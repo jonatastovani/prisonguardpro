@@ -15,14 +15,14 @@ class RefEstadoCivilSeeder extends Seeder
         $iplocal = '172.14.239.101';
 
         $insert = [
-            ['nome' => 'SOLTEIRO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'UNIÃO ESTÁVEL', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'CASADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'DESQUITADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'DIVORCIADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'VIÚVO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'OUTROS', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'NÃO INFORMADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Solteiro(a)', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'União estável', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Casado(a)', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Desquitado(a)', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Divorciado(a)', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Viúvo(a)', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Outros', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Não informado', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_estado_civil')->insert($insert);

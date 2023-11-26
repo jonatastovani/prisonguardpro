@@ -5,8 +5,10 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\RefCoresCabelo;
+use App\Models\RefCrenca;
 use App\Models\RefEscolaridade;
 use App\Models\RefEstadoCivil;
+use App\Models\RefOlho;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,12 +28,16 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersSeeder::class,
             CategoriasSeeders::class,
+            RefNacionalidadeSeeder::class,
             RefEstadoSeeder::class,
             RefCoresCabeloSeeder::class,
             RefTiposCabeloSeeder::class,
             RefCutisSeeder::class,
             RefEscolaridadeSeeder::class,
             RefEstadoCivilSeeder::class,
+            RefOlhoSeeder::class,
+            RefCrencaSeeder::class,
+            ProdutoSeeder::class,
         ]);
     }
 }

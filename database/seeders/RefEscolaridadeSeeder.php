@@ -14,19 +14,19 @@ class RefEscolaridadeSeeder extends Seeder
     {
         $iplocal = '172.14.239.101';
 
-        $cutis = [
-            ['nome' => 'ANALFABETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'ALFABETIZADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'FUNDAMENTAL INCOMPLETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'FUNDAMENTAL COMPLETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'MÉDIO INCOMPLETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'MÉDIO COMPLETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'SUPERIOR INCOMPLETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'SUPERIOR COMPLETO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'MESTRADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'DOUTORADO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+        $insert = [
+            ['nome' => 'Analfabeto', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Alfabetizado', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Fundamental incompleto', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Fundamental completo', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Médio incompleto', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Médio completo', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Superior incompleto', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Superior completo', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Mestrado', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Doutorado', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
         ];
 
-        DB::table('ref_escolaridades')->insert($cutis);
+        DB::table('ref_escolaridades')->insert($insert);
     }
 }

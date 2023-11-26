@@ -15,11 +15,11 @@ class RefTiposCabeloSeeder extends Seeder
         $iplocal = '172.14.239.101';
 
         $insert = [
-            ['nome' => 'CARAPINHO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'LISO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'CRESPO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'CALVO', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'OUTROS', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Carapinho', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Liso', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Crespo', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Calvo', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Outros', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_tipos_cabelos')->insert($insert);

@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ref_estados', function (Blueprint $table) {
+        Schema::create('ref_olhos', function (Blueprint $table) {
             $table->id();
-            $table->string('sigla')->unique();
             $table->string('nome')->unique();
-
-            $table->unsignedBigInteger('id_pais');
-            $table->foreign('id_pais')->references('id')->on('ref_nacionalidades');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
@@ -50,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ref_estados');
+        Schema::dropIfExists('ref_olhos');
     }
 };

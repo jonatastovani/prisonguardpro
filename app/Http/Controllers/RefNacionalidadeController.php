@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RefEstado;
+use App\Models\RefNacionalidade;
 use Illuminate\Http\Request;
 
-class RefEstadoController extends Controller
+class RefNacionalidadeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $estados = RefEstado::all();
-        return $estados;
+        //
     }
 
     /**
@@ -35,7 +34,7 @@ class RefEstadoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(RefEstado $refEstado)
+    public function show(RefNacionalidade $refNacionalidade)
     {
         //
     }
@@ -43,7 +42,7 @@ class RefEstadoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(RefEstado $refEstado)
+    public function edit(RefNacionalidade $refNacionalidade)
     {
         //
     }
@@ -51,7 +50,7 @@ class RefEstadoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RefEstado $refEstado)
+    public function update(Request $request, RefNacionalidade $refNacionalidade)
     {
         //
     }
@@ -59,7 +58,7 @@ class RefEstadoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RefEstado $refEstado)
+    public function destroy(RefNacionalidade $refNacionalidade)
     {
         //
     }

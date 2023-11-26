@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProdutoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RefEstadoController;
+use App\Models\Produto;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +16,4 @@ use App\Http\Controllers\RefEstadoController;
 |
 */
 
-Route::resource('estados', RefEstadoController::class);
+Route::resource('produtos', ProdutoController::class);
