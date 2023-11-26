@@ -12,7 +12,8 @@ class RefEstadoController extends Controller
      */
     public function index()
     {
-        //
+        $estados = RefEstado::all();
+        return dd($estados);
     }
 
     /**

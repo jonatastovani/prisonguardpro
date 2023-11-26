@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\RefCoresCabelo;
+use App\Models\RefEscolaridade;
+use App\Models\RefEstadoCivil;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,6 +27,11 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             CategoriasSeeders::class,
             RefEstadoSeeder::class,
+            RefCoresCabeloSeeder::class,
+            RefTiposCabeloSeeder::class,
+            RefCutisSeeder::class,
+            RefEscolaridadeSeeder::class,
+            RefEstadoCivilSeeder::class,
         ]);
     }
 }

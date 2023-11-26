@@ -29,7 +29,13 @@ return new class extends Migration
             $table->string('ip_deleted')->nullable();
             
             // Adiciona automaticamente os campos created_at e updated_at
-            $table->nullableTimestamps();
+            // $table->timestamps();
+
+            // Define o campo created_at como não nulo
+            $table->timestamp('created_at');
+
+            // Define o campo updated_at como nulo
+            $table->timestamp('updated_at')->nullable();
 
             // Adiciona campo deleted_at para soft deletes
             $table->softDeletes();
