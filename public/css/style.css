@@ -1,0 +1,24 @@
+:root {
+    --cor1: #45f3ff;
+}
+.nav-sub {
+    display: none;
+}
+
+#sidebar a {
+    text-decoration: none;
+}
+
+#sidebar h3 {
+    color: var(--cor1);
+    font-weight: 700;
+
+}
+
+#sidebar .nav-link {
+    color: var(--cor1);
+}
+
+#sidebar i {
+    color: var(--cor1);
+}

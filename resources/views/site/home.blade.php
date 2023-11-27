@@ -2,5 +2,7 @@
 @section('title','Home')
     
 @section('conteudo')
-    <h1>Essa é nossa home</h1>
+
+    <h1>Essa é a nossa Home</h1>
+    
 @endsection
