@@ -1,24 +1,23 @@
-:root {
-    --cor1: #45f3ff;
-}
-.nav-sub {
-    display: none;
-}
+@charset "UTF-8";
 
-#sidebar a {
-    text-decoration: none;
+@font-face {
+    font-family: 'Bebas';
+    src: url('./fontes/Bebas_Neue/BebasNeue-Regular.ttf');
 }
-
-#sidebar h3 {
-    color: var(--cor1);
-    font-weight: 700;
-
+@font-face {
+    font-family: 'OpenSans';
+    src: url('./fontes/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf');
+}
+@font-face {
+    font-family: 'OpenSans-Italic';
+    src: url('./fontes/Open_Sans/OpenSans-Italic-VariableFont_wdth\,wght.ttf');
 }
 
-#sidebar .nav-link {
-    color: var(--cor1);
+*{
+    font-family: 'OpenSans';
 }
 
-#sidebar i {
-    color: var(--cor1);
+#systemName {
+    font-family: 'Bebas', Arial, Helvetica, sans-serif;
+    font-weight: 800;
 }

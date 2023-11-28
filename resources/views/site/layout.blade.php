@@ -25,10 +25,27 @@
 
 </head>
 <body>
-    @component('componentes.nav')
-    @endcomponent
 
-    @yield('conteudo')
+    <div class="container-fluid">
+        <div class="row d-flex flex-column flex-nowrap vh-100">
+            <div class="row m-0 p-0">
+                @component('componentes.nav')
+                @endcomponent
+            </div>
+        
+            <div class="row flex-fill overflow-auto mx-auto">
+                <main class="container-fluid">
+                    <div class="row justify-content-center p-0 m-0">
+                        <div class="col p-0 m-0" style="max-width: 1000px;">
+                            
+                            @yield('conteudo')
+                
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>    
 
 </body>
 </html>

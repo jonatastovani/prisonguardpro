@@ -3,26 +3,11 @@
     
 @section('conteudo')
 
-{{-- 
-    <div class="grid text-center">
-
-        @foreach($produtos as $produto)
-            <div class="g-col-5 g-col-md-4">
-                <div class="card p-0" style="width: 18rem;">
-                    <img src=" {{ $produto->imagem }} " class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-
+    <div class="row">
+        <div class="col-12">
+            <h3>Categoria</h3>
+        </div>
     </div>
- --}}
-
-
-
-
     <div class="row flex-row flex-wrap justify-content-around p-0 m-0">
 
         @foreach($produtos as $produto)
@@ -38,12 +23,13 @@
             </div>
         @endforeach
 
-        <div class="row justify-content-center">
-            <div class="col-12 d-flex justify-content-center">
-                {{ $produtos->links('custom.pagination') }}
-            </div>
-        </div>
-        
     </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-12 d-flex justify-content-center">
+            {{ $produtos->links('custom.pagination') }}
+        </div>
+    </div>
+    
     
 @endsection
