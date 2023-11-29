@@ -7,10 +7,17 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav d-flex flex-wrap justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href=" {{ route('site.index') }} ">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Carrinho</a>
+                    <a class="nav-link position-relative" href=" {{ route('site.carrinho') }} ">
+                        Carrinho
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ \Cart::getContent()->count() }}
+                            <span class="visually-hidden"> {{ \Cart::getContent()->count() }} Produtos adicionados no seu carrinho</span>
+                        </span>
+                        {{-- <span class="badge text-bg-secondary"> {{ \Cart::getContent()->count() }} </span>--}}
+                    </a> 
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
