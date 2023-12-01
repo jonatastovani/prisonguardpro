@@ -19,17 +19,15 @@ class CarrinhoController extends Controller
             'id' => $request->id,
             'name' => $request->name,
             'price' => $request->price,
-            'quantity' => $request->qnt,
+            'quantity' => abs($request->qnt),
             'attributes' => array(
                 'image' =>$request->img
             ),
         ]);
 
-        $notifyMessage = 'Produto adicionado no carrinho com sucesso!';
-        $notifyType = 'success';
         $data = array(
-            'message' => $notifyMessage,
-            'type' => $notifyType,
+            'message' => 'Produto adicionado no carrinho com sucesso!',
+            'type' => 'success',
         );
 
         return redirect()->route('site.carrinho')->with('notifyMessage', json_encode(array($data)));
@@ -40,11 +38,9 @@ class CarrinhoController extends Controller
 
         \Cart::remove($request->id);
 
-        $notifyMessage = 'Produto removido do carrinho com sucesso!';
-        $notifyType = 'success';
         $data = array(
-            'message' => $notifyMessage,
-            'type' => $notifyType,
+            'message' => 'Produto removido do carrinho com sucesso!',
+            'type' => 'success',
         );
 
         return redirect()->route('site.carrinho')->with('notifyMessage', json_encode(array($data)));
@@ -56,15 +52,13 @@ class CarrinhoController extends Controller
         \Cart::update($request->id,
             ['quantity' => [
                 'relative' => false,
-                'value' => $request->quantity,
+                'value' => abs($request->quantity),
             ]
         ]);
 
-        $notifyMessage = 'Produto atualizado no carrinho com sucesso!';
-        $notifyType = 'success';
         $data = array(
-            'message' => $notifyMessage,
-            'type' => $notifyType,
+            'message' => 'Produto atualizado no carrinho com sucesso!',
+            'type' => 'success',
         );
 
         return redirect()->route('site.carrinho')->with('notifyMessage', json_encode(array($data)));
@@ -73,18 +67,11 @@ class CarrinhoController extends Controller
 
     public function limpaCarrinho(Request $request) {
 
-        \Cart::update($request->id,
-            ['quantity' => [
-                'relative' => false,
-                'value' => $request->quantity,
-            ]
-        ]);
+        \Cart::clear();
 
-        $notifyMessage = 'Produto atualizado no carrinho com sucesso!';
-        $notifyType = 'success';
         $data = array(
-            'message' => $notifyMessage,
-            'type' => $notifyType,
+            'message' => 'Seu carrinho está vazio!',
+            'type' => 'info',
         );
 
         return redirect()->route('site.carrinho')->with('notifyMessage', json_encode(array($data)));

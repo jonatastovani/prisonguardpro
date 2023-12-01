@@ -4,6 +4,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav d-flex flex-wrap justify-content-center">
                 <li class="nav-item">
@@ -33,5 +34,26 @@
                 </li>
             </ul>
         </div>
+
+        <ul class="navbar-nav d-flex flex-wrap text-end">
+            <li class="nav-item dropdown">
+                @auth
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Olá {{ auth()->user()->firstName }}!
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg-end">
+
+                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }} "> Dashboard </a></li>
+                        <li><a class="dropdown-item" href="{{ route('login.logout') }} "> Sair </a></li>
+
+                    </ul>
+                @else
+                    <a class="nav-link" href="{{route('login.form')}}" role="button">
+                        Login
+                    </a>
+                @endauth
+            </li>
+        </ul>
+
     </div>
 </nav>

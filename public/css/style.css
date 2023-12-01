@@ -17,6 +17,10 @@
     font-family: 'OpenSans';
 }
 
+:root {
+    --cor1: #45f3ff;
+}
+
 #systemName {
     font-family: 'Bebas', Arial, Helvetica, sans-serif;
     font-weight: 800;
