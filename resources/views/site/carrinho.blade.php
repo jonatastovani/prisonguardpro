@@ -33,12 +33,12 @@
                             <td><img src=" {{ $item->attributes->image }} " alt="" width="70" class="img-thumbnail"></td>
                             <td> {{ $item->name }} </td>
                             <td> R$ {{ number_format($item->price,2,',','.') }} </td>
-                            <td>
-                                <input type="number" name="quantity" value="{{ $item->quantity }}" style="width: 50px; text-align: center;">
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <form action=" {{ route('site.atualizaCarrinho') }} " method="POST" enctype="multipart/form-data" class="me-2">
+                            <form action=" {{ route('site.atualizaCarrinho') }} " method="POST" enctype="multipart/form-data" class="me-2">
+                                <td>
+                                    <input type="number" name="quantity" value="{{ $item->quantity }}" style="width: 50px; text-align: center;">
+                                </td>
+                                <td>
+                                    <div class="d-flex">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $item->id }}">
                                         <button class="btn btn-outline-success btn-sm" title="Atualizar produto"><i class="bi bi-arrow-clockwise"></i></button>

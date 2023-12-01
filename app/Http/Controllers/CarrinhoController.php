@@ -53,7 +53,32 @@ class CarrinhoController extends Controller
 
     public function atualizaCarrinho(Request $request) {
 
-        \Cart::update($request->id, ['quantity' => $request->quantity]);
+        \Cart::update($request->id,
+            ['quantity' => [
+                'relative' => false,
+                'value' => $request->quantity,
+            ]
+        ]);
+
+        $notifyMessage = 'Produto atualizado no carrinho com sucesso!';
+        $notifyType = 'success';
+        $data = array(
+            'message' => $notifyMessage,
+            'type' => $notifyType,
+        );
+
+        return redirect()->route('site.carrinho')->with('notifyMessage', json_encode(array($data)));
+
+    }
+
+    public function limpaCarrinho(Request $request) {
+
+        \Cart::update($request->id,
+            ['quantity' => [
+                'relative' => false,
+                'value' => $request->quantity,
+            ]
+        ]);
 
         $notifyMessage = 'Produto atualizado no carrinho com sucesso!';
         $notifyType = 'success';
