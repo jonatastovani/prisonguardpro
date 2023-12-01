@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    
 
     public function auth(Request $request) {
 
@@ -20,7 +19,7 @@ class LoginController extends Controller
             'password.required' => 'O campo senha é obrigatório!',
         ]);
 
-        if (Auth::attempt($credenciais)) {
+        if (Auth::attempt($credenciais, $request->remember)) {
             $request->session()->regenerate();
             return redirect()->intended('/admin/dashboard');
         } else {
@@ -34,6 +33,12 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerate();
         return redirect(route('site.index'));
+
+    }
+
+    public function create() {
+
+        return view('login.create');
 
     }
 

@@ -7,6 +7,7 @@
         <title>{{ config('sistema.sigla') }} @yield('title')</title>
 
         <link rel="stylesheet" href="{{ asset('bootstrap-5.3.2-dist/css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('bootstrap-icons-1.11.1/bootstrap-icons.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
@@ -20,11 +21,11 @@
 
         <div id="login" class="d-flex justify-content-center align-items-center" style="width: 100vw; height: 100vh;">
 
-            <div class="container-login">
+            <div class="container-teste">
                 
                 <div class="container">
 
-                    <form action="{{ route('login.auth') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -34,6 +35,22 @@
                         <div class="row">
                             <div class="col-12">
                                 <h4 class="mb-3 text-center">Login</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="firstName">Nome</label>
+                                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Digite seu nome"  autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="lastName">Sobrenome</label>
+                                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Digite seu sobrenome"  autofocus>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -57,7 +74,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         @if ($mensagem = Session::get('erro'))
                             {{ $mensagem }}
                         @endif

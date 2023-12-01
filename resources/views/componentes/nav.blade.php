@@ -48,7 +48,7 @@
 
                     </ul>
                 @else
-                    <a class="nav-link" href="{{route('login.form')}}" role="button">
+                    <a class="nav-link" href="{{route('login.login')}}" role="button">
                         Login
                     </a>
                 @endauth

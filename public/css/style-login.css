@@ -33,6 +33,39 @@
     animation: animate 6s linear infinite;
 }
 
+.container-teste {
+    position: relative;
+    width: 380px;
+    height: 560px;
+    background-color: #1c1c1c;;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.container-teste::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 380px;
+    height: 560px;
+    background: linear-gradient(0deg, transparent, var(--cor1), var(--cor1));
+    transform-origin: bottom right;
+    animation: animate 6s linear infinite;
+}
+
+.container-teste::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    width: 380px;
+    height: 560px;
+    background: linear-gradient(180deg, transparent, var(--cor1), var(--cor1));
+    transform-origin: top left;
+    animation: animate 6s linear infinite;
+}
+
 @keyframes animate {
     0% {
         transform: rotate(0deg);
