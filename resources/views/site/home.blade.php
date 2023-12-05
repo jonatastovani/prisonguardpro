@@ -32,7 +32,9 @@
                     <div class="card-body">
                         <h5 class="card-title" title=" {{ $produto->nome }} "> {{ Str::limit($produto->nome, 40, '...') }} </h5>
                         <p class="card-text" title=" {{ $produto->descricao }} "> {{ Str::limit($produto->descricao, 20, '...') }} </p>
-                        <a href=" {{ route('site.details', $produto->slug) }} " class="btn btn-primary">Ver produto</a>
+                        {{-- @can('verProduto', $produto) --}}
+                            <a href=" {{ route('site.details', $produto->slug) }} " class="btn btn-primary">Ver produto</a>
+                        {{-- @endcan --}}
                     </div>
                 </div>
             </div>
