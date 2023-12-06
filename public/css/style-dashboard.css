@@ -22,9 +22,9 @@ body {background-color: #f5f5f5;}
 .grafico h5 {font-size: 1rem; text-transform: uppercase; font-weight: 500; color: #333; }
 
 /* Crud */
-/* .crud .titulo  {margin-top: 20px; padding: 12px 0;} 
+.crud .titulo  {margin-top: 20px; padding: 12px 0;} 
 .crud .titulo h1 {font-size: 2rem;  text-transform: uppercase; font-weight: 900; color: #333; margin: 0; }
 .crud .titulo p {font-size: 1rem;   font-weight: 500; color: #333; margin: 0 0 20px 0; }
 .crud .registros {padding: 20px;}
-.crud .registros table img {width: 60px; margin-left: 10px;} */
+.crud .registros table img {width: 60px; margin-left: 10px;}
 
