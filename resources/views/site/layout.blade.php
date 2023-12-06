@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="{{ asset('css/style-popup.css') }}">
         <link rel="stylesheet" href="{{ asset('css/modal.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style-dashboard.css') }}">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
         <script src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
@@ -50,6 +51,7 @@
 
         @include('site.includesDefault')        
         @include('common.modalMessage')
+        <script type="module" src="{{ asset('js/script.js') }}"></script>
 
     </body>
 </html>

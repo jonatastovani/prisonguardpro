@@ -46,3 +46,12 @@ $(window).on('resize', function() {
     }
 
 });
+
+/* Fullscreen */
+// $('#fullscreen').click(function () {   
+//     if (!document.fullscreenElement) {
+//         document.documentElement.requestFullscreen();
+//     } else {
+//         document.exitFullscreen();
+//     }
+// })
