@@ -26,7 +26,14 @@ use Laravel\Sanctum\Http\Controllers\SanctumController;
 // Route::resource('produtos', ProdutoController::class);
 // Route::resource('users', UserController::class);
 
-Route::get('/', [SiteController::class, 'index'])->name('site.index');
+Route::view('/login','login.login')->name('login.login');
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    Route::get('/', [SiteController::class, 'index'])->name('site.index')->middleware('auth');
+
+});
+
 
 // Route::get('/produto/{slug}', [SiteController::class, 'details'])->name('site.details');
 
@@ -38,10 +45,9 @@ Route::get('/', [SiteController::class, 'index'])->name('site.index');
 // Route::post('/atualizar', [CarrinhoController::class, 'atualizaCarrinho'])->name('site.atualizaCarrinho');
 // Route::get('/limpar', [CarrinhoController::class, 'limpaCarrinho'])->name('site.limpaCarrinho');
 
-Route::view('/login','login.login')->name('login.login');
-Route::post('/auth', [LoginController::class, 'auth'])->name('login.auth');
-Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
-Route::get('/register', [LoginController::class, 'create'])->name('login.create');
+// Route::post('/auth', [LoginController::class, 'auth'])->name('login.auth');
+// Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
+// Route::get('/register', [LoginController::class, 'create'])->name('login.create');
 
 // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(['auth']);
 // Route::get('/admin/produtos', [ProdutoController::class, 'index'])->name('admin.produtos');

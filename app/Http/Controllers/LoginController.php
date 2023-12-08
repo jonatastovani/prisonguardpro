@@ -11,20 +11,23 @@ class LoginController extends Controller
     public function auth(Request $request)
     {
         $credenciais = $request->validate([
-            'usuario' => ['required'],
+            'username' => ['required'],
             'password' => ['required'],
         ], [
-            'usuario.required' => 'O campo user é obrigatório!',
-            'password.required' => 'O campo password é obrigatório!',
+            'username.required' => 'O campo Usuário é obrigatório!',
+            'password.required' => 'O campo Senha é obrigatório!',
         ]);
 
         if (Auth::attempt($credenciais, $request->remember)) {
-        // if (Auth::attempt(['usuario' => $request->usuario, 'password' => $request->senha], $request->remember)) {
+
+            // Inicia a sessão do usuário
+            $request->session()->regenerate();
+
             return response()->json([
                 'message' => 'Authorized.',
                 'status' => 200,
                 'data' => [
-                    'token' => $request->user()->createToken('token')->plainTextToken,
+                    // 'token' => $request->user()->createToken('token')->plainTextToken,
                 ],
             ], 200);
         } else {

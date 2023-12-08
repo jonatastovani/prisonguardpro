@@ -68,7 +68,8 @@
                                   </div>
                                 </div>
                         </div>
-
+                        
+                        {{-- 
                         @if ($mensagem = Session::get('erro'))
                             {{ $mensagem }}
                         @endif
@@ -77,11 +78,11 @@
                             @foreach ($errors->all() as $error)
                                 {{ $error }} <br>
                             @endforeach
-                        @endif
+                        @endif --}}
 
                         <div class="row">
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary w-50" id="send">Entrar</button>
+                                <button class="btn btn-primary w-50" id="send">Entrar</button>
                             </div>
                         </div>
 
