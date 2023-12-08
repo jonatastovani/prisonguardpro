@@ -1,0 +1,13 @@
+DROP TRIGGER IF EXISTS tab_raioscelasexcecoestipo_INSERT_BEFORE;
+
+delimiter $
+CREATE TRIGGER tab_raioscelasexcecoestipo_INSERT_BEFORE
+BEFORE INSERT ON tab_raioscelasexcecoestipo
+FOR EACH ROW
+
+BEGIN
+	IF NEW.DATACADASTRO IS NULL OR NEW.DATACADASTRO = '' OR NEW.DATACADASTRO = '0000-00-00 00:00:00' THEN
+		SET NEW.DATACADASTRO = CURRENT_TIMESTAMP;
+	END IF;
+ END $
+DESC tab_raioscelasexcecoestipo;

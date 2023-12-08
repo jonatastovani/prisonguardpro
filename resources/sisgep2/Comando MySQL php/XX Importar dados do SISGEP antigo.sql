@@ -1,0 +1,81 @@
+DESC entradas_presos;
+SELECT * FROM entradas_presos;
+
+#Inserindo os presos atuais da unidade
+INSERT INTO entradas_presos (IDENTRADA, MATRICULA, MATRICULAVINCULADA, NOME, PAI, MAE, RG, SEGURO, IDCADASTRO, DATACADASTRO, IPCADASTRO, SITUACAO) 
+SELECT 0, Matric_Cad, 1, Nome_Cad, Pai_Cad, Mae_Cad, RgNum_Cad, CASE WHEN pav_cel = 'MSP' THEN 1 ELSE 0 END, 2, CURRENT_TIMESTAMP, '172.14.239.101', 2 FROM sisgep.cadastros WHERE pav_cel <> '';
+
+DESC cadastros;
+SELECT * FROM cadastros;
+
+#INSERINDO TODOS OS PRESOS QUE JÁ PASSARAM NA UNIDADE E VINCULANDO A UM IDPRESO OS QUE ESTIVEREM NA UNIDADE
+INSERT INTO cadastros (MATRICULA, IDPRESO, NOME, DATANASC, NACIONALIDADE, RG, OUTRODOC, PAI, MAE, CUTIS, TIPOCABELO, CORCABELO, OLHOS, ESTATURA, PESO, INSTRUCAO, ESTADOCIVIL, RELIGIAO, SINAIS, IDCADASTRO, DATACADASTRO, IPCADASTRO)
+SELECT Matric_Cad, (SELECT ID FROM entradas_presos WHERE MATRICULA = Matric_Cad), Nome_Cad, Nasc_Cad, 2, RgNum_Cad, OutroDoc_Cad, Pai_Cad, Mae_Cad, CASE WHEN Cutis_Cad = '' THEN NULL ELSE Cutis_Cad + 1  END, CASE WHEN CabeloTp_Cad = '' THEN NULL ELSE CabeloTp_Cad + 1 END, CASE WHEN CabeloCor_Cad = '' THEN NULL ELSE CabeloCor_Cad + 1 END, CASE WHEN Olhos_Cad = '' THEN NULL ELSE Olhos_Cad + 1 END, CASE WHEN Estatura_Cad = '' THEN NULL ELSE Estatura_Cad END, CASE WHEN Peso_Cad = '' THEN NULL ELSE Peso_Cad END, CASE WHEN Instru_Cad = '' THEN NULL ELSE Instru_Cad + 1 END, CASE WHEN EstCiv_Cad = '' THEN NULL ELSE EstCiv_Cad + 1 END, CASE WHEN Relig_Cad = '' THEN NULL ELSE Relig_Cad + 1 END, Sinais_Cad, 2, CURRENT_TIMESTAMP, '172.14.239.101' FROM sisgep.cadastros;
+
+
+DESC cadastros_movimentacoes;
+SELECT *  FROM cadastros_movimentacoes;
+
+#INSERIR AS MOVIMENTAÇÕES DA ATUAL PASSAGEM DO PRESO
+
+create table ultimo_id_mov_inclusao (
+ID INT auto_increment, primary key (ID),
+IDPRESO INT NOT NULL,
+ULTIMOID INT NOT NULL,
+IDTIPO INT default NULL,
+IDMOTIVO INT default NULL,
+DATAINCLUSAO datetime default NULL,
+IDORIGEM INT default NULL,
+ORIGEM tinytext default NULL
+) default char set UTF8;
+
+DELETE FROM ultimo_id_mov_inclusao;
+INSERT INTO ultimo_id_mov_inclusao (IDPRESO, ULTIMOID) 
+SELECT ID,
+(SELECT MAX(Cod_id) FROM sisgep.mov_sent WHERE Tipo_Mov IN ('IN','IT','IR') AND Matric_Mov = EP.MATRICULA)
+FROM entradas_presos EP where ID > 0;
+
+UPDATE ultimo_id_mov_inclusao ULT SET IDTIPO = 
+(SELECT ID FROM tab_movimentacoestipo WHERE SIGLA = 
+(SELECT Tipo_Mov FROM sisgep.mov_sent WHERE Cod_id = ULT.ULTIMOID)),
+IDMOTIVO = 
+(SELECT ID FROM tab_movimentacoesmotivos WHERE SIGLA = 
+(SELECT Motivo_Mov FROM sisgep.mov_sent WHERE Cod_id =  ULT.ULTIMOID)),
+DATAINCLUSAO = 
+(SELECT Data_In_Mov FROM sisgep.mov_sent WHERE Cod_id = ULT.ULTIMOID),
+ORIGEM = (SELECT Proc_Destino_Mov FROM sisgep.mov_sent WHERE Cod_id = ULT.ULTIMOID);
+
+/*
+INSERIR MANUALMENTE AS ORIGENS
+****VER SE É MAIS PRÁTICO USAR A ORIGEM DO SISTEMA DA CAVEIRA****
+
+INSERT INTO codigo_gsa (TIPO, NOME) VALUES(1, 'PENIT. PIRACICABA');
+
+SELECT ID, NOME FROM codigo_gsa WHERE TIPO = 1 AND NOME LIKE '%PIRACICABA%';
+
+DELIMITER $$
+UPDATE ultimo_id_mov_inclusao SET IDORIGEM = 14076 WHERE ORIGEM = 'PENIT. PIRACICABA';
+select *, 1 TABELA from ultimo_id_mov_inclusao WHERE IDORIGEM IS NULL AND ORIGEM <> '' AND ORIGEM LIKE'%PIRACICABA%' UNION
+select *, 2 TABELA from ultimo_id_mov_inclusao WHERE IDORIGEM IS NULL AND ORIGEM <> '' ORDER BY TABELA, ORIGEM;
+
+*/
+
+select * from ultimo_id_mov_inclusao;
+
+#INSERE OS DADOS NA NOVA TABELA
+INSERT INTO cadastros_movimentacoes (IDPRESO, IDTIPOMOVIMENTACAO, IDMOTIVOMOVIMENTACAO, DATAMOVIMENTACAO, DATAPRISAO, IDORIGEM, IDCADASTRO, IPCADASTRO, DATACADASTRO)
+select IDPRESO, IDTIPO, IDMOTIVO, DATAINCLUSAO, DATAINCLUSAO, IDORIGEM, 2, '172.14.239.101', CURRENT_TIMESTAMP from ultimo_id_mov_inclusao WHERE IDMOTIVO IS NOT NULL;
+
+#ATUALIZA O LANCADOCIMIC
+UPDATE entradas_presos SET LANCADOCIMIC = TRUE, IDATUALIZACAO = 2, IPATUALIZACAO = '172.14.239.101' WHERE ID IN (select IDPRESO from ultimo_id_mov_inclusao WHERE IDMOTIVO IS NOT NULL);
+SELECT MM.NOME FROM ultimo_id_mov_inclusao ULTID
+INNER JOIN tab_movimentacoesmotivos MM ON MM.ID = ULTID.IDMOTIVO;
+
+#INSERE AS CELAS ATUAIS
+INSERT INTO cadastros_mudancacela (IDPRESO, RAIO, CELA, IDCADASTRO, IPCADASTRO) 
+SELECT EP.ID,
+(SELECT ID FROM tab_raioscelas WHERE NOME = CASE WHEN CD.pav_cel = 'MSP' THEN 'MPSP' ELSE CD.pav_cel END) RAIO, 
+CD.cela_cel CELA, 2, '172.14.239.101'  FROM entradas_presos EP
+INNER JOIN sisgep.cadastros CD on CD.Matric_Cad = EP.MATRICULA
+WHERE EP.LANCADOCIMIC = TRUE AND EP.ID NOT IN (566, 714, 715, 716);
+

@@ -1,0 +1,14 @@
+DROP TRIGGER IF EXISTS cimic_apresentacoes_internas_INSERT_BEFORE;
+
+delimiter $
+CREATE TRIGGER cimic_apresentacoes_internas_INSERT_BEFORE
+BEFORE INSERT ON cimic_apresentacoes_internas
+FOR EACH ROW
+
+BEGIN
+	IF NEW.DATACADASTRO IS NULL OR NEW.DATACADASTRO = '' OR NEW.DATACADASTRO = '0000-00-00 00:00:00' THEN
+		SET NEW.DATACADASTRO = CURRENT_TIMESTAMP;
+	END IF;
+    
+ END $
+DESC cimic_apresentacoes_internas;

@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+*{
+padding: 0;
+margin: 0;
+}
+
+.container{
+background-color: #172a5f;
+background-image: url("../imagens/imagens_comuns/sisgep8.jpg");
+background-repeat: no-repeat;
+background-position: center top;
+width: 100vw;
+height: 100vh;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+}
+
+.box{
+width: 498px;
+height: 200px;
+background-color: transparent;
+background-repeat: no-repeat;
+background-position: bottom center;
+color: white;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+/*transform: translate(-50%, -50%);*/ 
+}
+
+.formulario{
+position: relative;
+top: 15%;
+line-height: 1.5em;
+font-size: 1.5em;
+}
+
+.caixa-texto {
+    font-size: 0.7em;
+}
+
+input.btn-sub {
+	background: #134e39;
+	color:#F5F5F5;
+	cursor: pointer;
+	border:0;
+	border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.7em;
+}
+
+input.btn-sub:hover{
+	transition: all .3s;
+	box-shadow: 5px 5px 4px #CCC;
+	opacity: .9;
+}
+
+.botao:hover {
+    background-color: rgba(0, 0, 255, 0.808);
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.alinhamento-direita{
+    text-align: right;
+}
+
+.mensagem-erro{
+    padding-top: 5px;
+    margin: 0px -25px;
+    font-size: 0.8em;
+}

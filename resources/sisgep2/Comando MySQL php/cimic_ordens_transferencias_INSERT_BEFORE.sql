@@ -1,0 +1,21 @@
+DROP TRIGGER IF EXISTS cimic_ordens_transferencias_INSERT_BEFORE;
+
+delimiter $
+CREATE TRIGGER cimic_ordens_transferencias_INSERT_BEFORE
+BEFORE INSERT ON cimic_ordens_transferencias
+FOR EACH ROW
+
+BEGIN
+	CALL PROCED_gera_numero_ordem_saida(date_format(NEW.DATASAIDA, '%Y'), 1, NEW.IDCADASTRO, NEW.IPCADASTRO, @intIDORDEM);
+	SET NEW.IDORDEM = @intIDORDEM;
+    SET @intIDORDEM = 0;
+    
+	CALL PROCED_gera_numero_oficio(date_format(NEW.DATASAIDA, '%Y'), 3, NEW.IDCADASTRO, NEW.IPCADASTRO, @intIDOFICIO);
+	SET NEW.IDOFICIOESCOLTA = @intIDOFICIO;
+	SET @intIDOFICIO = 0;
+    
+	IF NEW.DATACADASTRO IS NULL OR NEW.DATACADASTRO = '' OR NEW.DATACADASTRO = '0000-00-00 00:00:00' THEN
+		SET NEW.DATACADASTRO = CURRENT_TIMESTAMP;
+	END IF;
+ END $
+DESC cimic_ordens_transferencias;
