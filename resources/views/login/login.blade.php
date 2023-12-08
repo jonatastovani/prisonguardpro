@@ -25,7 +25,7 @@
                 
                 <div class="container">
 
-                    <form action="{{ route('login.auth') }}" method="post" enctype="multipart/form-data">
+                    <form id="form1" {{-- action="{{ route('login.auth') }}" method="post" enctype="multipart/form-data" --}}>
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -41,7 +41,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="username">Usuário</label>
-                                    <input type="text" class="form-control" name="email" id="username" placeholder="Digite seu nome de usuário"  autofocus>
+                                    <input type="text" class="form-control" name="username" id="username" placeholder="Digite seu nome de usuário"  autofocus>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,8 @@
 
         </div>
 
-        <script src="{{ asset('js/login/login.js') }}"></script>
+        @include('site.includesDefault')        
+        <script type="module" src="{{ asset('js/login/login.js') }}"></script>
  
     </body>
 </html>

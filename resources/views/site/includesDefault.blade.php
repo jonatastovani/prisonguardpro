@@ -1,4 +1,11 @@
 
+<script>
+	const urlApi = "{{ config('sistema.urlApi') }}";
+	const urlVersion = "{{ config('sistema.versionApi') }}";
+	const urlLogin = urlApi + "/auth";
+	console.log(urlLogin);
+</script>
+
 <?php 
 
 $arrFieldsNotify = ['arrNotifyMessage'];

@@ -265,16 +265,25 @@ export class commonFunctions {
             const element = elemInput[i];
             const id = element.id;
             const name = element.name;
-            const val = element.value;
             const disabled = element.disabled;
+            let val;
 
+            if (element.type === 'checkbox') {
+                val = element.checked;
+            } else if (element.type === 'radio') {
+                val = form.querySelector(`input[name="${name}"]:checked`)?.value || null;
+            } else {
+                val = element.value;
+            }
+            val = String(val).trim();
+    
             if (blnDisabled || !blnDisabled && !disabled) {
                 if ((id && keyId)) {
-                    formData[id] = val.trim();
-                    strReturn += `${id}:${val.trim()}\n`;
+                    formData[id] = val;
+                    strReturn += `${id}:${val}\n`;
                 }else if ((name && !keyId)) {
-                    formData[name] = val.trim();
-                    strReturn += `${name}:${val.trim()}\n`;
+                    formData[name] = val;
+                    strReturn += `${name}:${val}\n`;
                 }
             }
         }

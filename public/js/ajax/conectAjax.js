@@ -1,4 +1,4 @@
-import { enumAction } from "../commons/enumAction.js";
+import { enumAction } from "../common/enumAction.js";
 
 /**
  * The `conectAjax` class provides methods for making AJAX requests to an external API and handling the responses.

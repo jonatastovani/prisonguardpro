@@ -21,13 +21,13 @@ class LoginController extends Controller
         if (Auth::attempt($credenciais, $request->remember)) {
 
             // Inicia a sessão do usuário
-            $request->session()->regenerate();
+            // $request->session()->regenerate();
 
             return response()->json([
                 'message' => 'Authorized.',
                 'status' => 200,
                 'data' => [
-                    // 'token' => $request->user()->createToken('token')->plainTextToken,
+                    'token' => $request->user()->createToken('token')->plainTextToken,
                 ],
             ], 200);
         } else {
@@ -38,7 +38,6 @@ class LoginController extends Controller
             ], 403);
         }
     }
-
 
     public function logout(Request $request)
     {
