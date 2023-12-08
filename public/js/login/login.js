@@ -1,5 +1,6 @@
+import { conectAjax } from "../ajax/conectAjax.js";
 import { commonFunctions } from "../common/commonFunctions.js";
-// import { enumAction } from "../common/enumAction.js";
+import { enumAction } from "../common/enumAction.js";
 
 $(document).ready(function() {
 
@@ -26,54 +27,28 @@ $(document).ready(function() {
         const dataToSend = commonFunctions.getInputsValues($('#form1')[0], 1);
         console.log(dataToSend)
         
-        // const obj = new conectAjax(urlApiClients);
+        const obj = new conectAjax(urlLogin);
 
-        // if (obj.setAction(actionRegCli)) {
-        //     obj.setData(data);
-            
-        //     let notifyMessage = 'Cliente adicionado com sucesso!';
+        if (obj.setAction(enumAction.POST)) {
+            obj.setData(dataToSend);
+                
+            obj.saveData()
+                .then(function (response) {
+                    console.log(response);
 
-        //     if (actionRegCli == enumAction.PUT) {
-        //         obj.setParam(idClient);
-        //         notifyMessage = 'Cliente alterado com sucesso!';
-        //     }
-    
-        //     obj.saveData()
-        //         .then(function (result) {
+                    $.notify(response.message,'success');
 
-        //         let form = document.createElement('form');
-        //         form.id = 'notifyShowPost';
-        //         form.hidden = 'hidden';
-        //         form.method = 'post';
-        //         form.action = redirectPrevious;
-        //         let input = document.createElement('input');
-        //         input.type = 'hidden';
-        //         input.name = 'notifyMessage';
-        //         input.value = notifyMessage;
-        //         form.appendChild(input);
-        //         input = document.createElement('input');
-        //         input.type = 'hidden';
-        //         input.name = 'notifyType';
-        //         input.value = 'success';
-        //         form.appendChild(input);
-        //         var submitButton = document.createElement('input');
-        //         submitButton.type = 'submit';
-        //         form.appendChild(submitButton);
-        //         document.body.appendChild(form);
-        //         submitButton.click();
+                    window.location.href = response.data.redirect;
 
-        //             $.notify(`Dados enviados com sucesso!`,'success');
+                })
+                .catch(function (error) {
 
-        //             // redirection();
+                    console.err(error);
+                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`,'error');
 
-        //         })
-        //         .catch(function (error) {
-
-        //             console.log(error);
-        //             $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`,'error');
-
-        //         });
-        // }
+                });
+        }
+        
         // $.ajax({
         //     url: `${window.location.origin}/api/auth`,
         //     method: 'POST',

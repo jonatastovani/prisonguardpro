@@ -19,15 +19,12 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credenciais, $request->remember)) {
-
-            // Inicia a sessão do usuário
-            // $request->session()->regenerate();
-
             return response()->json([
                 'message' => 'Authorized.',
                 'status' => 200,
                 'data' => [
-                    'token' => $request->user()->createToken('token')->plainTextToken,
+                    // 'token' => $request->user()->createToken('token')->plainTextToken,
+                    'redirect' => route('site.index'), // URL para onde redirecionar
                 ],
             ], 200);
         } else {
