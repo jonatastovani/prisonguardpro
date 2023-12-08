@@ -169,6 +169,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
+        Laravel\Sanctum\SanctumServiceProvider::class,
+
     ])->toArray(),
 
     /*

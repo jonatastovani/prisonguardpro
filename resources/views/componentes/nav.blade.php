@@ -8,37 +8,46 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav d-flex flex-wrap justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href=" {{ route('site.index') }} ">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link position-relative" href=" {{ route('site.carrinho') }} ">
-                        Carrinho
-                        <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ \Cart::getContent()->count() }}
-                            <span class="visually-hidden"> {{ \Cart::getContent()->count() }} Produtos adicionados no seu carrinho</span>
-                        </span>
-                        {{-- <span class="badge text-bg-secondary"> {{ \Cart::getContent()->count() }} </span>--}}
-                    </a> 
+                    <a class="nav-link active" aria-current="page" href="{{ route('site.index') }}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Categorias
+                        Inclusão
                     </a>
-                    <ul class="dropdown-menu">
-
-                        @foreach ($categoriasMenu as $categoriaM)
-                            <li><a class="dropdown-item" href="{{ route('site.categoria', $categoriaM->id) }} "> {{ $categoriaM->nome }} </a></li>
-                        @endforeach
-
+                    <ul class="dropdown-menu" data-bs-popper="static">
+                        <li class="nav-item dropend">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Entradas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Inserir / Alterar</a></li>
+                                <li><a class="dropdown-item" href="#">Gerenciar entradas</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropend">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Pertences
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" title="Gereciar Pertences retidos">Gerenciar Pertences</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropend">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sedex
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" title="Gereciar Sedexs retidos">Gerenciar Sedex</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
             </ul>
         </div>
+        
+        
 
         <ul class="navbar-nav d-flex flex-wrap text-end">
-            {{-- <li class="nav-item">
-                <a id="fullscreen" class="nav-link active" href="#" title="Clique para aplicar ou remover a tela cheia"><i class="bi bi-arrows-fullscreen"></i></a>
-            </li> --}}
             <li class="nav-item dropdown">
                 @auth
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,7 +55,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg-end">
                         
-                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }} "> Dashboard </a></li>
+                        {{-- <li><a class="dropdown-item" href="{{ route('admin.dashboard') }} "> Dashboard </a></li> --}}
                         <li><a class="dropdown-item" href="{{ route('login.logout') }} "> Sair </a></li>
 
                     </ul>

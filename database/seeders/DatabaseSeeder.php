@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UsersSeeder::class,
-            CategoriasSeeders::class,
+            // CategoriasSeeders::class,
+            // ProdutoSeeder::class,
             RefNacionalidadeSeeder::class,
             RefEstadoSeeder::class,
             RefCoresCabeloSeeder::class,
@@ -37,7 +38,7 @@ class DatabaseSeeder extends Seeder
             RefEstadoCivilSeeder::class,
             RefOlhoSeeder::class,
             RefCrencaSeeder::class,
-            ProdutoSeeder::class,
+            RefArtigoSeeder::class,
         ]);
     }
 }

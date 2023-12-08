@@ -1,19 +1,21 @@
 <?php
 
+use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Controllers\SanctumController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+// Rota para autenticação
+Route::post('/auth', [LoginController::class, 'auth']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Grupo de rotas protegidas pelo Sanctum
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    // Rotas relacionadas ao RefArtigoController
+    Route::get('/ref/artigos', [RefArtigoController::class, 'index']);
+    Route::post('/ref/artigos', [RefArtigoController::class, 'store']);
+    Route::delete('/ref/artigos/{id}', [RefArtigoController::class, 'destroy']);
+    
+    // Rota de logout
+    Route::post('/logout', [SanctumController::class, 'logout']);
 });

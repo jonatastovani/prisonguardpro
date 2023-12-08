@@ -25,3 +25,14 @@
     font-family: 'Bebas', Arial, Helvetica, sans-serif;
     font-weight: 800;
 }
+
+@media screen and (min-width: 991px) {
+    .dropend:hover > .dropdown-menu {
+      position: absolute;
+      top: 0;
+      left: 100%;
+    }
+    .dropend .dropdown-toggle{
+        margin-left: .5em;
+    }
+}

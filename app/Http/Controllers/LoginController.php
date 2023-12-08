@@ -8,32 +8,44 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
 
-    public function auth(Request $request) {
-
+    public function auth(Request $request)
+    {
         $credenciais = $request->validate([
-            'email' => ['required', 'email'],
+            'usuario' => ['required'],
             'password' => ['required'],
         ], [
-            'email.required' => 'O campo email é obrigatório!',
-            'email.email' => 'O email não é valido.',
-            'password.required' => 'O campo senha é obrigatório!',
+            'usuario.required' => 'O campo user é obrigatório!',
+            'password.required' => 'O campo password é obrigatório!',
         ]);
 
         if (Auth::attempt($credenciais, $request->remember)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/admin/dashboard');
+        // if (Auth::attempt(['usuario' => $request->usuario, 'password' => $request->senha], $request->remember)) {
+            return response()->json([
+                'message' => 'Authorized.',
+                'status' => 200,
+                'data' => [
+                    'token' => $request->user()->createToken('token')->plainTextToken,
+                ],
+            ], 200);
         } else {
-            return redirect()->back()->with('erro', 'Usuário ou senha inválida.');
+            return response()->json([
+                'message' => 'Unauthorized.',
+                'status' => 403,
+                'data' => [],
+            ], 403);
         }
     }
 
-    public function logout(Request $request) {
 
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerate();
-        return redirect(route('site.index'));
+    public function logout(Request $request)
+    {
+        Auth::user()->tokens()->delete();
 
+        return response()->json([
+            'message' => 'Logout successful.',
+            'status' => 200,
+            'data' => [],
+        ], 200);
     }
 
     public function create() {

@@ -14,10 +14,10 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'firstName' => 'Admin',
-            'lastName' => 'Master',
-            'email' => 'admin@pgp.com',
-            'password' => bcrypt('123456')
+            'nome' => 'Admin',
+            'usuario' => 'admin',
+            'cpf' => 0,
+            'password' => bcrypt('password')
         ]);
     }
 }

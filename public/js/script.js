@@ -47,6 +47,16 @@ $(window).on('resize', function() {
 
 });
 
+$('.dropend').on('click', function(e) {
+    e.stopPropagation();
+
+    const dropdownMenu = $(this).siblings('li.dropend');
+    if (dropdownMenu.find('a').hasClass('show')) {
+        dropdownMenu.children().removeClass('show');
+    }
+
+});
+
 /* Fullscreen */
 // $('#fullscreen').click(function () {   
 //     if (!document.fullscreenElement) {
