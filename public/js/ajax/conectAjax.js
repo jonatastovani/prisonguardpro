@@ -36,6 +36,12 @@ export class conectAjax {
         this.#actionRegCli = null;
         this.#data = null;
         this.#param = null;
+
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token]').attr('content')
+        //     }
+        // })
     }
 
     /**
@@ -78,7 +84,7 @@ export class conectAjax {
      * @returns {Promise} - A Promise that resolves with the response data or rejects with an error message.
      */
     getData() {
-
+        
         let param = '';
         if (this.#param!=null){
             param = this.#param;
@@ -115,6 +121,8 @@ export class conectAjax {
      */
     saveData() {
 
+        this.addCsrfToken(); 
+
         return new Promise((resolve, reject) => {
             
             let param = '';
@@ -140,6 +148,7 @@ export class conectAjax {
 
                     const responseText = JSON.parse(xhr.responseText);
                     if (xhr.status !== 200) {
+                        console.error(xhr);
                         console.error('Erro HTTP:', xhr.status);
                         console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
                     } else {
@@ -188,6 +197,19 @@ export class conectAjax {
                 }
             });
         });
+    }
+
+    addCsrfToken() {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        if (csrfToken) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            });
+        } else {
+            console.error('Token CSRF não encontrado na página.');
+        }
     }
 
 }

@@ -2,6 +2,8 @@
 <script>
 	const urlApi = "{{ config('sistema.urlApi') }}";
 	const urlVersion = "{{ config('sistema.versionApi') }}";
+	const urlApiVersion = urlApi + urlVersion;
+	const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
 	const urlLogin = urlApi + "/auth";
 	console.log(urlLogin);
 </script>

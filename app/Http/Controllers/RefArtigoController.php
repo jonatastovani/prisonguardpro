@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\RefArtigo;
+use App\Models\User;
 
 class RefArtigoController extends Controller
 {
@@ -112,7 +113,7 @@ class RefArtigoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(RefArtigo $refArtigo)
+    public function show($id)
     {
         //
     }
@@ -138,7 +139,14 @@ class RefArtigoController extends Controller
      */
     public function destroy($id)
     {
-        // Localize o modelo pelo ID
+        $validator = Validator::make(['id' => $id], [
+            'id' => 'exists:ref_artigos,id',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+    
         $refArtigo = RefArtigo::find($id);
 
         // Verifique se o modelo foi encontrado

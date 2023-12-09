@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Produto;
 use App\Models\User;
 
-class ProdutoPolicy
+class RefArtigoPolicy
 {
     /**
      * Create a new policy instance.
@@ -15,7 +14,8 @@ class ProdutoPolicy
         //
     }
 
-    public function verProduto(User $user, Produto $produto){
-        return $user->id === $produto->id_user;
-    }
+    // public function verProduto(User $user, Produto $produto){
+    //     return $user->id === $produto->id_user;
+    // }
+
 }

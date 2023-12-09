@@ -2,7 +2,8 @@
 
 namespace app\Common;
 
-use app\common\restResponse;
+use App\common\restResponse;
+use Illuminate\Support\Facades\Log;
 
 class CommonsFunctions {
 
@@ -10,6 +11,27 @@ class CommonsFunctions {
         return uniqid('PGP|');
     }    
 
+    static function generateLog($mensagem) {
+        
+        $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1);
+        
+        $chamador = end($trace);
+    
+        $diretorio = isset($chamador['file']) ? $chamador['file'] : null;
+        $linha = isset($chamador['line']) ? $chamador['line'] : null;
+    
+        $traceId = CommonsFunctions::generateTraceId();
+    
+        // Registre o erro no log com o trace ID
+        $mensagem .= $diretorio !== null ? " | Arquivo: $diretorio" : '';
+        $mensagem .= $linha !== null ? " | Linha: $linha" : '';
+        $mensagem .= " | Trace ID: $traceId";
+    
+        Log::error($mensagem);
+        return $traceId;
+        
+    }
+    
     // public function curlConsult($arr) : restResponse {
     //     $urlApi = $arr['urlApi'];
     //     $id = $arr['id'];

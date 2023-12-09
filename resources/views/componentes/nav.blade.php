@@ -51,7 +51,7 @@
             <li class="nav-item dropdown">
                 @auth
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Olá {{ auth()->user()->firstName }}!
+                        Olá {{ auth()->user()->nome }}!
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg-end">
                         

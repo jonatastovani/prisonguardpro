@@ -18,6 +18,7 @@ class LoginController extends Controller
             'password.required' => 'O campo Senha é obrigatório!',
         ]);
 
+
         if (Auth::attempt($credenciais, $request->remember)) {
             return response()->json([
                 'message' => 'Authorized.',
@@ -35,16 +36,41 @@ class LoginController extends Controller
             ], 403);
         }
     }
-
-    public function logout(Request $request)
+    public function authToken(Request $request)
     {
-        Auth::user()->tokens()->delete();
+        $credenciais = $request->validate([
+            'username' => ['required'],
+            'password' => ['required'],
+        ], [
+            'username.required' => 'O campo Usuário é obrigatório!',
+            'password.required' => 'O campo Senha é obrigatório!',
+        ]);
 
-        return response()->json([
-            'message' => 'Logout successful.',
-            'status' => 200,
-            'data' => [],
-        ], 200);
+        if (Auth::attempt($credenciais, $request->remember)) {
+            return response()->json([
+                'message' => 'Authorized.',
+                'status' => 200,
+                'data' => [
+                    'token' => $request->user()->createToken('token')->plainTextToken,
+                    // 'redirect' => route('site.index'), // URL para onde redirecionar
+                ],
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized.',
+                'status' => 403,
+                'data' => [],
+            ], 403);
+        }
+    }
+
+    public function logout(Request $request) {
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerate();
+        return redirect(route('site.index'));
+
     }
 
     public function create() {

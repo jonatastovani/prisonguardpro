@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <title>{{ config('sistema.sigla') }} @yield('title')</title>
 
         <link rel="stylesheet" href="{{ asset('bootstrap-5.3.2-dist/css/bootstrap.css') }}">
@@ -26,7 +28,7 @@
                 
                 <div class="container">
 
-                    <form id="form1" {{-- action="{{ route('login.auth') }}" method="post" enctype="multipart/form-data" --}}>
+                    <form id="form1" >
                         @csrf
                         <div class="row">
                             <div class="col-12">

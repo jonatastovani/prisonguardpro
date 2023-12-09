@@ -39,6 +39,12 @@ class DatabaseSeeder extends Seeder
             RefOlhoSeeder::class,
             RefCrencaSeeder::class,
             RefArtigoSeeder::class,
+            RefTurnoSeeder::class,
+            RefTurnoSeguinteSeeder::class,
+            RefTurnoTipoPermissaoSeeder::class,
+            RefPermissaoGrupoSeeder::class,
+            RefPermissaoSeeder::class,
+            RefTurnoPermissaoSeeder::class,
         ]);
     }
 }

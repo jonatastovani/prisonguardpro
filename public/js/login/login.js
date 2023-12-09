@@ -25,21 +25,31 @@ $(document).ready(function() {
         e.preventDefault();
         
         const dataToSend = commonFunctions.getInputsValues($('#form1')[0], 1);
+        // const dataToSend = $('#form1').serialize();
         console.log(dataToSend)
         
         const obj = new conectAjax(urlLogin);
 
         if (obj.setAction(enumAction.POST)) {
             obj.setData(dataToSend);
-                
+            
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token]').attr('content')
+            //     }
+            // })
+    
             obj.saveData()
                 .then(function (response) {
                     console.log(response);
 
-                    $.notify(response.message,'success');
-
-                    window.location.href = response.data.redirect;
-
+                    if (response.status === 200) {
+                        $.notify(response.message,'success');
+                        window.location.href = response.data.redirect;
+                    } else {
+                        $.notify(response.message,'error');
+                    }
+                    
                 })
                 .catch(function (error) {
 
