@@ -8,16 +8,10 @@ use Illuminate\Http\Request;
 use App\Common\UserInfo;
 use App\Models\RefPermissao;
 use Carbon\Carbon;
+use Illuminate\Support\Carbon as SupportCarbon;
 
 class UserPermissaoController extends Controller
 {
-    private $request;
-    
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -78,8 +72,12 @@ class UserPermissaoController extends Controller
 
             // Tratar o erro aqui
             return response()->json([
-                'error' => $mensagem,
-                'trace_id' => $traceId
+                'status' => 404,
+                'errors' => [
+                    'error' => $mensagem,
+                ],
+                'trace_id' => $traceId,
+                'timestamp' => now()->toDateString(),
             ], 404);
         }
 
@@ -105,9 +103,13 @@ class UserPermissaoController extends Controller
 
             // Tratar o erro aqui
             return response()->json([
-                'error' => $mensagem,
+                'status' => 409,
+                'errors' => [
+                    'error' => $mensagem,
+                ],
                 'trace_id' => $traceId,
-                'data' => $consultaPermissaoAtiva->get()
+                'data' => $consultaPermissaoAtiva->get(),
+                'timestamp' => now()->toDateString(),
             ], 409);
         }
 
@@ -125,12 +127,15 @@ class UserPermissaoController extends Controller
         // Erros que impedem o processamento
         if (count($arrErrors)){
             return response()->json([
-                'errors' => $arrErrors
+                "status" => 422,
+                'errors' => $arrErrors,
+                'timestamp' => now()->toDateTimeString(),
             ], 422);
         }
 
         $novo->id_user_created = auth()->user()->id;
         $novo->ip_created = UserInfo::get_ip();
+        $novo->created_at = now()->toDateTimeString();
         $novo->updated_at = null;
 
         $novo->save();
@@ -140,6 +145,7 @@ class UserPermissaoController extends Controller
             "status" => 201,
             'message' => 'Permissão adicionada com sucesso.',
             'data' => $novo,
+            'timestamp' => now()->toDateTimeString(),
         ], 201);
 
     }
@@ -164,7 +170,7 @@ class UserPermissaoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
         $arrErrors = [];
 
@@ -172,30 +178,34 @@ class UserPermissaoController extends Controller
         $rules = [
             'substituto_bln' => 'boolean',
             'data_inicio' => 'required|date',
-            'data_termino' => 'date',
+            'data_termino' => 'date|nullable',
         ];
 
         CommonsFunctions::validacaoRequest($request,$rules);
 
-        $resource = UserPermissao::find($id);
+        $resource = UserPermissao::find($request->id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
-        if ($resource || !$resource->trashed()) {
+        if (!$resource || $resource->trashed()) {
             // Gerar um log
             $mensagem = "A Permissão de Usuário informada não existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             return response()->json([
-                'error' => $mensagem,
-                'trace_id' => $traceId
+                'status' => 404,
+                'errors' => [
+                    'error' => $mensagem,
+                ],
+                'trace_id' => $traceId,
+                'timestamp' => now()->toDateString(),
             ], 404);
         }
 
         //Verifica se a permissão permite substituto
         $this->validarPermissaoSubstituto($resource, $request, $arrErrors);
 
-        // Verifica se foi informado uma data de início diferente da existente
-        if (Carbon::parse($request->input('data_inicio'))->startOfDay()->isBefore(Carbon::parse($resource->data_inicio)->startOfDay())) {
+        // Verificar se a data_inicio foi alterada
+        if ($request->has('data_inicio') && $resource->data_inicio != $request->input('data_inicio')) {
             // Verifica se a data de início é menor que a data de hoje
             $this->validarDataInicio($resource, $request, $arrErrors);
         }
@@ -208,7 +218,9 @@ class UserPermissaoController extends Controller
         // Erros que impedem o processamento
         if (count($arrErrors)){
             return response()->json([
-                'errors' => $arrErrors
+                'status' => 422,
+                'errors' => $arrErrors,
+                'timestamp' => now()->toDateTimeString(),
             ], 422);
         }
         
@@ -224,6 +236,7 @@ class UserPermissaoController extends Controller
             "status" => 201,
             'message' => 'Operação realizada com sucesso.',
             'data' => $resource,
+            'timestamp' => now()->toDateString(),
         ], 201);
 
     }
@@ -238,20 +251,28 @@ class UserPermissaoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             return response()->json([
+                'status' => 404,
                 'errors' => [
-                    'error' => 'Permissão de usuário não encontrada.']
+                    'error' => 'Permissão de usuário não encontrada.'
+                ],
+                'timestamp' => now()->toDateString(),
                 ], 404);
         }
 
         // Execute o soft delete
         $resource->id_user_deleted = auth()->user()->id;
         $resource->ip_deleted = UserInfo::get_ip();
-        $resource->deleted_at = now();
+        $resource->deleted_at = now()->toDateTimeString()
+;
 
         $resource->save();
 
         // Resposta de sucesso
-        return response()->json(['message' => 'Permissão de usuário excluída com sucesso.'], 200);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Permissão de usuário excluída com sucesso.',
+            'timestamp' => now()->toDateString(),
+        ], 200);
     }
 
     private function validarDataInicio($resource, $request, &$arrErrors)

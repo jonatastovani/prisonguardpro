@@ -26,8 +26,9 @@ $(document).ready(function() {
         
         const dataToSend = commonFunctions.getInputsValues($('#form1')[0], 1);
         // const dataToSend = $('#form1').serialize();
-        console.log(dataToSend)
-        
+        // console.log(dataToSend)
+        // console.log(urlLogin)
+  
         const obj = new conectAjax(urlLogin);
 
         if (obj.setAction(enumAction.POST)) {

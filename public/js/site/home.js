@@ -4,37 +4,21 @@ import { enumAction } from "../common/enumAction.js";
 
 $(document).ready(function() {
 
-    $("#show-password").click(function() {
-
-        var passwordField = $("#password");
-        var passwordType = passwordField.attr("type");
-        
-        if (passwordType === "password") {
-            passwordField.attr("type", "text");
-            $("#show-password i").removeClass("bi bi-eye-fill");
-            $("#show-password i").addClass("bi bi-eye-slash-fill");
-        } else {
-            passwordField.attr("type", "password");
-            $("#show-password i").removeClass("bi bi-eye-slash-fill");
-            $("#show-password i").addClass("bi bi-eye-fill");
-        }
-
-    });
-
     $('#send').click(function (e) {
         // e.preventDefault();
         
         // const dataToSend = commonFunctions.getInputsValues($('#form1')[0], 1);
         // console.log(dataToSend)
         
-        const obj = new conectAjax(urlRefArtigos);
+        const obj = new conectAjax(`${urlApiVersion}/userPermissao/2`);
 
         if (obj.setAction(enumAction.GET)) {
                 
             obj.getData()
                 .then(function (response) {
                     console.log(response);
-
+                    console.log(response[0].created_at)
+                    $('#data').val(response[0].created_at)
                     // $.notify(response.message,'success');
 
                     // window.location.href = response.data.redirect;
@@ -50,4 +34,8 @@ $(document).ready(function() {
         
     })
 
+    $('#imp').click(function () {
+        
+        $('#dataimpressa').val($("#data").val())
+    })
 });

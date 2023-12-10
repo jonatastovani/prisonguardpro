@@ -69,7 +69,12 @@ class CommonsFunctions {
             $traceId = CommonsFunctions::generateLog($validator->errors());
 
             // Se a validação falhar, retorne os erros em uma resposta JSON com código 422 (Unprocessable Entity)
-            return response()->json(['errors' => $validator->errors(), 'trace_id' => $traceId], 422)->throwResponse();
+            return response()->json([
+                "status" => 422,
+                'errors' => $validator->errors(),
+                'trace_id' => $traceId,
+                'timestamp' => now()->toDateTimeString(),
+            ], 422)->throwResponse();
         }
 
     }

@@ -11,6 +11,7 @@ class UserPermissao extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'user_permissao';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     public function user() {
 

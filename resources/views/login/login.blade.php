@@ -44,7 +44,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="username">Usuário</label>
-                                    <input type="text" class="form-control" name="username" id="username" placeholder="Digite seu nome de usuário"  autofocus>
+                                    <input type="text" class="form-control" name="username" id="username" placeholder="Digite seu nome de usuário" autofocus>
                                 </div>
                             </div>
                         </div>
