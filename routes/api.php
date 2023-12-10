@@ -25,19 +25,22 @@ route::prefix('/v1')->group(function() {
         
         // Rotas relacionadas ao RefArtigoController
         Route::controller(RefArtigoController::class)->group(function() {
-            Route::get('/ref/artigos', 'index');
-            Route::get('/ref/artigos/{id}', 'show');
-            Route::post('/ref/artigos', 'store');
-            Route::delete('/ref/artigos/{id}', 'destroy');
+            Route::prefix('/ref/artigos')->group(function () {
+                Route::get('', 'index');
+                Route::get('/{id}', 'show');
+                Route::post('', 'store');
+                Route::put('/{id}', 'update');
+                Route::delete('/{id}', 'destroy');
+            });
         });
-        
         
         // Rotas relacionadas ao UserPermissaoController
         Route::controller(UserPermissaoController::class)->group(function() {
             Route::prefix('/userPermissao')->group(function () {
-                Route::get('', 'index');
-                Route::get('/{id}', 'show');
+                Route::get('/{id}', 'index');
+                Route::get('/{id}/idPermissao/{idPermissao}', 'show');
                 Route::post('', 'store');
+                Route::put('/{id}', 'update');
                 Route::delete('/{id}', 'destroy');
             });
         });

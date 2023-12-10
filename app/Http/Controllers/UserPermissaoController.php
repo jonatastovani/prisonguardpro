@@ -4,30 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
 use App\Models\UserPermissao;
-use Darryldecode\Cart\Validators\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Common\UserInfo;
 use App\Models\RefPermissao;
 use Carbon\Carbon;
 
 class UserPermissaoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private $request;
+    
+    public function __construct(Request $request)
     {
-        $dados = UserPermissao::all();
-        return $dados;
+        $this->request = $request;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function index($idUser)
     {
-        //
+        $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
+
+        $dados = UserPermissao::
+        where('user_id', $idUser)
+        // ->where('permissao_id', $registro->permissao_id)
+        ->where(function ($query) use ($dataAtual) {
+            $query->whereDate('data_termino', '>=', $dataAtual)
+            ->orWhereNull('data_termino');
+        })->get();
+        return $dados;
     }
 
     /**
@@ -46,25 +51,17 @@ class UserPermissaoController extends Controller
             'data_termino' => 'date',
         ];
 
-        // Mensagens de erro personalizadas
-        $messages = [
-            'required' => 'O campo :attribute é obrigatório.',
-            'integer' => 'O campo :attribute deve ser um número.',
-            'boolean' => 'O campo :attribute deve ser booleano.',
-            'date' => 'O campo :attribute deve ser uma data.',
+        // Apelidos para os atributos
+        $attributeNames = [
+            'user_id' => 'ID do Usuário',
+            'permissao_id' => 'ID da Permissão',
+            'substituto_bln' => 'Substituto',
+            'data_inicio' => 'Data de Início',
+            'data_termino' => 'Data de Término',
         ];
 
-        // Valide os dados recebidos da requisição
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            // Gerar um log
-            $traceId = CommonsFunctions::generateLog($validator->errors());
-
-            // Se a validação falhar, retorne os erros em uma resposta JSON com código 422 (Unprocessable Entity)
-            return response()->json(['errors' => $validator->errors(), 'trace_id' => $traceId], 422);
-        }
-
+        CommonsFunctions::validacaoRequest($request,$rules, $attributeNames);
+        
         // Se a validação passou, crie um novo registro
         $novo = new UserPermissao();
         $novo->user_id = $request->input('user_id');
@@ -111,60 +108,18 @@ class UserPermissaoController extends Controller
                 'error' => $mensagem,
                 'trace_id' => $traceId,
                 'data' => $consultaPermissaoAtiva->get()
-            ], 404);
+            ], 409);
         }
 
-        $novo->permissao_id = $permissao_id;
-
-        // Verifique se o campo 'substituto_bln' foi enviado
-        if ($request->has('substituto_bln') && $request->input('substituto_bln') == true) {
-            // Obter a permissão encontrada
-            $permissao = $consultaPermissao->first();
-            if (!$permissao->diretor_bln) {
-                // Gerar um log
-                $mensagem = "A permissão '". $permissao->nome ."' não é uma permissão de Diretoria que permite substituto.";
-                $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-                $arrErrors[] = [
-                        'error' => $mensagem,
-                        'trace_id' => $traceId
-                    ];
-
-            } else {
-                $novo->substituto_bln = $request->input('substituto_bln');
-            }
-        }
-
-        $novo->data_inicio = $request->input('data_inicio');
+        //Verifica se a permissão permite substituto
+        $this->validarPermissaoSubstituto($novo, $request, $arrErrors);
 
         // Verifica se a data de início é menor que a data de hoje
-        if (Carbon::parse($novo->data_inicio)->startOfDay()->isBefore(Carbon::now()->startOfDay())) {
-            // Gerar um log
-            $mensagem = "A data de início não pode ser menor que a data de hoje.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-            $arrErrors[] = [
-                'error' => $mensagem,
-                'trace_id' => $traceId
-            ];
-        }
+        $this->validarDataInicio($novo, $request, $arrErrors);
 
         // Verifique se o campo 'data_termino' foi enviado
         if ($request->has('data_termino')) {
-
-            $novo->data_termino = $request->input('data_termino');
-
-            // Verifica se a data de término é menor que a data de início
-            if (Carbon::parse($novo->data_termino)->startOfDay()->isBefore(Carbon::parse($novo->data_inicio)->startOfDay())) {
-                // Gerar um log
-                $mensagem = "A data de término não pode ser menor que a data de início.";
-                $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-                $arrErrors[] = [
-                    'error' => $mensagem,
-                    'trace_id' => $traceId
-                ];
-            }
+            $this->validarDataTermino($novo, $request, $arrErrors);
         }
 
         // Erros que impedem o processamento
@@ -183,7 +138,7 @@ class UserPermissaoController extends Controller
         // Retorne uma resposta de sucesso (status 201 - Created)
         return response()->json([
             "status" => 201,
-            'message' => 'Operação realizada com sucesso.',
+            'message' => 'Permissão adicionada com sucesso.',
             'data' => $novo,
         ], 201);
 
@@ -192,32 +147,162 @@ class UserPermissaoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserPermissao $userPermissao)
+    public function show($idUser, $idPermissao)
     {
-        //
-    }
+        $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserPermissao $userPermissao)
-    {
-        //
+        $dados = UserPermissao::
+        where('user_id', $idUser)
+        ->where('permissao_id', $idPermissao)
+        ->where(function ($query) use ($dataAtual) {
+            $query->whereDate('data_termino', '>=', $dataAtual)
+            ->orWhereNull('data_termino');
+        })->get();
+        return $dados;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserPermissao $userPermissao)
+    public function update(Request $request, $id)
     {
-        //
+        $arrErrors = [];
+
+        // Regras de validação
+        $rules = [
+            'substituto_bln' => 'boolean',
+            'data_inicio' => 'required|date',
+            'data_termino' => 'date',
+        ];
+
+        CommonsFunctions::validacaoRequest($request,$rules);
+
+        $resource = UserPermissao::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if ($resource || !$resource->trashed()) {
+            // Gerar um log
+            $mensagem = "A Permissão de Usuário informada não existe.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            return response()->json([
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ], 404);
+        }
+
+        //Verifica se a permissão permite substituto
+        $this->validarPermissaoSubstituto($resource, $request, $arrErrors);
+
+        // Verifica se foi informado uma data de início diferente da existente
+        if (Carbon::parse($request->input('data_inicio'))->startOfDay()->isBefore(Carbon::parse($resource->data_inicio)->startOfDay())) {
+            // Verifica se a data de início é menor que a data de hoje
+            $this->validarDataInicio($resource, $request, $arrErrors);
+        }
+
+        // Verifique se o campo 'data_termino' foi enviado
+        if ($request->has('data_termino')) {
+            $this->validarDataTermino($resource, $request, $arrErrors);
+        }
+
+        // Erros que impedem o processamento
+        if (count($arrErrors)){
+            return response()->json([
+                'errors' => $arrErrors
+            ], 422);
+        }
+        
+        // Se as validações passaram, altere o registro
+
+        $resource->id_user_updated = auth()->user()->id;
+        $resource->ip_updated = UserInfo::get_ip();
+
+        $resource->save();
+        
+        // Retorne uma resposta de sucesso (status 201 - Created)
+        return response()->json([
+            "status" => 201,
+            'message' => 'Operação realizada com sucesso.',
+            'data' => $resource,
+        ], 201);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserPermissao $userPermissao)
+    public function destroy($id)
     {
-        //
+        $resource = UserPermissao::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            return response()->json([
+                'errors' => [
+                    'error' => 'Permissão de usuário não encontrada.']
+                ], 404);
+        }
+
+        // Execute o soft delete
+        $resource->id_user_deleted = auth()->user()->id;
+        $resource->ip_deleted = UserInfo::get_ip();
+        $resource->deleted_at = now();
+
+        $resource->save();
+
+        // Resposta de sucesso
+        return response()->json(['message' => 'Permissão de usuário excluída com sucesso.'], 200);
     }
+
+    private function validarDataInicio($resource, $request, &$arrErrors)
+    {
+        $resource->data_inicio = $request->input('data_inicio');
+
+        if (Carbon::parse($resource->data_inicio)->startOfDay()->isBefore(Carbon::now()->startOfDay())) {
+            $mensagem = "A data de início não pode ser menor que a data de hoje.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $arrErrors[] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
+
+    private function validarDataTermino($resource, $request, &$arrErrors)
+    {
+        $resource->data_termino = $request->input('data_termino');
+
+        if (Carbon::parse($resource->data_termino)->startOfDay()->isBefore(Carbon::parse($resource->data_inicio)->startOfDay())) {
+            $mensagem = "A data de término não pode ser menor que a data de início.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $arrErrors[] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
+
+    private function validarPermissaoSubstituto($resource, $request, &$arrErrors)
+    {
+        // Verifique se o campo 'substituto_bln' foi enviado
+        if ($request->has('substituto_bln') && $request->input('substituto_bln') == true) {
+            $consultaPermissao = RefPermissao::find($resource->permissao_id);
+
+            if (!$consultaPermissao || !$consultaPermissao->diretor_bln) {
+                // Gerar um log
+                $mensagem = "A permissão '". ($consultaPermissao ? $consultaPermissao->nome : 'Permissão não encontrada') ."' não é uma permissão de Diretoria que permite substituto.";
+                $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+                $arrErrors[] = [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ];
+            } else {
+                $resource->substituto_bln = $request->input('substituto_bln');
+            }
+        }
+    }
+
 }

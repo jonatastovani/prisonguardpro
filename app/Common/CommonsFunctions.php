@@ -4,14 +4,22 @@ namespace app\Common;
 
 use App\common\restResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+Use Illuminate\Support\Facades\Validator;
 
 class CommonsFunctions {
 
+    /**
+     * Gera um ID para o Log
+     */
     static function generateTraceId() {
         return uniqid('PGP|');
     }    
 
-    static function generateLog($mensagem) {
+    /**
+     * Gera Log de erro, retornando o id do Log
+     */
+    static function generateLog($mensagem) :string {
         
         $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1);
         
@@ -32,27 +40,38 @@ class CommonsFunctions {
         
     }
     
-    // public function curlConsult($arr) : restResponse {
-    //     $urlApi = $arr['urlApi'];
-    //     $id = $arr['id'];
+    /**
+     * Retorna um array de mensagens para uso do Validator
+     */
+    static function getMessagesValidate() : array {
+        return [
+            'required' => 'O campo :attribute é obrigatório.',
+            'integer' => 'O campo :attribute deve ser um número.',
+            'boolean' => 'O campo :attribute deve ser booleano.',
+            'date' => 'O campo :attribute deve ser uma data.',
+        ];
+    }
     
-    //     $urlConsult = URL_DOMAIN.$urlApi.$id;
-    
-    //     $ch = curl_init($urlConsult);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     $response = curl_exec($ch);
-    //     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    //     curl_close($ch);
-    //     $result = json_decode($response, true);
+    /**
+     * Efetua uma validação dos inputs da request enviada
+     */
+    static function validacaoRequest(Request $request, Array $rules, Array $attributeNames = [], Array $messages = []) {
+        
+        if (!count($messages)) {
+            $messages = CommonsFunctions::getMessagesValidate();
+        }
 
-    //     // Handle exceptions or errors here if needed
+        // Valide os dados recebidos da requisição
+        $validator = Validator::make($request->all(), $rules, $messages, $attributeNames);
 
-    //     if ($httpCode == 200) {
-    //         return new RestResponse($result, 200, 'Success');
-    //     } else {
-    //         return new RestResponse([], $httpCode, 'Error');
-    //     }
-    // }
+        if ($validator->fails()) {
+            // Gerar um log
+            $traceId = CommonsFunctions::generateLog($validator->errors());
 
-    
+            // Se a validação falhar, retorne os erros em uma resposta JSON com código 422 (Unprocessable Entity)
+            return response()->json(['errors' => $validator->errors(), 'trace_id' => $traceId], 422)->throwResponse();
+        }
+
+    }
+
 }
