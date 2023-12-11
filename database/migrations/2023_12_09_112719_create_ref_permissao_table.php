@@ -16,14 +16,6 @@ return new class extends Migration
             $table->string('nome');
             $table->string('nome_completo')->nullable();
             $table->string('descricao');            
-            $table->boolean('diretor_bln')->default(false);
-            $table->unsignedBigInteger('permissao_pai_id')->nullable();
-            $table->foreign('permissao_pai_id')->references('id')->on('ref_permissao');
-            $table->unsignedBigInteger('grupo_pai_id')->nullable();
-            $table->foreign('grupo_pai_id')->references('id')->on('ref_permissao_grupo');
-            $table->unsignedBigInteger('grupo_id')->nullable();
-            $table->foreign('grupo_id')->references('id')->on('ref_permissao_grupo');
-            $table->integer('ordem')->nullable();
         });
     }
 

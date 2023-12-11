@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Common\CommonsFunctions;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -27,4 +29,18 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof AuthorizationException) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Você não possui permissão para realizar esta ação.',
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+            ], 403);
+        }
+    
+        return parent::render($request, $exception);
+    }
+    
 }

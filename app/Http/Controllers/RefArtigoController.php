@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use app\Common\CommonsFunctions;
+use App\Common\CommonsFunctions;
+use App\Common\UserInfo;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -62,66 +63,54 @@ class RefArtigoController extends Controller
         // Regras de validação
         $rules = [
             'nome' => 'required',
-            'id_user_created' => 'required',
-            'ip_created' => 'string',
-            'created_at' => 'date',
+            'descricao' => 'required',
         ];
 
-        // Mensagens de erro personalizadas
-        $messages = [
-            'required' => 'O campo :attribute é obrigatório.',
-            'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
-        ];
+        CommonsFunctions::validacaoRequest($request,$rules);
 
-        // Valide os dados recebidos da requisição
-        $validator = Validator::make($request->all(), $rules, $messages);
+        // Valida se não existe outro com o mesmo nome
+        $resource = RefArtigo::where('nome', $request->input('nome'));
 
-        if ($validator->fails()) {
-            // Gere um trace ID
-            $traceId = commonsFunctions::generateTraceId();
+        if ($resource->exists()) {
+            // Gerar um log
+            $mensagem = "O artigo informado já existe.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            // Registre o erro no log com o trace ID
-            Log::error($validator->errors() . " Trace ID: $traceId");
-
-            // Se a validação falhar, retorne os erros em uma resposta JSON com código 422 (Unprocessable Entity)
-            return response()->json(['errors' => $validator->errors(), 'trace_id' => $traceId], 422);
+            // Tratar o erro aqui
+            return response()->json([
+                'status' => 409,
+                'errors' => [
+                    'error' => $mensagem,
+                ],
+                'data' => $resource->first(),
+                'trace_id' => $traceId,
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+            ], 409);
         }
-
+        
         // Se a validação passou, crie um novo registro
         $novo = new RefArtigo();
         $novo->nome = $request->input('nome');
         $novo->descricao = $request->input('descricao');
-        $novo->id_user_created = $request->input('id_user_created');
 
-        // Defina o ip_created baseado na presença de 'ip_created'
-        $novo->ip_created = $request->input('ip_created');
-
-        // Verifique se o campo 'created_at' foi enviado
-        if ($request->has('created_at')) {
-            $novo->created_at = $request->input('created_at');
-        } else {
-            // Caso contrário, defina a data atual
-            $novo->created_at = now();
-        }
+        CommonsFunctions::inserirInfoCreated($novo);
 
         $novo->save();
 
         // Retorne uma resposta de sucesso (status 201 - Created)
-        return response()->json(['message' => 'Artigo criado com sucesso', 'data' => $novo], 201);
+        return response()->json([
+            "status" => 201,
+            'message' => 'Artigo adicionado com sucesso.',
+            'data' => $novo,
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+        ], 201);
+
     }
 
     /**
      * Display the specified resource.
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(RefArtigo $refArtigo)
     {
         //
     }
@@ -139,25 +128,34 @@ class RefArtigoController extends Controller
      */
     public function destroy($id)
     {
-        $validator = Validator::make(['id' => $id], [
-            'id' => 'exists:ref_artigos,id',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
-    
-        $refArtigo = RefArtigo::find($id);
+        $this->authorize('delete', RefArtigo::class);
 
-        // Verifique se o modelo foi encontrado
-        if (!$refArtigo) {
-            return response()->json(['error' => 'Artigo não encontrado.'], 404);
+        $resource = RefArtigo::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            return response()->json([
+                'status' => 404,
+                'errors' => [
+                    'error' => 'Artigo não encontrado.'
+                ],
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+                ], 404);
         }
 
         // Execute o soft delete
-        $refArtigo->delete();
+        $resource->id_user_deleted = auth()->user()->id;
+        $resource->ip_deleted = UserInfo::get_ip();
+        $resource->deleted_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
+
+        $resource->save();
 
         // Resposta de sucesso
-        return response()->json(['message' => 'Artigo excluído com sucesso.'], 200);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Artigo excluído com sucesso.',
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+        ], 200);
+
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
-namespace app\Common;
+namespace App\Common;
 
 use App\common\restResponse;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 Use Illuminate\Support\Facades\Validator;
 
-class CommonsFunctions {
+class CommonsFunctions
+{
 
     /**
      * Gera um ID para o Log
@@ -49,6 +51,7 @@ class CommonsFunctions {
             'integer' => 'O campo :attribute deve ser um número.',
             'boolean' => 'O campo :attribute deve ser booleano.',
             'date' => 'O campo :attribute deve ser uma data.',
+            'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
         ];
     }
     
@@ -79,4 +82,22 @@ class CommonsFunctions {
 
     }
 
+    static function formatarDataTimeZonaAmericaSaoPaulo($value)
+    {
+        if ($value) {
+            return Carbon::parse($value)->timezone(config('app.timezone'))->toDateTimeString();
+        }
+
+        return null;
+    }
+
+    static function inserirInfoCreated($novo) {
+        
+        $novo->id_user_created = auth()->user()->id;
+        $novo->ip_created = UserInfo::get_ip();
+        $novo->created_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
+        $novo->updated_at = null;
+
+        return $novo;
+    }
 }

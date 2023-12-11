@@ -8,7 +8,6 @@ use App\Models\RefArtigo;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\SanctumController;
 
-
 // Rotas relacionadas ao RefArtigoController
 Route::controller(LoginController::class)->group(function () {
     // Rota para autenticação web com sessão

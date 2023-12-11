@@ -1,6 +1,7 @@
 
 <script>
-	const urlApi = "{{ config('sistema.urlApi') }}";
+    const baseUrl = 'http://172.14.239.101';
+    const urlApi = `${baseUrl}/api`;
 	const urlVersion = "{{ config('sistema.versionApi') }}";
 	const urlApiVersion = urlApi + urlVersion;
 	const urlRefArtigos = `${urlApiVersion}/ref/artigos`;

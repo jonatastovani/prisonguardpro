@@ -43,6 +43,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function permissoes()
+    {
+        return $this->hasMany(UserPermissao::class, 'user_id');
+    }
+
     // /**
     //  * The name of the "usuario" column.
     //  *

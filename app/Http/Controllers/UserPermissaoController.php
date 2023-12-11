@@ -26,7 +26,12 @@ class UserPermissaoController extends Controller
             $query->whereDate('data_termino', '>=', $dataAtual)
             ->orWhereNull('data_termino');
         })->get();
-        return $dados;
+        return response()->json([
+            "status" => 200,
+            'message' => 'Permissões do usuário encontradas com sucesso.',
+            'data' => $dados,
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+        ], 200);
     }
 
     /**
@@ -77,7 +82,7 @@ class UserPermissaoController extends Controller
                     'error' => $mensagem,
                 ],
                 'trace_id' => $traceId,
-                'timestamp' => now()->toDateString(),
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
             ], 404);
         }
 
@@ -108,8 +113,8 @@ class UserPermissaoController extends Controller
                     'error' => $mensagem,
                 ],
                 'trace_id' => $traceId,
-                'data' => $consultaPermissaoAtiva->get(),
-                'timestamp' => now()->toDateString(),
+                'data' => $consultaPermissaoAtiva->first(),
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
             ], 409);
         }
 
@@ -129,13 +134,13 @@ class UserPermissaoController extends Controller
             return response()->json([
                 "status" => 422,
                 'errors' => $arrErrors,
-                'timestamp' => now()->toDateTimeString(),
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
             ], 422);
         }
 
         $novo->id_user_created = auth()->user()->id;
         $novo->ip_created = UserInfo::get_ip();
-        $novo->created_at = now()->toDateTimeString();
+        $novo->created_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
         $novo->updated_at = null;
 
         $novo->save();
@@ -145,7 +150,7 @@ class UserPermissaoController extends Controller
             "status" => 201,
             'message' => 'Permissão adicionada com sucesso.',
             'data' => $novo,
-            'timestamp' => now()->toDateTimeString(),
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
         ], 201);
 
     }
@@ -163,14 +168,21 @@ class UserPermissaoController extends Controller
         ->where(function ($query) use ($dataAtual) {
             $query->whereDate('data_termino', '>=', $dataAtual)
             ->orWhereNull('data_termino');
-        })->get();
-        return $dados;
+        })->first();
+
+        return response()->json([
+            "status" => 200,
+            'message' => 'Permissão de usuário encontrada com sucesso.',
+            'data' => $dados,
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+        ], 200);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
         $arrErrors = [];
 
@@ -197,7 +209,7 @@ class UserPermissaoController extends Controller
                     'error' => $mensagem,
                 ],
                 'trace_id' => $traceId,
-                'timestamp' => now()->toDateString(),
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
             ], 404);
         }
 
@@ -220,7 +232,7 @@ class UserPermissaoController extends Controller
             return response()->json([
                 'status' => 422,
                 'errors' => $arrErrors,
-                'timestamp' => now()->toDateTimeString(),
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
             ], 422);
         }
         
@@ -234,9 +246,9 @@ class UserPermissaoController extends Controller
         // Retorne uma resposta de sucesso (status 201 - Created)
         return response()->json([
             "status" => 201,
-            'message' => 'Operação realizada com sucesso.',
+            'message' => 'Alteração realizada com sucesso.',
             'data' => $resource,
-            'timestamp' => now()->toDateString(),
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
         ], 201);
 
     }
@@ -255,15 +267,14 @@ class UserPermissaoController extends Controller
                 'errors' => [
                     'error' => 'Permissão de usuário não encontrada.'
                 ],
-                'timestamp' => now()->toDateString(),
+                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
                 ], 404);
         }
 
         // Execute o soft delete
         $resource->id_user_deleted = auth()->user()->id;
         $resource->ip_deleted = UserInfo::get_ip();
-        $resource->deleted_at = now()->toDateTimeString()
-;
+        $resource->deleted_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
 
         $resource->save();
 
@@ -271,7 +282,7 @@ class UserPermissaoController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Permissão de usuário excluída com sucesso.',
-            'timestamp' => now()->toDateString(),
+            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
         ], 200);
     }
 

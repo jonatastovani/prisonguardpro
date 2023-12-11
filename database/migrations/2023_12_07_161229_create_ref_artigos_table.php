@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('ref_artigos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome')->unique();
-            $table->string('descricao')->nullable();
+            $table->string('nome');
+            $table->string('descricao');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');

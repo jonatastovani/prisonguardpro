@@ -150,7 +150,7 @@ export class conectAjax {
                     if (xhr.status !== 200) {
                         console.error(xhr);
                         console.error('Erro HTTP:', xhr.status);
-                        console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
+                        // console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
                     } else {
                         console.error('Erro inesperado', xhr);
                     }
