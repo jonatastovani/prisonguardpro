@@ -1,12 +1,12 @@
 
 <script>
-    const baseUrl = 'http://172.14.239.101';
+    const baseUrl = "{{ env('HOST', 'http://prisonguardpro.test') }}";
     const urlApi = `${baseUrl}/api`;
-	const urlVersion = "{{ config('sistema.versionApi') }}";
-	const urlApiVersion = urlApi + urlVersion;
-	const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
-	const urlLogin = urlApi + "/auth";
-	console.log(urlLogin);
+    const urlVersion = "{{ config('sistema.versionApi') }}";
+    const urlApiVersion = `${urlApi}${urlVersion}`;
+    const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
+    const urlLogin = `${urlApi}/auth`;
+    console.log(urlLogin);
 </script>
 
 <?php 

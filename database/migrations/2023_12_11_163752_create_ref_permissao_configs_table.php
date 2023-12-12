@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ref_permissao_config', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('permissao_id')->nullable();
-            $table->boolean('permite_substituto_bln')->default(false);
+            $table->boolean('permite_subst_bln')->default(false);
             $table->foreign('permissao_id')->references('id')->on('ref_permissao');
             $table->unsignedBigInteger('permissao_pai_id')->nullable();
             $table->foreign('permissao_pai_id')->references('id')->on('ref_permissao');
