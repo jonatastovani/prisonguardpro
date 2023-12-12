@@ -33,7 +33,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 3,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => null,
+                'permissao_pai_id' => 53,
                 'grupo_pai_id' => null,
                 'grupo_id' => 4,
                 'ordem' => null,
@@ -81,7 +81,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 9,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => null,
+                'permissao_pai_id' => 62,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
                 'ordem' => null,
@@ -433,7 +433,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 53,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => 1,
+                'permissao_pai_id' => 62,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
                 'ordem' => null,
@@ -441,7 +441,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 54,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => 1,
+                'permissao_pai_id' => 53,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
                 'ordem' => null,
@@ -449,7 +449,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 55,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => 1,
+                'permissao_pai_id' => 53,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
                 'ordem' => null,
@@ -457,7 +457,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 56,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => 1,
+                'permissao_pai_id' => 53,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
                 'ordem' => null,
@@ -465,7 +465,7 @@ class RefPermissaoConfigSeeder extends Seeder
             [
                 'permissao_id' => 57,
                 'permite_subst_bln' => '1',
-                'permissao_pai_id' => 1,
+                'permissao_pai_id' => 53,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
                 'ordem' => null,

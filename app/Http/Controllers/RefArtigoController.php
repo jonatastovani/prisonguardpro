@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Common\CommonsFunctions;
-use App\Common\UserInfo;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Common\RestResponse;
 
 use App\Models\RefArtigo;
-use App\Models\User;
 
 class RefArtigoController extends Controller
 {
@@ -42,17 +38,9 @@ class RefArtigoController extends Controller
      */
     public function index()
     {
-        $consulta = RefArtigo::all();
-        return $consulta;
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        // 
+        $resource = RefArtigo::all();
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -70,22 +58,15 @@ class RefArtigoController extends Controller
 
         // Valida se não existe outro com o mesmo nome
         $resource = RefArtigo::where('nome', $request->input('nome'));
+        // Valida se não existe outro com o mesmo nome
 
         if ($resource->exists()) {
             // Gerar um log
             $mensagem = "O artigo informado já existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-            // Tratar o erro aqui
-            return response()->json([
-                'status' => 409,
-                'errors' => [
-                    'error' => $mensagem,
-                ],
-                'data' => $resource->first(),
-                'trace_id' => $traceId,
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-            ], 409);
+    
+            $response = RestResponse::createGenericResponse($resource->first(), 409, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
         
         // Se a validação passou, crie um novo registro
@@ -97,14 +78,8 @@ class RefArtigoController extends Controller
 
         $novo->save();
 
-        // Retorne uma resposta de sucesso (status 201 - Created)
-        return response()->json([
-            "status" => 201,
-            'message' => 'Artigo adicionado com sucesso.',
-            'data' => $novo,
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 201);
-
+        $response = RestResponse::createSuccessResponse($novo, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -112,15 +87,73 @@ class RefArtigoController extends Controller
      */
     public function show($id)
     {
-        //
+        $resource = RefArtigo::find($id);
+    
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "O Artigo informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+    
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+    
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RefArtigo $refArtigo)
+    public function update(Request $request)
     {
-        //
+        $this->authorize('update', RefArtigo::class);
+
+        // Regras de validação
+        $rules = [
+            'nome' => 'required',
+            'descricao' => 'required',
+        ];
+
+        CommonsFunctions::validacaoRequest($request,$rules);
+
+        // Valida se não existe outro com o mesmo nome
+        $resource = RefArtigo::
+        where('nome', $request->input('nome'))
+        ->whereNot('id', $request->id);
+
+        if ($resource->exists()) {
+            // Gerar um log
+            $mensagem = "O artigo informado já existe.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse($resource->first(), 409, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+        
+        $resource = RefArtigo::find($request->id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "O Artigo informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+
+        // Se passou pelas validações, altera o recurso
+        $resource->nome = $request->input('nome');
+        $resource->descricao = $request->input('descricao');
+
+        CommonsFunctions::inserirInfoUpdated($resource);
+        $resource->save();
+
+        // Retorne uma resposta de sucesso (status 200 - OK)
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -134,28 +167,21 @@ class RefArtigoController extends Controller
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
-            return response()->json([
-                'status' => 404,
-                'errors' => [
-                    'error' => 'Artigo não encontrado.'
-                ],
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-                ], 404);
+            // Gerar um log
+            $mensagem = "O Artigo informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         // Execute o soft delete
-        $resource->id_user_deleted = auth()->user()->id;
-        $resource->ip_deleted = UserInfo::get_ip();
-        $resource->deleted_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
-
+        CommonsFunctions::inserirInfoDeleted($resource);
         $resource->save();
 
-        // Resposta de sucesso
-        return response()->json([
-            'status' => 200,
-            'message' => 'Artigo excluído com sucesso.',
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 200);
-
+        // Retorne uma resposta de sucesso (status 204 - No Content)
+        $response = RestResponse::createSuccessResponse([], 204, 'Artigo excluído com sucesso.');
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
+
 }

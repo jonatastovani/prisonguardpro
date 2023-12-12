@@ -93,6 +93,7 @@ export class conectAjax {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: this.#urlApi + param,
+                accept: "application/json",
                 method: "GET",
                 dataType: "json",
                 success: function (response) {
@@ -101,7 +102,7 @@ export class conectAjax {
 
                 },
                 error: function (xhr, status, error) {
-
+                    console.log(xhr.responseJSON)
                     console.error('Erro na solicitação AJAX:', status, error);
                     if (xhr.responseJSON && xhr.responseJSON.error) {
                         console.error('Erro da API:', xhr.responseJSON.error.description);

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 Use Illuminate\Support\Facades\Validator;
+use Ramsey\Uuid\Type\Integer;
 
 class CommonsFunctions
 {
@@ -91,13 +92,57 @@ class CommonsFunctions
         return null;
     }
 
-    static function inserirInfoCreated($novo) {
-        
+    static function inserirInfoCreated($novo)
+    {    
         $novo->id_user_created = auth()->user()->id;
         $novo->ip_created = UserInfo::get_ip();
-        $novo->created_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
+        $novo->created_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
         $novo->updated_at = null;
-
-        return $novo;
     }
+
+    static function inserirInfoUpdated($resource)
+    {    
+        $resource->id_user_updated = auth()->user()->id;
+        $resource->ip_updated = UserInfo::get_ip();
+        $resource->updated_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
+    }
+
+    static function inserirInfoDeleted($resource)
+    {    
+        $resource->id_user_deleted = auth()->user()->id;
+        $resource->ip_deleted = UserInfo::get_ip();
+        $resource->deleted_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
+    }
+
+    // /**
+    //  * Retorna uma resposta JSON padronizada para solicitações da API.
+    //  *
+    //  * @param int $status O código de status da resposta.
+    //  * @param mixed $traceId O identificador de rastreamento associado à resposta.
+    //  * @param mixed|null $data Os dados a serem incluídos na resposta, podendo ser de erro ou sucesso.
+    //  * @return \Illuminate\Http\JsonResponse A resposta JSON com os dados formatados e o código de status fornecido.
+    //  */
+    // static function retornoJson(Integer $status, $traceId, $data = null)
+    // {
+    //     $response = [
+    //         'status' => $status,
+    //         'trace_id' => $traceId,
+    //         'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
+    //     ];
+    
+    //     if (!is_null($data)) {
+    //         if (isset($data['error'])) {
+    //             $response['errors'] = [
+    //                 'error' => $data['error'],
+    //             ];
+    //         } elseif (isset($data['errors'])) {
+    //             $response['errors'] = $data['errors'];
+    //         } elseif (isset($data['data'])) {
+    //             $response['data'] = $data['data'];
+    //         }
+    //     }
+    
+    //     return response()->json($response, $status)->throwResponse();
+    // }
+
 }

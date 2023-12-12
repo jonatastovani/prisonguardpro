@@ -10,7 +10,7 @@ $(document).ready(function() {
         // const dataToSend = commonFunctions.getInputsValues($('#form1')[0], 1);
         // console.log(dataToSend)
         
-        const obj = new conectAjax(`${urlApiVersion}/userPermissao/2`);
+        const obj = new conectAjax(`${urlApiVersion}/ref/artigos`);
 
         if (obj.setAction(enumAction.GET)) {
                 

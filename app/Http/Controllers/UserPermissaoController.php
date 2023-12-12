@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
+use App\Common\RestResponse;
 use App\Models\UserPermissao;
 use Illuminate\Http\Request;
 use App\Common\UserInfo;
@@ -19,19 +20,16 @@ class UserPermissaoController extends Controller
     {
         $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
 
-        $dados = UserPermissao::
+        $resource = UserPermissao::
         where('user_id', $idUser)
         // ->where('permissao_id', $registro->permissao_id)
         ->where(function ($query) use ($dataAtual) {
             $query->whereDate('data_termino', '>=', $dataAtual)
             ->orWhereNull('data_termino');
         })->get();
-        return response()->json([
-            "status" => 200,
-            'message' => 'Permissões do usuário encontradas com sucesso.',
-            'data' => $dados,
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 200);
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -75,15 +73,8 @@ class UserPermissaoController extends Controller
             $mensagem = "A permissão informada não existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            // Tratar o erro aqui
-            return response()->json([
-                'status' => 404,
-                'errors' => [
-                    'error' => $mensagem,
-                ],
-                'trace_id' => $traceId,
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-            ], 404);
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         $novo->permissao_id = $permissao_id;
@@ -103,19 +94,11 @@ class UserPermissaoController extends Controller
         // Verifica se o usuário já tem a permissão ativa
         if ($consultaPermissaoAtiva->exists()) {
             // Gerar um log
-            $mensagem = "A permissão já existe.";
+            $mensagem = "A permissão já existe para o usuário informado.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            // Tratar o erro aqui
-            return response()->json([
-                'status' => 409,
-                'errors' => [
-                    'error' => $mensagem,
-                ],
-                'trace_id' => $traceId,
-                'data' => $consultaPermissaoAtiva->first(),
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-            ], 409);
+            $response = RestResponse::createGenericResponse($consultaPermissaoAtiva->first(), 409, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         //Verifica se a permissão permite substituto
@@ -131,28 +114,16 @@ class UserPermissaoController extends Controller
 
         // Erros que impedem o processamento
         if (count($arrErrors)){
-            return response()->json([
-                "status" => 422,
-                'errors' => $arrErrors,
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-            ], 422);
+            $response = RestResponse::createGenericResponse($arrErrors, 422, "A requisição não pôde ser processada.");
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
 
-        $novo->id_user_created = auth()->user()->id;
-        $novo->ip_created = UserInfo::get_ip();
-        $novo->created_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
-        $novo->updated_at = null;
-
+        CommonsFunctions::inserirInfoCreated($novo);
         $novo->save();
         
         // Retorne uma resposta de sucesso (status 201 - Created)
-        return response()->json([
-            "status" => 201,
-            'message' => 'Permissão adicionada com sucesso.',
-            'data' => $novo,
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 201);
-
+        $response = RestResponse::createSuccessResponse($novo, 201, 'Permissão adicionada com sucesso.');
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -162,7 +133,7 @@ class UserPermissaoController extends Controller
     {
         $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
 
-        $dados = UserPermissao::
+        $resource = UserPermissao::
         where('user_id', $idUser)
         ->where('permissao_id', $idPermissao)
         ->where(function ($query) use ($dataAtual) {
@@ -170,13 +141,18 @@ class UserPermissaoController extends Controller
             ->orWhereNull('data_termino');
         })->first();
 
-        return response()->json([
-            "status" => 200,
-            'message' => 'Permissão de usuário encontrada com sucesso.',
-            'data' => $dados,
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 200);
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "A Permissão de Usuário informada não existe ou foi excluída.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| idUser: $idUser | idPermissao: $idPermissao");
 
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+    
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -200,17 +176,11 @@ class UserPermissaoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "A Permissão de Usuário informada não existe.";
+            $mensagem = "A Permissão de Usuário informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            return response()->json([
-                'status' => 404,
-                'errors' => [
-                    'error' => $mensagem,
-                ],
-                'trace_id' => $traceId,
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-            ], 404);
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         //Verifica se a permissão permite substituto
@@ -229,28 +199,17 @@ class UserPermissaoController extends Controller
 
         // Erros que impedem o processamento
         if (count($arrErrors)){
-            return response()->json([
-                'status' => 422,
-                'errors' => $arrErrors,
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-            ], 422);
+            $response = RestResponse::createGenericResponse($arrErrors, 422, "A requisição não pôde ser processada.");
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
         
         // Se as validações passaram, altere o registro
-
-        $resource->id_user_updated = auth()->user()->id;
-        $resource->ip_updated = UserInfo::get_ip();
-
+        CommonsFunctions::inserirInfoUpdated($resource);
         $resource->save();
         
-        // Retorne uma resposta de sucesso (status 201 - Created)
-        return response()->json([
-            "status" => 201,
-            'message' => 'Alteração realizada com sucesso.',
-            'data' => $resource,
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 201);
-
+        // Retorne uma resposta de sucesso (status 200 - OK)
+        $response = RestResponse::createSuccessResponse($resource, 200, 'Alteração realizada com sucesso.');
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -262,28 +221,21 @@ class UserPermissaoController extends Controller
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
-            return response()->json([
-                'status' => 404,
-                'errors' => [
-                    'error' => 'Permissão de usuário não encontrada.'
-                ],
-                'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-                ], 404);
+            // Gerar um log
+            $mensagem = "Permissão de usuário não encontrada.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         // Execute o soft delete
-        $resource->id_user_deleted = auth()->user()->id;
-        $resource->ip_deleted = UserInfo::get_ip();
-        $resource->deleted_at = CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now());
-
+        CommonsFunctions::inserirInfoDeleted($resource);
         $resource->save();
 
-        // Resposta de sucesso
-        return response()->json([
-            'status' => 200,
-            'message' => 'Permissão de usuário excluída com sucesso.',
-            'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
-        ], 200);
+        // Retorne uma resposta de sucesso (status 204 - No Content)
+        $response = RestResponse::createSuccessResponse([], 204, 'Artigo excluído com sucesso.');
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     private function validarDataInicio($resource, $request, &$arrErrors)
