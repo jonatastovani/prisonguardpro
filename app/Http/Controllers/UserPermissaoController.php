@@ -97,7 +97,7 @@ class UserPermissaoController extends Controller
             $mensagem = "A permissão já existe para o usuário informado.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse($consultaPermissaoAtiva->first(), 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $consultaPermissaoAtiva->first()], 409, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -114,7 +114,7 @@ class UserPermissaoController extends Controller
 
         // Erros que impedem o processamento
         if (count($arrErrors)){
-            $response = RestResponse::createGenericResponse($arrErrors, 422, "A requisição não pôde ser processada.");
+            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], 422, "A requisição não pôde ser processada.");
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -199,7 +199,7 @@ class UserPermissaoController extends Controller
 
         // Erros que impedem o processamento
         if (count($arrErrors)){
-            $response = RestResponse::createGenericResponse($arrErrors, 422, "A requisição não pôde ser processada.");
+            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], 422, "A requisição não pôde ser processada.");
             return response()->json($response->toArray(), $response->getStatusCode());
         }
         

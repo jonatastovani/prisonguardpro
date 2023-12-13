@@ -53,7 +53,7 @@ class RestResponse
 
     public static function createGenericResponse($data, $status, $message, $traceId = null)
     {
-        $response = new self(["resource" => $data], $status, $message);
+        $response = new self($data, $status, $message);
 
         if ($traceId) {
             $response->addTraceId($traceId);

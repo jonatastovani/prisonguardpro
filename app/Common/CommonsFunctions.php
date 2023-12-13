@@ -70,15 +70,12 @@ class CommonsFunctions
 
         if ($validator->fails()) {
             // Gerar um log
-            $traceId = CommonsFunctions::generateLog($validator->errors());
+            $mensagem = "A requisição não pôde ser processada.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()) . "Validator: " . json_encode($validator->errors()));
 
             // Se a validação falhar, retorne os erros em uma resposta JSON com código 422 (Unprocessable Entity)
-            return response()->json([
-                "status" => 422,
-                'errors' => $validator->errors(),
-                'trace_id' => $traceId,
-                'timestamp' => now()->toDateTimeString(),
-            ], 422)->throwResponse();
+            $response = restResponse::createGenericResponse(["errors" => $validator->errors()], 422, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
 
     }

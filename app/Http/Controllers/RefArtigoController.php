@@ -65,7 +65,7 @@ class RefArtigoController extends Controller
             $mensagem = "O artigo informado já existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
     
-            $response = RestResponse::createGenericResponse($resource->first(), 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
         
@@ -128,7 +128,7 @@ class RefArtigoController extends Controller
             $mensagem = "O artigo informado já existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse($resource->first(), 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
         
