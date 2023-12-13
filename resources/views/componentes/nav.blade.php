@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav id="navbar" class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a id="systemName" class="navbar-brand" href="#"> {{ config('sistema.nome') }} </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <i class="bi bi-list"></i>
         </button>
         
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -21,7 +21,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Inserir / Alterar</a></li>
-                                <li><a class="dropdown-item" href="#">Gerenciar entradas</a></li>
+                                <li><a class="dropdown-item" href="{{route('inclusao.entradaspresos')}}">Gerenciar entradas</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropend">
@@ -43,29 +43,27 @@
                     </ul>
                 </li>
             </ul>
-        </div>
-        
-        
 
-        <ul class="navbar-nav d-flex flex-wrap text-end">
-            <li class="nav-item dropdown">
-                @auth
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Olá {{ auth()->user()->nome }}!
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-lg-end">
-                        
-                        {{-- <li><a class="dropdown-item" href="{{ route('admin.dashboard') }} "> Dashboard </a></li> --}}
-                        <li><a class="dropdown-item" href="{{ route('login.logout') }} "> Sair </a></li>
+            <ul id="ulUser" class="navbar-nav d-flex flex-wrap flex-fill justify-content-end">
+                <li class="nav-item dropdown">
+                    @auth
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Olá {{ auth()->user()->nome }}!
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg-end">
+                            
+                            {{-- <li><a class="dropdown-item" href="{{ route('admin.dashboard') }} "> Dashboard </a></li> --}}
+                            <li><a class="dropdown-item" href="{{ route('login.logout') }} "> Sair </a></li>
 
-                    </ul>
-                @else
-                    <a class="nav-link" href="{{route('login.login')}}" role="button">
-                        Login
-                    </a>
-                @endauth
-            </li>
-        </ul>
+                        </ul>
+                    @else
+                        <a class="nav-link" href="{{route('login.login')}}" role="button">
+                            Login
+                        </a>
+                    @endauth
+                </li>
+            </ul>
+    </div>
 
     </div>
 </nav>

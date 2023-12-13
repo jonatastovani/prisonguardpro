@@ -46,6 +46,8 @@ class DatabaseSeeder extends Seeder
             RefPermissaoSeeder::class,
             RefTurnoPermissaoSeeder::class,
             RefPermissaoConfigSeeder::class,
+            RefTipoMovimentacaoPresoSeeder::class,
+            IncEntradaOrigemSeeder::class,
         ]);
     }
 }

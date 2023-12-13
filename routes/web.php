@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InclusaoController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\SiteController;
@@ -32,6 +33,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/', [SiteController::class, 'index'])->name('site.index')->middleware('auth');
 
+    // Rotas relacionadas ao InclusaoController
+    Route::controller(InclusaoController::class)->group(function() {
+        Route::prefix('/inclusao')->group(function () {
+            Route::get('', 'home')->name('inclusao.home');
+            Route::get('/entradaspresos', 'entradaspresos')->name('inclusao.entradaspresos');
+        });
+    });
+    
 });
 
 

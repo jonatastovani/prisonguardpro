@@ -40,7 +40,7 @@
                 <div class="row flex-fill overflow-auto mx-auto">
                     <main class="container-fluid">
                         <div class="row justify-content-center p-0 m-0">
-                            <div class="col p-0 m-0" style="max-width: 1000px;">
+                            <div class="col p-0 m-0 pt-3" style="max-width: 1000px;">
                                 
                                 @yield('conteudo')
                     

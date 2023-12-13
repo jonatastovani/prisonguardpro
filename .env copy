@@ -3,7 +3,7 @@ APP_ENV=local
 APP_KEY=base64:RYFET43CM7drCIcEuKImjjUR+2BBcRkUK+Pj0Bx5mjo=
 APP_DEBUG=true
 APP_URL=http://localhost
-HOST=http://192.168.15.9
+HOST=http://192.168.15.14
 
 LOG_CHANNEL=stack
 LOG_DEPRECATIONS_CHANNEL=null

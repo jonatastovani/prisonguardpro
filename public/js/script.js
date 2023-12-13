@@ -45,7 +45,24 @@ $(window).on('resize', function() {
         
     }
 
+    adjustClass();
+    
 });
+
+
+function adjustClass() {
+    if ($(window).width() <= 992) {
+        if ($('#ulUser').hasClass('justify-content-end')) {
+            $('#ulUser').removeClass('justify-content-end');
+        }
+    } else {
+        if (!$('#ulUser').hasClass('justify-content-end')) {
+            $('#ulUser').addClass('justify-content-end');
+        }
+    }
+}
+
+adjustClass();
 
 $('.dropend').on('click', function(e) {
     e.stopPropagation();

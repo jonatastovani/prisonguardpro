@@ -20,7 +20,7 @@ route::prefix('/v1')->group(function() {
     Route::group(['middleware' => 'auth:sanctum'], function () {
     
         // Rota de logout
-        Route::post('/logout', [SanctumController::class, 'logout']);
+        Route::post('/logout', [LoginController::class, 'logout']);
         
         // Rotas relacionadas ao RefArtigoController
         Route::controller(RefArtigoController::class)->group(function() {
