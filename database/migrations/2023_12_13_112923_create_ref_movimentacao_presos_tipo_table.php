@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ref_tipo_movimentacao_preso', function (Blueprint $table) {
+        Schema::create('ref_movimentacao_preso_tipos', function (Blueprint $table) {
             $table->id();
+            $table->string('sigla');
             $table->string('nome');
 
             $table->unsignedBigInteger('id_user_created');
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ref_tipo_movimentacao_preso');
+        Schema::dropIfExists('ref_movimentacao_preso_tipos');
     }
 };

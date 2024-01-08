@@ -3,6 +3,7 @@
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RefIncOrigemController;
 use App\Http\Controllers\UserPermissaoController;
 use App\Models\RefArtigo;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,17 @@ route::prefix('/v1')->group(function() {
         // Rotas relacionadas ao RefArtigoController
         Route::controller(RefArtigoController::class)->group(function() {
             Route::prefix('/ref/artigos')->group(function () {
+                Route::get('', 'index');
+                Route::get('/{id}', 'show');
+                Route::post('', 'store');
+                Route::put('/{id}', 'update');
+                Route::delete('/{id}', 'destroy');
+            });
+        });
+        
+        // Rotas relacionadas ao RefIncOrigemController
+        Route::controller(RefIncOrigemController::class)->group(function() {
+            Route::prefix('/ref/origem')->group(function () {
                 Route::get('', 'index');
                 Route::get('/{id}', 'show');
                 Route::post('', 'store');

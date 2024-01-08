@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RefTipoMovimentacaoPreso;
+use App\Models\RefMovimentacaoPresoMotivo;
 use Illuminate\Http\Request;
 
-class RefTipoMovimentacaoPresoController extends Controller
+class RefMovimentacaoPresoMotivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class RefTipoMovimentacaoPresoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(RefTipoMovimentacaoPreso $refTipoMovimentacaoPreso)
+    public function show(RefMovimentacaoPresoMotivo $refMovimentacaoPresoMotivo)
     {
         //
     }
@@ -42,7 +42,7 @@ class RefTipoMovimentacaoPresoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(RefTipoMovimentacaoPreso $refTipoMovimentacaoPreso)
+    public function edit(RefMovimentacaoPresoMotivo $refMovimentacaoPresoMotivo)
     {
         //
     }
@@ -50,7 +50,7 @@ class RefTipoMovimentacaoPresoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RefTipoMovimentacaoPreso $refTipoMovimentacaoPreso)
+    public function update(Request $request, RefMovimentacaoPresoMotivo $refMovimentacaoPresoMotivo)
     {
         //
     }
@@ -58,7 +58,7 @@ class RefTipoMovimentacaoPresoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RefTipoMovimentacaoPreso $refTipoMovimentacaoPreso)
+    public function destroy(RefMovimentacaoPresoMotivo $refMovimentacaoPresoMotivo)
     {
         //
     }

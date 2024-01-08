@@ -11,21 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inc_entrada_origem', function (Blueprint $table) {
+        Schema::create('ref_inc_origem', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
             $table->string('ip_created')->nullable();
+            $table->timestamp('created_at');
 
             $table->unsignedBigInteger('id_user_updated')->nullable();
             $table->foreign('id_user_updated')->references('id')->on('users');
             $table->string('ip_updated')->nullable();
+            $table->timestamp('updated_at')->nullable();
 
             $table->unsignedBigInteger('id_user_deleted')->nullable();
             $table->foreign('id_user_deleted')->references('id')->on('users');
             $table->string('ip_deleted')->nullable();
+            $table->softDeletes();
         });
     }
 
@@ -34,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inc_entrada_origem');
+        Schema::dropIfExists('ref_inc_origem');
     }
 };

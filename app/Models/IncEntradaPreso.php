@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Common\CommonsFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class IncEntradaPreso extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    protected $table = 'inc_entrada_preso';
+    use HasFactory, SoftDeletes, LogsActivity;
     
     public function getCreatedAtAttribute($value)
     {
@@ -26,6 +27,11 @@ class IncEntradaPreso extends Model
     public function getDeletedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaultsTo();
     }
 
 }

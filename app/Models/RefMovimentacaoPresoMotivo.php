@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class UserPermissaoTemporaria extends Model
+class RefMovimentacaoPresoMotivo extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
     

@@ -8,6 +8,7 @@ use App\Models\RefCoresCabelo;
 use App\Models\RefCrenca;
 use App\Models\RefEscolaridade;
 use App\Models\RefEstadoCivil;
+use App\Models\RefMovimentacaoPreso;
 use App\Models\RefOlho;
 use Illuminate\Database\Seeder;
 
@@ -27,8 +28,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UsersSeeder::class,
-            // CategoriasSeeders::class,
-            // ProdutoSeeder::class,
             RefNacionalidadeSeeder::class,
             RefEstadoSeeder::class,
             RefCoresCabeloSeeder::class,
@@ -46,8 +45,11 @@ class DatabaseSeeder extends Seeder
             RefPermissaoSeeder::class,
             RefTurnoPermissaoSeeder::class,
             RefPermissaoConfigSeeder::class,
-            RefTipoMovimentacaoPresoSeeder::class,
-            IncEntradaOrigemSeeder::class,
+            RefMovimentacaoPresoTipoSeeder::class,
+            RefMovimentacaoPresoTipoConfigSeeder::class,
+            RefMovimentacaoPresoMotivoSeeder::class,
+            RefMovimentacaoPresoSeeder::class,
+            RefIncOrigemSeeder::class,
         ]);
     }
 }

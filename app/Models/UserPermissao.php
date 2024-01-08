@@ -5,11 +5,14 @@ namespace App\Models;
 use App\Common\CommonsFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class UserPermissao extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $table = 'user_permissao';
 
@@ -45,6 +48,11 @@ class UserPermissao extends Model
     public function getDeletedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaultsTo();
     }
 
 }

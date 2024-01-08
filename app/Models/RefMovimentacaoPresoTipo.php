@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Common\CommonsFunctions;
+use Database\Seeders\RefTurnoTipoPermissaoSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class IncEntradaOrigem extends Model
+class RefMovimentacaoPresoTipo extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    protected $table = 'inc_entrada_origem';
+    use HasFactory, SoftDeletes, LogsActivity;
     
     public function getCreatedAtAttribute($value)
     {
@@ -26,6 +28,16 @@ class IncEntradaOrigem extends Model
     public function getDeletedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaultsTo();
+    }
+
+    public function motivosTransito()
+    {
+        return $this->hasOne(RefMovimentacaoPresoTipoTransitoConfig::class, 'tipo_mov_id');
     }
 
 }

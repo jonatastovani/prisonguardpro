@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IncEntradaOrigem;
+use App\Models\RefMovimentacaoPresoTipoConfig;
 use Illuminate\Http\Request;
 
-class IncEntradaOrigemController extends Controller
+class RefMovimentacaoPresoTipoConfigController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class IncEntradaOrigemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(IncEntradaOrigem $incEntradaOrigem)
+    public function show(RefMovimentacaoPresoTipoConfig $RefMovimentacaoPresoTipoConfig)
     {
         //
     }
@@ -42,7 +42,7 @@ class IncEntradaOrigemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(IncEntradaOrigem $incEntradaOrigem)
+    public function edit(RefMovimentacaoPresoTipoConfig $RefMovimentacaoPresoTipoConfig)
     {
         //
     }
@@ -50,7 +50,7 @@ class IncEntradaOrigemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, IncEntradaOrigem $incEntradaOrigem)
+    public function update(Request $request, RefMovimentacaoPresoTipoConfig $RefMovimentacaoPresoTipoConfig)
     {
         //
     }
@@ -58,7 +58,7 @@ class IncEntradaOrigemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(IncEntradaOrigem $incEntradaOrigem)
+    public function destroy(RefMovimentacaoPresoTipoConfig $RefMovimentacaoPresoTipoConfig)
     {
         //
     }

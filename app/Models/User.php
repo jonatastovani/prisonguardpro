@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Facades\Request;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +49,29 @@ class User extends Authenticatable
     public function permissoes()
     {
         return $this->hasMany(UserPermissao::class, 'user_id');
+    }
+
+    // Inserir a ação do usuário no log de alterações do Activitylog, assim como o IP
+    public function getActivityDescriptionForEvent(string $eventName): string
+    {
+        return "realizou a ação: $eventName";
+    }
+
+    public function getActivityCauser()
+    {
+        return $this;
+    }
+
+    public function getActivityProperties(string $eventName): array
+    {
+        return [
+            'ip' => Request::ip(),
+        ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaultsTo();
     }
 
     // /**

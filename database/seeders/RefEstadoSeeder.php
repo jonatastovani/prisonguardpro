@@ -12,7 +12,7 @@ class RefEstadoSeeder extends Seeder
      */
     public function run(): void
     {
-        $iplocal = '172.14.239.101';
+        $iplocal = config('sistema.ipHost');
 
         $insert = [
             ['nome' => 'Acre', 'sigla' => 'AC', 'id_pais' => 3, 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
