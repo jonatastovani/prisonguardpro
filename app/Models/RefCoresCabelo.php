@@ -31,7 +31,10 @@ class RefCoresCabelo extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults();
+        $logOptions = new LogOptions();
+        return $logOptions->logAll()
+            ->dontSubmitEmptyLogs()
+            ->useLogName(strtolower(class_basename($this)));
     }
 
 }

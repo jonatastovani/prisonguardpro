@@ -20,13 +20,12 @@ class UserPermissaoController extends Controller
     {
         $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
 
-        $resource = UserPermissao::
-        where('user_id', $idUser)
-        // ->where('permissao_id', $registro->permissao_id)
-        ->where(function ($query) use ($dataAtual) {
-            $query->whereDate('data_termino', '>=', $dataAtual)
-            ->orWhereNull('data_termino');
-        })->get();
+        $resource = UserPermissao::where('user_id', $idUser)
+            // ->where('permissao_id', $registro->permissao_id)
+            ->where(function ($query) use ($dataAtual) {
+                $query->whereDate('data_termino', '>=', $dataAtual)
+                    ->orWhereNull('data_termino');
+            })->get();
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -49,16 +48,16 @@ class UserPermissaoController extends Controller
         ];
 
         // Apelidos para os atributos
-        $attributeNames = [
-            'user_id' => 'ID do Usuário',
-            'permissao_id' => 'ID da Permissão',
-            'substituto_bln' => 'Substituto',
-            'data_inicio' => 'Data de Início',
-            'data_termino' => 'Data de Término',
-        ];
+        // $attributeNames = [
+        //     'user_id' => 'ID do Usuário',
+        //     'permissao_id' => 'ID da Permissão',
+        //     'substituto_bln' => 'Substituto',
+        //     'data_inicio' => 'Data de Início',
+        //     'data_termino' => 'Data de Término',
+        // ];
 
-        CommonsFunctions::validacaoRequest($request,$rules, $attributeNames);
-        
+        CommonsFunctions::validacaoRequest($request, $rules);
+
         // Se a validação passou, crie um novo registro
         $novo = new UserPermissao();
         $novo->user_id = $request->input('user_id');
@@ -81,15 +80,13 @@ class UserPermissaoController extends Controller
 
         $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
 
-        $consultaPermissaoAtiva = UserPermissao::
-            where('user_id', $novo->user_id)
+        $consultaPermissaoAtiva = UserPermissao::where('user_id', $novo->user_id)
             ->where('permissao_id', $novo->permissao_id)
             ->where(function ($query) use ($dataAtual) {
                 $query->whereDate('data_termino', '>=', $dataAtual)
-                ->orWhereNull('data_termino');
+                    ->orWhereNull('data_termino');
             })
-            ->whereNull('deleted_at');
-        ;
+            ->whereNull('deleted_at');;
 
         // Verifica se o usuário já tem a permissão ativa
         if ($consultaPermissaoAtiva->exists()) {
@@ -113,14 +110,14 @@ class UserPermissaoController extends Controller
         }
 
         // Erros que impedem o processamento
-        if (count($arrErrors)){
+        if (count($arrErrors)) {
             $response = RestResponse::createGenericResponse(["errors" => $arrErrors], 422, "A requisição não pôde ser processada.");
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         CommonsFunctions::inserirInfoCreated($novo);
         $novo->save();
-        
+
         // Retorne uma resposta de sucesso (status 201 - Created)
         $response = RestResponse::createSuccessResponse($novo, 201, 'Permissão adicionada com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -133,13 +130,12 @@ class UserPermissaoController extends Controller
     {
         $dataAtual = Carbon::now()->toDateString(); // Obtém a data atual no formato 'Y-m-d'
 
-        $resource = UserPermissao::
-        where('user_id', $idUser)
-        ->where('permissao_id', $idPermissao)
-        ->where(function ($query) use ($dataAtual) {
-            $query->whereDate('data_termino', '>=', $dataAtual)
-            ->orWhereNull('data_termino');
-        })->first();
+        $resource = UserPermissao::where('user_id', $idUser)
+            ->where('permissao_id', $idPermissao)
+            ->where(function ($query) use ($dataAtual) {
+                $query->whereDate('data_termino', '>=', $dataAtual)
+                    ->orWhereNull('data_termino');
+            })->first();
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
@@ -150,7 +146,7 @@ class UserPermissaoController extends Controller
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-    
+
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -169,7 +165,7 @@ class UserPermissaoController extends Controller
             'data_termino' => 'date|nullable',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         $resource = UserPermissao::find($request->id);
 
@@ -200,15 +196,15 @@ class UserPermissaoController extends Controller
         }
 
         // Erros que impedem o processamento
-        if (count($arrErrors)){
+        if (count($arrErrors)) {
             $response = RestResponse::createGenericResponse(["errors" => $arrErrors], 422, "A requisição não pôde ser processada.");
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         // Se as validações passaram, altere o registro
         CommonsFunctions::inserirInfoUpdated($resource);
         $resource->save();
-        
+
         // Retorne uma resposta de sucesso (status 200 - OK)
         $response = RestResponse::createSuccessResponse($resource, 200, 'Alteração realizada com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -278,7 +274,7 @@ class UserPermissaoController extends Controller
 
             if (!$consultaPermissao || !$consultaPermissao->diretor_bln) {
                 // Gerar um log
-                $mensagem = "A permissão '". ($consultaPermissao ? $consultaPermissao->nome : 'Permissão não encontrada') ."' não é uma permissão de Diretoria que permite substituto.";
+                $mensagem = "A permissão '" . ($consultaPermissao ? $consultaPermissao->nome : 'Permissão não encontrada') . "' não é uma permissão de Diretoria que permite substituto.";
                 $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
                 $arrErrors[] = [
@@ -290,5 +286,4 @@ class UserPermissaoController extends Controller
             }
         }
     }
-
 }

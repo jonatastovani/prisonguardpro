@@ -7,22 +7,30 @@ class RestResponse
     private $status;
     private $message;
     private $data;
+    private $traceId;
 
-    public function __construct($data, $status, $message = '')
+    public function __construct($data, $status, $message = '', $traceId = null)
     {
         $this->status = $status;
         $this->message = $message;
         $this->data = $data;
+        $this->traceId = $traceId;
     }
 
     public function toArray()
     {
-        return [
+        $responseArray = [
             'data' => $this->data,
             'status' => $this->status,
             'message' => $this->message,
             'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
         ];
+
+        if ($this->traceId) {
+            $responseArray['trace_id'] = $this->traceId;
+        }
+
+        return $responseArray;
     }
 
     public function toJson()
@@ -42,33 +50,17 @@ class RestResponse
 
     public static function createErrorResponse($status, $message, $traceId = null)
     {
-        $response = new self(null, $status, $message);
-
-        if ($traceId) {
-            $response->addTraceId($traceId);
-        }
-
-        return $response;
+        return new self(null, $status, $message, $traceId);
     }
 
     public static function createGenericResponse($data, $status, $message, $traceId = null)
     {
-        $response = new self($data, $status, $message);
-
-        if ($traceId) {
-            $response->addTraceId($traceId);
-        }
-
-        return $response;
+        return new self($data, $status, $message, $traceId);
     }
 
-    public static function createSuccessResponse($data, $status, $message='')
+    public static function createSuccessResponse($data, $status, $message = '')
     {
         return new self($data, $status, $message);
     }
 
-    private function addTraceId($traceId)
-    {
-        $this->data['trace_id'] = $traceId;
-    }
 }
