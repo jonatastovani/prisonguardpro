@@ -52,6 +52,7 @@ class DatabaseSeeder extends Seeder
             RefMovimentacaoPresoSeeder::class,
             RefIncOrigemSeeder::class,
             RefDocumentoTipoSeeder::class,
+            RefProfissaoSeeder::class,
         ]);
     }
 }

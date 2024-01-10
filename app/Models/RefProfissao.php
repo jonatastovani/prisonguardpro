@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class RefCutis extends Model
+class RefProfissao extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
     
-    protected $table = 'ref_cutis';
+    protected $table = 'ref_profissao';
     
     public function getCreatedAtAttribute($value)
     {

@@ -34,6 +34,7 @@ class RefPermissaoGrupoSeeder extends Seeder
             ['id' => 18, 'nome' => 'Zeladoria de Raios/Celas', 'individuais' => true],
             ['id' => 19, 'nome' => 'Gerenciar Listagem Origens Inclusões', 'individuais' => false],
             ['id' => 20, 'nome' => 'Gerenciar Listagem Tipos de Documentos', 'individuais' => false],
+            ['id' => 21, 'nome' => 'Gerenciar Listagem Profissões', 'individuais' => false],
         ];        
 
         DB::table('ref_permissao_grupo')->insert($insert);

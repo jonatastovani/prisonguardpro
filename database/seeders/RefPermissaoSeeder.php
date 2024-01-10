@@ -424,33 +424,45 @@ class RefPermissaoSeeder extends Seeder
             ],
             [
                 'id' => 69,
-                'nome' => 'Alterar Origem de Inclusão',
+                'nome' => 'Alterar listagem de Origem',
                 'nome_completo' => null,
-                'descricao' => 'Alterar nome da origem das inclusões.',
+                'descricao' => 'Alterar listagem dos nomes das origens das inclusões.',
             ],
             [
                 'id' => 70,
                 'nome' => 'Excluir Origem de Inclusão',
                 'nome_completo' => null,
-                'descricao' => 'Excluir nome da origem das inclusões.',
+                'descricao' => 'Excluir nome da listagem das origem das inclusões.',
             ],
             [
                 'id' => 71,
                 'nome' => 'Incluir Tipo de Documento',
                 'nome_completo' => null,
-                'descricao' => 'Incluir tipo de documento.',
+                'descricao' => 'Incluir nome na listagem dos tipos de documentos.',
             ],
             [
                 'id' => 72,
                 'nome' => 'Alterar Tipo de Documento',
                 'nome_completo' => null,
-                'descricao' => 'Alterar tipo de documento.',
+                'descricao' => 'Alterar nomes da listagem dos tipos de documentos.',
             ],
             [
                 'id' => 73,
                 'nome' => 'Excluir Tipo de Documento',
                 'nome_completo' => null,
-                'descricao' => 'Excluir tipo de documento.',
+                'descricao' => 'Excluir nome da listagem dos tipos de documentos.',
+            ],
+            [
+                'id' => 74,
+                'nome' => 'Alterar Profissão',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nome na listagem de profissões.',
+            ],
+            [
+                'id' => 75,
+                'nome' => 'Excluir Profissão',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de profissões.',
             ],
         ];
 
