@@ -53,6 +53,7 @@ class CommonsFunctions
             'boolean' => 'O campo :attribute deve ser booleano.',
             'date' => 'O campo :attribute deve ser uma data.',
             'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
+            'min' => 'O campo :attribute deve ter no mínimo :min caracteres.',
         ];
     }
     

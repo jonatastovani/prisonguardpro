@@ -22,7 +22,8 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\RefIncOrigem::class => \App\Policies\RefIncOrigemPolicy::class,
         \App\Models\RefDocumentoTipo::class => \App\Policies\RefDocumentoTipoPolicy::class,
         \App\Models\RefProfissao::class => \App\Policies\RefProfissaoPolicy::class,
-
+        \App\Models\RefEstado::class => \App\Policies\RefEstadoPolicy::class,
+        \App\Models\RefNacionalidade::class => \App\Policies\RefNacionalidadePolicy::class,
     ];
 
     /**

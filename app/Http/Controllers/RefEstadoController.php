@@ -3,77 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 use App\Common\CommonsFunctions;
+use App\Common\RestResponse;
 use App\Models\RefEstado;
+use App\Models\RefNacionalidade;
 
 class RefEstadoController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $estados = RefEstado::all();
-        return $estados;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        // Regras de validação
-        $rules = [
-            'sigla' => 'required|max:2',
-            'nome' => 'required',
-            'cadastro_id' => 'required',
-            'cadastro_ip' => 'string',
-            'cadastro_data' => 'date',
-        ];
-
-        // Mensagens de erro personalizadas
-        $messages = [
-            'required' => 'O campo :attribute é obrigatório.',
-            'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
-        ];
-
-        // Valide os dados recebidos da requisição
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            // Gere um trace ID
-            $traceId = commonsFunctions::generateTraceId();
-
-            // Registre o erro no log com o trace ID
-            Log::error($validator->errors() . " Trace ID: $traceId");
-
-            // Se a validação falhar, retorne os erros em uma resposta JSON com código 422 (Unprocessable Entity)
-            return response()->json(['errors' => $validator->errors(), 'trace_id' => $traceId], 422);
-        }
-
-        // Se a validação passou, crie um novo registro de estado
-        $estado = new RefEstado();
-        $estado->sigla = $request->input('sigla');
-        $estado->nome = $request->input('nome');
-        $estado->cadastro_id = $request->input('cadastro_id');
-
-        // Defina o cadastro_ip baseado na presença de 'cadastro_ip'
-        $estado->cadastro_ip = $request->input('cadastro_ip');
-
-        // Verifique se o campo 'cadastro_data' foi enviado
-        if ($request->has('cadastro_data')) {
-            $estado->cadastro_data = $request->input('cadastro_data');
-        } else {
-            // Caso contrário, defina a data atual
-            $estado->cadastro_data = now();
-        }
-
-        $estado->save();
-
-        // Retorne uma resposta de sucesso (status 201 - Created)
-        return response()->json(['message' => 'Estado criado com sucesso', 'data' => $estado], 201);
+        $resource = RefEstado::all();
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -81,38 +26,190 @@ class RefEstadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('store', RefEstado::class);
+
+        // Regras de validação
+        $rules = [
+            'nome' => 'required',
+            'sigla' => 'required|min:2',
+            'pais_id' => 'required',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        // Valida se não existe outro com o mesmo nome e país
+        $resource = RefEstado::where('sigla', $request->input('sigla'))
+            ->where('nome', $request->input('nome'))
+            ->where('pais_id', $request->input('pais_id'));
+
+        if ($resource->exists()) {
+            // Gerar um log
+            $mensagem = "O Estado informado já existe.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+
+
+
+
+
+
+        // Inserir a resposta no padrão rest
+        // Falta testar o update de delete
+
+        // Valida se o país existe e não está excluído
+        $paisValidationResult = $this->validarPaisExistente($request->input('pais_id'));
+
+        if ($paisValidationResult) {
+            // Se houver um problema com o país, retorne a resposta de erro
+            return response()->json($paisValidationResult, 409);
+        }
+
+
+
+
+
+
+        // Se a validação passou, crie um novo registro
+        $novo = new RefEstado();
+        $novo->sigla = $request->input('sigla');
+        $novo->nome = $request->input('nome');
+        $novo->pais_id = $request->input('pais_id');
+
+        CommonsFunctions::inserirInfoCreated($novo);
+
+        $novo->save();
+
+        $response = RestResponse::createSuccessResponse($novo, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(RefEstado $refEstado)
+    public function show($id)
     {
-        //
-    }
+        $resource = RefEstado::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(RefEstado $refEstado)
-    {
-        //
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "O Estado pesquisado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RefEstado $refEstado)
+    public function update(Request $request)
     {
-        //
+        $this->authorize('update', RefEstado::class);
+
+        // Regras de validação
+        $rules = [
+            'nome' => 'required',
+            'pais_id' => 'required',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        // Valida se não existe outro com o mesmo nome
+        $resource = RefEstado::where('sigla', $request->input('sigla'), 'nome', $request->input('nome'), 'pais_id', $request->input('pais_id'))
+            ->whereNot('id', $request->id);
+
+        if ($resource->exists()) {
+            // Gerar um log
+            $mensagem = "O nome do Estado informado já existe.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+
+        $resource = RefEstado::find($request->id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "O Estado a ser alterado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+
+        // Se passou pelas validações, altera o recurso
+        $resource->sigla = $request->input('sigla');
+        $resource->nome = $request->input('nome');
+        $resource->pais_id = $request->input('pais_id');
+
+        CommonsFunctions::inserirInfoUpdated($resource);
+        $resource->save();
+
+        // Retorne uma resposta de sucesso (status 200 - OK)
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RefEstado $refEstado)
+    public function destroy($id)
     {
-        //
+        $this->authorize('delete', RefEstado::class);
+
+        $resource = RefEstado::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "O Estado informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+
+            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
+
+        // Execute o soft delete
+        CommonsFunctions::inserirInfoDeleted($resource);
+        $resource->save();
+
+        // Retorne uma resposta de sucesso (status 204 - No Content)
+        $response = RestResponse::createSuccessResponse([], 204, 'Estado excluído com sucesso.');
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    private function validarPaisExistente($paisId)
+    {
+        $pais = RefNacionalidade::withTrashed()->find($paisId);
+
+        if (!$pais) {
+            $mensagem = "O País informado não existe.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Pais ID: " . $paisId);
+            return [
+                'error' => $mensagem,
+                'trace_id' => $traceId,
+            ];
+        }
+
+        if ($pais->trashed()) {
+            $mensagem = "O País informado foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Pais ID: " . $paisId);
+            return [
+                'error' => $mensagem,
+                'trace_id' => $traceId,
+            ];
+        }
+
+        return null;
     }
 }

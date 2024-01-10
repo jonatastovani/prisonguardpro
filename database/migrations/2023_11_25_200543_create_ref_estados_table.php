@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('ref_estados', function (Blueprint $table) {
             $table->id();
-            $table->string('sigla')->unique();
-            $table->string('nome')->unique();
+            $table->string('sigla');
+            $table->string('nome');
 
-            $table->unsignedBigInteger('id_pais');
-            $table->foreign('id_pais')->references('id')->on('ref_nacionalidades');
+            $table->unsignedBigInteger('pais_id');
+            $table->foreign('pais_id')->references('id')->on('ref_nacionalidades');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');

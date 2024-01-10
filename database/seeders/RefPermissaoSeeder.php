@@ -464,6 +464,42 @@ class RefPermissaoSeeder extends Seeder
                 'nome_completo' => null,
                 'descricao' => 'Excluir nome da listagem de profissões.',
             ],
+            [
+                'id' => 76,
+                'nome' => 'Incluir Estado',
+                'nome_completo' => null,
+                'descricao' => 'Incluir nome na listagem dos Estados.',
+            ],
+            [
+                'id' => 77,
+                'nome' => 'Alterar Estado',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem dos Estados.',
+            ],
+            [
+                'id' => 78,
+                'nome' => 'Excluir Estado',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem dos Estados.',
+            ],
+            [
+                'id' => 79,
+                'nome' => 'Incluir Nacionalidade',
+                'nome_completo' => null,
+                'descricao' => 'Incluir nome na listagem das Nacionalidades.',
+            ],
+            [
+                'id' => 80,
+                'nome' => 'Alterar Nacionalidade',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem das Nacionalidades.',
+            ],
+            [
+                'id' => 81,
+                'nome' => 'Excluir Nacionalidade',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem das Nacionalidades.',
+            ],
         ];
 
         DB::table('ref_permissao')->insert($data);
