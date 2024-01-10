@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaultsTo();
+        return LogOptions::defaults();
     }
 
     // /**

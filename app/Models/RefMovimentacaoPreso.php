@@ -33,7 +33,7 @@ class RefMovimentacaoPreso extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaultsTo();
+        return LogOptions::defaults();
     }
 
     public function tipo() {

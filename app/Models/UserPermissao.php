@@ -15,6 +15,7 @@ class UserPermissao extends Model
     use HasFactory, SoftDeletes, LogsActivity;
 
     protected $table = 'user_permissao';
+    protected static $logAttributes = ['substituto_bln', 'data_inicio', 'data_termino'];
 
     public function user() {
 
@@ -52,7 +53,11 @@ class UserPermissao extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaultsTo();
+        $logOptions = new LogOptions();
+        return $logOptions->logAll()
+        ->dontSubmitEmptyLogs()
+        ->useLogName('permissao_de_usuario');
     }
 
+    
 }

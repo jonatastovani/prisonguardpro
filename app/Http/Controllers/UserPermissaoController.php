@@ -195,6 +195,8 @@ class UserPermissaoController extends Controller
         // Verifique se o campo 'data_termino' foi enviado
         if ($request->has('data_termino')) {
             $this->validarDataTermino($resource, $request, $arrErrors);
+        } else {
+            $resource->data_termino = null;
         }
 
         // Erros que impedem o processamento

@@ -31,7 +31,7 @@ class RefMovimentacaoPresoTipoTransitoConfig extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaultsTo();
+        return LogOptions::defaults();
     }
 
 }
