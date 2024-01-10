@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
-use App\Models\RefIncOrigem;
+use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
 
-class RefIncOrigemController extends Controller
+class RefDocumentoTipoController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $resource = RefIncOrigem::all();
+        $resource = RefDocumentoTipo::all();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -24,6 +25,9 @@ class RefIncOrigemController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->authorize('store', RefDocumentoTipo::class);
+
         // Regras de validação
         $rules = [
             'nome' => 'required',
@@ -32,11 +36,11 @@ class RefIncOrigemController extends Controller
         CommonsFunctions::validacaoRequest($request,$rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefIncOrigem::where('nome', $request->input('nome'));
+        $resource = RefDocumentoTipo::where('nome', $request->input('nome'));
 
         if ($resource->exists()) {
             // Gerar um log
-            $mensagem = "A origem informada já existe.";
+            $mensagem = "O tipo de documento informado já existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
     
             $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
@@ -44,7 +48,7 @@ class RefIncOrigemController extends Controller
         }
         
         // Se a validação passou, crie um novo registro
-        $novo = new RefIncOrigem();
+        $novo = new RefDocumentoTipo();
         $novo->nome = $request->input('nome');
 
         CommonsFunctions::inserirInfoCreated($novo);
@@ -60,12 +64,12 @@ class RefIncOrigemController extends Controller
      */
     public function show($id)
     {
-        $resource = RefIncOrigem::find($id);
+        $resource = RefDocumentoTipo::find($id);
     
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "A origem pesquisada não existe ou foi excluída.";
+            $mensagem = "O tipo de documento pesquisado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
     
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
@@ -75,13 +79,13 @@ class RefIncOrigemController extends Controller
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request)
     {
-        $this->authorize('update', RefIncOrigem::class);
+        $this->authorize('update', RefDocumentoTipo::class);
 
         // Regras de validação
         $rules = [
@@ -91,25 +95,25 @@ class RefIncOrigemController extends Controller
         CommonsFunctions::validacaoRequest($request,$rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefIncOrigem::
+        $resource = RefDocumentoTipo::
         where('nome', $request->input('nome'))
         ->whereNot('id', $request->id);
 
         if ($resource->exists()) {
             // Gerar um log
-            $mensagem = "O nome da origem informada já existe.";
+            $mensagem = "O nome do tipo de documento informado já existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
         
-        $resource = RefIncOrigem::find($request->id);
+        $resource = RefDocumentoTipo::find($request->id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "A origem a ser alterada não existe ou foi excluída.";
+            $mensagem = "O tipo de documento a ser alterado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
@@ -132,14 +136,14 @@ class RefIncOrigemController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', RefIncOrigem::class);
+        $this->authorize('delete', RefDocumentoTipo::class);
 
-        $resource = RefIncOrigem::find($id);
+        $resource = RefDocumentoTipo::find($id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "A origem informada não existe ou foi excluída.";
+            $mensagem = "O tipo de documento informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
 
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
@@ -151,7 +155,8 @@ class RefIncOrigemController extends Controller
         $resource->save();
 
         // Retorne uma resposta de sucesso (status 204 - No Content)
-        $response = RestResponse::createSuccessResponse([], 204, 'Origem excluída com sucesso.');
+        $response = RestResponse::createSuccessResponse([], 204, 'Tipo de documento excluído com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
     }
+
 }

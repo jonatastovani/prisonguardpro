@@ -105,7 +105,7 @@ class UserPermissaoController extends Controller
         $this->validarDataInicio($novo, $request, $arrErrors);
 
         // Verifique se o campo 'data_termino' foi enviado
-        if ($request->has('data_termino')) {
+        if ($request->has('data_termino') && $request->input('data_termino')) {
             $this->validarDataTermino($novo, $request, $arrErrors);
         }
 
@@ -189,7 +189,7 @@ class UserPermissaoController extends Controller
         }
 
         // Verifique se o campo 'data_termino' foi enviado
-        if ($request->has('data_termino')) {
+        if ($request->has('data_termino') && $request->input('data_termino')) {
             $this->validarDataTermino($resource, $request, $arrErrors);
         } else {
             $resource->data_termino = null;

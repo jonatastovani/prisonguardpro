@@ -422,6 +422,36 @@ class RefPermissaoSeeder extends Seeder
                 'nome_completo' => null,
                 'descricao' => 'Permissão destinada para Zelador da Inclusão + MPSP + Trabalho.',
             ],
+            [
+                'id' => 69,
+                'nome' => 'Alterar Origem de Inclusão',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nome da origem das inclusões.',
+            ],
+            [
+                'id' => 70,
+                'nome' => 'Excluir Origem de Inclusão',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da origem das inclusões.',
+            ],
+            [
+                'id' => 71,
+                'nome' => 'Incluir Tipo de Documento',
+                'nome_completo' => null,
+                'descricao' => 'Incluir tipo de documento.',
+            ],
+            [
+                'id' => 72,
+                'nome' => 'Alterar Tipo de Documento',
+                'nome_completo' => null,
+                'descricao' => 'Alterar tipo de documento.',
+            ],
+            [
+                'id' => 73,
+                'nome' => 'Excluir Tipo de Documento',
+                'nome_completo' => null,
+                'descricao' => 'Excluir tipo de documento.',
+            ],
         ];
 
         DB::table('ref_permissao')->insert($data);

@@ -558,6 +558,46 @@ class RefPermissaoConfigSeeder extends Seeder
                 'grupo_id' => 18,
                 'ordem' => 6,
             ],
+            [
+                'permissao_id' => 69,
+                'permite_subst_bln' => '0',
+                'permissao_pai_id' => 3,
+                'grupo_pai_id' => null,
+                'grupo_id' => 19,
+                'ordem' => 1,
+            ],
+            [
+                'permissao_id' => 70,
+                'permite_subst_bln' => '0',
+                'permissao_pai_id' => 3,
+                'grupo_pai_id' => null,
+                'grupo_id' => 19,
+                'ordem' => 2,
+            ],
+            [
+                'permissao_id' => 71,
+                'permite_subst_bln' => '0',
+                'permissao_pai_id' => 9,
+                'grupo_pai_id' => null,
+                'grupo_id' => 20,
+                'ordem' => 1,
+            ],
+            [
+                'permissao_id' => 72,
+                'permite_subst_bln' => '0',
+                'permissao_pai_id' => 9,
+                'grupo_pai_id' => null,
+                'grupo_id' => 20,
+                'ordem' => 2,
+            ],
+            [
+                'permissao_id' => 73,
+                'permite_subst_bln' => '0',
+                'permissao_pai_id' => 9,
+                'grupo_pai_id' => null,
+                'grupo_id' => 20,
+                'ordem' => 3,
+            ],
         ];
 
         DB::table('ref_permissao_config')->insert($insert);

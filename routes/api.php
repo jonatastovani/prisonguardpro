@@ -3,9 +3,11 @@
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RefDocumentoTipoController;
 use App\Http\Controllers\RefIncOrigemController;
 use App\Http\Controllers\UserPermissaoController;
 use App\Models\RefArtigo;
+use App\Models\RefDocumentoTipo;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\SanctumController;
 
@@ -23,28 +25,43 @@ route::prefix('/v1')->group(function() {
         // Rota de logout
         Route::post('/logout', [LoginController::class, 'logout']);
         
-        // Rotas relacionadas ao RefArtigoController
-        Route::controller(RefArtigoController::class)->group(function() {
-            Route::prefix('/ref/artigos')->group(function () {
-                Route::get('', 'index');
-                Route::get('/{id}', 'show');
-                Route::post('', 'store');
-                Route::put('/{id}', 'update');
-                Route::delete('/{id}', 'destroy');
+        Route::prefix('/ref')->group(function() {
+
+            // Rotas relacionadas ao RefArtigoController
+            Route::controller(RefArtigoController::class)->group(function() {
+                Route::prefix('/artigos')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
             });
-        });
-        
-        // Rotas relacionadas ao RefIncOrigemController
-        Route::controller(RefIncOrigemController::class)->group(function() {
-            Route::prefix('/ref/origem')->group(function () {
-                Route::get('', 'index');
-                Route::get('/{id}', 'show');
-                Route::post('', 'store');
-                Route::put('/{id}', 'update');
-                Route::delete('/{id}', 'destroy');
+            
+            // Rotas relacionadas ao RefIncOrigemController
+            Route::controller(RefIncOrigemController::class)->group(function() {
+                Route::prefix('/origem')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
             });
+            
+            // Rotas relacionadas ao RefDocumentoTipoController
+            Route::controller(RefDocumentoTipoController::class)->group(function() {
+                Route::prefix('/documentotipo')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+            
         });
-        
+
         // Rotas relacionadas ao UserPermissaoController
         Route::controller(UserPermissaoController::class)->group(function() {
             Route::prefix('/userPermissao')->group(function () {

@@ -20,11 +20,19 @@ class RestResponse
     public function toArray()
     {
         $responseArray = [
-            'data' => $this->data,
+            // 'data' => $this->data,
             'status' => $this->status,
-            'message' => $this->message,
+            // 'message' => $this->message,
             'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
         ];
+
+        if ($this->data) {
+            $responseArray['data'] = $this->data;
+        }
+
+        if ($this->message) {
+            $responseArray['message'] = $this->message;
+        }
 
         if ($this->traceId) {
             $responseArray['trace_id'] = $this->traceId;

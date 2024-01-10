@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             RefTurnoTipoPermissaoSeeder::class,
             RefPermissaoGrupoSeeder::class,
             RefPermissaoSeeder::class,
+            UserPermissaoSeeder::class,
             RefTurnoPermissaoSeeder::class,
             RefPermissaoConfigSeeder::class,
             RefMovimentacaoPresoTipoSeeder::class,
@@ -50,6 +51,7 @@ class DatabaseSeeder extends Seeder
             RefMovimentacaoPresoMotivoSeeder::class,
             RefMovimentacaoPresoSeeder::class,
             RefIncOrigemSeeder::class,
+            RefDocumentoTipoSeeder::class,
         ]);
     }
 }

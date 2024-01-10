@@ -91,7 +91,7 @@ class RefArtigoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "O Artigo informado não existe ou foi excluído.";
+            $mensagem = "O artigo pesquisado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
     
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
@@ -124,7 +124,7 @@ class RefArtigoController extends Controller
 
         if ($resource->exists()) {
             // Gerar um log
-            $mensagem = "O artigo informado já existe.";
+            $mensagem = "O nome do artigo informado já existe.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
@@ -136,7 +136,7 @@ class RefArtigoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "O Artigo informado não existe ou foi excluído.";
+            $mensagem = "O artigo a ser alterado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
@@ -167,7 +167,7 @@ class RefArtigoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "O Artigo informado não existe ou foi excluído.";
+            $mensagem = "O artigo informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
 
             $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
