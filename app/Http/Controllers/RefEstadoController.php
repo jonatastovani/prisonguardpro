@@ -26,13 +26,15 @@ class RefEstadoController extends Controller
      */
     public function store(Request $request)
     {
+        $arrErrors = [];
+
         $this->authorize('store', RefEstado::class);
 
         // Regras de validação
         $rules = [
             'nome' => 'required',
             'sigla' => 'required|min:2',
-            'pais_id' => 'required',
+            'pais_id' => 'required|integer',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -51,35 +53,21 @@ class RefEstadoController extends Controller
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
-
-
-
-
-
-        // Inserir a resposta no padrão rest
-        // Falta testar o update de delete
-
-        // Valida se o país existe e não está excluído
-        $paisValidationResult = $this->validarPaisExistente($request->input('pais_id'));
-
-        if ($paisValidationResult) {
-            // Se houver um problema com o país, retorne a resposta de erro
-            return response()->json($paisValidationResult, 409);
-        }
-
-
-
-
-
-
         // Se a validação passou, crie um novo registro
         $novo = new RefEstado();
         $novo->sigla = $request->input('sigla');
         $novo->nome = $request->input('nome');
-        $novo->pais_id = $request->input('pais_id');
+
+        // Valida se o país existe e não está excluído
+        $paisValidationResult = $this->validarPaisExistente($novo, $request, $arrErrors);
+
+        // Erros que impedem o processamento
+        if (count($arrErrors)) {
+            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], 422, "A requisição não pôde ser processada.");
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
 
         CommonsFunctions::inserirInfoCreated($novo);
-
         $novo->save();
 
         $response = RestResponse::createSuccessResponse($novo, 200);
@@ -188,28 +176,23 @@ class RefEstadoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    private function validarPaisExistente($paisId)
+    private function validarPaisExistente($resource, $request, &$arrErrors)
     {
-        $pais = RefNacionalidade::withTrashed()->find($paisId);
+        $resource->pais_id = $request->input('pais_id');
 
-        if (!$pais) {
+        $resource = RefNacionalidade::find($resource->pais_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
             $mensagem = "O País informado não existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Pais ID: " . $paisId);
-            return [
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $arrErrors[] = [
                 'error' => $mensagem,
-                'trace_id' => $traceId,
+                'trace_id' => $traceId
             ];
         }
-
-        if ($pais->trashed()) {
-            $mensagem = "O País informado foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Pais ID: " . $paisId);
-            return [
-                'error' => $mensagem,
-                'trace_id' => $traceId,
-            ];
-        }
-
-        return null;
     }
+    
 }
