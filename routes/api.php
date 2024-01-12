@@ -32,7 +32,7 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefArtigoController
             Route::controller(RefArtigoController::class)->group(function () {
-                Route::prefix('/artigos')->group(function () {
+                Route::prefix('/artigo')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');

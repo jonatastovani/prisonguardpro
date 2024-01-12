@@ -32,17 +32,7 @@ class RefProfissaoController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefProfissao::where('nome', $request->input('nome'));
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $codigo = 409;
-            $mensagem = "A profissão informada já existe.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request, $request->id);
 
         // Se a validação passou, crie um novo registro
         $novo = new RefProfissao();
@@ -93,18 +83,7 @@ class RefProfissaoController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefProfissao::where('nome', $request->input('nome'))
-            ->whereNot('id', $request->id);
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $codigo = 409;
-            $mensagem = "O nome da profissão informada já existe.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request, $request->id);
 
         $resource = RefProfissao::find($request->id);
 
@@ -157,5 +136,23 @@ class RefProfissaoController extends Controller
         // Retorne uma resposta de sucesso (status 204 - No Content)
         $response = RestResponse::createSuccessResponse([], 204, 'Profissão excluída com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    private function validarRecursoExistente($request, $id = null)
+    {
+        $query = RefProfissao::where('nome', $request->input('nome'));
+
+        if ($id !== null) {
+            $query->whereNot('id', $id);
+        }
+
+        if ($query->exists()) {
+            $codigo = 409;
+            $mensagem = "O nome da profissão informada já existe.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
     }
 }

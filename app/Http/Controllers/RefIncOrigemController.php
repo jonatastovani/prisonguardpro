@@ -32,17 +32,7 @@ class RefIncOrigemController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefIncOrigem::where('nome', $request->input('nome'));
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $codigo = 409;
-            $mensagem = "A origem informada já existe.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request);
 
         // Se a validação passou, crie um novo registro
         $novo = new RefIncOrigem();
@@ -93,18 +83,7 @@ class RefIncOrigemController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefIncOrigem::where('nome', $request->input('nome'))
-            ->whereNot('id', $request->id);
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $codigo = 409;
-            $mensagem = "O nome da origem informada já existe.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request, $request->id);
 
         $resource = RefIncOrigem::find($request->id);
 
@@ -157,5 +136,23 @@ class RefIncOrigemController extends Controller
         // Retorne uma resposta de sucesso (status 204 - No Content)
         $response = RestResponse::createSuccessResponse([], 204, 'Origem excluída com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    private function validarRecursoExistente($request, $id = null)
+    {
+        $query = RefIncOrigem::where('nome', $request->input('nome'));
+
+        if ($id !== null) {
+            $query->whereNot('id', $id);
+        }
+
+        if ($query->exists()) {
+            $codigo = 409;
+            $mensagem = "O nome da origem informada já existe.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
     }
 }

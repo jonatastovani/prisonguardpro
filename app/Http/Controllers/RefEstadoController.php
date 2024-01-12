@@ -39,6 +39,7 @@ class RefEstadoController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
+        // Valida se não existe outro com o mesmo nome
         $this->validarRecursoExistente($request);
 
         // Se a validação passou, crie um novo registro
@@ -107,6 +108,7 @@ class RefEstadoController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
+        // Valida se não existe outro com o mesmo nome
         $this->validarRecursoExistente($request, $request->id);
 
         $resource = RefEstado::find($request->id);
@@ -204,8 +206,6 @@ class RefEstadoController extends Controller
             $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
-
-        return null;
     }
 
     private function validarPaisExistente($resource, $request, &$arrErrors)

@@ -36,19 +36,7 @@ class RefNacionalidadeController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefNacionalidade::where('nome', $request->input('nome'))
-            ->orWhere('sigla', $request->input('sigla'))
-            ->orWhere('pais', $request->input('pais'));
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $codigo = 409;
-            $mensagem = "A nome da nacionalidade, sigla ou País informado já existe.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request);
 
         // Se a validação passou, crie um novo registro
         $novo = new RefNacionalidade();
@@ -103,22 +91,7 @@ class RefNacionalidadeController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefNacionalidade::where(function ($query) use ($request) {
-            $query->where('nome', $request->input('nome'))
-                ->orWhere('sigla', $request->input('sigla'))
-                ->orWhere('pais', $request->input('pais'));
-        })
-            ->whereNot('id', $request->id);
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $codigo = 409;
-            $mensagem = "O nome da nacionalidade, sigla ou País informado já existe.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request, $request->id);
 
         $resource = RefNacionalidade::find($request->id);
 
@@ -173,5 +146,27 @@ class RefNacionalidadeController extends Controller
         // Retorne uma resposta de sucesso (status 204 - No Content)
         $response = RestResponse::createSuccessResponse([], 204, 'Nacionalidade excluída com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    private function validarRecursoExistente($request, $id = null)
+    {
+        $query = RefNacionalidade::where(function ($query) use ($request) {
+            $query->where('nome', $request->input('nome'))
+                ->orWhere('sigla', $request->input('sigla'))
+                ->orWhere('pais', $request->input('pais'));
+        });
+
+        if ($id !== null) {
+            $query->whereNot('id', $id);
+        }
+
+        if ($query->exists()) {
+            $codigo = 409;
+            $mensagem = "O nome da nacionalidade, sigla ou País informado já existe.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
     }
 }
