@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RefDocumentoTipoController;
 use App\Http\Controllers\RefEstadoController;
+use App\Http\Controllers\RefGeneroController;
 use App\Http\Controllers\RefIncOrigemController;
 use App\Http\Controllers\RefNacionalidadeController;
 use App\Http\Controllers\RefProfissaoController;
@@ -44,6 +45,17 @@ route::prefix('/v1')->group(function () {
             // Rotas relacionadas ao RefDocumentoTipoController
             Route::controller(RefDocumentoTipoController::class)->group(function () {
                 Route::prefix('/documentotipo')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefGeneroController
+            Route::controller(RefGeneroController::class)->group(function () {
+                Route::prefix('/genero')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');

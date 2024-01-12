@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             RefIncOrigemSeeder::class,
             RefDocumentoTipoSeeder::class,
             RefProfissaoSeeder::class,
+            RefGeneroSeeder::class,
         ]);
     }
 }

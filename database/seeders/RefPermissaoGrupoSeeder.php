@@ -37,6 +37,7 @@ class RefPermissaoGrupoSeeder extends Seeder
             ['id' => 21, 'nome' => 'Gerenciar Listagem Profissões', 'individuais' => false],
             ['id' => 22, 'nome' => 'Gerenciar Listagem Estados', 'individuais' => false],
             ['id' => 23, 'nome' => 'Gerenciar Listagem Nacionalidades', 'individuais' => false],
+            ['id' => 24, 'nome' => 'Gerenciar Listagem Gêneros', 'individuais' => false],
         ];        
 
         DB::table('ref_permissao_grupo')->insert($insert);
