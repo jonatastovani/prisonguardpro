@@ -119,7 +119,7 @@ class RefGeneroController extends Controller
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O gênero informado não existe ou foi excluído.";
+            $mensagem = "O ID do gênero informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);

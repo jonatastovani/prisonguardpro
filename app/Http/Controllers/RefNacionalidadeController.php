@@ -57,18 +57,8 @@ class RefNacionalidadeController extends Controller
      */
     public function show($id)
     {
-        $resource = RefNacionalidade::find($id);
-
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
-            // Gerar um log
-            $codigo = 404;
-            $mensagem = "A nacionalidade pesquisada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
-
-            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        // Verifica se o modelo existe
+        $resource = $this->buscarRecurso($id);
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -93,18 +83,8 @@ class RefNacionalidadeController extends Controller
         // Valida se não existe outro com o mesmo nome
         $this->validarRecursoExistente($request, $request->id);
 
-        $resource = RefNacionalidade::find($request->id);
-
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
-            // Gerar um log
-            $codigo = 404;
-            $mensagem = "A nacionalidade a ser alterada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        // Verifica se o modelo existe
+        $resource = $this->buscarRecurso($request->id);
 
         // Se passou pelas validações, altera o recurso
         $resource->nome = $request->input('nome');
@@ -126,18 +106,8 @@ class RefNacionalidadeController extends Controller
     {
         $this->authorize('delete', RefNacionalidade::class);
 
-        $resource = RefNacionalidade::find($id);
-
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
-            // Gerar um log
-            $codigo = 404;
-            $mensagem = "A nacionalidade informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
-
-            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        // Verifica se o modelo existe
+        $resource = $this->buscarRecurso($id);
 
         // Execute o soft delete
         CommonsFunctions::inserirInfoDeleted($resource);
@@ -146,6 +116,23 @@ class RefNacionalidadeController extends Controller
         // Retorne uma resposta de sucesso (status 204 - No Content)
         $response = RestResponse::createSuccessResponse([], 204, 'Nacionalidade excluída com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    private function buscarRecurso($id)
+    {
+        $resource = RefNacionalidade::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O ID da nacionalidade informada não existe ou foi excluída.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+        return $resource;
     }
 
     private function validarRecursoExistente($request, $id = null)
