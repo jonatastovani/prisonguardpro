@@ -29,20 +29,21 @@ class RefIncOrigemController extends Controller
             'nome' => 'required',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
         $resource = RefIncOrigem::where('nome', $request->input('nome'));
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "A origem informada já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-    
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         // Se a validação passou, crie um novo registro
         $novo = new RefIncOrigem();
         $novo->nome = $request->input('nome');
@@ -61,17 +62,18 @@ class RefIncOrigemController extends Controller
     public function show($id)
     {
         $resource = RefIncOrigem::find($id);
-    
+
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A origem pesquisada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
-    
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-    
+
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -88,31 +90,32 @@ class RefIncOrigemController extends Controller
             'nome' => 'required',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefIncOrigem::
-        where('nome', $request->input('nome'))
-        ->whereNot('id', $request->id);
+        $resource = RefIncOrigem::where('nome', $request->input('nome'))
+            ->whereNot('id', $request->id);
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "O nome da origem informada já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         $resource = RefIncOrigem::find($request->id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A origem a ser alterada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -139,10 +142,11 @@ class RefIncOrigemController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A origem informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 

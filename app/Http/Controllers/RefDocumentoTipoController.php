@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class RefDocumentoTipoController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -33,20 +33,21 @@ class RefDocumentoTipoController extends Controller
             'nome' => 'required',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
         $resource = RefDocumentoTipo::where('nome', $request->input('nome'));
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "O tipo de documento informado já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-    
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         // Se a validação passou, crie um novo registro
         $novo = new RefDocumentoTipo();
         $novo->nome = $request->input('nome');
@@ -65,21 +66,22 @@ class RefDocumentoTipoController extends Controller
     public function show($id)
     {
         $resource = RefDocumentoTipo::find($id);
-    
+
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O tipo de documento pesquisado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
-    
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-    
+
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
-    
+
     /**
      * Update the specified resource in storage.
      */
@@ -92,31 +94,32 @@ class RefDocumentoTipoController extends Controller
             'nome' => 'required',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefDocumentoTipo::
-        where('nome', $request->input('nome'))
-        ->whereNot('id', $request->id);
+        $resource = RefDocumentoTipo::where('nome', $request->input('nome'))
+            ->whereNot('id', $request->id);
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "O nome do tipo de documento informado já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         $resource = RefDocumentoTipo::find($request->id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O tipo de documento a ser alterado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -143,10 +146,11 @@ class RefDocumentoTipoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O tipo de documento informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -158,5 +162,4 @@ class RefDocumentoTipoController extends Controller
         $response = RestResponse::createSuccessResponse([], 204, 'Tipo de documento excluído com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
     }
-
 }

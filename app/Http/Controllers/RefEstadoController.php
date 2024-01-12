@@ -39,19 +39,7 @@ class RefEstadoController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        // Valida se não existe outro com o mesmo nome e país
-        $resource = RefEstado::where('sigla', $request->input('sigla'))
-            ->where('nome', $request->input('nome'))
-            ->where('pais_id', $request->input('pais_id'));
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $mensagem = "O Estado informado já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request);
 
         // Se a validação passou, crie um novo registro
         $novo = new RefEstado();
@@ -59,11 +47,16 @@ class RefEstadoController extends Controller
         $novo->nome = $request->input('nome');
 
         // Valida se o país existe e não está excluído
-        $paisValidationResult = $this->validarPaisExistente($novo, $request, $arrErrors);
+        $this->validarPaisExistente($novo, $request, $arrErrors);
 
         // Erros que impedem o processamento
         if (count($arrErrors)) {
-            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], 422, "A requisição não pôde ser processada.");
+            // Gerar um log
+            $codigo = 422;
+            $mensagem = "A requisição não pôde ser processada.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($arrErrors));
+
+            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -84,10 +77,11 @@ class RefEstadoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O Estado pesquisado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -100,45 +94,51 @@ class RefEstadoController extends Controller
      */
     public function update(Request $request)
     {
+        $arrErrors = [];
+
         $this->authorize('update', RefEstado::class);
 
         // Regras de validação
         $rules = [
             'nome' => 'required',
-            'pais_id' => 'required',
+            'sigla' => 'required|min:2',
+            'pais_id' => 'required|integer',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        // Valida se não existe outro com o mesmo nome
-        $resource = RefEstado::where('sigla', $request->input('sigla'), 'nome', $request->input('nome'), 'pais_id', $request->input('pais_id'))
-            ->whereNot('id', $request->id);
-
-        if ($resource->exists()) {
-            // Gerar um log
-            $mensagem = "O nome do Estado informado já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode());
-        }
+        $this->validarRecursoExistente($request, $request->id);
 
         $resource = RefEstado::find($request->id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O Estado a ser alterado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
         // Se passou pelas validações, altera o recurso
         $resource->sigla = $request->input('sigla');
         $resource->nome = $request->input('nome');
-        $resource->pais_id = $request->input('pais_id');
+
+        // Valida se o país existe e não está excluído
+        $this->validarPaisExistente($resource, $request, $arrErrors);
+
+        // Erros que impedem o processamento
+        if (count($arrErrors)) {
+            // Gerar um log
+            $codigo = 422;
+            $mensagem = "A requisição não pôde ser processada.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($arrErrors));
+
+            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], $codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode());
+        }
 
         CommonsFunctions::inserirInfoUpdated($resource);
         $resource->save();
@@ -160,10 +160,11 @@ class RefEstadoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O Estado informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -174,6 +175,37 @@ class RefEstadoController extends Controller
         // Retorne uma resposta de sucesso (status 204 - No Content)
         $response = RestResponse::createSuccessResponse([], 204, 'Estado excluído com sucesso.');
         return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    private function validarRecursoExistente($request, $id = null)
+    {
+        $query = RefEstado::where('sigla', $request->input('sigla'))
+            ->where('nome', $request->input('nome'))
+            ->where('pais_id', $request->input('pais_id'));
+
+        if ($id !== null) {
+            $query->whereNot('id', $id);
+        }
+
+        // Verificar se o nome já existe no país
+        $query->orWhere(function ($query) use ($request, $id) {
+            $query->where('nome', $request->input('nome'))
+                ->where('pais_id', $request->input('pais_id'));
+            if ($id !== null) {
+                $query->whereNot('id', $id);
+            }
+        });
+
+        if ($query->exists()) {
+            $codigo = 409;
+            $mensagem = "O Estado informado já existe.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+
+        return null;
     }
 
     private function validarPaisExistente($resource, $request, &$arrErrors)
@@ -194,5 +226,4 @@ class RefEstadoController extends Controller
             ];
         }
     }
-    
 }

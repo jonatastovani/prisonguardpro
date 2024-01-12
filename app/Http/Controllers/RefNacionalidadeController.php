@@ -42,10 +42,11 @@ class RefNacionalidadeController extends Controller
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "A nome da nacionalidade, sigla ou País informado já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -73,10 +74,11 @@ class RefNacionalidadeController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A nacionalidade pesquisada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -110,10 +112,11 @@ class RefNacionalidadeController extends Controller
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "O nome da nacionalidade, sigla ou País informado já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -122,10 +125,11 @@ class RefNacionalidadeController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A nacionalidade a ser alterada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -154,10 +158,11 @@ class RefNacionalidadeController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A nacionalidade informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 

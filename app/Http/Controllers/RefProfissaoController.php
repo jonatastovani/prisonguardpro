@@ -29,20 +29,21 @@ class RefProfissaoController extends Controller
             'nome' => 'required',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
         $resource = RefProfissao::where('nome', $request->input('nome'));
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "A profissão informada já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-    
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
+
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         // Se a validação passou, crie um novo registro
         $novo = new RefProfissao();
         $novo->nome = $request->input('nome');
@@ -61,17 +62,18 @@ class RefProfissaoController extends Controller
     public function show($id)
     {
         $resource = RefProfissao::find($id);
-    
+
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A profissão pesquisada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
-    
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-    
+
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -88,31 +90,32 @@ class RefProfissaoController extends Controller
             'nome' => 'required',
         ];
 
-        CommonsFunctions::validacaoRequest($request,$rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $resource = RefProfissao::
-        where('nome', $request->input('nome'))
-        ->whereNot('id', $request->id);
+        $resource = RefProfissao::where('nome', $request->input('nome'))
+            ->whereNot('id', $request->id);
 
         if ($resource->exists()) {
             // Gerar um log
+            $codigo = 409;
             $mensagem = "O nome da profissão informada já existe.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], 409, $mensagem, $traceId);
+            $response = RestResponse::createGenericResponse(["resource" => $resource->first()], $codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
-        
+
         $resource = RefProfissao::find($request->id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A profissão a ser alterada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -139,10 +142,11 @@ class RefProfissaoController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A profissão informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| id: $id");
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
-            $response = RestResponse::createErrorResponse(404, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode());
         }
 
@@ -155,4 +159,3 @@ class RefProfissaoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 }
-

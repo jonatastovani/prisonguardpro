@@ -4,9 +4,10 @@ namespace App\Common;
 
 use App\common\restResponse;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-Use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Type\Integer;
 
 class CommonsFunctions
@@ -15,38 +16,42 @@ class CommonsFunctions
     /**
      * Gera um ID para o Log
      */
-    static function generateTraceId() {
+    static function generateTraceId()
+    {
         return uniqid('PGP|');
-    }    
+    }
 
     /**
      * Gera Log de erro, retornando o id do Log
      */
-    static function generateLog($mensagem) :string {
-        
+    static function generateLog($mensagem): string
+    {
+
         $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1);
-        
+
         $chamador = end($trace);
-    
+
         $diretorio = isset($chamador['file']) ? $chamador['file'] : null;
         $linha = isset($chamador['line']) ? $chamador['line'] : null;
-    
+
         $traceId = CommonsFunctions::generateTraceId();
-    
+
         // Registre o erro no log com o trace ID
         $mensagem .= $diretorio !== null ? " | Arquivo: $diretorio" : '';
         $mensagem .= $linha !== null ? " | Linha: $linha" : '';
+        $mensagem .= " | UserId: ". auth()->id();
         $mensagem .= " | Trace ID: $traceId";
-    
-        Log::error($mensagem);
+
+        // Log::error($mensagem);
+        Log::channel('pgplog_file')->info($mensagem);
         return $traceId;
-        
     }
-    
+
     /**
      * Retorna um array de mensagens para uso do Validator
      */
-    static function getMessagesValidate() : array {
+    static function getMessagesValidate(): array
+    {
         return [
             'required' => 'O campo :attribute é obrigatório.',
             'integer' => 'O campo :attribute deve ser um número.',
@@ -56,12 +61,13 @@ class CommonsFunctions
             'min' => 'O campo :attribute deve ter no mínimo :min caracteres.',
         ];
     }
-    
+
     /**
      * Efetua uma validação dos inputs da request enviada
      */
-    static function validacaoRequest(Request $request, Array $rules, Array $attributeNames = [], Array $messages = []) {
-        
+    static function validacaoRequest(Request $request, array $rules, array $attributeNames = [], array $messages = [])
+    {
+
         if (!count($messages)) {
             $messages = CommonsFunctions::getMessagesValidate();
         }
@@ -78,7 +84,6 @@ class CommonsFunctions
             $response = restResponse::createGenericResponse(["errors" => $validator->errors()], 422, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
-
     }
 
     static function formatarDataTimeZonaAmericaSaoPaulo($value)
@@ -91,7 +96,7 @@ class CommonsFunctions
     }
 
     static function inserirInfoCreated($novo)
-    {    
+    {
         $novo->id_user_created = auth()->user()->id;
         $novo->ip_created = UserInfo::get_ip();
         $novo->created_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
@@ -99,14 +104,14 @@ class CommonsFunctions
     }
 
     static function inserirInfoUpdated($resource)
-    {    
+    {
         $resource->id_user_updated = auth()->user()->id;
         $resource->ip_updated = UserInfo::get_ip();
         $resource->updated_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
     }
 
     static function inserirInfoDeleted($resource)
-    {    
+    {
         $resource->id_user_deleted = auth()->user()->id;
         $resource->ip_deleted = UserInfo::get_ip();
         $resource->deleted_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
@@ -127,7 +132,7 @@ class CommonsFunctions
     //         'trace_id' => $traceId,
     //         'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
     //     ];
-    
+
     //     if (!is_null($data)) {
     //         if (isset($data['error'])) {
     //             $response['errors'] = [
@@ -139,7 +144,7 @@ class CommonsFunctions
     //             $response['data'] = $data['data'];
     //         }
     //     }
-    
+
     //     return response()->json($response, $status)->throwResponse();
     // }
 
