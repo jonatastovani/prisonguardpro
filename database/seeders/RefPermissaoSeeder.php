@@ -518,6 +518,60 @@ class RefPermissaoSeeder extends Seeder
                 'nome_completo' => null,
                 'descricao' => 'Excluir nome da listagem das Gêneros.',
             ],
+            [
+                'id' => 85,
+                'nome' => 'Incluir Escolaridade',
+                'nome_completo' => null,
+                'descricao' => 'Incluir nome na listagem das Escolaridades.',
+            ],
+            [
+                'id' => 86,
+                'nome' => 'Alterar Escolaridade',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem das Escolaridades.',
+            ],
+            [
+                'id' => 87,
+                'nome' => 'Excluir Escolaridade',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem das Escolaridades.',
+            ],
+            [
+                'id' => 88,
+                'nome' => 'Incluir Cidade',
+                'nome_completo' => null,
+                'descricao' => 'Incluir nome na listagem das Cidades.',
+            ],
+            [
+                'id' => 89,
+                'nome' => 'Alterar Cidade',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem das Cidades.',
+            ],
+            [
+                'id' => 90,
+                'nome' => 'Excluir Cidade',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem das Cidades.',
+            ],
+            [
+                'id' => 91,
+                'nome' => 'Incluir Estado Civil',
+                'nome_completo' => null,
+                'descricao' => 'Incluir nome na listagem de Estado Civil.',
+            ],
+            [
+                'id' => 92,
+                'nome' => 'Alterar Estado Civil',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de Estado Civil.',
+            ],
+            [
+                'id' => 93,
+                'nome' => 'Excluir Estado Civil',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de Estado Civil.',
+            ],
         ];
 
         DB::table('ref_permissao')->insert($data);

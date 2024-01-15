@@ -86,6 +86,20 @@ class CommonsFunctions
         }
     }
 
+    static function retornaErroQueImpedemProcessamento422($arrErrors)
+    {
+        // Erros que impedem o processamento
+        if (count($arrErrors)) {
+            // Gerar um log
+            $codigo = 422;
+            $mensagem = "A requisição não pôde ser processada.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($arrErrors));
+
+            $response = RestResponse::createGenericResponse(["errors" => $arrErrors], $codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+    }
+    
     static function formatarDataTimeZonaAmericaSaoPaulo($value)
     {
         if ($value) {

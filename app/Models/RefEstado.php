@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class RefEstado extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
-    
+
     public function getCreatedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
@@ -37,5 +37,9 @@ class RefEstado extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
+    public function nacionalidade()
+    {
 
+        return $this->belongsTo(RefNacionalidade::class, 'pais_id');
+    }
 }

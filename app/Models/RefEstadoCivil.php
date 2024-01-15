@@ -14,6 +14,8 @@ class RefEstadoCivil extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
     
+    protected $table = 'ref_estado_civil';
+    
     public function getCreatedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);

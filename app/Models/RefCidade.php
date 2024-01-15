@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class IncEntradaPreso extends Model
+class RefCidade extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
@@ -35,5 +35,11 @@ class IncEntradaPreso extends Model
         return $logOptions->logAll()
             ->dontSubmitEmptyLogs()
             ->useLogName(strtolower(class_basename($this)));
+    }
+
+    public function estado()
+    {
+
+        return $this->belongsTo(RefNacionalidade::class, 'estado_id');
     }
 }
