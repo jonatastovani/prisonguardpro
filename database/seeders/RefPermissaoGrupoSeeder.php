@@ -47,6 +47,7 @@ class RefPermissaoGrupoSeeder extends Seeder
             ['id' => 31, 'nome' => 'Gerenciar Listagem Cores de Olhos', 'individuais' => false],
             ['id' => 32, 'nome' => 'Gerenciar Listagem Crenças', 'individuais' => false],
             ['id' => 33, 'nome' => 'Gerenciar Listagem Tipos de Olhos', 'individuais' => false],
+            ['id' => 34, 'nome' => 'Gerenciar Listagem Orgãos Emissores', 'individuais' => false],
         ];        
 
         DB::table('ref_permissao_grupo')->insert($insert);

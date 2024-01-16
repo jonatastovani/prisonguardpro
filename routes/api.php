@@ -3,11 +3,14 @@
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\PresoController;
 use App\Http\Controllers\RefCabeloCorController;
 use App\Http\Controllers\RefCabeloTipoController;
 use App\Http\Controllers\RefCidadeController;
 use App\Http\Controllers\RefCrencaController;
 use App\Http\Controllers\RefCutisController;
+use App\Http\Controllers\RefDocumentoOrgaoEmissorController;
 use App\Http\Controllers\RefDocumentoTipoController;
 use App\Http\Controllers\RefEscolaridadeController;
 use App\Http\Controllers\RefEstadoCivilController;
@@ -19,7 +22,9 @@ use App\Http\Controllers\RefOlhoCorController;
 use App\Http\Controllers\RefOlhoTipoController;
 use App\Http\Controllers\RefProfissaoController;
 use App\Http\Controllers\UserPermissaoController;
+use App\Models\Pessoa;
 use App\Models\RefCidade;
+use App\Models\RefDocumentoOrgaoEmissor;
 use Illuminate\Support\Facades\Route;
 
 // Rotas relacionadas ao LoginController
@@ -107,6 +112,17 @@ route::prefix('/v1')->group(function () {
             // Rotas relacionadas ao RefDocumentoTipoController
             Route::controller(RefDocumentoTipoController::class)->group(function () {
                 Route::prefix('/documentotipo')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefDocumentoOrgaoEmissor
+            Route::controller(RefDocumentoOrgaoEmissorController::class)->group(function () {
+                Route::prefix('/documentoemissor')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -215,9 +231,20 @@ route::prefix('/v1')->group(function () {
             });
         });
 
-        // Rotas relacionadas ao RefIncOrigemController
-        Route::controller(RefIncOrigemController::class)->group(function () {
-            Route::prefix('/origem')->group(function () {
+        // Rotas relacionadas ao PessoaController
+        Route::controller(PessoaController::class)->group(function () {
+            Route::prefix('/pessoa')->group(function () {
+                Route::get('', 'index');
+                Route::get('/{id}', 'show');
+                Route::post('', 'store');
+                Route::put('/{id}', 'update');
+                Route::delete('/{id}', 'destroy');
+            });
+        });
+
+        // Rotas relacionadas ao PessoaController
+        Route::controller(PresoController::class)->group(function () {
+            Route::prefix('/preso')->group(function () {
                 Route::get('', 'index');
                 Route::get('/{id}', 'show');
                 Route::post('', 'store');

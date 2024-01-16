@@ -644,6 +644,18 @@ class RefPermissaoSeeder extends Seeder
                 'nome_completo' => null,
                 'descricao' => 'Excluir nome da listagem de tipos de olhos.',
             ],
+            [
+                'id' => 106,
+                'nome' => 'Alterar Orgãos Emissores',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de orgãos emissores.',
+            ],
+            [
+                'id' => 107,
+                'nome' => 'Excluir Orgãos Emissores',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de orgãos emissores.',
+            ],
         ];
 
         DB::table('ref_permissao')->insert($data);

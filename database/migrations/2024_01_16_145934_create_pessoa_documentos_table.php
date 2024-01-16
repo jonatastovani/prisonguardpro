@@ -11,35 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('presos', function (Blueprint $table) {
+        Schema::create('pessoa_documentos', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('pessoa_id');
             $table->foreign('pessoa_id')->references('id')->on('pessoas');
 
-            $table->string('matricula');
-            $table->double('estatura', 3, 2)->nullable();
-            $table->double('peso', 4, 1)->nullable();
+            $table->unsignedBigInteger('doc_tipo_id');
+            $table->foreign('doc_tipo_id')->references('id')->on('ref_documento_tipos');
+            
+            $table->unsignedBigInteger('org_exp_id');
+            $table->foreign('org_exp_id')->references('id')->on('ref_documento_orgao_emissor');
 
-            $table->unsignedBigInteger('cutis_id')->nullable();
-            $table->foreign('cutis_id')->references('id')->on('ref_cutis');
+            $table->unsignedBigInteger('estado_id');
+            $table->foreign('estado_id')->references('id')->on('ref_estados');
 
-            $table->unsignedBigInteger('cabelo_tipo_id')->nullable();
-            $table->foreign('cabelo_tipo_id')->references('id')->on('ref_cabelo_tipos');
-
-            $table->unsignedBigInteger('cabelo_cor_id')->nullable();
-            $table->foreign('cabelo_cor_id')->references('id')->on('ref_cabelo_cor');
-
-            $table->unsignedBigInteger('olho_cor_id')->nullable();
-            $table->foreign('olho_cor_id')->references('id')->on('ref_olho_cor');
-
-            $table->unsignedBigInteger('olho_tipo_id')->nullable();
-            $table->foreign('olho_tipo_id')->references('id')->on('ref_olho_tipos');
-
-            $table->unsignedBigInteger('crenca_id')->nullable();
-            $table->foreign('crenca_id')->references('id')->on('ref_crencas');
-
-            $table->text('sinais')->nullable();
+            $table->string('numero');
             
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
@@ -63,6 +50,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presos');
+        Schema::dropIfExists('pessoa_documentos');
     }
 };

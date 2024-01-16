@@ -34,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\RefOlhoCor::class => \App\Policies\RefOlhoCorPolicy::class,
         \App\Models\RefCrenca::class => \App\Policies\RefCrencaPolicy::class,
         \App\Models\RefOlhoTipo::class => \App\Policies\RefOlhoTipoPolicy::class,
+        \App\Models\RefDocumentoOrgaoEmissor::class => \App\Policies\RefDocumentoOrgaoEmissorPolicy::class,
     ];
 
     /**

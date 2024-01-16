@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Common\RestResponse;
 use App\Models\Preso;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class PresoController extends Controller
      */
     public function index()
     {
-        //
+        $resource = Preso::with('pessoa.documentos')->get();
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**

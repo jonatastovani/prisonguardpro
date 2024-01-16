@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\RefCidade;
+use App\Models\RefEscolaridade;
+use App\Models\RefEstadoCivil;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,17 @@ class PessoaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nome' => $this->faker->unique()->sentence(4),
+            'mae' => $this->faker->unique()->sentence(4),
+            'pai' => $this->faker->unique()->sentence(4),
+            'data_nasc' => $this->faker->date(),
+            'cidade_nasc_id' => RefCidade::pluck('id')->random(),
+            'genero_id' => 1,
+            'escolaridade_id' => RefEscolaridade::pluck('id')->random(),
+            'estado_civil_id' => RefEstadoCivil::pluck('id')->random(),
+            'id_user_created' => 1,
+            'ip_created' => config('sistema.ipHost'),
+            'created_at' => now(),
         ];
     }
 }

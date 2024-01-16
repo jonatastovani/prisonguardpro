@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\RefDocumentoOrgaoEmissor;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -50,6 +51,11 @@ class DatabaseSeeder extends Seeder
             RefProfissaoSeeder::class,
             RefGeneroSeeder::class,
             RefCidadeSeeder::class,
+            RefDocumentoOrgaoEmissorSeeder::class,
+            PessoaSeeder::class, // Faker
+            PessoaDocumentoSeeder::class, // Faker
+            PresoSeeder::class, // Faker
+            PessoaProfissaoSeeder::class, // Faker
         ]);
     }
 }

@@ -11,25 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pessoas', function (Blueprint $table) {
+        Schema::create('ref_documento_orgao_emissor', function (Blueprint $table) {
             $table->id();
+            $table->string('sigla');
             $table->string('nome');
-            $table->string('nome_social')->nullable();
-            $table->string('mae')->nullable();
-            $table->string('pai')->nullable();
-            $table->date('data_nasc')->nullable();
-
-            $table->unsignedBigInteger('cidade_nasc_id')->nullable();
-            $table->foreign('cidade_nasc_id')->references('id')->on('ref_cidades');
-
-            $table->unsignedBigInteger('genero_id')->nullable();
-            $table->foreign('genero_id')->references('id')->on('ref_generos');
-
-            $table->unsignedBigInteger('escolaridade_id')->nullable();
-            $table->foreign('escolaridade_id')->references('id')->on('ref_escolaridades');
-
-            $table->unsignedBigInteger('estado_civil_id')->nullable();
-            $table->foreign('estado_civil_id')->references('id')->on('ref_estado_civil');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
@@ -53,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pessoas');
+        Schema::dropIfExists('ref_documento_orgao_emissor');
     }
 };

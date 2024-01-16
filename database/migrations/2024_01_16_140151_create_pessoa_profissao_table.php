@@ -11,36 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('presos', function (Blueprint $table) {
+        Schema::create('pessoa_profissao', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('pessoa_id');
             $table->foreign('pessoa_id')->references('id')->on('pessoas');
 
-            $table->string('matricula');
-            $table->double('estatura', 3, 2)->nullable();
-            $table->double('peso', 4, 1)->nullable();
+            $table->unsignedBigInteger('profissao_id');
+            $table->foreign('profissao_id')->references('id')->on('ref_profissao');
 
-            $table->unsignedBigInteger('cutis_id')->nullable();
-            $table->foreign('cutis_id')->references('id')->on('ref_cutis');
-
-            $table->unsignedBigInteger('cabelo_tipo_id')->nullable();
-            $table->foreign('cabelo_tipo_id')->references('id')->on('ref_cabelo_tipos');
-
-            $table->unsignedBigInteger('cabelo_cor_id')->nullable();
-            $table->foreign('cabelo_cor_id')->references('id')->on('ref_cabelo_cor');
-
-            $table->unsignedBigInteger('olho_cor_id')->nullable();
-            $table->foreign('olho_cor_id')->references('id')->on('ref_olho_cor');
-
-            $table->unsignedBigInteger('olho_tipo_id')->nullable();
-            $table->foreign('olho_tipo_id')->references('id')->on('ref_olho_tipos');
-
-            $table->unsignedBigInteger('crenca_id')->nullable();
-            $table->foreign('crenca_id')->references('id')->on('ref_crencas');
-
-            $table->text('sinais')->nullable();
-            
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
             $table->string('ip_created')->nullable();
@@ -63,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presos');
+        Schema::dropIfExists('pessoa_profissao');
     }
 };

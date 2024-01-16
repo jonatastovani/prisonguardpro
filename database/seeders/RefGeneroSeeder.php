@@ -16,8 +16,8 @@ class RefGeneroSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['nome' => 'Feminino', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
             ['nome' => 'Masculino', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Feminino', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_generos')->insert($insert);

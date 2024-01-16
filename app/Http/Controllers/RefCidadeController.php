@@ -182,7 +182,7 @@ class RefCidadeController extends Controller
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "O Estado informado não existe.";
+            $mensagem = "O Estado informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $arrErrors[] = [
