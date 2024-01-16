@@ -572,6 +572,78 @@ class RefPermissaoSeeder extends Seeder
                 'nome_completo' => null,
                 'descricao' => 'Excluir nome da listagem de Estado Civil.',
             ],
+            [
+                'id' => 94,
+                'nome' => 'Alterar Cores de Cabelo',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de cores de cabelos.',
+            ],
+            [
+                'id' => 95,
+                'nome' => 'Excluir Cores de Cabelo',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de cores de cabelos.',
+            ],
+            [
+                'id' => 96,
+                'nome' => 'Alterar Tipos de Cabelo',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de tipos de cabelos.',
+            ],
+            [
+                'id' => 97,
+                'nome' => 'Excluir Tipos de Cabelo',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de tipos de cabelos.',
+            ],
+            [
+                'id' => 98,
+                'nome' => 'Alterar Cutis',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de cores de peles.',
+            ],
+            [
+                'id' => 99,
+                'nome' => 'Excluir Cutis',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de cores de peles.',
+            ],
+            [
+                'id' => 100,
+                'nome' => 'Alterar Cor de Olhos',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de cores de olhos.',
+            ],
+            [
+                'id' => 101,
+                'nome' => 'Excluir Cor de Olhos',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de cores de olhos.',
+            ],
+            [
+                'id' => 102,
+                'nome' => 'Alterar Crença',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de crenças.',
+            ],
+            [
+                'id' => 103,
+                'nome' => 'Excluir Crença',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de crenças.',
+            ],
+            [
+                'id' => 104,
+                'nome' => 'Alterar Tipo de Olhos',
+                'nome_completo' => null,
+                'descricao' => 'Alterar nomes da listagem de tipos de olhos.',
+            ],
+            [
+                'id' => 105,
+                'nome' => 'Excluir Tipo de Olhos',
+                'nome_completo' => null,
+                'descricao' => 'Excluir nome da listagem de tipos de olhos.',
+            ],
         ];
 
         DB::table('ref_permissao')->insert($data);

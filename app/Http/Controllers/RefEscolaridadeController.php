@@ -137,7 +137,7 @@ class RefEscolaridadeController extends Controller
 
         if ($query->exists()) {
             $codigo = 409;
-            $mensagem = "O nome do escolaridade informada já existe.";
+            $mensagem = "O nome da escolaridade informada já existe.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
             $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);

@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class RefCoresCabelo extends Model
+class RefCabeloCor extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
-    
+
+    protected $table = 'ref_cabelo_cor';
+
     public function getCreatedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
@@ -36,5 +38,4 @@ class RefCoresCabelo extends Model
             ->dontSubmitEmptyLogs()
             ->useLogName(strtolower(class_basename($this)));
     }
-
 }

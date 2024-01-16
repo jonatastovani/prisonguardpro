@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('ref_nacionalidades', function (Blueprint $table) {
             $table->id();
-            $table->string('sigla')->unique();
-            $table->string('nome')->unique();
-            $table->string('pais')->unique();
+            $table->string('sigla');
+            $table->string('nome');
+            $table->string('pais');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');

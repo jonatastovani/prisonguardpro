@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class RefCidade extends Model
+class RefOlhoTipo extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
-
+    
     public function getCreatedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
@@ -37,8 +37,4 @@ class RefCidade extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    public function estado()
-    {
-        return $this->belongsTo(RefEstado::class, 'estado_id');
-    }
 }

@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class RefCidade extends Model
+class RefOlhoCor extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
+    
+    protected $table = 'ref_olho_cor';
 
     public function getCreatedAtAttribute($value)
     {
@@ -37,8 +39,4 @@ class RefCidade extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    public function estado()
-    {
-        return $this->belongsTo(RefEstado::class, 'estado_id');
-    }
 }

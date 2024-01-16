@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class RefOlhoSeeder extends Seeder
+class RefOlhoCorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,6 +22,6 @@ class RefOlhoSeeder extends Seeder
             ['nome' => 'Outros', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
         ];
 
-        DB::table('ref_olhos')->insert($insert);
+        DB::table('ref_olho_cor')->insert($insert);
     }
 }

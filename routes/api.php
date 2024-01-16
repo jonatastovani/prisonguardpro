@@ -3,7 +3,11 @@
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RefCabeloCorController;
+use App\Http\Controllers\RefCabeloTipoController;
 use App\Http\Controllers\RefCidadeController;
+use App\Http\Controllers\RefCrencaController;
+use App\Http\Controllers\RefCutisController;
 use App\Http\Controllers\RefDocumentoTipoController;
 use App\Http\Controllers\RefEscolaridadeController;
 use App\Http\Controllers\RefEstadoCivilController;
@@ -11,6 +15,8 @@ use App\Http\Controllers\RefEstadoController;
 use App\Http\Controllers\RefGeneroController;
 use App\Http\Controllers\RefIncOrigemController;
 use App\Http\Controllers\RefNacionalidadeController;
+use App\Http\Controllers\RefOlhoCorController;
+use App\Http\Controllers\RefOlhoTipoController;
 use App\Http\Controllers\RefProfissaoController;
 use App\Http\Controllers\UserPermissaoController;
 use App\Models\RefCidade;
@@ -43,9 +49,53 @@ route::prefix('/v1')->group(function () {
                 });
             });
 
+            // Rotas relacionadas ao RefCabeloCorController
+            Route::controller(RefCabeloCorController::class)->group(function () {
+                Route::prefix('/cabelocor')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefCabeloTipoController
+            Route::controller(RefCabeloTipoController::class)->group(function () {
+                Route::prefix('/cabelotipo')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
             // Rotas relacionadas ao RefCidadeController
             Route::controller(RefCidadeController::class)->group(function () {
                 Route::prefix('/cidade')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefCutisController
+            Route::controller(RefCrencaController::class)->group(function () {
+                Route::prefix('/crenca')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefCutisController
+            Route::controller(RefCutisController::class)->group(function () {
+                Route::prefix('/cutis')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -87,6 +137,17 @@ route::prefix('/v1')->group(function () {
                 });
             });
 
+            // Rotas relacionadas ao RefEstadoController
+            Route::controller(RefEstadoController::class)->group(function () {
+                Route::prefix('/estado')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
             // Rotas relacionadas ao RefGeneroController
             Route::controller(RefGeneroController::class)->group(function () {
                 Route::prefix('/genero')->group(function () {
@@ -101,17 +162,6 @@ route::prefix('/v1')->group(function () {
             // Rotas relacionadas ao RefIncOrigemController
             Route::controller(RefIncOrigemController::class)->group(function () {
                 Route::prefix('/origem')->group(function () {
-                    Route::get('', 'index');
-                    Route::get('/{id}', 'show');
-                    Route::post('', 'store');
-                    Route::put('/{id}', 'update');
-                    Route::delete('/{id}', 'destroy');
-                });
-            });
-
-            // Rotas relacionadas ao RefEstadoController
-            Route::controller(RefEstadoController::class)->group(function () {
-                Route::prefix('/estado')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -141,7 +191,28 @@ route::prefix('/v1')->group(function () {
                     Route::delete('/{id}', 'destroy');
                 });
             });
-            
+
+            // Rotas relacionadas ao RefOlhoCorController
+            Route::controller(RefOlhoCorController::class)->group(function () {
+                Route::prefix('/olhocor')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefOlhoTipoController
+            Route::controller(RefOlhoTipoController::class)->group(function () {
+                Route::prefix('/olhotipo')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+                });
+            });
         });
 
         // Rotas relacionadas ao RefIncOrigemController

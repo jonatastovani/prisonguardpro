@@ -13,8 +13,34 @@ return new class extends Migration
     {
         Schema::create('presos', function (Blueprint $table) {
             $table->id();
-            $table->double('nome', 3, 2);
 
+            $table->unsignedBigInteger('pessoa_id');
+            $table->foreign('pessoa_id')->references('id')->on('pessoas');
+
+            $table->string('matricula');
+            $table->double('estatura', 3, 2);
+            $table->double('peso', 5, 2);
+
+            $table->unsignedBigInteger('cutis_id');
+            $table->foreign('cutis_id')->references('id')->on('ref_cutis');
+
+            $table->unsignedBigInteger('cabelo_tipo_id');
+            $table->foreign('cabelo_tipo_id')->references('id')->on('ref_cabelo_tipos');
+
+            $table->unsignedBigInteger('cabelo_cor_id');
+            $table->foreign('cabelo_cor_id')->references('id')->on('ref_cabelo_cor');
+
+            $table->unsignedBigInteger('olho_cor_id');
+            $table->foreign('olho_cor_id')->references('id')->on('ref_olho_cor');
+
+            $table->unsignedBigInteger('olho_tipo_id');
+            $table->foreign('olho_tipo_id')->references('id')->on('ref_olho_tipos');
+
+            $table->unsignedBigInteger('crenca_id');
+            $table->foreign('crenca_id')->references('id')->on('ref_crencas');
+
+            $table->text('sinais');
+            
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
             $table->string('ip_created')->nullable();

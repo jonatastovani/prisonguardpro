@@ -41,6 +41,12 @@ class RefPermissaoGrupoSeeder extends Seeder
             ['id' => 25, 'nome' => 'Gerenciar Listagem Escolaridades', 'individuais' => false],
             ['id' => 26, 'nome' => 'Gerenciar Listagem Cidades', 'individuais' => false],
             ['id' => 27, 'nome' => 'Gerenciar Listagem Estado Civil', 'individuais' => false],
+            ['id' => 28, 'nome' => 'Gerenciar Listagem Cores de cabelos', 'individuais' => false],
+            ['id' => 29, 'nome' => 'Gerenciar Listagem Tipos de cabelos', 'individuais' => false],
+            ['id' => 30, 'nome' => 'Gerenciar Listagem Cores de peles', 'individuais' => false],
+            ['id' => 31, 'nome' => 'Gerenciar Listagem Cores de Olhos', 'individuais' => false],
+            ['id' => 32, 'nome' => 'Gerenciar Listagem Crenças', 'individuais' => false],
+            ['id' => 33, 'nome' => 'Gerenciar Listagem Tipos de Olhos', 'individuais' => false],
         ];        
 
         DB::table('ref_permissao_grupo')->insert($insert);

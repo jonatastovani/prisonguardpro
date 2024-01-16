@@ -54,7 +54,10 @@ class RefCidadeController extends Controller
         CommonsFunctions::inserirInfoCreated($novo);
         $novo->save();
 
-        $response = RestResponse::createSuccessResponse($novo, 200);
+        // Busca o recurso para retornar com a referência de chave estrangeira correta
+        $resource = $this->buscarRecurso($novo->id);
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
@@ -105,6 +108,9 @@ class RefCidadeController extends Controller
         CommonsFunctions::inserirInfoUpdated($resource);
         $resource->save();
 
+        // Busca o recurso para retornar com a referência de chave estrangeira correta
+        $resource = $this->buscarRecurso($request->id);
+
         // Retorne uma resposta de sucesso (status 200 - OK)
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -133,7 +139,7 @@ class RefCidadeController extends Controller
 
     private function buscarRecurso($id)
     {
-        $resource = RefCidade::find($id);
+        $resource = RefCidade::with('estado')->find($id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
