@@ -52,6 +52,7 @@ class DatabaseSeeder extends Seeder
             RefGeneroSeeder::class,
             RefCidadeSeeder::class,
             RefDocumentoOrgaoEmissorSeeder::class,
+            RefStatusTipoSeeder::class,
             PessoaSeeder::class, // Faker
             PessoaDocumentoSeeder::class, // Faker
             PresoSeeder::class, // Faker

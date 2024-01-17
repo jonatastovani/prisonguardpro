@@ -11,30 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inc_entrada_presos', function (Blueprint $table) {
+        Schema::create('ref_status_nomes', function (Blueprint $table) {
             $table->id();
-
-            $table->unsignedBigInteger('entrada_id');
-            $table->foreign('entrada_id')->references('id')->on('inc_entradas');
-
             $table->string('nome');
-            $table->string('matricula')->nullable();
-            $table->string('rg')->nullable();
-            $table->string('cpf')->nullable();
-            $table->string('mae')->nullable();
-            $table->string('pai')->nullable();
-            $table->date('data_prisao')->nullable();
-            $table->text('informacoes')->nullable();
-            $table->text('observacoes')->nullable();
-
-            $table->unsignedBigInteger('preso_id');
-            $table->foreign('preso_id')->references('id')->on('presos');
-
-            $table->unsignedBigInteger('movimentacao_id');
-            $table->foreign('movimentacao_id')->references('id')->on('ref_movimentacao_preso');
-
-            $table->unsignedBigInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('ref_status');
 
             $table->unsignedBigInteger('id_user_created');
             $table->foreign('id_user_created')->references('id')->on('users');
@@ -58,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inc_entrada_presos');
+        Schema::dropIfExists('ref_status_nomes');
     }
 };
