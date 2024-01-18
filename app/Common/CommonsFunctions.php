@@ -39,7 +39,7 @@ class CommonsFunctions
         // Registre o erro no log com o trace ID
         $mensagem .= $diretorio !== null ? " | Arquivo: $diretorio" : '';
         $mensagem .= $linha !== null ? " | Linha: $linha" : '';
-        $mensagem .= " | UserId: ". auth()->id();
+        $mensagem .= " | UserId: " . auth()->id();
         $mensagem .= " | Trace ID: $traceId";
 
         // Log::error($mensagem);
@@ -56,9 +56,29 @@ class CommonsFunctions
             'required' => 'O campo :attribute é obrigatório.',
             'integer' => 'O campo :attribute deve ser um número.',
             'boolean' => 'O campo :attribute deve ser booleano.',
+            'array' => 'O campo :attribute deve ser array.',
+            'string' => 'O campo :attribute deve ser um texto.',
             'date' => 'O campo :attribute deve ser uma data.',
             'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
             'min' => 'O campo :attribute deve ter no mínimo :min caracteres.',
+            'date_format' => 'O campo :attribute deve possuir o formato :format.',
+            'presos.*.nome.regex' => 'O campo :attribute não deve conter números.',
+            'presos.*.mae.regex' => 'O campo :attribute não deve conter números.',
+            'presos.*.pai.regex' => 'O campo :attribute não deve conter números.',
+            'presos.*.matricula.regex' => 'O campo :attribute deve conter somente números.',
+        ];
+    }
+
+    /**
+     * Retorna um array de mensagens para uso do Validator
+     */
+    static function getAttributeNamesValidate(): array
+    {
+        return [
+            'presos.*.nome' => 'nome',
+            'presos.*.mae' => 'mae',
+            'presos.*.pai' => 'pai',
+            'presos.*.matricula' => 'matricula',
         ];
     }
 
@@ -67,9 +87,12 @@ class CommonsFunctions
      */
     static function validacaoRequest(Request $request, array $rules, array $attributeNames = [], array $messages = [])
     {
-
         if (!count($messages)) {
             $messages = CommonsFunctions::getMessagesValidate();
+        }
+
+        if (!count($attributeNames)) {
+            $attributeNames = CommonsFunctions::getAttributeNamesValidate();
         }
 
         // Valide os dados recebidos da requisição
@@ -99,7 +122,7 @@ class CommonsFunctions
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
     }
-    
+
     static function formatarDataTimeZonaAmericaSaoPaulo($value)
     {
         if ($value) {

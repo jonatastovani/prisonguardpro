@@ -71,4 +71,11 @@ class RestResponse
         return new self($data, $status, $message);
     }
 
+    public static function createTesteResponse($data = [], $message = 'Retorno teste')
+    {
+        $response = new self($data, 422, $message);
+
+        return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+    }
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncEntradaPresoController;
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\RefOlhoCorController;
 use App\Http\Controllers\RefOlhoTipoController;
 use App\Http\Controllers\RefProfissaoController;
 use App\Http\Controllers\UserPermissaoController;
+use App\Models\IncEntradaPreso;
 use App\Models\Pessoa;
 use App\Models\RefCidade;
 use App\Models\RefDocumentoOrgaoEmissor;
@@ -228,6 +230,22 @@ route::prefix('/v1')->group(function () {
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
                 });
+            });
+        });
+
+        Route::prefix('/inclusao')->group(function () {
+            Route::prefix('/entrada')->group(function () {
+
+                // Rotas relacionadas ao IncEntradaPresoController
+                Route::controller(IncEntradaPresoController::class)->group(function () {
+                    Route::prefix('/presos')->group(function () {
+                        Route::get('/{id}', 'show');
+                        Route::post('', 'store');
+                        Route::put('/{id}', 'update');
+                        Route::delete('/{id}', 'destroy');
+                    });
+                });
+
             });
         });
 

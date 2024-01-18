@@ -17,9 +17,13 @@ class RefStatusNomeSeeder extends Seeder
 
         $insert = [
             ['id' => 1, 'nome' => 'Aguardando cadastro do CIMIC', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 2, 'nome' => 'Aguardando pr', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 2, 'nome' => 'Cadastro cancelado', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 3, 'nome' => 'Liberado para inclusão', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 4, 'nome' => 'Inclusão pendente', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 5, 'nome' => 'Inclusão OK', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 6, 'nome' => 'Aguardando designação de cela', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
         ];
 
-        DB::table('ref_status_tipos')->insert($insert);
+        DB::table('ref_status_nomes')->insert($insert);
     }
 }
