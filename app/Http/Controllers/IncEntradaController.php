@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Common\CommonsFunctions;
+use App\Common\RestResponse;
 use App\Models\IncEntrada;
 use Illuminate\Http\Request;
 
@@ -34,10 +36,18 @@ class IncEntradaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(IncEntrada $incEntrada)
+    public function show($id)
     {
-        //
+        // Verifica se o modelo existe
+        $resource = $this->buscarRecurso($id);
+
+        // Carrega os presos relacionados
+        // $resource->load('presos');
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -61,5 +71,22 @@ class IncEntradaController extends Controller
     public function destroy(IncEntrada $incEntrada)
     {
         //
+    }
+
+    private function buscarRecurso($id)
+    {
+        $resource = IncEntrada::with('presos.preso')->find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O ID da entrada de presos informada não existe ou foi excluída.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+        return $resource;
     }
 }

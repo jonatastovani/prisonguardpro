@@ -15,12 +15,12 @@ class RefCutisSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['nome' => 'Branca', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Parda', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Negra', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Amarela', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Vermelha', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Outras', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Branca', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Parda', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Negra', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Amarela', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Vermelha', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Outras', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_cutis')->insert($insert);

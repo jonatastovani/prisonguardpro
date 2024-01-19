@@ -38,8 +38,8 @@ class PresoFactory extends Factory
             'olho_tipo_id' => RefOlhoTipo::pluck('id')->random(),
             'crenca_id' => RefCrenca::pluck('id')->random(),
             'sinais' => $this->faker->paragraph(),
-            'id_user_created' => 1,
-            'ip_created' => config('sistema.ipHost'),
+            'created_user_id' => 1,
+            'created_ip' => config('sistema.ipHost'),
             'created_at' => now(),
         ];
     }

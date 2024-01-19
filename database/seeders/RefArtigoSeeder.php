@@ -16,9 +16,9 @@ class RefArtigoSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['nome' => '33', 'descricao' => 'Tráfico', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => '155', 'descricao' => 'Roubo', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => '121', 'descricao' => 'Ameaça', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => '33', 'descricao' => 'Tráfico', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => '155', 'descricao' => 'Roubo', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => '121', 'descricao' => 'Ameaça', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_artigos')->insert($insert);

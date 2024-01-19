@@ -16,9 +16,9 @@ class RefCidadeSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['nome' => 'Americana', 'estado_id' => 25, 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => "Santa Bárbara D'Oeste'", 'estado_id' => 25, 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Sumaré', 'estado_id' => 25, 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Americana', 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => "Santa Bárbara D'Oeste'", 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => 'Sumaré', 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
         
         DB::table('ref_cidades')->insert($insert);

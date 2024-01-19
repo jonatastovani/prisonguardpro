@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncEntradaController;
 use App\Http\Controllers\IncEntradaPresoController;
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
@@ -235,6 +236,14 @@ route::prefix('/v1')->group(function () {
 
         Route::prefix('/inclusao')->group(function () {
             Route::prefix('/entrada')->group(function () {
+
+                // Rotas relacionadas ao IncEntradaController
+                Route::controller(IncEntradaController::class)->group(function () {
+                    Route::get('/{id}', 'show');
+                    // Route::post('', 'store');
+                    // Route::put('/{id}', 'update');
+                    // Route::delete('/{id}', 'destroy');
+                });
 
                 // Rotas relacionadas ao IncEntradaPresoController
                 Route::controller(IncEntradaPresoController::class)->group(function () {

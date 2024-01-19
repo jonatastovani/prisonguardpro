@@ -26,8 +26,8 @@ class PessoaDocumentoFactory extends Factory
             'org_exp_id' => RefDocumentoOrgaoEmissor::pluck('id')->random(),
             'estado_id' => RefEstado::pluck('id')->random(),
             'numero' => $this->faker->numberBetween(1000000,999999999),
-            'id_user_created' => 1, 
-            'ip_created' => config('sistema.ipHost'),
+            'created_user_id' => 1, 
+            'created_ip' => config('sistema.ipHost'),
             'created_at' => now(),
         ];
     }

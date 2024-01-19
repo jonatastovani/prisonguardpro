@@ -19,7 +19,7 @@ class UserPermissao extends Model
     public function user()
     {
 
-        return $this->belongsTo(User::class, 'id_user_created');
+        return $this->belongsTo(User::class, 'created_user_id');
     }
 
     public function permissao()

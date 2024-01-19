@@ -36,4 +36,9 @@ class IncEntradaPreso extends Model
             ->dontSubmitEmptyLogs()
             ->useLogName(strtolower(class_basename($this)));
     }
+
+    public function preso()
+    {
+        return $this->belongsTo(Preso::class)->withDefault([]);
+    }
 }

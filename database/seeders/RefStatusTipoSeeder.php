@@ -16,8 +16,8 @@ class RefStatusTipoSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['id' => 1, 'nome' => 'Gerenciar Entradas de Presos CIMIC', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 2, 'nome' => 'Gerenciar Entradas de Presos Inclusão', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 1, 'nome' => 'Gerenciar Entradas de Presos CIMIC', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['id' => 2, 'nome' => 'Gerenciar Entradas de Presos Inclusão', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_status_tipos')->insert($insert);

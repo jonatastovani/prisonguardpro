@@ -28,8 +28,8 @@ class PessoaFactory extends Factory
             'genero_id' => 1,
             'escolaridade_id' => RefEscolaridade::pluck('id')->random(),
             'estado_civil_id' => RefEstadoCivil::pluck('id')->random(),
-            'id_user_created' => 1,
-            'ip_created' => config('sistema.ipHost'),
+            'created_user_id' => 1,
+            'created_ip' => config('sistema.ipHost'),
             'created_at' => now(),
         ];
     }

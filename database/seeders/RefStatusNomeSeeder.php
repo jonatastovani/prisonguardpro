@@ -16,12 +16,12 @@ class RefStatusNomeSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['id' => 1, 'nome' => 'Aguardando cadastro do CIMIC', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 2, 'nome' => 'Cadastro cancelado', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 3, 'nome' => 'Liberado para inclusão', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 4, 'nome' => 'Inclusão pendente', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 5, 'nome' => 'Inclusão OK', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
-            ['id' => 6, 'nome' => 'Aguardando designação de cela', 'id_user_created' => 1, 'ip_created' => $iplocal, 'created_at' => now()],
+            ['id' => 1, 'nome' => 'Aguardando cadastro do CIMIC', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['id' => 2, 'nome' => 'Cadastro cancelado', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['id' => 3, 'nome' => 'Liberado para inclusão', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['id' => 4, 'nome' => 'Inclusão pendente', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['id' => 5, 'nome' => 'Inclusão OK', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['id' => 6, 'nome' => 'Aguardando designação de cela', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_status_nomes')->insert($insert);

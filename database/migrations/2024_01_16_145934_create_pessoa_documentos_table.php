@@ -28,19 +28,19 @@ return new class extends Migration
 
             $table->string('numero');
             
-            $table->unsignedBigInteger('id_user_created');
-            $table->foreign('id_user_created')->references('id')->on('users');
-            $table->string('ip_created')->nullable();
+            $table->unsignedBigInteger('created_user_id');
+            $table->foreign('created_user_id')->references('id')->on('users');
+            $table->string('created_ip')->nullable();
             $table->timestamp('created_at');
 
-            $table->unsignedBigInteger('id_user_updated')->nullable();
-            $table->foreign('id_user_updated')->references('id')->on('users');
-            $table->string('ip_updated')->nullable();
+            $table->unsignedBigInteger('updated_user_id')->nullable();
+            $table->foreign('updated_user_id')->references('id')->on('users');
+            $table->string('updated_ip')->nullable();
             $table->timestamp('updated_at')->nullable();
 
-            $table->unsignedBigInteger('id_user_deleted')->nullable();
-            $table->foreign('id_user_deleted')->references('id')->on('users');
-            $table->string('ip_deleted')->nullable();
+            $table->unsignedBigInteger('deleted_user_id')->nullable();
+            $table->foreign('deleted_user_id')->references('id')->on('users');
+            $table->string('deleted_ip')->nullable();
             $table->softDeletes();
         });
     }

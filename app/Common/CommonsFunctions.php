@@ -134,23 +134,23 @@ class CommonsFunctions
 
     static function inserirInfoCreated($novo)
     {
-        $novo->id_user_created = auth()->user()->id;
-        $novo->ip_created = UserInfo::get_ip();
+        $novo->created_user_id = auth()->user()->id;
+        $novo->created_ip = UserInfo::get_ip();
         $novo->created_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
         $novo->updated_at = null;
     }
 
     static function inserirInfoUpdated($resource)
     {
-        $resource->id_user_updated = auth()->user()->id;
-        $resource->ip_updated = UserInfo::get_ip();
+        $resource->updated_user_id = auth()->user()->id;
+        $resource->updated_ip = UserInfo::get_ip();
         $resource->updated_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
     }
 
     static function inserirInfoDeleted($resource)
     {
-        $resource->id_user_deleted = auth()->user()->id;
-        $resource->ip_deleted = UserInfo::get_ip();
+        $resource->deleted_user_id = auth()->user()->id;
+        $resource->deleted_ip = UserInfo::get_ip();
         $resource->deleted_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
     }
 

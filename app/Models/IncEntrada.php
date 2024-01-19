@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class IncEntrada extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
-    
+
     public function getCreatedAtAttribute($value)
     {
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
@@ -31,7 +31,14 @@ class IncEntrada extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaultsTo();
+        $logOptions = new LogOptions();
+        return $logOptions->logAll()
+            ->dontSubmitEmptyLogs()
+            ->useLogName(strtolower(class_basename($this)));
     }
 
+    public function presos()
+    {
+        return $this->hasMany(IncEntradaPreso::class, 'entrada_id');
+    }
 }

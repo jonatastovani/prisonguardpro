@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
+use App\Models\IncEntrada;
 use App\Models\IncEntradaPreso;
+use App\Models\Preso;
+use App\Models\RefIncOrigem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IncEntradaPresoController extends Controller
 {
@@ -44,28 +48,54 @@ class IncEntradaPresoController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules, []);
 
-
-        RestResponse::createTesteResponse();
-
-        // Valida se não existe outro com o mesmo nome
-        $this->validarRecursoExistente($request);
-
         // Se a validação passou, crie um novo registro
-        $novo = new IncEntradaPreso();
-        $novo->sigla = $request->input('sigla');
-        $novo->nome = $request->input('nome');
+        $novaIncEntrada = new IncEntrada();
 
-        // Valida se o país existe e não está excluído
-        $this->validarPaisExistente($novo, $request, $arrErrors);
+        // Valida se a origem existe e não está excluída
+        $this->validarOrigemExistente($novaIncEntrada, $request, $arrErrors);
+
+        $novaIncEntrada->data_entrada = $request->input('data_entrada');
 
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
-        CommonsFunctions::inserirInfoCreated($novo);
-        $novo->save();
+        // Inicia a transação
+        DB::beginTransaction();
 
-        $response = RestResponse::createSuccessResponse($novo, 200);
-        return response()->json($response->toArray(), $response->getStatusCode());
+        try {
+
+            CommonsFunctions::inserirInfoCreated($novaIncEntrada);
+            $novaIncEntrada->save();
+
+            $arrIncPreso = [];
+            foreach ($request->input('presos') as $preso) {
+                $preso = array_merge($preso, ['entrada_id' => $novaIncEntrada->id]);
+                $preso = $this->preencherPreso($preso);
+                CommonsFunctions::inserirInfoCreated($preso);
+                array_push($arrIncPreso, $preso);
+            }
+    
+            $novaIncEntrada->presos()->saveMany($arrIncPreso);
+
+            DB::commit();
+
+            // $response = RestResponse::createSuccessResponse($novo, 200);
+            // return response()->json($response->toArray(), $response->getStatusCode());
+
+            // Retorne a resposta de sucesso, se aplicável
+            return response()->json(['message' => 'Operação concluída com sucesso'], 200);
+        } catch (\Exception $e) {
+            // Se ocorrer algum erro, faça o rollback da transação
+            DB::rollBack();
+
+            // Gerar um log
+            $codigo = 422;
+            $mensagem = "A requisição não pôde ser processada. " . $e->getMessage();
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($e->getMessage()));
+            
+            $response = RestResponse::createErrorResponse(422, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
     }
 
     /**
@@ -109,7 +139,7 @@ class IncEntradaPresoController extends Controller
         $resource->nome = $request->input('nome');
 
         // Valida se o país existe e não está excluído
-        $this->validarPaisExistente($resource, $request, $arrErrors);
+        $this->validarOrigemExistente($resource, $request, $arrErrors);
 
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
@@ -143,13 +173,13 @@ class IncEntradaPresoController extends Controller
 
     private function buscarRecurso($id)
     {
-        $resource = IncEntradaPreso::find($id);
+        $resource = IncEntradaPreso::with('preso')->find($id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O ID do Estado informado não existe ou foi excluído.";
+            $mensagem = "O ID da passagem do preso informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
@@ -187,16 +217,16 @@ class IncEntradaPresoController extends Controller
         }
     }
 
-    private function validarPaisExistente($resource, $request, &$arrErrors)
+    private function validarOrigemExistente($resource, $request, &$arrErrors)
     {
-        $resource->pais_id = $request->input('pais_id');
+        $resource->origem_id = $request->input('origem_id');
 
-        $resource = RefNacionalidade::find($resource->pais_id);
+        $resource = RefIncOrigem::find($resource->origem_id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $mensagem = "O País informado não existe ou foi excluído.";
+            $mensagem = "A origem informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $arrErrors[] = [
@@ -204,5 +234,23 @@ class IncEntradaPresoController extends Controller
                 'trace_id' => $traceId
             ];
         }
+    }
+
+    private function preencherPreso($preso)
+    {
+        $novoPreso = new IncEntradaPreso();
+        $camposValidos = ['entrada_id', 'nome', 'matricula', 'rg', 'cpf', 'mae', 'pai', 'data_prisao', 'informacoes', 'observacoes'];
+
+        if (isset($preso['id'])) {
+            $novoPreso->id = $preso['id'];
+        }
+        
+        foreach ($camposValidos as $campo) {
+            if (isset($preso[$campo]) && !empty($preso[$campo])) {
+                $novoPreso->$campo = $preso[$campo];
+            }
+        }
+
+        return $novoPreso;
     }
 }
