@@ -91,7 +91,7 @@ export class zipCode {
             url: this.#urlApi + this.#zipCode,
             method: 'GET',
             dataType: "json",
-            success: function(response) {
+            success: function (response) {
                 console.log(response);
 
                 if (self.#idElemStreet !== null) {
@@ -114,12 +114,12 @@ export class zipCode {
                     $(self.#idElemFocus).focus();
                 }
             },
-            error: function(xhr, status) {
+            error: function (xhr, status) {
                 if (xhr.responseJSON && xhr.responseJSON.error) {
                     console.error('Response API:', xhr.responseJSON.error.description);
                 }
             }
         });
     }
-    
+
 }

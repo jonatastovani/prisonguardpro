@@ -235,6 +235,7 @@ route::prefix('/v1')->group(function () {
         });
 
         Route::prefix('/inclusao')->group(function () {
+
             Route::prefix('/entrada')->group(function () {
 
                 // Rotas relacionadas ao IncEntradaController
@@ -243,6 +244,10 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+                    
+                    Route::prefix('/busca')->group(function() {
+                        Route::post('/entradas', 'indexAll');
+                    });
                 });
 
                 // Rotas relacionadas ao IncEntradaPresoController
@@ -256,6 +261,7 @@ route::prefix('/v1')->group(function () {
                 });
 
             });
+            
         });
 
         // Rotas relacionadas ao PessoaController

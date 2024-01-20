@@ -1,12 +1,12 @@
 import { conectAjax } from "../ajax/conectAjax.js";
-import instanceManager from "../common/instanceManager.js";
+import instanceManager from "../commons/instanceManager.js";
 import { popDepartments } from "../popup/employees/popupDepartments.js";
 import { popEmployees } from "../popup/employees/popupEmployees.js";
 import { popRoles } from "../popup/employees/popupRoles.js";
 
-$(document).ready(function(){
+$(document).ready(function () {
 
-    function init () {
+    function init() {
 
         const formPopDataHidden = '#formPopDataHidden';
 
@@ -22,7 +22,7 @@ $(document).ready(function(){
         switch (popName) {
 
             case 'departments':
-                if (popId!='') {
+                if (popId != '') {
 
                     let obj = instanceManager.setInstance('popDepartments', new popDepartments(urlApiWorkDepartments));
                     obj.setId(popId);
@@ -30,10 +30,10 @@ $(document).ready(function(){
                 }
 
                 openPopupDepartments.click();
-            break;
+                break;
 
             case 'roles':
-                if (popId!='') {
+                if (popId != '') {
 
                     let obj = instanceManager.setInstance('popRoles', new popRoles(urlApiWorkRoles));
                     obj.setId(popId);
@@ -41,18 +41,18 @@ $(document).ready(function(){
                 }
 
                 openPopupRoles.click();
-            break;
+                break;
 
             case 'employees':
-                if (popId!='') {
+                if (popId != '') {
 
-                    let obj = instanceManager.setInstance('popEmployees', new popEmployees(urlApiWorkEmployees,urlApiWorkDepartments, urlApiWorkRoles));
+                    let obj = instanceManager.setInstance('popEmployees', new popEmployees(urlApiWorkEmployees, urlApiWorkDepartments, urlApiWorkRoles));
                     obj.setId(popId);
 
                 }
 
                 openPopupEmployees.click();
-            break;
+                break;
 
         }
 
@@ -69,7 +69,7 @@ $(document).ready(function(){
         obj.openPop();
 
     });
-  
+
     const openPopupRoles = $('#openPopupRoles')
     openPopupRoles.on("click", (event) => {
 
@@ -86,72 +86,74 @@ $(document).ready(function(){
 
         event.preventDefault();
 
-        let obj = instanceManager.setInstance('popEmployees', new popEmployees(urlApiWorkEmployees,urlApiWorkDepartments, urlApiWorkRoles));
+        let obj = instanceManager.setInstance('popEmployees', new popEmployees(urlApiWorkEmployees, urlApiWorkDepartments, urlApiWorkRoles));
         obj.setElemFocusClose(openPopupEmployees);
         obj.openPop();
 
     });
-  
-    init ();
+
+    if ($('#employeesHome, #home').length) {
+        init();
+    }
 
 });
 
 export class employeesHome {
 
-    constructor () {
+    constructor() {
     }
 
-    getDepartmentsTotal () {
+    getDepartmentsTotal() {
 
-        const obj = new conectAjax (urlApiWorkDepartments);
+        const obj = new conectAjax(urlApiWorkDepartments);
 
         obj.getData()
             .then(function (response) {
 
                 $('#departmentsTotal').html(response.data.length);
-                
+
             })
             .catch(function (error) {
 
                 console.log(error);
                 $('#departmentsTotal').html("Erro Consulta");
-                
+
             });
     }
 
-    getRolesTotal () {
+    getRolesTotal() {
 
-        const obj = new conectAjax (urlApiWorkRoles);
+        const obj = new conectAjax(urlApiWorkRoles);
 
         obj.getData()
             .then(function (response) {
 
                 $('#rolesTotal').html(response.data.length);
-                
+
             })
             .catch(function (error) {
 
                 console.log(error);
                 $('#rolesTotal').html("Erro Consulta");
-                
+
             });
     }
 
-    getEmployeesTotal () {
+    getEmployeesTotal() {
 
-        const obj = new conectAjax (urlApiWorkEmployees);
+        const obj = new conectAjax(urlApiWorkEmployees);
 
         obj.getData()
             .then(function (response) {
 
                 $('#employeesTotal').html(response.data.length);
-                
+
             })
             .catch(function (error) {
 
                 console.log(error);
                 $('#employeesTotal').html("Erro Consulta");
-                
+
             });
     }
 

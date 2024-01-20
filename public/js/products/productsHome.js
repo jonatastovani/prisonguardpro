@@ -1,23 +1,24 @@
 import { conectAjax } from "../ajax/conectAjax.js";
-import instanceManager from "../common/instanceManager.js";
+import instanceManager from "../commons/instanceManager.js";
 import { popItems } from "../popup/products/popupItems.js";
 
-$(document).ready(function(){
+$(document).ready(function () {
 
-    function init () {
+    function init() {
 
         const formPopDataHidden = '#formPopDataHidden';
 
         const obj = instanceManager.setInstance('productsHome', new productsHome());
         obj.getItemsTotal();
+        obj.getTemplatesTotal();
 
         const popName = $(formPopDataHidden).find('input[name="popName"]').val();
         const popId = $(formPopDataHidden).find('input[name="popId"]').val();
-        
+
         switch (popName) {
 
             case 'items':
-                if (popId!='') {
+                if (popId != '') {
 
                     let obj = instanceManager.setInstance('popItems', new popItems(urlApiProdItems));
                     obj.setId(popId);
@@ -25,10 +26,8 @@ $(document).ready(function(){
                 }
 
                 openPopupItems.click();
-            break;
 
         }
-
 
     }
 
@@ -42,28 +41,48 @@ $(document).ready(function(){
         obj.openPop();
 
     });
-  
-    init ();
+
+    if ($('#productsHome, #home').length) {
+        init();
+    }
 
 });
 
 export class productsHome {
 
-    getItemsTotal () {
+    getItemsTotal() {
 
-        const obj = new conectAjax (urlApiProdItems);
+        const obj = new conectAjax(urlApiProdItems);
 
         obj.getData()
             .then(function (response) {
 
                 $('#itemsTotal').html(response.data.length);
-                
+
             })
             .catch(function (error) {
 
                 console.log(error);
                 $('#itemsTotal').html("Erro Consulta");
-                
+
+            });
+    }
+
+    getTemplatesTotal() {
+
+        const obj = new conectAjax(urlApiProdTemplates);
+
+        obj.getData()
+            .then(function (response) {
+
+                $('#templatesTotal').html(response.data.length);
+
+            })
+            .catch(function (error) {
+
+                console.log(error);
+                $('#templatesTotal').html("Erro Consulta");
+
             });
     }
 

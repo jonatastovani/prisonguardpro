@@ -10,6 +10,10 @@ class InclusaoController extends Controller
         return view('setores.inclusao.home');
     }
 
+    public function gerenciarEntradasPresos() {
+        return view('setores.inclusao.gerenciarEntradasPresos');
+    }
+
     public function entradaspresos() {
         return view('setores.inclusao.entradaspresos');
     }

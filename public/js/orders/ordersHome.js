@@ -6,37 +6,37 @@ $(document).ready(function () {
 
     function init() {
 
-        const obj = instanceManager.setInstance('clientsHome', new clientsHome());
+        const obj = instanceManager.setInstance('ordersHome', new ordersHome());
 
-        obj.getClientsTotal();
+        obj.getOrdersTotal();
 
     }
 
-    if ($('#clientsHome, #home').length) {
+    if ($('#ordersHome, #home').length) {
         init();
     }
 
 });
 
-export class clientsHome {
+export class ordersHome {
 
     constructor() {
     }
 
-    getClientsTotal() {
+    getOrdersTotal() {
 
-        const obj = new conectAjax(urlApiClients);
+        const obj = new conectAjax(urlApiOrders);
 
         obj.getData()
             .then(function (response) {
 
-                $('#clientsTotal').html(response.data.length);
+                $('#ordersTotal').html(response.data.length);
 
             })
             .catch(function (error) {
 
                 console.log(error);
-                $('#clientsTotal').html("Erro Consulta");
+                $('#ordersTotal').html("Erro Consulta");
 
             });
     }

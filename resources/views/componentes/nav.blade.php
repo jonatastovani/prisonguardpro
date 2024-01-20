@@ -13,22 +13,22 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/home">
                                 Home
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Gerenciamento
+                                Inclusão
                             </a>
                             <ul class="dropdown-menu" data-bs-popper="static">
                                 <li class="nav-item">
-                                    <a class="dropdown-item item-dropdown" href="/clients/home">
-                                        Clientes
+                                    <a class="dropdown-item item-dropdown" href="{{route('inclusao.gerenciarEntradasPresos')}}">
+                                        Entrada de presos
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="dropdown-item item-dropdown" href="/employees/home">
                                         Funcionários
                                     </a>
@@ -37,10 +37,10 @@
                                     <a class="dropdown-item item-dropdown" href="/products/home">
                                         Produtos
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        {{-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Vendas
                             </a>
@@ -56,7 +56,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                     </ul>
                     <ul class="navbar-nav flex-fill justify-content-end">

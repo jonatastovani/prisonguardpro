@@ -6,53 +6,47 @@ import { enumAction } from "../common/enumAction.js";
 export class conectAjax {
 
     /**
-     * The base URL of the API.
+     * O URL base da API.
      * @type {string}
     */
     #urlApi;
     /**
-     * The HTTP action for registering clients (e.g., 'POST', 'PUT').
+     * A ação HTTP para registrar clientes (por exemplo, 'POST', 'PUT').
      * @type {string}
     */
-    #actionRegCli;
+    #action;
     /**
-     * The data to send with the request (for 'POST' or 'PUT' actions).
+     * Os dados a serem enviados com a solicitação (para ações 'POST' ou 'PUT').
      * @type {string}
     */
     #data;
     /**
-     * The additional parameter to include in the URL.
+     * O parâmetro adicional a ser incluído na URL.
      * @type {string}
     */
     #param;
 
     /**
-     * Creates a new `conectAjax` instance.
+     * Cria uma nova instância `conectAjax`.
      *
-     * @param {string} urlApi - The base URL of the API to make requests to.
+     * @param {string} urlApi – O URL base da API para fazer solicitações.
      */
     constructor(urlApi) {
         this.#urlApi = urlApi;
-        this.#actionRegCli = null;
+        this.#action = null;
         this.#data = null;
         this.#param = null;
-
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token]').attr('content')
-        //     }
-        // })
     }
 
     /**
-     * Sets the HTTP action for registering clients.
+     * Define a ação HTTP para registrar clientes.
      *
-     * @param {string} action - The HTTP action to set (e.g., 'POST', 'PUT').
-     * @returns {boolean} - Returns `true` if the action is valid, otherwise returns `false`.
+     * @param {string} action - A ação HTTP a ser definida (por exemplo, 'POST', 'PUT').
+     * @returns {boolean} - Retorna `true` se a ação for válida, caso contrário retorna `false`.
      */
     setAction(action) {
         if (enumAction.isValid(action)) {
-            this.#actionRegCli = action;
+            this.#action = action;
             return true;
         } else {
             console.error('Action inválido');
@@ -61,119 +55,210 @@ export class conectAjax {
     }
 
     /**
-     * Sets the data to be sent with the request for 'POST' or 'PUT' actions.
+     * Define os dados a serem enviados com a solicitação das ações 'POST' ou 'PUT'.
      *
-     * @param {Object} data - The data to send in the request.
+     * @param {Object} data – Os dados a serem enviados na solicitação.
      */
     setData(data) {
         this.#data = data;
     }
 
     /**
-     * Sets an additional parameter to include in the request URL.
+     * Define um parâmetro adicional para incluir no URL da solicitação.
      *
-     * @param {string} param - The additional parameter.
+     * @param {string} param – O parâmetro adicional.
      */
     setParam(param) {
         this.#param = param;
     }
 
     /**
-     * Sends a 'GET' request to the API and returns a Promise that resolves with the response data.
+     * Envia uma solicitação 'GET' para a API e retorna uma Promise que resolve com os dados da resposta.
      *
-     * @returns {Promise} - A Promise that resolves with the response data or rejects with an error message.
+     * @returns {Promise} - Uma promessa que é resolvida com os dados de resposta ou rejeitada com uma mensagem de erro.
      */
-    getData() {
-        
-        let param = '';
-        if (this.#param!=null){
-            param = this.#param;
+    getRequest() {
+        const self = this;
+
+        let param = self.#param != null ? self.#param : '?size=10000000';
+        let method = self.#action === null ? "GET" : self.#action;
+        let data = self.#data !== null ? JSON.stringify(self.#data) : null;
+
+        if (globalDebug === true) {
+            console.log('URL = ', self.#urlApi + param);
+            console.log('Param = ', param);
+            console.log('Method = ', method);
+            console.log('Data = ', data);
+
+        }
+        if (globalDebugStack === true) {
+            try {
+                throw new Error();
+            } catch (e) {
+                console.log(`Pilha = ${e.stack}`);
+            }
         }
 
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: this.#urlApi + param,
-                accept: "application/json",
-                method: "GET",
+                url: self.#urlApi + param,
+                method: method,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.getToken());
+                },
+                contentType: "application/json",
+                data: data,
                 dataType: "json",
                 success: function (response) {
+
+                    if (globalDebug === true) {
+                        console.log('Response = ', response);
+                    }
 
                     resolve(response);
 
                 },
-                error: function (xhr, status, error) {
-                    console.log(xhr.responseJSON)
-                    console.error('Erro na solicitação AJAX:', status, error);
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        console.error('Erro da API:', xhr.responseJSON.error.description);
+                error: function (xhr) {
+                    if (globalDebug === true) {
+                        console.error(xhr);
                     }
-                    reject('Erro na solicitação AJAX');
-                    
+
+                    if (xhr.status === 401) {
+                        reject({
+                            status: xhr.status,
+                            description: 'Este usuário não possui permissão para realizar esta ação.'
+                        });
+                    } else if (xhr.responseText) {
+                        try {
+                            const responseText = JSON.parse(xhr.responseText);
+                            console.error('Erro HTTP:', xhr.status);
+                            console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
+                            reject(responseText.error);
+                        } catch (parseError) {
+                            console.error('Erro HTTP:', xhr.status);
+                            console.error(`Descrição do erro: ${xhr.responseText}`);
+                            reject({
+                                xhr: xhr,
+                                description: xhr.responseText
+                            });
+                        }
+                    } else {
+                        reject({
+                            xhr: xhr,
+                            description: 'Erro interno no servidor API.'
+                        });
+                    }
                 }
             });
         });
-        
+
     }
 
     /**
-     * Sends a 'POST' or 'PUT' request to the API with the provided data and returns a Promise.
+     * Envia uma solicitação 'POST' ou 'PUT' para a API com os dados fornecidos e retorna uma Promessa.
      *
-     * @returns {Promise} - A Promise that resolves with the response data or rejects with an error message.
+     * @returns {Promise} - Uma promessa que é resolvida com os dados de resposta ou rejeitada com uma mensagem de erro.
      */
-    saveData() {
+    envRequest() {
+        const self = selfthis;
 
-        this.addCsrfToken(); 
+        self.addCsrfToken();
 
         return new Promise((resolve, reject) => {
-            
+
             let param = '';
-            if (this.#param!=null){
-                param = this.#param;
+            if (self.#param != null) {
+                param = self.#param;
             }
-                        
+
+            if (globalDebug === true) {
+                console.log('URL = ', self.#urlApi + param);
+                console.log('Param = ', param);
+                console.log('Method = ', self.#action);
+                console.log('Data = ', JSON.stringify(self.#data));
+            }
+
             $.ajax({
-                url: this.#urlApi + param,
-                method: this.#actionRegCli,
-                data: JSON.stringify(this.#data),
+                url: self.#urlApi + param,
+                method: self.#action,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.getToken());
+                },
+                data: JSON.stringify(self.#data),
                 contentType: "application/json",
                 success: function (response, status, xhr) {
 
-                    if (xhr.status === 200) {
+                    if (globalDebug === true) {
+                        console.log('Response = ', response);
+                    }
+
+                    if ([200, 201].includes(xhr.status)) {
                         resolve(response);
+                    } else if (xhr.status === 401) {
+                        reject('Este usuário não possui permissão para realizar esta ação.');
                     } else {
                         reject('Solicitação retornou código de status não esperado: ' + xhr.status);
                     }
 
                 },
                 error: function (xhr) {
-
-                    const responseText = JSON.parse(xhr.responseText);
-                    if (xhr.status !== 200) {
+                    if (globalDebug === true) {
                         console.error(xhr);
-                        console.error('Erro HTTP:', xhr.status);
-                        // console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
-                    } else {
-                        console.error('Erro inesperado', xhr);
                     }
-                    reject(responseText.error);
 
+                    if (xhr.status === 401) {
+                        reject({
+                            status: xhr.status,
+                            description: 'Este usuário não possui permissão para realizar esta ação.'
+                        });
+                    } else if (xhr.responseText) {
+                        try {
+                            const responseText = JSON.parse(xhr.responseText);
+                            console.error('Erro HTTP:', xhr.status);
+                            console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
+                            reject(responseText.error);
+                        } catch (parseError) {
+                            console.error('Erro HTTP:', xhr.status);
+                            console.error(`Descrição do erro: ${xhr.responseText}`);
+                            reject({
+                                xhr: xhr,
+                                description: xhr.responseText
+                            });
+                        }
+                    } else {
+                        reject({
+                            xhr: xhr,
+                            description: 'Erro interno no servidor API.'
+                        });
+                    }
                 }
             });
         });
     }
 
     /**
-     * Sends a 'DELETE' request to the API and returns a Promise that resolves with the response data.
+     * Envia uma solicitação 'DELETE' para a API e retorna uma Promise que resolve com os dados de resposta.
      *
-     * @returns {Promise} - A Promise that resolves with the response data or rejects with an error message.
+     * @returns {Promise} - Uma promessa que é resolvida com os dados de resposta ou rejeitada com uma mensagem de erro.
      */
-    deleteData() {
+    deleteRequest() {
+        const self = this;
 
         return new Promise((resolve, reject) => {
-            
+
+            if (globalDebug === true) {
+                console.log('URL = ', self.#urlApi + self.#param);
+                console.log('Param = ', self.#param);
+                console.log('Method = ', self.#action);
+                console.log('Data = ', JSON.stringify(self.#data));
+            }
+
             $.ajax({
-                url: this.#urlApi + this.#param,
-                method: this.#actionRegCli,
+                url: self.#urlApi + self.#param,
+                method: self.#action,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.getToken());
+                },
                 contentType: "application/json",
                 success: function (response, status, xhr) {
 
@@ -186,6 +271,10 @@ export class conectAjax {
                 },
                 error: function (xhr) {
 
+                    if (globalDebug === true) {
+                        console.log(xhr);
+                    }
+
                     const responseText = JSON.parse(xhr.responseText);
                     if (xhr.status !== 200) {
                         console.error('Erro HTTP:', xhr.status);
@@ -193,7 +282,7 @@ export class conectAjax {
                     } else {
                         console.error('Erro inesperado', xhr);
                     }
-                    
+
                     reject(responseText.error);
                 }
             });

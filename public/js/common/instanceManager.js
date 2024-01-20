@@ -2,9 +2,9 @@
  * Module for managing instances.
  */
 export default {
-    
+
     instances: {},
-    
+
     /**
      * Verifies the existence of an instance with the given name.
      *

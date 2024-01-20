@@ -9,14 +9,13 @@ use App\Models\IncEntradaPreso;
 use App\Models\RefIncOrigem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class IncEntradaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the all resource.
      */
-    public function index()
+    public function indexAll(Request $request)
     {
         //
     }

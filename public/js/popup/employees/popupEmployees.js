@@ -1,7 +1,7 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
-import instanceManager from "../../common/instanceManager.js";
 import { commonFunctions } from "../../commons/commonFunctions.js";
 import { enumAction } from "../../commons/enumAction.js";
+import instanceManager from "../../commons/instanceManager.js";
 import { modalMessage } from "../../commons/modalMessage.js";
 import { employeesHome } from "../../employees/employeesHome.js";
 import { popDepartments } from "./popupDepartments.js";
@@ -16,8 +16,13 @@ export class popEmployees {
     #idEmployee;
     #action;
     #elemFocusClose;
+    #returnPromisse;
+    #endTime;
+    #blnReturnPromisse;
+    timerSearch;
+    #arrDateSearch;
 
-    constructor (urlApi, urlApiDepartments, urlApiRoles) {
+    constructor(urlApi, urlApiDepartments, urlApiRoles) {
         this.#urlApi = urlApi;
         this.#urlApiDepartments = urlApiDepartments;
         this.#urlApiRoles = urlApiRoles;
@@ -25,48 +30,101 @@ export class popEmployees {
         this.#idEmployee = null;
         this.#action = enumAction.POST;
         this.#elemFocusClose = null;
+        this.#endTime = false;
+        this.#blnReturnPromisse = false;
+
+        const pop = $(this.#idPop);
+
+        this.#arrDateSearch = [
+            {
+                button: pop.find('#rbCreatedEmployees'),
+                input: [pop.find('input[name="createdAfterEmployees"]'), pop.find('input[name="createdBeforeEmployees"]')],
+                div_group: pop.find('.group-createdEmployees')
+            }, {
+                button: pop.find('#rbUpdatedEmployees'),
+                input: [pop.find('input[name="updatedAfterEmployees"]'), pop.find('input[name="updatedBeforeEmployees"]')],
+                div_group: pop.find('.group-updatedEmployees')
+            }
+        ];
+
+        commonFunctions.eventRBHidden(pop.find('#rbCreatedEmployees'), this.#arrDateSearch);
+        commonFunctions.eventRBHidden(pop.find('#rbUpdatedEmployees'), this.#arrDateSearch);
+
     }
-    
-    setId (idEmployee) {
+
+    setId(idEmployee) {
         this.#idEmployee = idEmployee;
     }
 
-    setAction (action) {
+    getIdPop() {
+        return this.#idPop;
+    }
+
+    setAction(action) {
         this.#action = action;
     }
 
-    setElemFocusClose (elem) {
+    setElemFocusClose(elem) {
         this.#elemFocusClose = elem;
     }
 
-    openPop (){
+    openPop() {
 
-        this.addButtonsEvents();
+        const self = this;
 
-        this.getDataAll ();
-        this.fillSelectDepartments();
-        this.fillSelectRoles();
+        self.addButtonsEvents();
+        self.generateFilters();
+        self.fillSelectDepartments();
+        self.fillSelectRoles();
 
-        if (this.#idEmployee!='' && this.#idEmployee!=null){
+        if (self.#idEmployee != '' && self.#idEmployee != null) {
 
-            this.get();
+            self.get();
 
         } else {
-            this.cancelPop();
+            self.cancelPop();
 
         }
 
-        $(this.#idPop).addClass("active");
-        $(this.#idPop).find(".popup").addClass("active");
+        $(self.#idPop).addClass("active");
+        $(self.#idPop).find(".popup").addClass("active");
+
+        return new Promise(function (resolve, reject) {
+
+            const checkConfirmation = setInterval(function () {
+
+                if (self.#returnPromisse !== undefined || self.#endTime) {
+
+                    clearInterval(checkConfirmation);
+                    if (self.#returnPromisse !== undefined) {
+
+                        resolve(self.#returnPromisse);
+                        self.closePop();
+
+                    } else {
+
+                        reject();
+
+                    }
+
+                    self.#returnPromisse = undefined;
+                    self.#endTime = false;
+                }
+
+            }, 100);
+
+        });
 
     }
 
-    closePop () {
+    closePop() {
 
         $(this.#idPop).removeClass("active");
         $(this.#idPop).find(".popup").removeClass("active");
         $(this.#idPop).find("*").off();
         $(this.#idPop).off('keydown');
+        this.#endTime = true;
+        this.cancelPop();
 
         this.cancelPop();
 
@@ -75,22 +133,22 @@ export class popEmployees {
             obj.getEmployeesTotal();
         }
 
-        if (this.#elemFocusClose!==null && $(this.#elemFocusClose).length) {
+        if (this.#elemFocusClose !== null && $(this.#elemFocusClose).length) {
             $(this.#elemFocusClose).focus();
             this.#elemFocusClose = null;
         }
 
     }
 
-    clearPop () {
+    clearPop() {
 
         $(this.#idPop).find('form')[0].reset();
         $(this.#idPop).find('form').find('select').val('');
-        this.#idEmployee = '';
-        
+        this.#idEmployee = null;
+
     }
 
-    cancelPop () {
+    cancelPop() {
 
         this.#action = enumAction.POST;
         if ($(this.#idPop).find(".hidden-fields").css("display") === "block") {
@@ -101,16 +159,10 @@ export class popEmployees {
 
     }
 
-    addButtonsEvents () {
+    addButtonsEvents() {
         const self = this;
 
-        $(self.#idPop).find(".close-btn").on("click", () => {
-            self.closePop();
-        });
-
-        $(self.#idPop).find('.btnCancelPop').on('click', () => {
-            self.cancelPop();
-        });
+        commonFunctions.eventDefaultPopups(self, { formRegister: true, inputsSearchs: $(self.#idPop).find('.inputActionEmployees') });
 
         $(self.#idPop).find(".btnNewPop").on("click", () => {
             $(self.#idPop).find('.titlePop').html('Novo funcionário');
@@ -119,48 +171,32 @@ export class popEmployees {
             self.#action = enumAction.POST;
         });
 
-        $(self.#idPop).find('.btnSavePop').on('click', (event) => {
-            event.preventDefault();
-            self.saveButtonAction();
-        });
+        self.adjustTableHeight();
+        commonFunctions.addEventToggleDiv($(self.#idPop).find(".dataSearch"), $(self.#idPop).find(".toggleDataSearchButton"), { self: self })
 
-        $(self.#idPop).find('form').on('keydown', function (e) {
-            if (e.key === 'Escape') {
-                e.stopPropagation();
-                self.cancelPop();
-            }
-        });
-        
-        $(self.#idPop).on('keydown', function (e) {
-            if (e.key === 'Escape') {
-                e.stopPropagation();
-                self.closePop();
-            }
-        });
-        
         const btnNewDepartment = $(self.#idPop).find(".btnNewDepartment");
-        btnNewDepartment.on("click", () => {
+        btnNewDepartment.on("click", function (event) {
+            event.preventDefault();
 
-            const obj = instanceManager.setInstance('popDepartments', new popDepartments(this.#urlApiDepartments));
+            const obj = instanceManager.setInstance('popDepartments', new popDepartments(self.#urlApiDepartments));
             obj.setElemFocusClose(btnNewDepartment);
             obj.openPop();
 
         });
 
         const btnNewRole = $(self.#idPop).find(".btnNewRole");
-        btnNewRole.on("click", () => {
+        btnNewRole.on("click", function (event) {
+            event.preventDefault();
 
-            const obj = instanceManager.setInstance('popRoles', new popRoles(this.#urlApiRoles));
+            const obj = instanceManager.setInstance('popRoles', new popRoles(self.#urlApiRoles));
             obj.setElemFocusClose(btnNewRole);
             obj.openPop();
 
         });
 
-        self.adjustTableHeight();
-        
     }
-    
-    addQueryButtonEvents (){
+
+    addQueryButtonEvents() {
         const self = this;
 
         $(self.#idPop).find('.table').find('.edit').on("click", function () {
@@ -174,16 +210,33 @@ export class popEmployees {
 
             const idDel = $(this).data('id');
             const nameDel = $(this).data('name');
-            self.delButtonAction (idDel, nameDel, this);
-            
+            self.delButtonAction(idDel, nameDel, this);
+
+        });
+
+        $(self.#idPop).find('.table').find('.select').on("click", function () {
+
+            self.#returnPromisse = $(this).data('id');
+
+        });
+
+        $(self.#idPop).find('.table').find('tr').on('dblclick', function () {
+
+            if (self.#blnReturnPromisse) {
+                self.#returnPromisse = $(this).data('id');
+            }
+
         });
 
     }
 
-    registrationVisibility () {
+    registrationVisibility() {
 
-        $(this.#idPop).find('.btnNewPop').slideToggle();
+        $(this.#idPop).find('.btnNewPop').parent().parent().slideToggle();
         $(this.#idPop).find(".hidden-fields").slideToggle();
+        setTimeout(() => {
+            this.adjustTableHeight();
+        }, 500);
 
     }
 
@@ -191,40 +244,107 @@ export class popEmployees {
 
         const self = this;
         const screenHeight = $(window).height();
-        const maxHeight = screenHeight - 350;
+        const sizeDiscount = $(this.#idPop).find(".hidden-fields").css("display") === "block" ? 465 : 290;
+        const maxHeight = screenHeight - sizeDiscount;
         $(self.#idPop).find('.table-responsive').css('max-height', maxHeight + 'px');
 
     }
 
-    fillSelectDepartments () {
+    fillSelectDepartments() {
 
         commonFunctions.fillSelect($(this.#idPop).find('select[name="department_id"]'), this.#urlApiDepartments);
 
     }
 
-    fillSelectRoles () {
+    fillSelectRoles() {
 
         commonFunctions.fillSelect($(this.#idPop).find('select[name="role_id"]'), this.#urlApiRoles);
 
     }
 
-    getDataAll () {
+    generateFilters() {
 
-        const obj = new conectAjax (this.#urlApi);
-        const table = $(`${this.#idPop} .table tbody`);
         const self = this;
+        const dataSearch = $(self.#idPop).find('.dataSearch');
 
-        obj.getData()
+        let data = {
+            sorting: {
+                field: 'name',
+                method: dataSearch.find('input[name="methodEmployees"]:checked').val()
+            },
+            filters: {}
+        };
+
+        if (!dataSearch.find('input[name="createdAfterEmployees"]').attr('disabled')) {
+
+            let created_at = commonFunctions.generateDateFilter(
+                dataSearch.find('input[name="createdAfterEmployees"]').val(),
+                dataSearch.find('input[name="createdBeforeEmployees"]').val()
+            );
+            if (Object.keys(created_at).length !== 0) {
+                data.filters.created_at = created_at;
+            }
+
+        } else {
+
+            let updated_at = commonFunctions.generateDateFilter(
+                dataSearch.find('input[name="updatedAfterEmployees"]').val(),
+                dataSearch.find('input[name="updatedBeforeEmployees"]').val()
+            );
+            if (Object.keys(updated_at).length !== 0) {
+                data.filters.updated_at = updated_at;
+            }
+
+        }
+
+        const name = dataSearch.find('input[name="name"]').val();
+        if (name != '') {
+            data.filters.name = name;
+        }
+
+        const department_name = dataSearch.find('input[name="department_name"]').val();
+        if (department_name != '') {
+            data.filters.department_name = department_name;
+        }
+
+        const role_name = dataSearch.find('input[name="role_name"]').val();
+        if (role_name != '') {
+            data.filters.role_name = role_name;
+        }
+
+        self.getDataAll(data);
+    }
+
+    getDataAll(data) {
+
+        const self = this;
+        const table = $(`${self.#idPop} .table tbody`);
+
+        const obj = new conectAjax(`${this.#urlApi}search/`);
+        obj.setAction(enumAction.POST);
+        obj.setParam('?size=100000');
+        obj.setData(data);
+
+        obj.saveData()
             .then(function (response) {
-                
+
                 let strHTML = '';
                 response.data.forEach(result => {
+                    let btnReturn = '';
 
-                    strHTML += '<tr><td>'+result.name+'</td>';
-                    strHTML += '<td>'+result.department.name+'</td>';
-                    strHTML += '<td>'+result.role.name+'</td>';
-                    strHTML += '<td  class="text-right"><input class="btn btn-primary edit" type="button" value="Editar" data-id="'+result.id+'" title="Editar este registro"></td>';
-                    strHTML += '<td><button class="btn btn-danger delete" type=button data-id="'+result.id+'" data-name="'+result.name+'" title="Deletar este registro">Deletar</button></td></tr>';
+                    if (self.#blnReturnPromisse) {
+                        btnReturn = `<button class="btn btn-success btn-mini select" data-id="${result.id}" title="Selecionar este registro"><i class="bi bi-check2-square"></i></button>`;
+                    }
+
+                    console.log(result)
+                    strHTML += `<tr data-id="${result.id}">`;
+                    strHTML += `<td class="text-center">${btnReturn}</td>`;
+                    strHTML += `<td><span>${result.name}</span></td>`;
+                    strHTML += `<td class="text-center"><span>${result.department.name}</span></td>`;
+                    strHTML += `<td class="text-center"><span>${result.role.name}</span></td>`;
+                    strHTML += `<td><div class="d-flex flex-nowrap justify-content-center"><button class="btn btn-primary btn-mini edit me-2" data-id="${result.id}" title="Editar este registro"><i class="bi bi-pencil"></i></button>`;
+                    strHTML += `<button class="btn btn-danger btn-mini delete" data-id="${result.id}" data-name="${result.name}" title="Deletar este registro"><i class="bi bi-trash"></i></button></div></td>`;
+                    strHTML += `</tr>`;
 
                 });
 
@@ -236,20 +356,20 @@ export class popEmployees {
             .catch(function (error) {
 
                 $(self.#idPop).find('.totalRegisters').html('0');
-                table.html('<td colspan=6>'+error+'</td>');
-                
+                table.html(`<td colspan=5>${error}</td>`);
+
             });
 
     }
 
     get() {
-        
+
         const self = this;
-        $(self.#idPop).find('.titlePop').html('Alterar funcionário');   
+        $(self.#idPop).find('.titlePop').html('Alterar funcionário');
         $(self.#idPop).find('input[name="name"]').focus();
         self.#action = enumAction.PUT;
 
-        const obj = new conectAjax (self.#urlApi);
+        const obj = new conectAjax(self.#urlApi);
         obj.setParam(self.#idEmployee);
 
         obj.getData()
@@ -258,48 +378,52 @@ export class popEmployees {
                 if ($(self.#idPop).find(".hidden-fields").css("display") === "none") {
                     self.registrationVisibility();
                 }
-        
-                $(self.#idPop).find('input[name="name"]').val(response.name).focus();
-                $(self.#idPop).find('select[name="department_id"]').val(response.department.id);
-                $(self.#idPop).find('select[name="role_id"]').val(response.role.id);
-                
+
+                const form = $(self.#idPop).find('form');
+
+                form.find('input[name="name"]').val(response.name).focus();
+                form.find('select[name="department_id"]').val(response.department.id);
+                form.find('select[name="role_id"]').val(response.role.id);
+
             })
             .catch(function (error) {
 
                 $(self.#idPop).find('form1 :input').prop('disabled', true);
                 console.log(error);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`,'error');
+                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
 
             });
 
     }
 
-    saveButtonAction () {
+    saveButtonAction() {
 
         let data = commonFunctions.getInputsValues($(this.#idPop).find('form')[0], 1, false, false);
 
-        if (this.saveVerifications(data)) {
-            this.save(data);
-        } 
+        this.save(data);
 
     }
 
     save(data) {
 
-        const obj = new conectAjax (this.#urlApi);
         const self = this;
+        const obj = new conectAjax(self.#urlApi);
 
-        if (obj.setAction(this.#action)) {
+        if (obj.setAction(self.#action)) {
+
+            const btn = $(self.#idPop).find('.btnSavePop');
+            commonFunctions.simulateLoading(btn);
+
             obj.setData(data);
-    
-            if (this.#action == enumAction.PUT) {
-                obj.setParam(this.#idEmployee);
+
+            if (self.#action == enumAction.PUT) {
+                obj.setParam(self.#idEmployee);
             }
-    
+
             obj.saveData()
                 .then(function (result) {
-                    $.notify(`Dados enviados com sucesso!`,'success');
-                    self.getDataAll();
+                    $.notify(`Dados enviados com sucesso!`, 'success');
+                    self.generateFilters();
                     if (instanceManager.instanceVerification('employeesHome')) {
                         const obj = instanceManager.setInstance(('employeesHome'), new employeesHome());
                         obj.getEmployeesTotal();
@@ -311,50 +435,25 @@ export class popEmployees {
                         self.clearPop();
                         $(self.#idPop).find('form').find('input[name="name"]').focus();
                     }
-        
+
                 })
                 .catch(function (error) {
 
                     console.log(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`,'error');
+                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
 
-            });
+                })
+                .finally(function () {
+                    commonFunctions.simulateLoading(btn, false);
+                });
         }
 
     }
 
-    saveVerifications(data) {
+    delButtonAction(idDel, nameDel, button = null) {
 
-        // let arrMessage = [];
-
-        // if (data.name.length==0) {
-        //     arrMessage.push('O nome ou descrição da funcionário deve ser preenchido.');
-        //     $(this.#idPop).find('input[name="name"]').focus();
-        // }
-
-        // if (arrMessage.length) {
-            
-        //     let strMessage = '';
-        //     arrMessage.forEach(mess => {
-        //         if (strMessage!='') {
-        //             strMessage += '\n';
-        //         }
-        //         strMessage += mess;
-        //     });
-
-        //     $.notify(strMessage,'warning');
-        //     return false;
-            
-        // }
-
-        return true;
-
-    }
-    
-    delButtonAction (idDel, nameDel, button = null) {
-        
         const self = this;
-        
+
         const obj = instanceManager.setInstance('modalMessage', new modalMessage());
         obj.setMessage(`Confirma a exclusão do funcionário <b>${nameDel}</b>?`);
         obj.setTitle('Confirmação de exclusão de Funcionário');
@@ -372,19 +471,19 @@ export class popEmployees {
 
     del(idDel) {
 
-        const obj = new conectAjax (this.#urlApi);
+        const obj = new conectAjax(this.#urlApi);
         const self = this;
 
         if (obj.setAction(enumAction.DELETE)) {
-    
+
             obj.setParam(idDel);
-    
+
             obj.deleteData()
                 .then(function (result) {
 
-                    $.notify(`Funcionário deletado com sucesso!`,'success');
+                    $.notify(`Funcionário deletado com sucesso!`, 'success');
                     self.cancelPop();
-                    self.getDataAll();
+                    self.generateFilters();
 
                     if (instanceManager.instanceVerification('employeesHome')) {
                         const obj = instanceManager.setInstance(('employeesHome'), new employeesHome());
@@ -395,9 +494,9 @@ export class popEmployees {
                 .catch(function (error) {
 
                     console.log(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`,'error');
+                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
 
-            });
+                });
         }
 
     }

@@ -4,14 +4,21 @@
  * Initializes the modal properties and adds event listeners to its buttons.
  */
 export class modalMessage {
-    
+
+    #idModal;
+    #message;
+    #confirmResult;
+    #title;
+    #elemFocusClose;
+    #idDefaultButton;
+
     constructor() {
-        this.idModal = $("#modalMessage");
-        this.message = null;
-        this.confirmResult = undefined;
+        this.#idModal = "#modalMessage";
+        this.#message = null;
+        this.#confirmResult = undefined;
         this.addButtonsEvents();
-        this.title = null;
-        this.elemFocusClose = null;
+        this.#title = null;
+        this.#elemFocusClose = null;
 
         /**
          * Specifies the default button to receive focus.
@@ -19,60 +26,62 @@ export class modalMessage {
          * @type {number}
          * @property {number} focusPattern - Focus pattern for buttons (1 for "Confirm" button, 2 for "Deny" button).
          */
-        this.idDefaultButton = null;
+        this.#idDefaultButton = null;
     }
 
     setMessage(message) {
 
-        this.message = message;
+        this.#message = message;
 
     }
 
     setTitle(title) {
 
-        this.title = title;
+        this.#title = title;
 
     }
 
-    setElemFocusClose (elem) {
-        this.elemFocusClose = elem;
+    setElemFocusClose(elem) {
+        this.#elemFocusClose = elem;
     }
 
-    setIdDefaultButton (elem) {
-        this.idDefaultButton = elem;
+    setIdDefaultButton(id) {
+
+        this.#idDefaultButton = id;
+
     }
 
     openModal() {
 
         const self = this;
-        if (self.title !== null) {
-            $(self.idModal).find('.title').html(self.title);
-        } 
+        if (self.#title !== null) {
+            $(self.#idModal).find('.title').html(self.#title);
+        }
 
-        if (self.message !== null) {
+        if (self.#message !== null) {
 
-            $(self.idModal).find('.message').html(self.message);
-            $(self.idModal).show();
+            $(self.#idModal).find('.message').html(self.#message);
+            $(self.#idModal).show();
 
-            if (([1,2].findIndex((item)=>item==self.idDefaultButton))!=-1) {
+            if (([1, 2].findIndex((item) => item == self.#idDefaultButton)) != -1) {
 
-                if (self.idDefaultButton == 1) {
-                    $(self.idModal).find('.confirmYes').focus();
+                if (self.#idDefaultButton == 1) {
+                    $(self.#idModal).find('.confirmYes').focus();
                 } else {
-                    $(self.idModal).find('.confirmNo').focus();
+                    $(self.#idModal).find('.confirmNo').focus();
                 }
 
             } else {
-                $(self.idModal).find('.confirmNo').focus();
+                $(self.#idModal).find('.confirmNo').focus();
             }
 
             return new Promise(function (resolve) {
 
                 const checkConfirmation = setInterval(function () {
 
-                    if (self.confirmResult !== undefined) {
+                    if (self.#confirmResult !== undefined) {
                         clearInterval(checkConfirmation);
-                        resolve(self.confirmResult);
+                        resolve(self.#confirmResult);
                         self.closeModal();
                     }
 
@@ -82,45 +91,45 @@ export class modalMessage {
 
         } else {
 
-            console.log ('Nenhuma mensagem foi definida');
+            console.error('Nenhuma mensagem foi definida');
 
         }
 
     }
 
-    closeModal () {
+    closeModal() {
 
         const self = this;
 
-        this.title = null;
-        this.confirmResult = undefined;
-        this.message = null;
+        this.#title = null;
+        this.#confirmResult = undefined;
+        this.#message = null;
 
-        $(this.idModal).hide();
-        
-        if (this.elemFocusClose!==null && $(this.elemFocusClose).length) {
-            $(this.elemFocusClose).focus();
-            this.elemFocusClose = null;
+        $(this.#idModal).hide();
+
+        if (this.#elemFocusClose !== null && $(this.#elemFocusClose).length) {
+            $(this.#elemFocusClose).focus();
+            this.#elemFocusClose = null;
         }
 
     }
 
-    addButtonsEvents () {
+    addButtonsEvents() {
 
         const self = this;
 
-        const confirmYes = $(self.idModal).find(".confirmYes");
-        const confirmNo = $(self.idModal).find(".confirmNo");
-    
+        const confirmYes = $(self.#idModal).find(".confirmYes");
+        const confirmNo = $(self.#idModal).find(".confirmNo");
+
         confirmYes.click(function () {
-            self.confirmResult = true;
+            self.#confirmResult = true;
         });
-    
+
         confirmNo.click(function () {
-            self.confirmResult = false;
+            self.#confirmResult = false;
         });
-    
-        $(self.idModal).on('keydown', function (e) {
+
+        $(self.#idModal).on('keydown', function (e) {
             if (e.key === 'Escape') {
                 confirmNo.click();
                 e.stopPropagation();
