@@ -240,8 +240,8 @@ route::prefix('/v1')->group(function () {
                 // Rotas relacionadas ao IncEntradaController
                 Route::controller(IncEntradaController::class)->group(function () {
                     Route::get('/{id}', 'show');
-                    // Route::post('', 'store');
-                    // Route::put('/{id}', 'update');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
                     // Route::delete('/{id}', 'destroy');
                 });
 
@@ -249,8 +249,8 @@ route::prefix('/v1')->group(function () {
                 Route::controller(IncEntradaPresoController::class)->group(function () {
                     Route::prefix('/presos')->group(function () {
                         Route::get('/{id}', 'show');
-                        Route::post('', 'store');
-                        Route::put('/{id}', 'update');
+                        // Route::post('', 'store');
+                        // Route::put('/{id}', 'update');
                         Route::delete('/{id}', 'destroy');
                     });
                 });
