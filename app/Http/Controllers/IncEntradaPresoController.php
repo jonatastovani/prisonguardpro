@@ -79,7 +79,7 @@ class IncEntradaPresoController extends Controller
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O ID inclusão $id informado não existe ou foi excluído.";
+            $mensagem = "O ID inclusão $id não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);

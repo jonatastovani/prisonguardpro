@@ -242,7 +242,7 @@ route::prefix('/v1')->group(function () {
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
-                    // Route::delete('/{id}', 'destroy');
+                    Route::delete('/{id}', 'destroy');
                 });
 
                 // Rotas relacionadas ao IncEntradaPresoController

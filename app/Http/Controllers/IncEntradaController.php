@@ -61,6 +61,17 @@ class IncEntradaController extends Controller
 
         $novo->data_entrada = $request->input('data_entrada');
 
+        $arrIncPreso = [];
+        foreach ($request->input('presos') as $preso) {
+            $retorno = $this->preencherPreso($preso);
+
+            if ($retorno instanceof IncEntradaPreso) {
+                $arrIncPreso[] = $retorno;
+            } else {
+                $arrErrors = array_merge($arrErrors, $retorno);
+            }
+        }
+
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
@@ -72,16 +83,19 @@ class IncEntradaController extends Controller
             CommonsFunctions::inserirInfoCreated($novo);
             $novo->save();
 
-            $arrIncPreso = [];
-            foreach ($request->input('presos') as $preso) {
-                $preso['entrada_id'] = $novo->id;
-                $preso = $this->preencherPreso($preso);
-                CommonsFunctions::inserirInfoCreated($preso);
-                $preso->save();
-                $arrIncPreso[] = $preso;
+            $presos = [];
+            foreach ($arrIncPreso as $preso) {
+                if ($preso instanceof IncEntradaPreso) {
+
+                    $preso['entrada_id'] = $novo->id;
+                    CommonsFunctions::inserirInfoCreated($preso);
+
+                    $preso->save();
+                    $presos[] = $preso;
+                }
             }
 
-            $novo['presos'] = $arrIncPreso;
+            $novo['presos'] = $presos;
 
             DB::commit();
 
@@ -115,7 +129,6 @@ class IncEntradaController extends Controller
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -159,7 +172,7 @@ class IncEntradaController extends Controller
 
         $arrIncPreso = [];
         foreach ($request->input('presos') as $preso) {
-            $retorno = $this->preencherPreso($preso);
+            $retorno = $this->preencherPreso($preso, $resource->id);
 
             if ($retorno instanceof IncEntradaPreso) {
                 $arrIncPreso[] = $retorno;
@@ -179,19 +192,31 @@ class IncEntradaController extends Controller
             CommonsFunctions::inserirInfoUpdated($resource);
             $resource->save();
 
-            $presos = [];
-            foreach ($arrIncPreso as $preso) {
-                if($preso instanceof IncEntradaPreso) {
-                    $preso['entrada_id'] = $resource->id;
+            foreach ($resource->presos as $presoExistente) {
+                $presoEnviado = collect($arrIncPreso)->firstWhere('id', $presoExistente->id);
 
-                    CommonsFunctions::inserirInfoUpdated($preso);
-
-                    $preso->save();
-                    $presos[] = $preso;
+                if (!$presoEnviado) {
+                    // O preso existente não foi enviado, então excluímos
+                    CommonsFunctions::inserirInfoDeleted($presoExistente);
+                    $presoExistente->save();
                 }
             }
 
-            $resource['presos'] = $presos;
+            foreach ($arrIncPreso as $preso) {
+                if ($preso instanceof IncEntradaPreso) {
+
+                    if (!$preso->id) {
+                        $preso['entrada_id'] = $resource->id;
+                        CommonsFunctions::inserirInfoCreated($preso);
+                    } else {
+                        CommonsFunctions::inserirInfoUpdated($preso);
+                    }
+
+                    $preso->save();
+                }
+            }
+
+            $resource->refresh();
 
             DB::commit();
 
@@ -214,9 +239,20 @@ class IncEntradaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(IncEntrada $incEntrada)
+    public function destroy($id)
     {
-        //
+        // $this->authorize('delete', IncEntradaPreso::class);
+
+        // Verifica se o modelo existe
+        $resource = $this->buscarRecurso($id);
+
+        // Execute o soft delete
+        CommonsFunctions::inserirInfoDeleted($resource);
+        $resource->save();
+
+        // Retorne uma resposta de sucesso (status 204 - No Content)
+        $response = RestResponse::createSuccessResponse([], 204, 'Entrada de presos excluída com sucesso.');
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     private function buscarRecurso($id)
@@ -255,26 +291,30 @@ class IncEntradaController extends Controller
         }
     }
 
-    private function preencherPreso($preso)
+    private function preencherPreso($preso, $entradaId = null)
     {
         $retorno = new IncEntradaPreso();
         $camposValidos = ['entrada_id', 'nome', 'matricula', 'rg', 'cpf', 'mae', 'pai', 'data_prisao', 'informacoes', 'observacoes'];
 
         if (isset($preso['id'])) {
-            $retorno = $this->buscarRecursoPreso($preso['id']);
+            $retorno = $this->buscarRecursoPreso($preso['id'], $entradaId);
         }
 
         if ($retorno instanceof IncEntradaPreso) {
             foreach ($camposValidos as $campo) {
                 if (isset($preso[$campo]) && !empty($preso[$campo])) {
                     $retorno->$campo = $preso[$campo];
+                } else {
+                    if ($entradaId && !in_array($campo, ['entrada_id'])) {
+                        $retorno->$campo = null;
+                    }
                 }
             }
         }
         return $retorno;
     }
 
-    private function buscarRecursoPreso($id)
+    private function buscarRecursoPreso($id, $entradaId)
     {
         $resource = IncEntradaPreso::find($id);
 
@@ -282,13 +322,26 @@ class IncEntradaController extends Controller
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O ID inclusão $id informado não existe ou foi excluída.";
+            $mensagem = "O ID inclusão $id não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             return ["preso.$id" => [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ]];
+        } else {
+
+            if ($resource->entrada_id != $entradaId) {
+                // Gerar um log
+                $codigo = 422;
+                $mensagem = "O ID Inclusão $id não pertence a Entrada de Presos $entradaId.";
+                $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+                return ["preso.$id" => [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ]];
+            }
         }
 
         return $resource;
