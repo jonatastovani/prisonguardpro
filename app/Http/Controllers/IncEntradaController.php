@@ -36,9 +36,25 @@ class IncEntradaController extends Controller
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
+        $resource = IncEntrada::with(['presos' => function ($query) use ($request) {
+            // Condição para filtrar por status se o filtro estiver presente
+            $query->when($request->filtros['status'], function ($query, $status) {
+                $query->where('status_id', $status);
+            })
+                ->when($request->filtros['texto']['valor'], function ($query, $valor) {
+                    // Adicione as condições relacionadas ao texto se valor estiver presente
+                    $query->where('nome', 'LIKE', "%$valor%")
+                        ->orWhere('matricula', 'LIKE', "%$valor%");
+                });
+        }, 'presos.preso.pessoa'])
+            ->where('data_entrada', '>=', $request->filtros['data_entrada']['inicio'] . " 00:00:00")
+            ->when($request->filtros['data_entrada']['fim'], function ($query, $fim) {
+                return $query->where('data_entrada', '<=', "$fim 23:59:59");
+            })
+            ->get();
 
-        $ordenacao = 'matricula';
-        switch ($request->ordenacao) {
+        $ordenacao = 'preso.matricula';
+        switch ($request->filtros['ordenacao']) {
             case 'matricula':
                 $ordenacao = 'preso.matricula';
                 break;
@@ -49,22 +65,6 @@ class IncEntradaController extends Controller
                 $ordenacao = 'data_entrada';
                 break;
         }
-
-        $resource = IncEntrada::with('presos.preso.pessoa')
-            ->where('data_entrada', $request->filtros['data_entrada']['inicio'])
-            ->when($request->filtros['data_entrada']['fim'], function ($query, $fim) {
-                return $query->where('data_entrada', '<=', $fim);
-            })
-            ->when($request->filtros['status'], function ($query, $status) {
-                return $query->where('status', $status);
-            })
-            ->when($request->filtros['texto']['valor'], function ($query, $valor) {
-                // Adicione as condições relacionadas ao texto se valor estiver presente
-                $query->where('presos.nome', 'LIKE', "%$valor%")
-                    ->orWhere('presos.matricula', 'LIKE', "%$valor%");
-            })
-            ->orderBy($ordenacao)
-            ->get();
 
 
         $response = RestResponse::createSuccessResponse($resource, 200);
