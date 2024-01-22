@@ -23,6 +23,7 @@ use App\Http\Controllers\RefNacionalidadeController;
 use App\Http\Controllers\RefOlhoCorController;
 use App\Http\Controllers\RefOlhoTipoController;
 use App\Http\Controllers\RefProfissaoController;
+use App\Http\Controllers\RefStatusController;
 use App\Http\Controllers\UserPermissaoController;
 use App\Models\IncEntradaPreso;
 use App\Models\Pessoa;
@@ -232,11 +233,28 @@ route::prefix('/v1')->group(function () {
                     Route::delete('/{id}', 'destroy');
                 });
             });
+
+            // Rotas relacionadas ao RefStatusController
+            Route::controller(RefStatusController::class)->group(function () {
+                Route::prefix('/status')->group(function () {
+                    Route::get('', 'index');
+                    // Route::get('/{id}', 'show');
+                    // Route::post('', 'store');
+                    // Route::put('/{id}', 'update');
+                    // Route::delete('/{id}', 'destroy');
+                    
+                    Route::prefix('/busca')->group(function () {
+                        Route::post('/select', 'preencherSelect');
+
+                    });
+                });
+            });
+
         });
 
         Route::prefix('/inclusao')->group(function () {
 
-            Route::prefix('/entrada')->group(function () {
+            Route::prefix('/entradas')->group(function () {
 
                 // Rotas relacionadas ao IncEntradaController
                 Route::controller(IncEntradaController::class)->group(function () {
@@ -245,9 +263,10 @@ route::prefix('/v1')->group(function () {
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
                     
-                    Route::prefix('/busca')->group(function() {
-                        Route::post('/entradas', 'indexAll');
-                    });
+                    Route::post('/busca', 'indexBusca');
+                    // Route::prefix('/busca')->group(function() {
+                    //     Route::post('/entradas', 'indexBusca');
+                    // });
                 });
 
                 // Rotas relacionadas ao IncEntradaPresoController

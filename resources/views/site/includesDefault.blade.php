@@ -1,11 +1,17 @@
 
 <script>
     const baseUrl = "{{ env('HOST', 'http://prisonguardpro.test') }}";
+    const globalDebug = {{ config('sistema.globalDebug') ? 'true' : 'false' }};
+    const globalDebugStack = {{ config('sistema.globalDebugStack') ? 'true' : 'false' }};
+
     const urlApi = `${baseUrl}/api`;
     const urlVersion = "{{ config('sistema.versionApi') }}";
     const urlApiVersion = `${urlApi}${urlVersion}`;
-    const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
     const urlLogin = `${urlApi}/auth`;
+
+    const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
+    const urlRefStatus = `${urlApiVersion}/ref/status`;
+
     console.log(urlLogin);
 </script>
 

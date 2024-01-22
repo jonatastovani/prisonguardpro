@@ -15,17 +15,60 @@ class IncEntradaController extends Controller
     /**
      * Display a listing of the all resource.
      */
-    public function indexAll(Request $request)
+    public function indexBusca(Request $request)
     {
-        //
-    }
+        $arrErrors = [];
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        // $this->authorize('store', IncEntradaPreso::class);
+
+        // Regras de validação
+        $rules = [
+            'filtros' => 'required|array',
+            'filtros.data_entrada' => 'required|array',
+            'filtros.data_entrada.inicio' => 'required|date_format:Y-m-d',
+            'filtros.data_entrada.fim' => 'nullable|date_format:Y-m-d',
+            'filtros.ordenacao' => 'required|string',
+            'filtros.status' => 'nullable|integer',
+            'filtros.texto' => 'nullable|array',
+            'filtros.texto.valor' => 'nullable|string',
+            'filtros.texto.tratamento' => 'required_with:filtros.texto.valor|integer',
+            'filtros.texto.metodo' => 'required_with:filtros.texto.valor|integer',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $ordenacao = 'matricula';
+        switch ($request->ordenacao) {
+            case 'matricula':
+                $ordenacao = 'preso.matricula';
+                break;
+            case 'nome':
+                $ordenacao = 'preso.nome';
+                break;
+            case 'data_entrada':
+                $ordenacao = 'data_entrada';
+                break;
+        }
+
+        $resource = IncEntrada::with('presos.preso.pessoa')
+            ->where('data_entrada', $request->filtros['data_entrada']['inicio'])
+            ->when($request->filtros['data_entrada']['fim'], function ($query, $fim) {
+                return $query->where('data_entrada', '<=', $fim);
+            })
+            ->when($request->filtros['status'], function ($query, $status) {
+                return $query->where('status', $status);
+            })
+            ->when($request->filtros['texto']['valor'], function ($query, $valor) {
+                // Adicione as condições relacionadas ao texto se valor estiver presente
+                $query->where('presos.nome', 'LIKE', "%$valor%")
+                    ->orWhere('presos.matricula', 'LIKE', "%$valor%");
+            })
+            ->orderBy($ordenacao)
+            ->get();
+
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     /**
@@ -127,14 +170,6 @@ class IncEntradaController extends Controller
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(IncEntrada $incEntrada)
-    {
-        //
     }
 
     /**

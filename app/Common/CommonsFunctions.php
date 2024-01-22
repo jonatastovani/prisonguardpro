@@ -62,6 +62,8 @@ class CommonsFunctions
             'max' => 'O campo :attribute deve ter no máximo :max caracteres.',
             'min' => 'O campo :attribute deve ter no mínimo :min caracteres.',
             'date_format' => 'O campo :attribute deve possuir o formato :format.',
+            'required_with' => 'O campo :attribute deve ser informado.',
+
             'presos.*.nome.regex' => 'O campo :attribute não deve conter números.',
             'presos.*.mae.regex' => 'O campo :attribute não deve conter números.',
             'presos.*.pai.regex' => 'O campo :attribute não deve conter números.',
@@ -89,10 +91,14 @@ class CommonsFunctions
     {
         if (!count($messages)) {
             $messages = CommonsFunctions::getMessagesValidate();
+        } else {
+            $messages = array_merge($messages, CommonsFunctions::getMessagesValidate());
         }
 
         if (!count($attributeNames)) {
             $attributeNames = CommonsFunctions::getAttributeNamesValidate();
+        } else {
+            $attributeNames = array_merge($attributeNames, CommonsFunctions::getAttributeNamesValidate());
         }
 
         // Valide os dados recebidos da requisição

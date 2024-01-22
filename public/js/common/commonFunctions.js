@@ -1,4 +1,5 @@
 import { conectAjax } from "../ajax/conectAjax.js";
+import { enumAction } from "./enumAction.js";
 
 export class commonFunctions {
 
@@ -424,41 +425,54 @@ export class commonFunctions {
     /**
      * Fills a select element with options retrieved from an API.
      *
-     * @param {jQuery} elem - The jQuery-wrapped select element to be filled.
-     * @param {string} urlApi - The URL of the API to fetch data from.
-     * @param {Object} options - Additional options to customize the filling process.
-     * @param {boolean} options.insertFirstOption - Whether to insert the first option (default: true).
-     * @param {string} options.firstOptionName - The name of the first option (default: 'Selecione').
-     * @param {string} options.firstOptionValue - The value of the first option (default: '').
-     * @param {string} options.selectedIdOption - The ID of the option to be marked as selected (default: the current value of the select element).
-     * @param {string} options.displayColumnName - The name of the column to be displayed in the options (default: 'name').
-     * @returns {Promise} - A Promise that resolves when the select element is filled or rejects on error.
+     * @param {jQuery} elem - O elemento de seleção encapsulado em jQuery a ser preenchido.
+     * @param {string} urlApi – A URL da API da qual buscar dados.
+     * @param {Object} opcoes - Opções adicionais para personalizar o processo de preenchimento.
+     * @param {boolean} options.inserirPrimeiraOpcao - Se deseja inserir a primeira opção (padrão: true).
+     * @param {string} options.primeiraOpcaoNome - O nome da primeira opção (padrão: 'Selecione').
+     * @param {string} options.primeiraOpcaoValor - O valor da primeira opção (padrão: '').
+     * @param {string} options.idOpcaoSelecionada - O ID da opção a ser marcada como selecionada (padrão: o valor atual do elemento select).
+     * @param {string} options.campoExibir - O nome da coluna a ser exibida nas opções (padrão: 'nome').
+     * @param {string} options.tipoRequest - O tipo de solicitação (por exemplo, "GET" ou "POST").
+     * @returns {Promise} - Uma promessa que é resolvida quando o elemento selecionado é preenchido ou rejeitado por erro.
      */
-    static async fillSelect(elem, urlApi, options = {}) {
+    static async preencherSelect(elem, urlApi, opcoes = {}) {
         const {
-            insertFirstOption = true,
-            firstOptionName = 'Selecione',
-            firstOptionValue = '',
-            selectedIdOption = elem.val(),
-            displayColumnName = 'name'
-        } = options;
+            inserirPrimeiraOpcao: inserirPrimeiraOpcao = true,
+            primeiraOpcaoNome: primeiraOpcaoNome = 'Selecione',
+            primeiraOpcaoValor: primeiraOpcaoValor = '',
+            idOpcaoSelecionada: idOpcaoSelecionada = elem.val(),
+            campoExibir: campoExibir = 'nome',
+            tipoRequest: tipoRequest = enumAction.GET,
+            envData: envData = {},
+        } = opcoes;
 
         const obj = new conectAjax(urlApi);
 
         try {
-            const response = await obj.getData();
+            let response;
+
+            if (tipoRequest === enumAction.GET) {
+                response = await obj.getRequest();
+            } else if (tipoRequest === enumAction.POST) {
+                obj.setAction(tipoRequest);
+                obj.setData(envData);
+                response = await obj.envRequest();
+            } else {
+                throw new Error('Tipo de solicitação inválido. Use "GET", "POST" ou "PUT".');
+            }
 
             let strOptions = '';
 
-            if (insertFirstOption) {
-                strOptions += `<option value="${firstOptionValue}">${firstOptionName}</option>`;
+            if (inserirPrimeiraOpcao) {
+                strOptions += `<option value="${primeiraOpcaoValor}">${primeiraOpcaoNome}</option>`;
             }
 
             response.data.forEach(result => {
                 const id = result.id;
-                const columnValue = result[displayColumnName];
-                const strSelected = (id == selectedIdOption ? ' selected' : '');
-                strOptions += `\n<option value="${id}"${strSelected}>${columnValue}</option>`;
+                const valor = result[campoExibir];
+                const strSelected = (id == idOpcaoSelecionada ? ' selected' : '');
+                strOptions += `\n<option value="${id}"${strSelected}>${valor}</option>`;
             });
 
             elem.html(strOptions);
@@ -467,6 +481,7 @@ export class commonFunctions {
             const errorMessage = 'Erro ao preencher';
             console.error(error);
             elem.html(`<option>${errorMessage}</option>`);
+            $.notify(error.message)
             return Promise.reject(error);
         }
     }
@@ -549,7 +564,7 @@ export class commonFunctions {
      *
      * @returns {Array} - An array of default values.
      */
-    static getInvalidsDefaultValuesGenerateFilters() {
+    static buscarValoresInvalidosGerarFiltros() {
         return ['undefined', undefined, 'null', null, '0', 0, ''];
     }
 
@@ -595,24 +610,24 @@ export class commonFunctions {
     }
 
     /**
-     * Generates a date filter object based on after and before values.
+     * Gera um objeto de filtro de data com base nos valores início e fim.
      *
-     * @param {string} afterValue - The start date for the filter (in YYYY-MM-DD format).
-     * @param {string} beforeValue - The end date for the filter (in YYYY-MM-DD format).
-     * @returns {Object} - The date filter object.
+     * @param {string} valorInicio - A data de início do filtro (no formato AAAA-MM-DD).
+     * @param {string} valorFim - A data de fim do filtro (no formato AAAA-MM-DD).
+     * @returns {Object} – O objeto de filtro de data.
      */
-    static generateDateFilter(afterValue, beforeValue) {
-        let filter = {};
+    static gerarFiltroData(valorInicio, valorFim) {
+        let filtro = {};
 
-        if (afterValue) {
-            filter.after = this.formatToISODate(new Date(`${afterValue}T00:00:00`));
+        if (valorInicio) {
+            filtro.inicio = valorInicio;
         }
 
-        if (beforeValue) {
-            filter.before = this.formatToISODate(new Date(`${beforeValue}T23:59:59`));
+        if (valorFim) {
+            filtro.fim = valorFim;
         }
 
-        return filter;
+        return filtro;
     }
 
     /**

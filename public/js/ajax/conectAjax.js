@@ -80,7 +80,8 @@ export class conectAjax {
     getRequest() {
         const self = this;
 
-        let param = self.#param != null ? self.#param : '?size=10000000';
+        let param = self.#param != null ? self.#param : '';
+        // let param = self.#param != null ? self.#param : '?size=10000000';
         let method = self.#action === null ? "GET" : self.#action;
         let data = self.#data !== null ? JSON.stringify(self.#data) : null;
 
@@ -103,9 +104,6 @@ export class conectAjax {
             $.ajax({
                 url: self.#urlApi + param,
                 method: method,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.getToken());
-                },
                 contentType: "application/json",
                 data: data,
                 dataType: "json",
@@ -129,22 +127,11 @@ export class conectAjax {
                             description: 'Este usuário não possui permissão para realizar esta ação.'
                         });
                     } else if (xhr.responseText) {
-                        try {
-                            const responseText = JSON.parse(xhr.responseText);
-                            console.error('Erro HTTP:', xhr.status);
-                            console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
-                            reject(responseText.error);
-                        } catch (parseError) {
-                            console.error('Erro HTTP:', xhr.status);
-                            console.error(`Descrição do erro: ${xhr.responseText}`);
-                            reject({
-                                xhr: xhr,
-                                description: xhr.responseText
-                            });
-                        }
+                        reject(self.tratamentoErro(xhr));
                     } else {
                         reject({
                             xhr: xhr,
+                            status: xhr.status,
                             description: 'Erro interno no servidor API.'
                         });
                     }
@@ -160,16 +147,13 @@ export class conectAjax {
      * @returns {Promise} - Uma promessa que é resolvida com os dados de resposta ou rejeitada com uma mensagem de erro.
      */
     envRequest() {
-        const self = selfthis;
+        const self = this;
 
         self.addCsrfToken();
 
         return new Promise((resolve, reject) => {
 
-            let param = '';
-            if (self.#param != null) {
-                param = self.#param;
-            }
+            let param = self.#param != null ? self.#param : '';
 
             if (globalDebug === true) {
                 console.log('URL = ', self.#urlApi + param);
@@ -181,9 +165,6 @@ export class conectAjax {
             $.ajax({
                 url: self.#urlApi + param,
                 method: self.#action,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.getToken());
-                },
                 data: JSON.stringify(self.#data),
                 contentType: "application/json",
                 success: function (response, status, xhr) {
@@ -212,22 +193,11 @@ export class conectAjax {
                             description: 'Este usuário não possui permissão para realizar esta ação.'
                         });
                     } else if (xhr.responseText) {
-                        try {
-                            const responseText = JSON.parse(xhr.responseText);
-                            console.error('Erro HTTP:', xhr.status);
-                            console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
-                            reject(responseText.error);
-                        } catch (parseError) {
-                            console.error('Erro HTTP:', xhr.status);
-                            console.error(`Descrição do erro: ${xhr.responseText}`);
-                            reject({
-                                xhr: xhr,
-                                description: xhr.responseText
-                            });
-                        }
+                        reject(self.tratamentoErro(xhr));
                     } else {
                         reject({
                             xhr: xhr,
+                            status: xhr.status,
                             description: 'Erro interno no servidor API.'
                         });
                     }
@@ -235,6 +205,43 @@ export class conectAjax {
             });
         });
     }
+
+    tratamentoErro(xhr) {
+        try {
+            const responseText = JSON.parse(xhr.responseText);
+            let mensagens = [];
+
+            console.error('Erro HTTP:', xhr.status);
+            console.error(`Código de erro: ${responseText.trace_id}`);
+
+            console.log(responseText)
+            if (responseText.data.errors) {
+                // Verifica se 'errors' é um array ou um objeto
+                if (Array.isArray(responseText.data.errors)) {
+                    mensagens = responseText.data.errors.map(error => error);
+                } else {
+                    Object.keys(responseText.data.errors).forEach(key => {
+                        mensagens.push(responseText.data.errors[key]);
+                    });
+                }
+            }
+
+            const mensagem = `${responseText.message}\n${mensagens.join('\n')}`;
+
+            return {
+                status: xhr.status,
+                message: mensagem
+            };
+        } catch (parseError) {
+            console.error('Erro HTTP:', xhr.status);
+            console.error(`Descrição do erro: ${xhr.responseText}`);
+            return {
+                status: xhr.status,
+                descricao: xhr.responseText
+            };
+        }
+    }
+
 
     /**
      * Envia uma solicitação 'DELETE' para a API e retorna uma Promise que resolve com os dados de resposta.
@@ -256,9 +263,6 @@ export class conectAjax {
             $.ajax({
                 url: self.#urlApi + self.#param,
                 method: self.#action,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.getToken());
-                },
                 contentType: "application/json",
                 success: function (response, status, xhr) {
 
@@ -270,20 +274,24 @@ export class conectAjax {
 
                 },
                 error: function (xhr) {
-
                     if (globalDebug === true) {
-                        console.log(xhr);
+                        console.error(xhr);
                     }
 
-                    const responseText = JSON.parse(xhr.responseText);
-                    if (xhr.status !== 200) {
-                        console.error('Erro HTTP:', xhr.status);
-                        console.error(`Código de erro: ${responseText.trace_id}\nDescrição do erro: ${responseText.error.description}`);
+                    if (xhr.status === 401) {
+                        reject({
+                            status: xhr.status,
+                            description: 'Este usuário não possui permissão para realizar esta ação.'
+                        });
+                    } else if (xhr.responseText) {
+                        reject(self.tratamentoErro(xhr));
                     } else {
-                        console.error('Erro inesperado', xhr);
+                        reject({
+                            xhr: xhr,
+                            status: xhr.status,
+                            description: 'Erro interno no servidor API.'
+                        });
                     }
-
-                    reject(responseText.error);
                 }
             });
         });

@@ -24,7 +24,7 @@
                             </a>
                             <ul class="dropdown-menu" data-bs-popper="static">
                                 <li class="nav-item">
-                                    <a class="dropdown-item item-dropdown" href="{{route('inclusao.gerenciarEntradasPresos')}}">
+                                    <a class="dropdown-item item-dropdown" href="{{route('inclusao.entradasPresos')}}">
                                         Entrada de presos
                                     </a>
                                 </li>

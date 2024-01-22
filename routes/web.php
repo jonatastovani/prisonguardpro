@@ -38,9 +38,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::prefix('/inclusao')->group(function () {
             Route::get('', 'home')->name('inclusao.home');
 
-            Route::get('/entradas','gerenciarEntradasPresos')->name('inclusao.gerenciarEntradasPresos');
+            Route::get('/entradas','entradasPresos')->name('inclusao.entradasPresos');
 
-            Route::get('/entradaspresos', 'entradaspresos')->name('inclusao.entradaspresos');
         });
     });
     

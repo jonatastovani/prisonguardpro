@@ -1,207 +1,134 @@
 @extends('site.layout')
-@section('title','Inclusão')
-    
+@section('title', 'Inclusão Entradas')
+
 @section('conteudo')
     <div class="row">
-        <div class="col-12 titulo-pagina">
-            <h4>Gerenciar Entradas de Presos</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-7 border border-secondary rounded">
-            <div class="row">
-                <div class="col-12">
-                    <label for="data_inicio" class="form-label">Intervalo de busca</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <div class="input-group">
-                        <div class="input-group-text">
-                            <label for="data_inicio">Data início</label>
-                        </div>
-                        <input type="date" class="form-control" id="data_inicio" aria-describedby="data_inicio" value="<?= Carbon\Carbon::now()->subDays(2)->toDateString() ?>">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="input-group">
-                        <div class="input-group-text">
-                            <label for="data_final">Data Final</label>
-                        </div>
-                        <input type="date" class="form-control" id="data_final" aria-describedby="data_final">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <label for="data_inicio" class="form-label">Situação de inclusão</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rbs_situacao" id="rb_pendentes" checked>
-                        <label class="form-check-label" for="rb_pendentes">
-                            Pendentes
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rbs_situacao" id="rb_encerrados">
-                        <label class="form-check-label" for="rb_encerrados">
-                            Encerrados
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rbs_situacao" id="rb_todos">
-                        <label class="form-check-label" for="rb_todos">
-                            Todos
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5 border border-secondary rounded">
-            <div class="row">
-                <div class="col-12">
-                    <label for="texto_consulta" class="form-label">Busca Personalizada</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="input-group" title="Texto a ser pesquisado na consulta">
-                        <div class="input-group-text">
-                            <label for="texto_consulta">Texto: </label>
-                        </div>
-                        <input type="text" class="form-control" id="texto_consulta" aria-describedby="texto_consulta" placeholder="Digite o texto para filtro na consulta">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="rb_dividir" class="form-label">Sobre o texto</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-check form-check-inline" title="Esta opção divide as palavras do texto efetuando uma busca onde contenha correspondência a qualquer uma">
-                                <input class="form-check-input" type="radio" name="rbs_texto" id="rb_dividir" checked>
-                                <label class="form-check-label" for="rb_dividir">
-                                    Dividir na busca
-                                </label>
-                            </div>
-                            <div class="form-check form-check-inline" title="Esta opção busca correspondência com o texto todo digitado">
-                                <input class="form-check-input" type="radio" name="rbs_texto" id="rb_completo">
-                                <label class="form-check-label" for="rb_completo">
-                                    Texto completo
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 border border-secondary rounded">
-            <h6>Sobre a busca</h6>
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-check form-check-inline" title="Esta opção filtra correspondência em qualquer parte do registro">
-                        <input class="form-check-input" type="radio" name="rbs_busca" id="rb_qualquer_parte" value="1" checked>
-                        <label class="form-check-label" for="rb_qualquer_parte">
-                            Qualquer parte
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline" title="Esta opção filtra correspondência íntegra com o registro">
-                        <input class="form-check-input" type="radio" name="rbs_busca" id="rb_exato" value="2">
-                        <label class="form-check-label" for="rb_exato">
-                            Busca exata
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline" title="Esta opção filtra correspondência com a parte inicial do registro">
-                        <input class="form-check-input" type="radio" name="rbs_busca" id="rb_iniciado_por" value="3">
-                        <label class="form-check-label" for="rb_iniciado_por">
-                            Iniciado por
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline" title="Esta opção filtra correspondência com a parte final do registro">
-                        <input class="form-check-input" type="radio" name="rbs_busca" id="rb_encerrado_por" value="4">
-                        <label class="form-check-label" for="rb_encerrado_por">
-                            Encerrado por
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-2">
-        <div class="col-12 p-0">
-            <button class="btn btn-primary" title="Inserir uma nova entrada de presos"><i class="bi bi-plus"></i> Nova Entrada</button>
-            <button class="btn btn-secondary" title="Imprimir recibo de presos dos presos selecionados"><i class="bi bi-printer-fill"></i> Recibo de Presos</button>
+        <div class="col-12 mt-2">
+            <h3 class="text-center">Entrada de Presos</h3>
         </div>
     </div>
 
     <div class="row">
-        <div class="table-responsive mt-2 p-0 rounded">
-            <table class="table table-stripet">
+        <div id="dataSearch" class="col-lg-12 col-sm-11 dataSearch">
+
+            <div class="row">
+                <div class="col-lg-6 mt-2 group-EntradasPresos"
+                    title="Filtro para busca informando o intervalo de datas que o cliente foi cadastrado">
+                    <div class="row">
+                        <div class="col-lg-7 col-sm-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inicioEntradasPresos">Entrada de:</label>
+                                <input type="date" class="form-control inputActionEntradasPresosSearch"
+                                    id="inicioEntradasPresos" name="inicioEntradasPresos">
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-sm-6">
+                            <div class="input-group">
+                                <label class="input-group-text" for="fimEntradasPresos">até:</label>
+                                <input type="date" class="form-control inputActionEntradasPresosSearch"
+                                    id="fimEntradasPresos" name="fimEntradasPresos">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 mt-2" title="Filtro para busca do orçamento selecionando o cliente">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <label for="ordenacaoEntradasPresos">Ordenação</label>
+                        </div>
+                        <select name="ordenacao" id="ordenacaoEntradasPresos" class="form-select inputActionEntradasPresosSearch">
+                            <option value="matricula">Matrícula</option>
+                            <option value="nome">Nome do preso</option>
+                            <option value="data_entrada">Data entrada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 mt-2" title="Filtro para o status do(a) preso(a)">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <label for="statusEntradasPresos">Status</label>
+                        </div>
+                        <select name="status" id="statusEntradasPresos"
+                            class="form-select inputActionEntradasPresosSearch"></select>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 mt-2" title="Filtro para busca por palavras ou números">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <label for="valorEntradasPresos">Busca</label>
+                        </div>
+                        <input type="text" name="valor" id="valorEntradasPresos" class="form-control inputActionEntradasPresosSearch">
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-md-6 mt-2" title="Filtro para tratar o texto de busca informado">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <label for="tratamentoEntradasPresos">Tratamento</label>
+                        </div>
+                        <select name="tratamento" id="tratamentoEntradasPresos" class="form-select inputActionEntradasPresosSearch">
+                            <option value="1">Dividir palavra na busca</option>
+                            <option value="2">Texto completo para busca</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 mt-2" title="Filtro para tratar o texto de busca informado">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <label for="metodoEntradasPresos">Método</label>
+                        </div>
+                        <select name="metodo" id="metodoEntradasPresos" class="form-select inputActionEntradasPresosSearch">
+                            <option value="1">Qualquer parte</option>
+                            <option value="2">Busca exata</option>
+                            <option value="3">Iniciado por</option>
+                            <option value="4">Encerrado por</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-auto flex-fill text-end">
+            <button id="toggleDataSearchButton" class="btn btn-outline-secondary btn-mini d-lg-none toggleDataSearchButton">
+                <i class="bi bi-view-list"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row flex-fill overflow-auto">
+        <div class="table-responsive mt-2">
+            <table id="table-entradaspresos" class="table table-hover">
                 <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col"></th>
-                        <th scope="col">Matrícula</th>
-                        <th scope="col">Nome</th>
-                        <th scope="col">RG</th>
-                        <th scope="col">Data Entrada</th>
-                        <th scope="col">Origem</th>
-                        <th scope="col">Situação</th>
+                    <tr class="text-center">
+                        <th>#</th>
+                        <th>Ação</th>
+                        <th>Matrícula</th>
+                        <th>Nome Preso</th>
+                        <th>RG</th>
+                        <th>Data Entrada</th>
+                        <th>Origem</th>
+                        <th>Situação</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <th scope="row">1</th>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">2</th>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">3</th>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    </tr>
-                    
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script type="module" src="{{asset('js/site/home.js')}}"></script>
-    
+    <div class="row mt-2 mb-2">
+        <div class="col-12">
+            <button id="btnNewBudget" class="btn btn-primary" title="Inserir novo orçamento">Nova entrada</button>
+        </div>
+    </div>
+
+    <?php // include_once 'view/popup/entradaspresos/popupNewEntradasPresos.php';
+    ?>
+    <script type="module" src="{{ asset('js/setores/inclusao/entradasPresos.js') }}"></script>
+
 @endsection
