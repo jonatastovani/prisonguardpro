@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('entrada_id')->references('id')->on('inc_entradas');
 
             $table->string('nome');
+            $table->string('nome_social')->nullable();
             $table->string('matricula')->nullable();
             $table->string('rg')->nullable();
             $table->string('cpf')->nullable();

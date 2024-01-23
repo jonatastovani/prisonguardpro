@@ -41,4 +41,9 @@ class IncEntrada extends Model
     {
         return $this->hasMany(IncEntradaPreso::class, 'entrada_id');
     }
+
+    public function origem()
+    {
+        return $this->belongsTo(RefIncOrigem::class);
+    }
 }

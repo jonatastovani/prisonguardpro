@@ -242,14 +242,12 @@ route::prefix('/v1')->group(function () {
                     // Route::post('', 'store');
                     // Route::put('/{id}', 'update');
                     // Route::delete('/{id}', 'destroy');
-                    
+
                     Route::prefix('/busca')->group(function () {
                         Route::post('/select', 'preencherSelect');
-
                     });
                 });
             });
-
         });
 
         Route::prefix('/inclusao')->group(function () {
@@ -262,8 +260,8 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
-                    
-                    Route::post('/busca', 'indexBusca');
+
+                    // Route::post('/busca', 'indexBusca');
                     // Route::prefix('/busca')->group(function() {
                     //     Route::post('/entradas', 'indexBusca');
                     // });
@@ -276,11 +274,11 @@ route::prefix('/v1')->group(function () {
                         // Route::post('', 'store');
                         // Route::put('/{id}', 'update');
                         Route::delete('/{id}', 'destroy');
+
+                        Route::post('/busca', 'indexBusca');
                     });
                 });
-
             });
-            
         });
 
         // Rotas relacionadas ao PessoaController

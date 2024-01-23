@@ -41,4 +41,9 @@ class IncEntradaPreso extends Model
     {
         return $this->belongsTo(Preso::class)->withDefault([]);
     }
+
+    public function entrada()
+    {
+        return $this->belongsTo(IncEntrada::class);
+    }
 }

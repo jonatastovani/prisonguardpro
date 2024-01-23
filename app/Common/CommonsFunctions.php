@@ -54,7 +54,7 @@ class CommonsFunctions
     {
         return [
             'required' => 'O campo :attribute é obrigatório.',
-            'integer' => 'O campo :attribute deve ser um número.',
+            'integer' => 'O campo :attribute deve ser um número inteiro.',
             'boolean' => 'O campo :attribute deve ser booleano.',
             'array' => 'O campo :attribute deve ser array.',
             'string' => 'O campo :attribute deve ser um texto.',
@@ -63,7 +63,9 @@ class CommonsFunctions
             'min' => 'O campo :attribute deve ter no mínimo :min caracteres.',
             'date_format' => 'O campo :attribute deve possuir o formato :format.',
             'required_with' => 'O campo :attribute deve ser informado.',
-
+            'between' => 'O campo :attribute deve estar entre :min e :max.',
+            'in' => 'O campo :attribute deve ser um dos seguintes valores: :values.',
+        
             'presos.*.nome.regex' => 'O campo :attribute não deve conter números.',
             'presos.*.mae.regex' => 'O campo :attribute não deve conter números.',
             'presos.*.pai.regex' => 'O campo :attribute não deve conter números.',
