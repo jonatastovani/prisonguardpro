@@ -36,20 +36,53 @@ class IncEntradaController extends Controller
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
-        $resource = IncEntrada::with(['presos' => function ($query) use ($request) {
-            // Condição para filtrar por status se o filtro estiver presente
-            $query->when($request->filtros['status'], function ($query, $status) {
-                $query->where('status_id', $status);
-            })
-                ->when($request->filtros['texto']['valor'], function ($query, $valor) {
-                    // Adicione as condições relacionadas ao texto se valor estiver presente
-                    $query->where('nome', 'LIKE', "%$valor%")
-                        ->orWhere('matricula', 'LIKE', "%$valor%");
+        $resource = IncEntrada::with([
+            'presos' => function ($query) use ($request) {
+                // Condição para filtrar por status se o filtro estiver presente
+                $query->when($request->filtros['status'], function ($query, $status) {
+                    $query->where('status_id', $status);
+                })
+                    ->when($request->filtros['texto']['valor'], function ($query, $valor) {
+                        $arrCampos = ['nome', 'matricula', 'mae', 'rg', 'cpf', 'pai', 'data_prisao', 'informacoes', 'observacoes'];
+
+                        for ($i = 0; $i < count($arrCampos); $i++) {
+                            if ($i == 0) {
+                                // Adicione as condições relacionadas ao texto se valor estiver presente
+                                $query->where($arrCampos[$i], 'LIKE', "%$valor%");
+                            } else {
+                                $query->orWhere($arrCampos[$i], 'LIKE', "%$valor%");
+                            }
+                        }
+                    })->when($request->filtros['ordenacao'], function ($query, $campo) {
+                        if (in_array($campo, ['matricula', 'nome'])) {
+                            $query->orderBy($campo);
+                        }
+                    });
+            }, 'presos.preso.pessoa' => function ($query) use ($request) {
+                $query->when($request->filtros['texto']['valor'], function ($query, $valor) {
+                    $arrCampos = ['nome', 'matricula', 'mae', 'rg', 'cpf', 'pai', 'data_prisao', 'informacoes', 'observacoes'];
+
+                    for ($i = 0; $i < count($arrCampos); $i++) {
+                        if ($i == 0) {
+                            // Adicione as condições relacionadas ao texto se valor estiver presente
+                            $query->where($arrCampos[$i], 'LIKE', "%$valor%");
+                        } else {
+                            $query->orWhere($arrCampos[$i], 'LIKE', "%$valor%");
+                        }
+                    }
+                })->when($request->filtros['ordenacao'] == 'matricula', function ($query) {
+                    $query->orderBy('matricula');
                 });
-        }, 'presos.preso.pessoa'])
+            }
+        ])
             ->where('data_entrada', '>=', $request->filtros['data_entrada']['inicio'] . " 00:00:00")
             ->when($request->filtros['data_entrada']['fim'], function ($query, $fim) {
                 return $query->where('data_entrada', '<=', "$fim 23:59:59");
+            })
+            ->when($request->filtros['ordenacao'], function ($query, $campo) {
+                if (in_array($campo, ['data_entrada'])) {
+                    $query->orderBy($campo);
+                }
             })
             ->get();
 
