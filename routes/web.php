@@ -27,22 +27,24 @@ use Laravel\Sanctum\Http\Controllers\SanctumController;
 // Route::resource('produtos', ProdutoController::class);
 // Route::resource('users', UserController::class);
 
-Route::view('/login','login.login')->name('login.login');
+Route::view('/login', 'login.login')->name('login.login');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/', [SiteController::class, 'index'])->name('site.index')->middleware('auth');
 
     // Rotas relacionadas ao InclusaoController
-    Route::controller(InclusaoController::class)->group(function() {
+    Route::controller(InclusaoController::class)->group(function () {
         Route::prefix('/inclusao')->group(function () {
             Route::get('', 'home')->name('inclusao.home');
 
-            Route::get('/entradas','entradasPresos')->name('inclusao.entradasPresos');
-
+            Route::prefix('/entradas')->group(function () {
+                Route::get('', 'entradasPresos')->name('inclusao.entradasPresos');
+                Route::get('/criar', 'cadastroEntradasPresos')->name('inclusao.criarEntradasPresos');
+                Route::match(['get','post'],'/{id}','cadastroEntradasPresos')->name('inclusao.editarEntradasPresos');
+            });
         });
     });
-    
 });
 
 
@@ -62,5 +64,3 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
 
 // Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(['auth']);
 // Route::get('/admin/produtos', [ProdutoController::class, 'index'])->name('admin.produtos');
-
-

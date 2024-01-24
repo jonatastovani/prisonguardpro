@@ -19,6 +19,29 @@ class RefIncOrigemController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexBusca(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'texto' => 'required|min:3',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resources = RefIncOrigem::where('nome', 'LIKE', "%{$request->texto}%")->get();
+
+        // Mapear os resultados para criar um array com os campos id e text
+        $mappedResults = $resources->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'text' => $item->nome,
+            ];
+        });
+
+        $response = RestResponse::createSuccessResponse($mappedResults, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

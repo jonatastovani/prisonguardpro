@@ -10,6 +10,7 @@
     const urlLogin = `${urlApi}/auth`;
 
     const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
+    const urlRefIncOrigem = `${urlApiVersion}/ref/inclusao/origem`;
     const urlRefStatus = `${urlApiVersion}/ref/status`;
 
     console.log(urlLogin);

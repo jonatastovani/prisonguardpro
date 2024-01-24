@@ -123,7 +123,8 @@
 
     <div class="row mt-2 mb-2">
         <div class="col-12">
-            <button id="btnNewBudget" class="btn btn-primary" title="Inserir novo orçamento">Nova entrada</button>
+            <a href="{{route('inclusao.criarEntradasPresos')}}" class="btn btn-primary" title="Inserir nova Entrada de Presos">Nova entrada</a>
+            {{-- <a href="{{route('inclusao.entradasPresos')}}/1" class="btn btn-primary" title="Inserir nova Entrada de Presos">Nova entrada</a> --}}
         </div>
     </div>
 

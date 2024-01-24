@@ -181,8 +181,9 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefIncOrigemController
             Route::controller(RefIncOrigemController::class)->group(function () {
-                Route::prefix('/origem')->group(function () {
+                Route::prefix('/inclusao/origem')->group(function () {
                     Route::get('', 'index');
+                    Route::post('/busca/select', 'indexBusca');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
