@@ -13,6 +13,8 @@ $(document).ready(function () {
 
         $('#origem_idEntradasPresos').focus();
         
+        commonFunctions.addEventToggleDiv($("#camposAdicionais1234"), $("#togglecamposAdicionais1234"))
+
 
         // commonFunctions.addEventToggleDiv($("#dataClient"), $("#toggleDataClientButton"), { minWidht: 577 })
         // commonFunctions.hiddenInputValue($('#cost_priceBudget'), $("#show_cost_price"), { titleShow: 'Mostrar preço de custo', titleHidden: 'Ocultar preço de custo' });
@@ -185,7 +187,7 @@ export class registerBudgets {
 
     fillProducts(arrData) {
 
-        $('#containerProducts').html('');
+        $('#containerPresos').html('');
 
         arrData.forEach(product => {
 
@@ -235,7 +237,7 @@ export class registerBudgets {
                 </div>
             </div>`;
 
-            $('#containerProducts').append(strProduct);
+            $('#containerPresos').append(strProduct);
 
         });
 
@@ -245,7 +247,7 @@ export class registerBudgets {
 
         const self = this;
 
-        $('#containerProducts').find('.edit').on("click", function (event) {
+        $('#containerPresos').find('.edit').on("click", function (event) {
             event.preventDefault();
 
             const idproduct = $(this).data('idproduct');
@@ -256,7 +258,7 @@ export class registerBudgets {
 
         });
 
-        $('#containerProducts').find('.delete').on("click", function (event) {
+        $('#containerPresos').find('.delete').on("click", function (event) {
             event.preventDefault();
 
             const idDel = $(this).data('idproduct');
