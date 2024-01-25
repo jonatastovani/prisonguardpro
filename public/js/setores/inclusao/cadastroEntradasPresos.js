@@ -8,50 +8,22 @@ $(document).ready(function () {
 
     const idBudget = $('#id').val();
 
-    $('.form-select').select2({
-        ajax: {
-            // url: `${urlRefIncOrigem}/busca/select`,
-            dataType: 'json',
-            delay: 250,
-            transport: function (params, success, failure) {
-                var texto = params.data.term; // Captura o valor do texto
-    
-                // Adiciona o valor do texto ao corpo da solicitação
-                var ajaxOptions = {
-                    url: `${urlRefIncOrigem}/busca/select`,
-                    type: 'POST',
-                    data: {'texto': texto},
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: success,
-                    failure: failure
-                };
-    
-                return $.ajax(ajaxOptions);
-            },
-            processResults: function (data) {
-                return {
-                    results: data.data
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 3 // Número mínimo de caracteres antes da pesquisa
+    function init() {
+        commonFunctions.configurarCampoSelect2($('#origem_idEntradasPresos'),`${urlRefIncOrigem}/busca/select`);
+
+        $('#origem_idEntradasPresos').focus();
+        
+
+        // commonFunctions.addEventToggleDiv($("#dataClient"), $("#toggleDataClientButton"), { minWidht: 577 })
+        // commonFunctions.hiddenInputValue($('#cost_priceBudget'), $("#show_cost_price"), { titleShow: 'Mostrar preço de custo', titleHidden: 'Ocultar preço de custo' });
+
+    };
+
+    $(window).on('resize', function () {
+        // $('#origem_idEntradasPresos').select2('destroy');
+        commonFunctions.configurarCampoSelect2($('#origem_idEntradasPresos'),`${urlRefIncOrigem}/busca/select`);
+
     });
-
-    // function init() {
-
-    //     const obj = instanceManager.setInstance('registerBudgets', new registerBudgets(idBudget, redirecionamentoAnterior));
-    //     obj.getDataAll();
-
-    //     $('#btnNewProduct').focus();
-    //     executeMask();
-
-    //     commonFunctions.addEventToggleDiv($("#dataClient"), $("#toggleDataClientButton"), { minWidht: 577 })
-    //     commonFunctions.hiddenInputValue($('#cost_priceBudget'), $("#show_cost_price"), { titleShow: 'Mostrar preço de custo', titleHidden: 'Ocultar preço de custo' });
-
-    // };
 
     // const btnNewProduct = $('#btnNewProduct')
     // btnNewProduct.on("click", (event) => {
@@ -134,7 +106,7 @@ $(document).ready(function () {
 
     // });
 
-    // init();
+    init();
 
 });
 

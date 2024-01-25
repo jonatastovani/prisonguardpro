@@ -831,4 +831,59 @@ export class commonFunctions {
 
     }
 
+    static configurarCampoSelect2(elem,urlApi,options={}) {
+        const {
+            minimo = 3, placeholder = 'Selecione uma opção'
+        } = options;
+
+        elem.select2({
+            language: {
+                inputTooShort: function (args) {
+                    var caracteres = args.minimum - args.input.length;
+                    return `Digite ${caracteres} ou mais caracteres`;
+                },
+                noResults: function () {
+                    return 'Nenhum resultado encontrado';
+                },
+                searching: function () {
+                    return 'Pesquisando...';
+                }
+            },
+            ajax: {
+                dataType: 'json',
+                delay: 250,
+                transport: function (params, success) {
+                    var texto = params.data.term; // Captura o valor do texto
+        
+                    // Adiciona o valor do texto ao corpo da solicitação
+                    var ajaxOptions = {
+                        url: urlApi,
+                        type: 'POST',
+                        data: { 'texto': texto },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: success,
+                        error: function (xhr, textStatus, errorThrown) {
+                            const objAjax = new conectAjax('');
+                            const erro = objAjax.tratamentoErro(xhr);
+                            $.notify(erro.message, 'error');
+                        }
+                    };
+                    return $.ajax(ajaxOptions);
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.data
+                    };
+                },
+                cache: true
+            },
+            placeholder: placeholder,
+            allowClear: true,
+            minimumInputLength: minimo
+
+        });
+
+    }
 }

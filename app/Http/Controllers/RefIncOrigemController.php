@@ -49,7 +49,7 @@ class RefIncOrigemController extends Controller
     {
         // Regras de validação
         $rules = [
-            'nome' => 'required',
+            'nome' => 'required|min:3',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -90,7 +90,7 @@ class RefIncOrigemController extends Controller
 
         // Regras de validação
         $rules = [
-            'nome' => 'required',
+            'nome' => 'required|min:3',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);

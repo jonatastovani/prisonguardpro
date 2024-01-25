@@ -242,7 +242,6 @@ export class conectAjax {
         }
     }
 
-
     /**
      * Envia uma solicitação 'DELETE' para a API e retorna uma Promise que resolve com os dados de resposta.
      *

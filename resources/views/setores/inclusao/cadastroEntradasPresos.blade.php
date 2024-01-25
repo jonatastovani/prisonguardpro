@@ -17,10 +17,13 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-5 col-md-6 mt-2" title="Selecione a Origem da Entrada">
+        <div class="col-md-6 col-sm-8 mt-2" title="Selecione a Origem da Entrada">
             <label class="form-label" for="origem_idEntradasPresos">Origem</label>
-            <select name="origem_id" id="origem_idEntradasPresos" class="form-select inputActionEntradasPresosSearch">
-            </select>
+            <select name="origem_id" id="origem_idEntradasPresos" class="form-select"></select>
+        </div>
+        <div class="col-md-3 col-sm-4 mt-2">
+            <label class="form-label" for="data_entradaEntradasPresos">Data Entrada</label>
+            <input type="date" name="data_entrada" id="data_entradaEntradasPresos" class="form-control" value="{{now()->format('Y-m-d')}}">
         </div>
     </div>
 
