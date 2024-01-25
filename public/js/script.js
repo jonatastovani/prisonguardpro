@@ -1,4 +1,4 @@
-import instanceManager from "./common/instanceManager.js";
+import instanceManager from "./comuns/instanceManager.js";
 
 document.onkeydown = function(e) {
 

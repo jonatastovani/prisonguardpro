@@ -11,6 +11,7 @@
 
     const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
     const urlRefIncOrigem = `${urlApiVersion}/ref/inclusao/origem`;
+    const urlIncEntrada = `${urlApiVersion}/inclusao/entradas`;
     const urlRefStatus = `${urlApiVersion}/ref/status`;
 
     console.log(urlLogin);

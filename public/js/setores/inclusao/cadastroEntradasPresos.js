@@ -1,179 +1,83 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
-import { commonFunctions } from "../../common/commonFunctions.js";
-import { enumAction } from "../../common/enumAction.js";
-// import instanceManager from "../../common/instanceManager.js';";
-// import { modalMessage } from "../../common/modalMessage.js';";
+import { funcoesComuns } from "../../comuns/funcoesComuns.js";
+import { modalMessage } from "../../comuns/modalMessage.js";
 
 $(document).ready(function () {
 
-    const idBudget = $('#id').val();
+    const id = $('#id').val();
+    const containerPresos = $('#containerPresos');
 
     function init() {
-        commonFunctions.configurarCampoSelect2($('#origem_idEntradasPresos'),`${urlRefIncOrigem}/busca/select`);
 
+        funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
         $('#origem_idEntradasPresos').focus();
-        
-        commonFunctions.addEventToggleDiv($("#camposAdicionais1234"), $("#togglecamposAdicionais1234"))
 
-
-        // commonFunctions.addEventToggleDiv($("#dataClient"), $("#toggleDataClientButton"), { minWidht: 577 })
-        // commonFunctions.hiddenInputValue($('#cost_priceBudget'), $("#show_cost_price"), { titleShow: 'Mostrar preço de custo', titleHidden: 'Ocultar preço de custo' });
+        console.log(id);
+        buscarTodosDados();
 
     };
 
     $(window).on('resize', function () {
-        // $('#origem_idEntradasPresos').select2('destroy');
-        commonFunctions.configurarCampoSelect2($('#origem_idEntradasPresos'),`${urlRefIncOrigem}/busca/select`);
+
+        funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
 
     });
 
-    // const btnNewProduct = $('#btnNewProduct')
-    // btnNewProduct.on("click", (event) => {
+    $('#btnInserirPreso').on("click", (event) => {
 
-    //     event.preventDefault();
+        const idDiv = inserirFormularioPreso();
+        $(`#${idDiv}`).find('input[name="matricula"]').focus();
 
-    //     let obj = instanceManager.setInstance('popNewProduct', new popNewProduct(urlApiProducts, urlApiProdTemplates));
-    //     obj.setId(idBudget);
-    //     obj.setElemFocusClose(btnNewProduct);
-    //     obj.openPop().then(function (result) {
+    });
 
-    //         if (result) {
+    function buscarTodosDados() {
 
-    //             const objBudget = instanceManager.setInstance('registerBudgets', new registerBudgets(idBudget));
-    //             objBudget.getDataAll();
+        const obj = new conectAjax(urlIncEntrada);
+        obj.setParam(id);
 
-    //             const obj = instanceManager.setInstance('popProducts', new popProducts(urlApiProducts, urlApiProdItems));
-    //             obj.setUrlApi(`${urlApiProducts}${result}/`)
-    //             obj.openPop();
-
-    //         }
-
-    //     });
-
-    // });
-
-    // function handleButtonEditBudgetClick(event) {
-    //     event.preventDefault();
-
-    //     const obj = instanceManager.setInstance('popEditBudgets', new popEditBudgets(urlApiBudgets, urlApiClients, urlApiOrders));
-    //     obj.setId(idBudget);
-    //     obj.setElemFocusClose(this);
-    //     obj.openPop().finally(function (result) {
-    //         const objBudget = instanceManager.setInstance('registerBudgets', new registerBudgets(idBudget, redirecionamentoAnterior));
-    //         objBudget.getDataAll();
-    //     });
-    // }
-
-    // $(document).on("click", '#editBudget, #newOrder', handleButtonEditBudgetClick);
-
-    // $(document).on("click", '#editOrder', function (event) {
-    //     event.preventDefault();
-
-    //     const idOrder = $(this).data('id');
-
-    //     const obj = instanceManager.setInstance('popOrders', new popOrders(urlApiOrders));
-    //     obj.setId(idOrder);
-    //     obj.setElemFocusClose(this);
-    //     obj.openPop().finally(function (result) {
-    //         const objBudget = instanceManager.setInstance('registerBudgets', new registerBudgets(idBudget, redirecionamentoAnterior));
-    //         objBudget.getDataAll();
-    //     });
-
-    // });
-
-    // function executeMask() {
-
-    //     commonFunctions.applyCustomNumberMask($('#cost_priceBudget'), { format: '#.##0,00', reverse: true });
-    //     commonFunctions.applyCustomNumberMask($('#priceBudget'), { format: '#.##0,00', reverse: true });
-
-    // }
-
-    // $(document).on('click', '#cancel', function () {
-
-    //     redirection();
-
-    // });
-
-    // function redirection() {
-
-    //     window.location.href = redirecionamentoAnterior;
-
-    // }
-
-    // $("#show_cost_price").click(function () {
-
-    //     const value = (commonFunctions.getItemLocalStorage('hidden_data') == 'true') ? false : true;
-    //     commonFunctions.setItemLocalStorage('hidden_data', value);
-    //     commonFunctions.hiddenInputValue($('#cost_priceBudget'), this, { titleShow: 'Mostrar preço de custo', titleHidden: 'Ocultar preço de custo' });
-
-    // });
-
-    init();
-
-});
-
-export class registerBudgets {
-
-    #idBudget;
-    #client_id;
-    #action;
-    #cost_price;
-    #redirecionamentoAnterior;
-
-    constructor(idBudget, redirecionamentoAnterior) {
-        this.#idBudget = idBudget;
-        this.#redirecionamentoAnterior = redirecionamentoAnterior;
-        this.#action = enumAction.PATCH;
-    }
-
-    getDataAll() {
-        const self = this;
-        const obj = new conectAjax(urlApiBudgets);
-        obj.setParam(self.#idBudget);
-
-        obj.getData()
+        obj.getRequest()
             .then(function (response) {
 
-                self.#client_id = response.client_id;
-                self.#cost_price = commonFunctions.formatNumberWithLimitDecimalPlaces(response.cost_price ? response.cost_price : 0);
-                const cost_price = commonFunctions.formatWithCurrencyCommasOrFraction(self.#cost_price);
-                const price = commonFunctions.formatWithCurrencyCommasOrFraction(response.price ? response.price : 0);
+                // self.#client_id = response.client_id;
+                // self.#cost_price = funcoesComuns.formatNumberWithLimitDecimalPlaces(response.cost_price ? response.cost_price : 0);
+                // const cost_price = funcoesComuns.formatWithCurrencyCommasOrFraction(self.#cost_price);
+                // const price = funcoesComuns.formatWithCurrencyCommasOrFraction(response.price ? response.price : 0);
 
-                const btnOpenClient = `<form action="/clients/${response.client_id}" method="post"><button class="btn btn-primary btn-mini edit ms-2" type="submit" title="Editar este cliente"><i class="bi bi-pencil"></i></button><input type="hidden" name="redirect-previous" value="/budgets/${response.id}"></form>`;
+                // const btnOpenClient = `<form action="/clients/${response.client_id}" method="post"><button class="btn btn-primary btn-mini edit ms-2" type="submit" title="Editar este cliente"><i class="bi bi-pencil"></i></button><input type="hidden" name="redirect-previous" value="/budgets/${response.id}"></form>`;
 
-                $('#title').html(`Orçamento: ${response.id}`);
-                $('#nameClient').html(response.client.name);
-                $('#btnOpenClient').html(btnOpenClient);
+                // $('#title').html(`Orçamento: ${response.id}`);
+                // $('#nameClient').html(response.client.name);
+                // $('#btnOpenClient').html(btnOpenClient);
 
-                $('#order_id').html(response.order_id ? response.order_id : '');
+                // $('#order_id').html(response.order_id ? response.order_id : '');
 
-                let strButton;
-                if (response.order_id) {
-                    strButton = `<button id="editOrder" class="btn btn-primary btn-mini" data-id="${response.order_id}" title="Editar pedido"><i class="bi bi-pencil"></i></button>`;
-                } else {
-                    strButton = `<button id="newOrder" class="btn btn-success btn-mini" title="Gerar pedido">Gerar pedido</button>`;
-                }
-                $('#edit_order').html(strButton);
+                // let strButton;
+                // if (response.order_id) {
+                //     strButton = `<button id="editOrder" class="btn btn-primary btn-mini" data-id="${response.order_id}" title="Editar pedido"><i class="bi bi-pencil"></i></button>`;
+                // } else {
+                //     strButton = `<button id="newOrder" class="btn btn-success btn-mini" title="Gerar pedido">Gerar pedido</button>`;
+                // }
+                // $('#edit_order').html(strButton);
 
-                if (response.client.tel) {
-                    $('#tel').html(commonFunctions.formatPhone(response.client.tel));
-                }
-                if (response.client.cpf) {
-                    $('#typeDoc').html('CPF');
-                    $('#doc').html(commonFunctions.formatCPF(response.client.cpf));
-                }
-                if (response.client.cnpj) {
-                    $('#typeDoc').html('CNPJ');
-                    $('#doc').html(commonFunctions.formatCNPJ(response.client.cnpj));
-                }
-                $('#created_at').html(moment(response.created_at).format('DD/MM/YYYY HH:mm'));
-                $('#updated_at').html(moment(response.updated_at).format('DD/MM/YYYY HH:mm'));
-                $('#cost_priceBudget').val(cost_price);
-                $('#priceBudget').val(price);
+                // if (response.client.tel) {
+                //     $('#tel').html(funcoesComuns.formatPhone(response.client.tel));
+                // }
+                // if (response.client.cpf) {
+                //     $('#typeDoc').html('CPF');
+                //     $('#doc').html(funcoesComuns.formatCPF(response.client.cpf));
+                // }
+                // if (response.client.cnpj) {
+                //     $('#typeDoc').html('CNPJ');
+                //     $('#doc').html(funcoesComuns.formatCNPJ(response.client.cnpj));
+                // }
+                // $('#created_at').html(moment(response.created_at).format('DD/MM/YYYY HH:mm'));
+                // $('#updated_at').html(moment(response.updated_at).format('DD/MM/YYYY HH:mm'));
+                // $('#cost_priceBudget').val(cost_price);
+                // $('#priceBudget').val(price);
 
-                self.fillProducts(response.products);
+                // self.inserirFormularioPreso(response.products);
 
-                self.addQueryButtonEvents();
+                // self.addQueryButtonEvents();
 
             })
             .catch(function (error) {
@@ -185,133 +89,125 @@ export class registerBudgets {
 
     }
 
-    fillProducts(arrData) {
+    function inserirFormularioPreso(id = '') {
 
-        $('#containerPresos').html('');
+        const idDiv = `${id}${Date.now()}`;
+        const strDataId = id ? `data-id="${id}"` : '';
+        let strPreso = `
+            <div id="${idDiv}" ${strDataId}
+                class="p-2 col-md-6 col-12 bg-info bg-opacity-10 border border-info rounded position-relative">
+                <button type="button" ${strDataId} class="btn-close position-absolute top-0 end-0" aria-label="Close"></button>
 
-        arrData.forEach(product => {
-
-            const idDiv = `${product.id}${Date.now()}`;
-            const qtdItems = product.item_refs.length;
-
-            const sumPriceItems = (items) => {
-                let total = 0;
-
-                for (const item of items) {
-                    if (item.price) {
-                        total += item.price;
-                    }
-                }
-
-                return total;
-            };
-
-            let strProduct = `
-            <div id="${idDiv}" class="p-2 col-md-6 col-12 bg-info bg-opacity-10 border border-info rounded">
+                <div class="row">
+                    <div class="col-3">
+                        <label for="matricula${idDiv}" class="form-label">Matrícula</label>
+                        <input type="text" class="form-control" name="matricula" id="matricula${idDiv}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="nome${idDiv}" class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="nome" id="nome${idDiv}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12"
+                        title="Nome pelo qual o preso deseja ser chamado. Este nome ficará mais aparente nos documentos, caso seja informado.">
+                        <label for="nome${idDiv}" class="form-label">Nome social</label>
+                        <input type="text" class="form-control" name="nome_social" id="nome_social${idDiv}">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-6">
-                        <div class="row">
-                            <div class="col-12">
-                                <h5 class="text-start"><span class="nameProduct">${product.name}</span></h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <button data-idproduct="${product.id}" title="Editar produto ${product.name}" class="btn btn-primary edit me-2"><i class="bi bi-pencil"></i></button>
-                                <button data-idproduct="${product.id}" data-nameproduct="${product.name}" title="Excluir produto ${product.name}" class="btn btn-danger delete"><i class="bi bi-trash"></i></button>
-                            </div>
-                        </div>
+                        <label for="rg${idDiv}" class="form-label">RG</label>
+                        <input type="text" class="form-control" name="rg" id="rg${idDiv}">
                     </div>
                     <div class="col-6">
-                        <div class="row">
-                            <div class="col-12">
-                                <span title="Quantidade de itens que compõe o produto ${product.name}">Qtd. Itens: <b>${qtdItems}</b></span>
-                            </div>
+                        <label for="cpf${idDiv}" class="form-label">CPF</label>
+                        <input type="text" class="form-control" name="cpf" id="cpf${idDiv}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto flex-fill text-end">
+                        <button id="toggleCamposAdicionais${idDiv}" class="btn btn-outline-secondary btn-mini">
+                            <i class="bi bi-view-list"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="camposAdicionais${idDiv}" style="display: none;">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="mae${idDiv}" class="form-label">Mãe</label>
+                            <input type="text" class="form-control" name="mae" id="mae${idDiv}">
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <span title="Soma total dos itens do produto ${product.name}">Soma: <b>${commonFunctions.formatNumberToCurrency(sumPriceItems(product.item_refs))}</b></span>                                
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="pai${idDiv}" class="form-label">Pai</label>
+                            <input type="text" class="form-control" name="pai" id="pai${idDiv}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="data_prisao${idDiv}" class="form-label">Data prisão</label>
+                            <input type="date" class="form-control" name="data_prisao" id="data_prisao${idDiv}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="informacoes${idDiv}" class="form-label">Informações (Ex: link da
+                                notícia)</label>
+                            <textarea class="form-control" name="informacoes" id="informacoes${idDiv}" cols="30" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"
+                            title="Observações sobre o preso (este campo não é impresso na qualificativa)">
+                            <label for="observacoes${idDiv}" class="form-label">Observações</label>
+                            <textarea class="form-control" name="observacoes" id="observacoes${idDiv}" cols="30" rows="2"></textarea>
                         </div>
                     </div>
                 </div>
             </div>`;
 
-            $('#containerPresos').append(strProduct);
+        containerPresos.append(strPreso);
+        addQueryButtonEvents(idDiv);
 
+        return idDiv;
+    }
+
+    function addQueryButtonEvents(idDiv) {
+
+        funcoesComuns.aplicarMascaraNumero($(`#${idDiv}`).find('input[name="matricula"]'));
+        funcoesComuns.eventoEsconderExibir($(`#camposAdicionais${idDiv}`), $(`#toggleCamposAdicionais${idDiv}`));
+
+        $(`#${idDiv}`).find('.btn-close').on("click", function () {
+            const idPreso = $(this).data('id');
+            if (idPreso) {
+                acaoBtnDeletar(idDiv, this);
+            } else {
+                $(`#${idDiv}`).remove();
+            }
         });
 
     }
 
-    addQueryButtonEvents() {
+    function acaoBtnDeletar(idDiv, button) {
 
-        const self = this;
-
-        $('#containerPresos').find('.edit').on("click", function (event) {
-            event.preventDefault();
-
-            const idproduct = $(this).data('idproduct');
-
-            const obj = instanceManager.setInstance('popProducts', new popProducts(urlApiProducts, urlApiProdItems));
-            obj.setUrlApi(`${urlApiProducts}${idproduct}/`)
-            obj.openPop();
-
-        });
-
-        $('#containerPresos').find('.delete').on("click", function (event) {
-            event.preventDefault();
-
-            const idDel = $(this).data('idproduct');
-            const nameDel = $(this).data('nameproduct');
-            self.delButtonAction(idDel, nameDel, this);
-
-        });
-
-    }
-
-    delButtonAction(idDel, nameDel, button = null) {
-
-        const self = this;
-
-        const obj = instanceManager.setInstance('modalMessage', new modalMessage());
-        obj.setMessage(`Confirma a exclusão do produto <b>${nameDel}</b>?`);
-        obj.setTitle('Confirmação de exclusão de produto');
+        const obj = new modalMessage();
+        obj.setMessage(`Confirma a exclusão deste preso?`);
+        obj.setTitle('Confirmação de exclusão de preso');
         obj.setElemFocusClose(button);
-
         obj.openModal().then(function (result) {
 
             if (result) {
-                self.del(idDel);
+                $(`#${idDiv}`).remove();
             }
 
         });
 
     }
 
-    del(idDel) {
+    init();
 
-        const obj = new conectAjax(urlApiProducts);
-        const self = this;
-
-        if (obj.setAction(enumAction.DELETE)) {
-
-            obj.setParam(idDel);
-
-            obj.deleteData()
-                .then(function (result) {
-
-                    $.notify(`Produto deletado com sucesso!`, 'success');
-                    self.getDataAll();
-
-                })
-                .catch(function (error) {
-
-                    console.error(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
-
-                });
-        }
-
-    }
-
-}
+});

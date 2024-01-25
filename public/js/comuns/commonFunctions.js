@@ -61,10 +61,10 @@ export class commonFunctions {
 
         $(selector).on(event, function () {
 
-            const num = commonFunctions.returnsOnlyNumber(this.value);
+            const num = funcoesComuns.returnsOnlyNumber(this.value);
 
             if (num.length == 11) {
-                if (!commonFunctions.validateCPF($(this).val())) {
+                if (!funcoesComuns.validateCPF($(this).val())) {
                     $(this).addClass('is-invalid');
                 } else {
                     $(this).removeClass('is-invalid');
@@ -151,10 +151,10 @@ export class commonFunctions {
 
         $(selector).on(event, function () {
 
-            const num = commonFunctions.returnsOnlyNumber(this.value);
+            const num = funcoesComuns.returnsOnlyNumber(this.value);
 
             if (num.length == 14) {
-                if (!commonFunctions.validateCNPJ($(this).val())) {
+                if (!funcoesComuns.validateCNPJ($(this).val())) {
                     $(this).addClass('is-invalid');
                 } else {
                     $(this).removeClass('is-invalid');

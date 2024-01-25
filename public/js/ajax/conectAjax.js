@@ -1,4 +1,4 @@
-import { enumAction } from "../common/enumAction.js";
+import { enumAction } from "../comuns/enumAction.js";
 
 /**
  * The `conectAjax` class provides methods for making AJAX requests to an external API and handling the responses.
@@ -80,7 +80,7 @@ export class conectAjax {
     getRequest() {
         const self = this;
 
-        let param = self.#param != null ? self.#param : '';
+        let param = self.#param != null ? `/${self.#param}` : '';
         // let param = self.#param != null ? self.#param : '?size=10000000';
         let method = self.#action === null ? "GET" : self.#action;
         let data = self.#data !== null ? JSON.stringify(self.#data) : null;
@@ -153,7 +153,7 @@ export class conectAjax {
 
         return new Promise((resolve, reject) => {
 
-            let param = self.#param != null ? self.#param : '';
+            let param = self.#param != null ? `/${self.#param}` : '';
 
             if (globalDebug === true) {
                 console.log('URL = ', self.#urlApi + param);

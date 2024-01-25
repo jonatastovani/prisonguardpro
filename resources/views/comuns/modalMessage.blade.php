@@ -22,4 +22,4 @@
     </div>
 </div>
 
-<script type="module" src="{{ asset('js/common/modalMessage.js') }}"></script>
+<script type="module" src="{{ asset('js/comuns/modalMessage.js') }}"></script>
