@@ -33,7 +33,8 @@
 </head>
 
 <body>
-
+    @vite('resources/js/app.js');
+    
     <div class="container-fluid">
         <div class="row vh-100">
             <div class="col-12 d-flex flex-column flex-nowrap mh-100">

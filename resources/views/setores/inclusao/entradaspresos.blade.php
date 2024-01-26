@@ -128,5 +128,6 @@
     </div>
 
     <script type="module" src="{{ asset('js/setores/inclusao/entradasPresos.js') }}"></script>
+    <script type="module" src="{{ asset('js/websocket/script.js') }}"></script>
 
 @endsection
