@@ -38,53 +38,14 @@ $(document).ready(function () {
         obj.getRequest()
             .then(function (response) {
 
-                // self.#client_id = response.client_id;
-                // self.#cost_price = funcoesComuns.formatNumberWithLimitDecimalPlaces(response.cost_price ? response.cost_price : 0);
-                // const cost_price = funcoesComuns.formatWithCurrencyCommasOrFraction(self.#cost_price);
-                // const price = funcoesComuns.formatWithCurrencyCommasOrFraction(response.price ? response.price : 0);
-
-                // const btnOpenClient = `<form action="/clients/${response.client_id}" method="post"><button class="btn btn-primary btn-mini edit ms-2" type="submit" title="Editar este cliente"><i class="bi bi-pencil"></i></button><input type="hidden" name="redirect-previous" value="/budgets/${response.id}"></form>`;
-
-                // $('#title').html(`Orçamento: ${response.id}`);
-                // $('#nameClient').html(response.client.name);
-                // $('#btnOpenClient').html(btnOpenClient);
-
-                // $('#order_id').html(response.order_id ? response.order_id : '');
-
-                // let strButton;
-                // if (response.order_id) {
-                //     strButton = `<button id="editOrder" class="btn btn-primary btn-mini" data-id="${response.order_id}" title="Editar pedido"><i class="bi bi-pencil"></i></button>`;
-                // } else {
-                //     strButton = `<button id="newOrder" class="btn btn-success btn-mini" title="Gerar pedido">Gerar pedido</button>`;
-                // }
-                // $('#edit_order').html(strButton);
-
-                // if (response.client.tel) {
-                //     $('#tel').html(funcoesComuns.formatPhone(response.client.tel));
-                // }
-                // if (response.client.cpf) {
-                //     $('#typeDoc').html('CPF');
-                //     $('#doc').html(funcoesComuns.formatCPF(response.client.cpf));
-                // }
-                // if (response.client.cnpj) {
-                //     $('#typeDoc').html('CNPJ');
-                //     $('#doc').html(funcoesComuns.formatCNPJ(response.client.cnpj));
-                // }
-                // $('#created_at').html(moment(response.created_at).format('DD/MM/YYYY HH:mm'));
-                // $('#updated_at').html(moment(response.updated_at).format('DD/MM/YYYY HH:mm'));
-                // $('#cost_priceBudget').val(cost_price);
-                // $('#priceBudget').val(price);
-
-                // self.inserirFormularioPreso(response.products);
-
-                // self.addQueryButtonEvents();
-
+                const data = response.data;
+                $('#origem_idEntradasPresos').html(new Option(data.origem.nome, data.origem_id, true, true)).trigger('change');
+                $('#data_entradaEntradasPresos').val(data.data_entrada);
+                
             })
             .catch(function (error) {
-
-                $('#form1 :input').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error}`, 'error');
-
+                $('input, .btn, select').prop('disabled', true);
+                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
             });
 
     }
@@ -211,3 +172,35 @@ $(document).ready(function () {
     init();
 
 });
+
+// async function init() {
+
+//     await buscarTodosDados();
+//     // await funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
+//     $('#origem_idEntradasPresos').focus();
+
+// }
+
+// async function buscarTodosDados() {
+//     try {
+//         const obj = new conectAjax(urlIncEntrada);
+//         obj.setParam(id);
+
+//         const response = await obj.getRequest();
+//         const data = response.data;
+
+//         const select = $('#origem_idEntradasPresos');
+
+//         // Remover opções anteriores se necessário
+//         select.find('option').remove();
+
+//         // Adicionar uma nova opção
+//         const novaOpcao = new Option(data.origem.nome, data.origem_id, true, true);
+//         console.log(novaOpcao);
+//         select.html(novaOpcao).trigger('change');
+//         // select.select2('val', data.origem_id);
+//     } catch (error) {
+//         $('#form1 :input').prop('disabled', true);
+//         $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error}`, 'error');
+//     }
+// }

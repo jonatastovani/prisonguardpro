@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Common\CommonsFunctions;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Date;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -35,6 +37,11 @@ class IncEntrada extends Model
         return $logOptions->logAll()
             ->dontSubmitEmptyLogs()
             ->useLogName(strtolower(class_basename($this)));
+    }
+
+    public function getDataEntradaAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d');
     }
 
     public function presos()
