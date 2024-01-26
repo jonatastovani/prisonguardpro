@@ -112,7 +112,7 @@
                         <th>RG</th>
                         <th>Data Entrada</th>
                         <th>Origem</th>
-                        <th>Situação</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,12 +124,9 @@
     <div class="row mt-2 mb-2">
         <div class="col-12">
             <a href="{{route('inclusao.criarEntradasPresos')}}" class="btn btn-primary" title="Inserir nova Entrada de Presos">Nova entrada</a>
-            {{-- <a href="{{route('inclusao.entradasPresos')}}/1" class="btn btn-primary" title="Inserir nova Entrada de Presos">Nova entrada</a> --}}
         </div>
     </div>
 
-    <?php // include_once 'view/popup/entradaspresos/popupNewEntradasPresos.php';
-    ?>
     <script type="module" src="{{ asset('js/setores/inclusao/entradasPresos.js') }}"></script>
 
 @endsection

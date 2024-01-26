@@ -8,13 +8,15 @@ class RestResponse
     private $message;
     private $data;
     private $traceId;
+    private $token;
 
-    public function __construct($data, $status, $message = '', $traceId = null)
+    public function __construct($data, $status, $message = null, $traceId = null, $token = false)
     {
         $this->status = $status;
         $this->message = $message;
         $this->data = $data;
         $this->traceId = $traceId;
+        $this->token = $token;
     }
 
     public function toArray()
@@ -36,6 +38,10 @@ class RestResponse
 
         if ($this->traceId) {
             $responseArray['trace_id'] = $this->traceId;
+        }
+
+        if ($this->token) {
+            $responseArray['token'] = csrf_token();
         }
 
         return $responseArray;
@@ -66,9 +72,19 @@ class RestResponse
         return new self($data, $status, $message, $traceId);
     }
 
-    public static function createSuccessResponse($data, $status, $message = '')
+    public static function createSuccessResponse($data, $status, $options = [])
     {
-        return new self($data, $status, $message);
+        $message = '';
+        $token = false;
+
+        if (isset($options['message'])) {
+            $message = $options['message'];
+        }
+        if (isset($options['token'])) {
+            $token = $options['token'] === true ? true : false;
+        }
+
+        return new self($data, $status, $message, null, $token);
     }
 
     public static function createTesteResponse($data = [], $message = 'Retorno teste')
@@ -77,5 +93,4 @@ class RestResponse
 
         return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
     }
-
 }

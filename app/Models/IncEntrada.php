@@ -39,11 +39,6 @@ class IncEntrada extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    public function getDataEntradaAttribute($value)
-    {
-        return Carbon::parse($value)->format('Y-m-d');
-    }
-
     public function presos()
     {
         return $this->hasMany(IncEntradaPreso::class, 'entrada_id');

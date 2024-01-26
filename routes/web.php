@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('', 'home')->name('inclusao.home');
 
             Route::prefix('/entradas')->group(function () {
-                Route::get('', 'entradasPresos')->name('inclusao.entradasPresos');
+                Route::match(['get','post'],'', 'entradasPresos')->name('inclusao.entradasPresos');
                 Route::get('/criar', 'cadastroEntradasPresos')->name('inclusao.criarEntradasPresos');
                 Route::match(['get','post'],'/{id}','cadastroEntradasPresos')->name('inclusao.editarEntradasPresos');
             });

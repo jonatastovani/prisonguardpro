@@ -1,6 +1,8 @@
-import { commonFunctions } from "../../common/commonFunctions.js";
-import { configurationApp } from "../../common/configurationsApp.js";
-import { enumAction } from "../../common/enumAction.js";
+import { conectAjax } from "../../ajax/conectAjax.js";
+import { configuracoesApp } from "../../comuns/configuracoesApp.js";
+import { enumAction } from "../../comuns/enumAction.js";
+import { funcoesComuns } from "../../comuns/funcoesComuns.js";
+import { funcoesPresos } from "../../comuns/funcoesPresos.js";
 
 $(document).ready(function () {
 
@@ -19,17 +21,17 @@ $(document).ready(function () {
     //     }
     // ];
 
-    // commonFunctions.eventRBHidden($('#rbEntradasPresos'), arrDateSearch);
-    // commonFunctions.eventRBHidden($('#rbUpdatedEntradasPresos'), arrDateSearch);
+    // funcoesComuns.eventRBHidden($('#rbEntradasPresos'), arrDateSearch);
+    // funcoesComuns.eventRBHidden($('#rbUpdatedEntradasPresos'), arrDateSearch);
 
     function init() {
 
-        let dateNowSubtract = configurationApp.subtractDateDefault('YYYY-MM-DD');
+        let dateNowSubtract = configuracoesApp.subtractDateDefault('YYYY-MM-DD');
         $('#inicioEntradasPresos').val(dateNowSubtract);
         $('#updatedinicioEntradasPresos').val(dateNowSubtract);
         preencherSelectStatus();
         gerarFiltros();
-        commonFunctions.addEventToggleDiv($("#dataSearch"), $("#toggleDataSearchButton"))
+        funcoesComuns.addEventToggleDiv($("#dataSearch"), $("#toggleDataSearchButton"))
 
     }
 
@@ -44,7 +46,7 @@ $(document).ready(function () {
     });
 
     function gerarFiltros() {
-        let invalidos = commonFunctions.buscarValoresInvalidosGerarFiltros();
+        let invalidos = funcoesComuns.buscarValoresInvalidosGerarFiltros();
 
         let data = {
             // sorting: {
@@ -54,7 +56,7 @@ $(document).ready(function () {
             filtros: {}
         };
 
-        let data_entrada = commonFunctions.gerarFiltroData(
+        let data_entrada = funcoesComuns.gerarFiltroData(
             $('#inicioEntradasPresos').val(),
             $('#fimEntradasPresos').val()
         );
@@ -100,52 +102,67 @@ $(document).ready(function () {
             }
         }
 
-        console.log(data);
-        return;
-        getDataAll(data);
+        buscarTodosDados(data);
     }
 
-    function getDataAll(data) {
+    function buscarTodosDados(data) {
 
-        const obj = new conectAjax(`${urlApiEntradasPresos}search/`);
+        tableEntradasPresos.html('');
+
+        const obj = new conectAjax(`${urlIncEntradaPreso}/busca`);
         obj.setData(data);
         obj.setAction(enumAction.POST);
-        obj.setParam('?size=100000');
 
-        obj.saveData()
+        obj.envRequest()
             .then(function (response) {
 
-                let strHTML = '';
+                console.log(response)
 
                 response.data.forEach(result => {
 
-                    const tel = commonFunctions.formatPhone(result.client.tel);
-                    const _at = moment(result._at).format('DD/MM/YYYY HH:mm');
-                    const price = commonFunctions.formatNumberToCurrency(result.price ? result.price : 0);
+                    let strHTML = '';
+                    const data_entrada = moment(result.entrada.data_entrada).format('DD/MM/YYYY HH:mm');
+                    
+                    let matricula = result.matricula;
+                    let nome = result.nome;
+
+                    if(result.preso) {
+                        matricula = result.preso.matricula;
+                    }
+                    if(result.preso && result.preso.nome) {
+                        nome = result.preso.nome;
+                    }
+
+                    matricula = matricula ? funcoesPresos.retornaMatriculaFormatada(matricula) : 'N/C'
 
                     strHTML += `<tr>`;
-                    strHTML += `<td><b><span>${result.id}</span></b></td>`;
-                    strHTML += `<td><span>${result.client.name}</span></td>`;
-                    strHTML += `<td class="text-center"><span>${tel}</span></td>`;
-                    strHTML += `<td class="text-center"><span>${price}</span></td>`;
-                    strHTML += `<td class="text-center"><span>${_at}</span></td>`;
+                    strHTML += `<td class="text-center"><b><span>${result.id}</span></b></td>`;
                     strHTML += `<td class="text-center"><div class="col-12 d-flex justify-content-center">
-                        <form action="/entradaspresos/${result.id}" method="get"><button class="btn btn-primary btn-sm edit me-2" type="submit" title="Editar este orçamento"><i class="bi bi-pencil"></i></button></form>`;
-                    strHTML += `<button class="btn btn-danger btn-sm delete" data-id="${result.id}" title="Deletar este orçamento"><i class="bi bi-trash"></i></button>
-                    </div></td>`;
+                        <a href="entradas/${result.entrada_id}" class="btn btn-primary btn-mini me-2" title="Editar Entrada de Preso ${result.entrada_id}"><i class="bi bi-pencil"></i></a></td>`;
+                    strHTML += `<td class="text-center text-nowrap"><span>${matricula}</span></td>`;
+                    strHTML += `<td><span>${nome}</span></td>`;
+                    strHTML += `<td class="text-center text-nowrap"><span>${result.rg ? result.rg : 'N/C'}</span></td>`;
+                    strHTML += `<td class="text-center"><span>${data_entrada}</span></td>`;
+                    strHTML += `<td><span>${result.entrada.origem.nome}</span></td>`;
+                    strHTML += `<td><span>${result.status.nome.nome}</span></td>`;
+                    // strHTML += `<td class="text-center"><div class="col-12 d-flex justify-content-center">
+                    //     <form action="/entradaspresos/${result.id}" method="get"><button class="btn btn-primary btn-sm edit me-2" type="submit" title="Editar este orçamento"><i class="bi bi-pencil"></i></button></form>`;
+                    // strHTML += `<button class="btn btn-danger btn-sm delete" data-id="${result.id}" title="Deletar este orçamento"><i class="bi bi-trash"></i></button>
+                    // </div></td>`;
                     strHTML += `</tr>`;
+
+                    tableEntradasPresos.append(strHTML);
 
                 });
 
-                tableEntradasPresos.html(strHTML);
 
             })
             .catch(function (error) {
 
                 console.error(error);
-                const description = commonFunctions.firstUppercaseLetter(error.description);
-                tableEntradasPresos.html(`<td colspan=5>${description}</td>`);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${description}`, 'error');
+                const message = funcoesComuns.firstUppercaseLetter(error.message);
+                tableEntradasPresos.html(`<td colspan=8>${message}</td>`);
+                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${message}`, 'error');
 
             });
 
@@ -160,7 +177,7 @@ $(document).ready(function () {
             },
         }
 
-            commonFunctions.preencherSelect($('#statusEntradasPresos'), `${urlRefStatus}/busca/select`, opcoes)
+        funcoesComuns.preencherSelect($('#statusEntradasPresos'), `${urlRefStatus}/busca/select`, opcoes)
 
 
     }
@@ -192,7 +209,7 @@ $(document).ready(function () {
     //         .catch(function (error) {
 
     //             console.error(error);
-    //             $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
+    //             $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${funcoesComuns.firstUppercaseLetter(error.description)}`, 'error');
 
     //         });
 
@@ -264,7 +281,7 @@ $(document).ready(function () {
     //             .catch(function (error) {
 
     //                 console.log(error);
-    //                 $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
+    //                 $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${funcoesComuns.firstUppercaseLetter(error.description)}`, 'error');
 
     //             });
     //     }

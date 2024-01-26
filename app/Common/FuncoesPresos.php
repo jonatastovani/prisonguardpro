@@ -2,6 +2,8 @@
 
 namespace App\Common;
 
+use InvalidArgumentException;
+
 class FuncoesPresos
 {
     public static function retornaDigitoMatricula($matricula): int
@@ -32,18 +34,47 @@ class FuncoesPresos
         return intval($soma);
     }
 
-    public static function retornaMatriculaFormatada($matricula, $tipo = 1)
+    public static function retornaMatriculaFormatada($matricula, $tipo = 1, $inserirPontuacao = true)
     {
+        // Verifica se o tipo é válido (1, 2 ou 3)
+        if ($tipo < 1 || $tipo > 3) {
+            throw new InvalidArgumentException('O tipo deve ser 1, 2 ou 3.');
+        }
+    
+        // Remove qualquer pontuação existente na matrícula
+        $matricula = preg_replace('/[^\d]/', '', $matricula);
+    
+        // Verifica se a matrícula tem pelo menos um número
+        if (empty($matricula)) {
+            throw new InvalidArgumentException('A matrícula deve conter pelo menos um número.');
+        }
+    
         $matricula = strval($matricula);
         $digito = substr($matricula, -1);
         $matricula = substr($matricula, 0, -1);
 
-        if ($tipo == 1) {
-            return $matricula . '-' . $digito;
-        } else if ($tipo == 2) {
-            return $matricula;
-        } else if ($tipo == 3) {
-            return $digito;
+        if ($inserirPontuacao) {
+            $matricula = number_format($matricula, 0, '', '.');
         }
+
+        // Formata a matrícula conforme o tipo
+        switch ($tipo) {
+            case 1:
+                $matriculaFormatada = $matricula . '-' . $digito;
+                break;
+    
+            case 2:
+                $matriculaFormatada = $matricula;
+                break;
+    
+            case 3:
+                $matriculaFormatada = $digito;
+                break;
+    
+            default:
+                throw new InvalidArgumentException('Tipo de formato inválido.');
+        }
+        
+        return $matriculaFormatada;
     }
 }

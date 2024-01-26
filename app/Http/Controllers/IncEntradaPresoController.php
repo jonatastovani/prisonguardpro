@@ -50,7 +50,7 @@ class IncEntradaPresoController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         $arrFiltosTexto = [];
-        if ($request->filtros['texto']) {
+        if (isset($request->filtros['texto'])) {
             if ($request->filtros['texto']['tratamento'] == 1) {
                 $arrFiltosTexto['palavras'] = explode(' ', $request->filtros['texto']['valor']);
             } else {
@@ -161,7 +161,7 @@ class IncEntradaPresoController extends Controller
                     $query->orderBy($campo);
                 }
             })
-            ->with(['entrada', 'preso.pessoa'])
+            ->with(['entrada.origem', 'preso.pessoa', 'status.nome'])
             ->get();
 
         $response = RestResponse::createSuccessResponse($resource, 200);

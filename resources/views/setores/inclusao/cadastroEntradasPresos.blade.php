@@ -12,17 +12,24 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 col-sm-8 mt-2" title="Selecione a Origem da Entrada">
-            <label class="form-label" for="origem_idEntradasPresos">Origem</label>
-            <select name="origem_id" id="origem_idEntradasPresos" class="form-select"></select>
-        </div>
-        <div class="col-md-3 col-sm-4 mt-2">
-            <label class="form-label" for="data_entradaEntradasPresos">Data Entrada</label>
-            <input type="date" name="data_entrada" id="data_entradaEntradasPresos" class="form-control"
-                value="{{ now()->format('Y-m-d') }}">
-        </div>
-    </div>
+    <div id="dadosEntradaEntradasPresos">
+		<div class="row">
+			<div class="col-md-7 mt-2" title="Selecione a Origem da Entrada">
+				<label class="form-label" for="origem_idEntradasPresos">Origem</label>
+				<select name="origem_id" id="origem_idEntradasPresos" class="form-select"></select>
+			</div>
+			<div class="col-md-3 col-sm-4 mt-2">
+				<label class="form-label" for="data_entradaEntradasPresos">Data Entrada</label>
+				<input type="date" name="data_entrada" id="data_entradaEntradasPresos" class="form-control"
+					value="{{ now()->format('Y-m-d') }}">
+			</div>
+			<div class="col-md-2 col-sm-3 mt-2">
+				<label class="form-label" for="hora_entradaEntradasPresos">Hora Entrada</label>
+				<input type="time" name="hora_entrada" id="hora_entradaEntradasPresos" class="form-control"
+					value="{{ now()->format('H:i') }}">
+			</div>
+		</div>
+	</div>
 
     <div class="row">
         <div class="col-12">
@@ -37,16 +44,28 @@
     </div>
 
     <div class="row mb-2">
-        <div class="col-sm-3 mt-2">
-            <button type="button" id="btnInserirPreso" class="btn btn-primary me-2 w-sm" title="Inserir um preso">
-                Inserir Preso
-            </button>
-            <a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
-                class="btn btn-danger w-sm" title="Sair do orçamento" style="width: 100px;">
-                Sair
-            </a>
-
-        </div>
+        <div class="col-sm-6">
+			<div class="row">
+				<div class="col-12 mt-2">
+					<button type="button" id="btnInserirPreso" class="btn btn-primary w-25" title="Inserir um preso">
+						Inserir Preso
+					</button>
+				</div>
+			</div>
+		</div>
+        <div class="col-sm-6">
+			<div class="row text-end">
+				<div class="col-12 mt-2">
+					<button type="submit" id="btnSalvar" class="btn btn-success me-2 w-25" title="Salvar alterações">
+						Salvar
+					</button>
+					<a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
+						class="btn btn-danger w-25 redirecionamentoAnterior" title="Sair da edição da Entrada de Presos" style="width: 100px;">
+						Sair
+					</a>
+				</div>
+			</div>
+		</div>
     </div>
 
     <input type="hidden" id="id" value="{{ isset($id) ? $id : '' }}">

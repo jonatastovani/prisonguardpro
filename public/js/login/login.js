@@ -1,6 +1,6 @@
 import { conectAjax } from "../ajax/conectAjax.js";
-import { commonFunctions } from "../common/commonFunctions.js";
-import { enumAction } from "../common/enumAction.js";
+import { enumAction } from "../comuns/enumAction.js";
+import { funcoesComuns } from "../comuns/funcoesComuns.js";
 
 $(document).ready(function() {
 
@@ -24,7 +24,7 @@ $(document).ready(function() {
     $('#send').click(function (e) {
         e.preventDefault();
         
-        const dataToSend = commonFunctions.getInputsValues($('#form1')[0], 1);
+        const dataToSend = funcoesComuns.obterValoresDosInputs($('#form1')[0], 1);
   
         const obj = new conectAjax(urlLogin);
 
@@ -36,7 +36,7 @@ $(document).ready(function() {
                     console.log(response);
 
                     if (response.status === 200) {
-                        $.notify(response.message,'success');
+                        $.notify('Acesso autorizado!','success');
                         window.location.href = response.data.redirect;
                     } else {
                         $.notify(response.message,'error');
@@ -45,8 +45,8 @@ $(document).ready(function() {
                 })
                 .catch(function (error) {
 
-                    console.err(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`,'error');
+                    console.error(error);
+                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`,'error');
 
                 });
         }

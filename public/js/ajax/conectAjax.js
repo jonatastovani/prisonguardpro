@@ -214,14 +214,18 @@ export class conectAjax {
             console.error('Erro HTTP:', xhr.status);
             console.error(`Código de erro: ${responseText.trace_id}`);
 
-            console.log(responseText)
+            // console.log(responseText)
             if (responseText.data && responseText.data.errors) {
                 // Verifica se 'errors' é um array ou um objeto
                 if (Array.isArray(responseText.data.errors)) {
                     mensagens = responseText.data.errors.map(error => error);
                 } else {
                     Object.keys(responseText.data.errors).forEach(key => {
-                        mensagens.push(responseText.data.errors[key]);
+                        if (responseText.data.errors[key].error) {
+                            mensagens.push(responseText.data.errors[key].error);
+                        } else {
+                            mensagens.push(responseText.data.errors[key]);
+                        }
                     });
                 }
             }

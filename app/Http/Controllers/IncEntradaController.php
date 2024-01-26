@@ -289,7 +289,7 @@ class IncEntradaController extends Controller
 
             DB::commit();
 
-            $response = RestResponse::createSuccessResponse($resource, 200);
+            $response = RestResponse::createSuccessResponse($resource, 200,['token'=>true]);
             return response()->json($response->toArray(), $response->getStatusCode());
         } catch (\Exception $e) {
             // Se ocorrer algum erro, fazer o rollback da transação
@@ -391,7 +391,7 @@ class IncEntradaController extends Controller
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O ID inclusão $id não existe ou foi excluído.";
+            $mensagem = "O ID Passagem $id não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             return ["preso.$id" => [
@@ -403,7 +403,7 @@ class IncEntradaController extends Controller
             if ($resource->entrada_id != $entradaId) {
                 // Gerar um log
                 $codigo = 422;
-                $mensagem = "O ID Inclusão $id não pertence a Entrada de Presos $entradaId.";
+                $mensagem = "O ID Passagem $id não pertence a Entrada de Presos $entradaId.";
                 $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
                 return ["preso.$id" => [
