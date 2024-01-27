@@ -39,7 +39,7 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 // 'host' => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'mt1').'.pusher.com',
                 // 'host' => 'http://172.14.239.101',
-                'host' => 'http://127.0.0.1',
+                'host' => 'http://192.168.15.14',
                 'port' => 6001,
                 'scheme' => 'http',
                 'encrypted' => true,
