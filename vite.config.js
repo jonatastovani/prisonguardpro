@@ -8,9 +8,9 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    server: {
-        proxy: {
-          '/api': 'http://172.14.239.101', // Substitua isso pela URL do seu servidor Laravel
-        },
-      },
+    // server: {
+    //     proxy: {
+    //       '/api': 'http://172.14.239.101', // Substitua isso pela URL do seu servidor Laravel
+    //     },
+    //   },
 });

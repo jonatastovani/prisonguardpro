@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('css/modal.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-e3b0c442.css')}}"> --}}
 
     <script src="{{ asset('js/jquery/jquery-3.7.0.min.js') }}"></script>
     <script src="{{ asset('js/jquery/jquery.mask-1.14.16.min.js') }}"></script>
@@ -29,11 +30,13 @@
     <script src="{{ asset('bootstrap-5.3.2-dist/js/bootstrap.min.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>        
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    {{-- <script src="{{asset('build/assets/app-08eb809b.js')}}"></script> --}}
 
 </head>
 
 <body>
-    @vite('resources/js/app.js');
+    @vite('resources/js/app.js')
     
     <div class="container-fluid">
         <div class="row vh-100">

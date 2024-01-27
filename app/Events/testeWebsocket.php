@@ -14,12 +14,13 @@ class testeWebsocket implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $data;
     /**
      * Create a new event instance.
      */
     public function __construct()
     {
-        //
+        $this->data = 'Este é um teste de websocket';
     }
 
     /**

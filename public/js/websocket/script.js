@@ -1,8 +1,6 @@
-// import '../../../resources/js/app.js';
-
 setTimeout(() => {
-    window.SpeechRecognitionAlternative.channel('testing')
-    .listen('.App\\Events\\testWebsocket',(e)=>{
+    window.Echo.channel('testing')
+    .listen('.App\\Events\\testeWebsocket',(e)=>{
         console.log(e);
     })
-}, 200);
+}, 1000);
