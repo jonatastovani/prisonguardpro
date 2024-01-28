@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
+use App\Events\testeWebsocket;
 use App\Models\IncEntrada;
 use App\Models\IncEntradaPreso;
 use App\Models\RefIncOrigem;
@@ -154,6 +155,8 @@ class IncEntradaController extends Controller
         // Inicia a transação
         DB::beginTransaction();
 
+        $this->executarEventoWebsocket();
+
         try {
 
             CommonsFunctions::inserirInfoCreated($novo);
@@ -200,7 +203,7 @@ class IncEntradaController extends Controller
         $resource = $this->buscarRecurso($id);
 
         // Carrega os presos relacionados
-        $resource->load(['presos.preso.pessoa','origem']);
+        $resource->load(['presos.preso.pessoa', 'origem']);
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -256,6 +259,8 @@ class IncEntradaController extends Controller
         // Inicia a transação
         DB::beginTransaction();
 
+        $this->executarEventoWebsocket();
+ 
         try {
 
             CommonsFunctions::inserirInfoUpdated($resource);
@@ -289,7 +294,7 @@ class IncEntradaController extends Controller
 
             DB::commit();
 
-            $response = RestResponse::createSuccessResponse($resource, 200,['token'=>true]);
+            $response = RestResponse::createSuccessResponse($resource, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
         } catch (\Exception $e) {
             // Se ocorrer algum erro, fazer o rollback da transação
@@ -318,6 +323,8 @@ class IncEntradaController extends Controller
         // Execute o soft delete
         CommonsFunctions::inserirInfoDeleted($resource);
         $resource->save();
+
+        $this->executarEventoWebsocket();
 
         // Retorne uma resposta de sucesso (status 204 - No Content)
         $response = RestResponse::createSuccessResponse([], 204, 'Entrada de presos excluída com sucesso.');
@@ -414,5 +421,10 @@ class IncEntradaController extends Controller
         }
 
         return $resource;
+    }
+
+    private function executarEventoWebsocket()
+    {
+        event(new testeWebsocket);
     }
 }

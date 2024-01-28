@@ -15,6 +15,7 @@ class testeWebsocket implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
+    
     /**
      * Create a new event instance.
      */

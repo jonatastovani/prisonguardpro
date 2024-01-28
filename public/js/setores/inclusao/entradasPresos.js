@@ -182,111 +182,13 @@ $(document).ready(function () {
 
     }
 
-    // function fillSearchEntradasPresos() {
-
-    //     const self = this;
-
-    //     const obj = new conectAjax(urlApiEntradasPresos);
-    //     const elem = $('#listEntradasPresos');
-
-    //     obj.getData()
-    //         .then(function (response) {
-
-    //             let strOptions = '';
-
-    //             response.data.forEach(result => {
-
-    //                 const client = result.client.name;
-    //                 const id = result.id;
-    //                 const display = `${moment(result._at).format('DD/MM/YYYY HH:mm')} | ${client} `;
-    //                 strOptions += `\n<option value="${id}">${display}</option>`;
-
-    //             });
-
-    //             elem.html(strOptions);
-
-    //         })
-    //         .catch(function (error) {
-
-    //             console.error(error);
-    //             $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${funcoesComuns.firstUppercaseLetter(error.description)}`, 'error');
-
-    //         });
-
-    // }
-
-    // const btnNewBudget = $('#btnNewBudget')
-    // btnNewBudget.on("click", (event) => {
-
-    //     event.preventDefault();
-
-    //     let obj = instanceManager.setInstance('popNewEntradasPresos', new popNewEntradasPresos(urlApiEntradasPresos, urlApiClients));
-    //     obj.setElemFocusClose(btnNewBudget);
-    //     obj.openPop();
-
-    // });
-
-    // const btnSearchClientesEntradasPresos = $("#btnSearchClientesEntradasPresos");
-    // btnSearchClientesEntradasPresos.on("click", (event) => {
-    //     event.preventDefault();
-
-    //     const obj = instanceManager.setInstance('popSearchClients', new popSearchClients(urlApiClients));
-    //     obj.setElemFocusClose(btnSearchClientesEntradasPresos);
-
-    //     obj.openPop().then(function (result) {
-
-    //         if (result) {
-    //             $('#statusEntradasPresos').val(result).trigger('input');
-    //         }
-
-    //     });
-
-    // });
-
-    // $(document).on('click', '.delete', function (event) {
-    //     event.preventDefault();
-
-    //     var id = $(this).data('id');
-
-    //     const obj = instanceManager.setInstance('modalMessage', new modalMessage());
-    //     obj.setMessage(`Confirma a exclusão deste orçamento?`);
-    //     obj.setTitle('Confirmação de exclusão de Orçamento');
-    //     obj.setElemFocusClose(this);
-
-    //     obj.openModal().then(function (result) {
-
-    //         if (result) {
-    //             delBudget(id);
-    //         }
-
-    //     });
-
-    // });
-
-    // function delBudget(idClient) {
-
-    //     const obj = new conectAjax(urlApiEntradasPresos);
-
-    //     if (obj.setAction(enumAction.DELETE)) {
-
-    //         obj.setParam(idClient);
-
-    //         obj.deleteData()
-    //             .then(function (result) {
-
-    //                 $.notify(`Orçamento deletado com sucesso!`, 'success');
-    //                 generateFilters();
-
-    //             })
-    //             .catch(function (error) {
-
-    //                 console.log(error);
-    //                 $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${funcoesComuns.firstUppercaseLetter(error.description)}`, 'error');
-
-    //             });
-    //     }
-
-    // }
+    setTimeout(() => {
+        window.Echo.channel('testing')
+        .listen('.App\\Events\\testeWebsocket',(e)=>{
+            tableEntradasPresos.html('');
+            gerarFiltros();
+        })
+    }, 1000);
 
     init();
 

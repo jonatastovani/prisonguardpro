@@ -7,6 +7,6 @@ return [
     'urlApi' => 'http://prisonguardpro.test/api',
     'versionApi' => '/v1',
     'ipHost' => '172.14.239.101',
-    'globalDebug' => false,
+    'globalDebug' => true,
     'globalDebugStack' => false,
 ];

@@ -47,7 +47,7 @@
         <div class="col-sm-6">
 			<div class="row">
 				<div class="col-12 mt-2">
-					<button type="button" id="btnInserirPreso" class="btn btn-primary w-25" title="Inserir um preso">
+					<button type="button" id="btnInserirPreso" class="btn btn-primary w-md-25" title="Inserir um preso">
 						Inserir Preso
 					</button>
 				</div>
