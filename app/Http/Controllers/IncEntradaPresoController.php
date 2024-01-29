@@ -81,19 +81,15 @@ class IncEntradaPresoController extends Controller
             }
         }
 
-        $resource = IncEntradaPreso::whereHas('entrada', function ($query) use ($request) {
-            $query->where('data_entrada', '>=', $request->filtros['data_entrada']['inicio'] . " 00:00:00")
-                ->when($request, function ($query, $request) {
-                    if (isset($request->filtros['data_entrada']['fim'])) {
-                        $query->where('data_entrada', '<=', $request->filtros['data_entrada']['fim']);
-                    }
-                })
-                ->when($request->filtros['ordenacao'], function ($query, $campo) {
-                    if (in_array($campo, ['data_entrada'])) {
-                        $query->orderBy($campo);
-                    }
-                });
-        })
+        // RestResponse::createTesteResponse($$request->all(), 200);
+
+        $resource = IncEntradaPreso::join('inc_entradas', 'inc_entradas.id', '=', 'inc_entrada_presos.entrada_id')
+            ->when($request, function ($query, $request) {
+                $query->where('inc_entradas.data_entrada', '>=', $request->filtros['data_entrada']['inicio'] . " 00:00:00")
+                    ->when(isset($request->filtros['data_entrada']['fim']), function ($query) use ($request) {
+                        $query->where('inc_entradas.data_entrada', '<=', $request->filtros['data_entrada']['fim']);
+                    });
+            })
             ->when($request, function ($query, $request) {
                 if (isset($request->filtros['status'])) {
                     $query->where('status_id', $request->filtros['status']);
@@ -108,47 +104,55 @@ class IncEntradaPresoController extends Controller
                         $query->where(function ($query) use ($palavra, $likeInicio, $likeFim) {
                             $arrCampos = ['nome', 'nome_social', 'matricula', 'mae', 'pai', 'rg', 'cpf', 'data_prisao', 'informacoes', 'observacoes'];
                             foreach ($arrCampos as $campo) {
-                                $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                 $query->orWhereHas('preso', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['matricula', 'sinais'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        if (in_array($campo, ['matricula'])) {
+                                            $query->orWhere($campo, 'LIKE', $likeInicio . CommonsFunctions::removePontuacaoDeTexto($palavra) . $likeFim);
+                                        } else {
+                                            $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
+                                        }
                                     }
                                 });
                                 $query->orWhereHas('preso', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['matricula'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        if (in_array($campo, ['matricula'])) {
+                                            $query->orWhere($campo, 'LIKE', $likeInicio . CommonsFunctions::removePontuacaoDeTexto($palavra) . $likeFim);
+                                        } else {
+                                            $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
+                                        }
                                     }
                                 });
                                 $query->orWhereHas('preso.pessoa', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['nome', 'nome_social', 'mae', 'pai', 'data_nasc'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                     }
                                 });
                                 $query->orWhereHas('preso.pessoa.documentos', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['numero'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                     }
                                 });
                                 $query->orWhereHas('preso.pessoa.escolaridade', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['nome'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                     }
                                 });
                                 $query->orWhereHas('preso.pessoa.genero', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['nome'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                     }
                                 });
                                 $query->orWhereHas('preso.pessoa.cidade_nasc', function ($query) use ($palavra, $likeInicio, $likeFim) {
                                     $arrCampos = ['nome'];
                                     foreach ($arrCampos as $campo) {
-                                        $query->orWhere($campo, 'LIKE', "$likeInicio" . "$palavra" . "$likeFim");
+                                        $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                     }
                                 });
                             }
@@ -157,8 +161,12 @@ class IncEntradaPresoController extends Controller
                 }
             })
             ->when($request->filtros['ordenacao'], function ($query, $campo) {
-                if (in_array($campo, ['nome', 'matricula'])) {
-                    $query->orderBy($campo);
+                if ($campo === 'matricula') {
+                    $query->orderByRaw("CAST(inc_entrada_presos.matricula AS SIGNED)");
+                } else if ($campo === 'nome') {
+                    $query->orderBy("inc_entrada_presos.nome");
+                } else if ($campo === 'data_entrada') {
+                    $query->orderByRaw("DATE_FORMAT(inc_entradas.data_entrada, '%Y-%m-%d')");
                 }
             })
             ->with(['entrada.origem', 'preso.pessoa', 'status.nome'])

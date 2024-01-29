@@ -65,7 +65,7 @@ class CommonsFunctions
             'required_with' => 'O campo :attribute deve ser informado.',
             'between' => 'O campo :attribute deve estar entre :min e :max.',
             'in' => 'O campo :attribute deve ser um dos seguintes valores: :values.',
-        
+
             'presos.*.nome.regex' => 'O campo :attribute não deve conter números.',
             'presos.*.mae.regex' => 'O campo :attribute não deve conter números.',
             'presos.*.pai.regex' => 'O campo :attribute não deve conter números.',
@@ -161,6 +161,18 @@ class CommonsFunctions
         $resource->deleted_ip = UserInfo::get_ip();
         $resource->deleted_at = self::formatarDataTimeZonaAmericaSaoPaulo(now());
     }
+
+    public static function removePontuacaoDeTexto($string)
+    {
+        // Define os caracteres de pontuação a serem removidos
+        $caracteresPontuacao = ['.', ',', '-', '/'];
+
+        // Remove os caracteres de pontuação da string
+        $stringSemPontuacao = str_replace($caracteresPontuacao, '', $string);
+
+        return $stringSemPontuacao;
+    }
+
 
     // /**
     //  * Retorna uma resposta JSON padronizada para solicitações da API.

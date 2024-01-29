@@ -178,7 +178,7 @@ class IncEntradaController extends Controller
 
             DB::commit();
 
-            $response = RestResponse::createSuccessResponse($novo, 200);
+            $response = RestResponse::createSuccessResponse($novo, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
         } catch (\Exception $e) {
             // Se ocorrer algum erro, fazer o rollback da transação
@@ -327,7 +327,7 @@ class IncEntradaController extends Controller
         $this->executarEventoWebsocket();
 
         // Retorne uma resposta de sucesso (status 204 - No Content)
-        $response = RestResponse::createSuccessResponse([], 204, 'Entrada de presos excluída com sucesso.');
+        $response = RestResponse::createSuccessResponse([], 204, ['message' => 'Entrada de presos excluída com sucesso.', 'token' => true]);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
