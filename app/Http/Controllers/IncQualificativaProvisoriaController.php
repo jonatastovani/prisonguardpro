@@ -6,6 +6,7 @@ use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
 use App\Common\ValidacoesReferenciasId;
 use App\Models\IncQualificativaProvisoria;
+use App\Models\PresoPassagemArtigo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,6 +45,9 @@ class IncQualificativaProvisoriaController extends Controller
             'olho_cor_id' => 'nullable|integer',
             'olho_cor_id' => 'nullable|integer',
             'sinais' => 'nullable|string',
+            'artigos' => 'nullable|array',
+            'artigos.*.artigo_id' => 'integer',
+            'artigos.*.observacoes' => 'nullable|string',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -87,6 +91,17 @@ class IncQualificativaProvisoriaController extends Controller
             ValidacoesReferenciasId::crenca($novo, $request, $arrErrors);
         }
 
+        $arrArtigos = [];
+        foreach ($request->input('artigos') as $preso) {
+            $retorno = $this->preencherAtigos($preso);
+
+            if ($retorno instanceof IncEntradaPreso) {
+                $arrArtigos[] = $retorno;
+            } else {
+                $arrErrors = array_merge($arrErrors, $retorno);
+            }
+        }
+
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
@@ -99,7 +114,7 @@ class IncQualificativaProvisoriaController extends Controller
             $novo->save();
 
             $presos = [];
-            foreach ($arrIncPreso as $preso) {
+            foreach ($arrArtigos as $preso) {
                 if ($preso instanceof IncQualificativaProvisoriaPreso) {
 
                     $preso['entrada_id'] = $novo->id;
@@ -147,19 +162,76 @@ class IncQualificativaProvisoriaController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, IncQualificativaProvisoria $incQualificativaProvisoria)
+    // private function buscarRecurso($id)
+    // {
+    //     $resource = IncEntrada::find($id);
+
+    //     // Verifique se o modelo foi encontrado e não foi excluído
+    //     if (!$resource || $resource->trashed()) {
+    //         // Gerar um log
+    //         $codigo = 404;
+    //         $mensagem = "O ID da entrada de presos informada não existe ou foi excluída.";
+    //         $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+    //         $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+    //         return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+    //     }
+    //     return $resource;
+    // }
+
+    private function preencherArtigos($artigo, $passagem_id = null)
     {
-        //
+        $retorno = new PresoPassagemArtigo();
+        $camposValidos = ['passagem_id', 'artigo_id', 'observacoes'];
+
+        if (isset($artigo['id'])) {
+            $retorno = $this->buscarRecursoArtigo($artigo['id'], $passagem_id);
+        }
+
+        if ($retorno instanceof IncEntradaPreso) {
+            foreach ($camposValidos as $campo) {
+                if (isset($artigo[$campo]) && !empty($artigo[$campo])) {
+                    $retorno->$campo = $artigo[$campo];
+                } else {
+                    if ($passagem_id && !in_array($campo, ['entrada_id'])) {
+                        $retorno->$campo = null;
+                    }
+                }
+            }
+        }
+        return $retorno;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(IncQualificativaProvisoria $incQualificativaProvisoria)
+    private function buscarRecursoArtigo($id, $passagem_id)
     {
-        //
+        $resource = PresoPassagemArtigo::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O artigo ID $id não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            return ["preso.$id" => [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ]];
+        } else {
+
+            if ($resource->entrada_id != $passagem_id) {
+                // Gerar um log
+                $codigo = 422;
+                $mensagem = "O artigo ID $id não pertence a passagem de preso $passagem_id.";
+                $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+                return ["preso.$id" => [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ]];
+            }
+        }
+
+        return $resource;
     }
 }
