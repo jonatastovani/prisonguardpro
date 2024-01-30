@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class testeWebsocket implements ShouldBroadcast
+class EntradasPresos implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,7 +21,7 @@ class testeWebsocket implements ShouldBroadcast
      */
     public function __construct()
     {
-        $this->data = 'Este é um teste de websocket';
+        $this->data = 'Listagem da Entrada de Presos alterada.';
     }
 
     /**
@@ -32,7 +32,12 @@ class testeWebsocket implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('testing'),
+            new Channel('EntradasPresos'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'EntradasPresos';
     }
 }

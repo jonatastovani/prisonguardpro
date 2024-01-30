@@ -37,8 +37,8 @@ table .fade-out {
 .operators-regex { color: deeppink; font-weight: bold; }
 
 .btn-mini {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.6rem !important;
 }
 
 .form-label {

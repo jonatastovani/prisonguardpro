@@ -17,9 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('passagem_id');
             $table->foreign('passagem_id')->references('id')->on('inc_entrada_presos');
 
-            $table->string('matricula')->nullable();
-            $table->string('nome');
-            $table->string('nome_social')->nullable();
             $table->string('mae')->nullable();
             $table->string('pai')->nullable();
             $table->date('data_nasc')->nullable();

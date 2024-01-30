@@ -183,8 +183,8 @@ $(document).ready(function () {
     }
 
     setTimeout(() => {
-        window.Echo.channel('testing')
-        .listen('.App\\Events\\testeWebsocket',(e)=>{
+        window.Echo.channel('EntradasPresos')
+        .listen('.EntradasPresos',(e)=>{
             tableEntradasPresos.html('');
             gerarFiltros();
         })

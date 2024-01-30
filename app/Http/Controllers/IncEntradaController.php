@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
+use App\Common\FuncoesPresos;
 use App\Common\RestResponse;
 use App\Common\ValidacoesReferenciasId;
-use App\Events\testeWebsocket;
+use App\Events\EntradasPresos;
 use App\Models\IncEntrada;
 use App\Models\IncEntradaPreso;
-use App\Models\RefIncOrigem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -101,7 +101,6 @@ class IncEntradaController extends Controller
                 break;
         }
 
-
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -124,9 +123,11 @@ class IncEntradaController extends Controller
             'presos.*.nome' => 'required|regex:/^[^0-9]+$/u',
             'presos.*.nome_social' => 'nullable|regex:/^[^0-9]+$/u',
             'presos.*.matricula' => 'nullable|regex:/^[0-9]+$/',
-            'presos.*.mae' => 'nullable|regex:/^[^0-9]+$/u',
-            'presos.*.pai' => 'nullable|regex:/^[^0-9]+$/u',
+            // 'presos.*.mae' => 'nullable|regex:/^[^0-9]+$/u',
+            // 'presos.*.pai' => 'nullable|regex:/^[^0-9]+$/u',
             'presos.*.data_prisao' => 'nullable|date',
+            'presos.*.informacoes' => 'nullable|text',
+            'presos.*.observacoes' => 'nullable|text',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -352,7 +353,7 @@ class IncEntradaController extends Controller
     private function preencherPreso($preso, $entradaId = null)
     {
         $retorno = new IncEntradaPreso();
-        $camposValidos = ['entrada_id', 'nome', 'matricula', 'rg', 'cpf', 'mae', 'pai', 'data_prisao', 'informacoes', 'observacoes'];
+        $camposValidos = ['entrada_id', 'nome', 'nome_social', 'matricula', 'data_prisao', 'informacoes', 'observacoes'];
 
         if (isset($preso['id'])) {
             $retorno = $this->buscarRecursoPreso($preso['id'], $entradaId);
@@ -374,21 +375,9 @@ class IncEntradaController extends Controller
 
     private function buscarRecursoPreso($id, $entradaId)
     {
-        $resource = IncEntradaPreso::find($id);
+        $resource = FuncoesPresos::buscarRecursoPassagemPreso($id);
 
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
-            // Gerar um log
-            $codigo = 404;
-            $mensagem = "O ID Passagem $id não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
-
-            return ["preso.$id" => [
-                'error' => $mensagem,
-                'trace_id' => $traceId
-            ]];
-        } else {
-
+        if ($resource instanceof IncEntradaPreso) {
             if ($resource->entrada_id != $entradaId) {
                 // Gerar um log
                 $codigo = 422;
@@ -407,6 +396,6 @@ class IncEntradaController extends Controller
 
     private function executarEventoWebsocket()
     {
-        event(new testeWebsocket);
+        event(new EntradasPresos);
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Common;
 
+use App\Models\IncEntradaPreso;
+use App\Models\PresoPassagemArtigo;
 use InvalidArgumentException;
 
 class FuncoesPresos
 {
+
     public static function retornaDigitoMatricula($matricula): int
     {
         $matricula = strval($matricula);
@@ -77,4 +80,45 @@ class FuncoesPresos
         
         return $matriculaFormatada;
     }
+
+    public static function buscarRecursoPassagemPreso($id) : IncEntradaPreso | array
+    {
+        $resource = IncEntradaPreso::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O ID Passagem $id não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            return ["passagem.$id" => [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ]];
+        }
+
+        return $resource;
+    }
+
+    public static function buscarRecursoPresoPassagemArtigo($id) : PresoPassagemArtigo | array
+    {
+        $resource = PresoPassagemArtigo::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O artigo atribuído ao ID Passagem $id não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            return ["artigo_passagem.$id" => [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ]];
+        } 
+
+        return $resource;
+    }
+
 }

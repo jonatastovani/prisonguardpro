@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IncEntradaController;
 use App\Http\Controllers\IncEntradaPresoController;
+use App\Http\Controllers\IncQualificativaProvisoriaController;
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
@@ -25,10 +26,6 @@ use App\Http\Controllers\RefOlhoTipoController;
 use App\Http\Controllers\RefProfissaoController;
 use App\Http\Controllers\RefStatusController;
 use App\Http\Controllers\UserPermissaoController;
-use App\Models\IncEntradaPreso;
-use App\Models\Pessoa;
-use App\Models\RefCidade;
-use App\Models\RefDocumentoOrgaoEmissor;
 use Illuminate\Support\Facades\Route;
 
 // Rotas relacionadas ao LoginController
@@ -280,6 +277,23 @@ route::prefix('/v1')->group(function () {
                     });
                 });
             });
+
+            Route::prefix('/qualificativa')->group(function () {
+
+                Route::prefix('/provisoria')->group(function () {
+
+                    // Rotas relacionadas ao IncQualificativaProvisoriaController
+                    Route::controller(IncQualificativaProvisoriaController::class)->group(function () {
+                        Route::get('/{id}', 'show');
+                        Route::post('', 'store');
+                        Route::put('/{id}', 'update');
+                        Route::delete('/{id}', 'destroy');
+                    });
+
+                });
+
+            });
+
         });
 
         // Rotas relacionadas ao PessoaController

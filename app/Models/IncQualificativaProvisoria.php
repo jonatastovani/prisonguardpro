@@ -47,12 +47,22 @@ class IncQualificativaProvisoria extends Model
         static::saving(function ($model) {
             // Convertendo o valor do campo 'nome' para maiúsculas
             $model->nome = mb_strtoupper($model->nome, 'UTF-8');
-            $model->nome_social = mb_strtoupper($model->nome_social, 'UTF-8');
-            $model->mae = mb_strtoupper($model->mae, 'UTF-8');
-            $model->pai = mb_strtoupper($model->pai, 'UTF-8');
+            if ($model->nome_social) {
+                $model->nome_social = mb_strtoupper($model->nome_social, 'UTF-8');
+            }
+            if ($model->mae) {
+                $model->mae = mb_strtoupper($model->mae, 'UTF-8');
+            }
+            if ($model->pai) {
+                $model->pai = mb_strtoupper($model->pai, 'UTF-8');
+            }
         });
     }
 
+    public function passagem()
+    {
+        return $this->belongsTo(IncEntradaPreso::class);
+    }
     public function cidade_nasc()
     {
         return $this->belongsTo(RefCidade::class)->withDefault(false);

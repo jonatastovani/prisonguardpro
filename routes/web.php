@@ -8,6 +8,7 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 use Laravel\Sanctum\Http\Controllers\SanctumController;
@@ -34,5 +35,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
 
-Route::get('test', [TestController::class, 'test']);
-Route::view('bbb', 'checandoWebsocket');
+// Route::get('test', [TestController::class, 'test']);
+// Route::view('bbb', 'checandoWebsocket');

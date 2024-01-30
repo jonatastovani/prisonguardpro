@@ -51,7 +51,7 @@ class ValidacoesReferenciasId
             $mensagem = "A $nome informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors[$input] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -70,7 +70,7 @@ class ValidacoesReferenciasId
             $mensagem = "O gênero informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['genero'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -89,7 +89,7 @@ class ValidacoesReferenciasId
             $mensagem = "A escolaridade informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['escolaridade'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -108,7 +108,7 @@ class ValidacoesReferenciasId
             $mensagem = "O estado civil informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['estado_civil'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -127,7 +127,7 @@ class ValidacoesReferenciasId
             $mensagem = "A cutis informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['cutis'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -146,7 +146,7 @@ class ValidacoesReferenciasId
             $mensagem = "O tipo de cabelo informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['cabelo_tipo'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -165,7 +165,7 @@ class ValidacoesReferenciasId
             $mensagem = "A cor de cabelo informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['cabelo_cor'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -174,9 +174,9 @@ class ValidacoesReferenciasId
 
     public static function olhoTipo($resource, $request, &$arrErrors)
     {
-        $resource->olhos_tipo_id = $request->input('olhos_tipo_id');
+        $resource->olho_tipo_id = $request->input('olho_tipo_id');
 
-        $resource = RefOlhoTipo::find($resource->olhos_tipo_id);
+        $resource = RefOlhoTipo::find($resource->olho_tipo_id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
@@ -184,7 +184,7 @@ class ValidacoesReferenciasId
             $mensagem = "O tipo de olhos informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['olho_tipo'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -193,9 +193,9 @@ class ValidacoesReferenciasId
 
     public static function olhoCor($resource, $request, &$arrErrors)
     {
-        $resource->olhos_cor_id = $request->input('olhos_cor_id');
+        $resource->olho_cor_id = $request->input('olho_cor_id');
 
-        $resource = RefOlhoCor::find($resource->olhos_cor_id);
+        $resource = RefOlhoCor::find($resource->olho_cor_id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
@@ -203,7 +203,7 @@ class ValidacoesReferenciasId
             $mensagem = "A cor de olhos informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['olho_cor'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -222,7 +222,7 @@ class ValidacoesReferenciasId
             $mensagem = "A crença informada não existe ou foi excluída.";
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
-            $arrErrors['origem'] = [
+            $arrErrors['crenca'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];

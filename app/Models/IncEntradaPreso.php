@@ -37,7 +37,7 @@ class IncEntradaPreso extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    protected $fillable = ['nome','nome_social','rg'];
+    protected $fillable = ['nome', 'nome_social', 'rg'];
 
     public static function boot()
     {
@@ -47,8 +47,12 @@ class IncEntradaPreso extends Model
         static::saving(function ($model) {
             // Convertendo o valor do campo 'nome' para maiúsculas
             $model->nome = mb_strtoupper($model->nome, 'UTF-8');
-            $model->nome_social = mb_strtoupper($model->nome_social, 'UTF-8');
-            $model->rg = mb_strtoupper($model->rg, 'UTF-8');
+            if ($model->nome_social) {
+                $model->nome_social = mb_strtoupper($model->nome_social, 'UTF-8');
+            }
+            if ($model->rg) {
+                $model->rg = mb_strtoupper($model->rg, 'UTF-8');
+            }
         });
     }
 
@@ -66,4 +70,15 @@ class IncEntradaPreso extends Model
     {
         return $this->belongsTo(RefStatus::class);
     }
+
+    public function artigos_passagem()
+    {
+        return $this->hasMany(PresoPassagemArtigo::class,'passagem_id');
+    }
+
+    public function qualificativa_provisoria()
+    {
+        return $this->hasOne(IncQualificativaProvisoria::class,'passagem_id')->latest();
+    }
+
 }
