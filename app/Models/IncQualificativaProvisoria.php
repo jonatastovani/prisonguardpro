@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class IncEntradaPreso extends Model
+class IncQualificativaProvisoria extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
@@ -37,7 +37,7 @@ class IncEntradaPreso extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    protected $fillable = ['nome','nome_social','rg'];
+    protected $fillable = ['nome', 'nome_social', 'mae', 'pai'];
 
     public static function boot()
     {
@@ -48,22 +48,49 @@ class IncEntradaPreso extends Model
             // Convertendo o valor do campo 'nome' para maiúsculas
             $model->nome = mb_strtoupper($model->nome, 'UTF-8');
             $model->nome_social = mb_strtoupper($model->nome_social, 'UTF-8');
-            $model->rg = mb_strtoupper($model->rg, 'UTF-8');
+            $model->mae = mb_strtoupper($model->mae, 'UTF-8');
+            $model->pai = mb_strtoupper($model->pai, 'UTF-8');
         });
     }
 
-    public function preso()
+    public function cidade_nasc()
     {
-        return $this->belongsTo(Preso::class)->withDefault(false);
+        return $this->belongsTo(RefCidade::class)->withDefault(false);
     }
-
-    public function entrada()
+    public function genero()
     {
-        return $this->belongsTo(IncEntrada::class);
+        return $this->belongsTo(RefGenero::class)->withDefault(false);
     }
-
-    public function status()
+    public function escolaridade()
     {
-        return $this->belongsTo(RefStatus::class);
+        return $this->belongsTo(RefEscolaridade::class)->withDefault(false);
+    }
+    public function estado_civil()
+    {
+        return $this->belongsTo(RefEstadoCivil::class)->withDefault(false);
+    }
+    public function cutis()
+    {
+        return $this->belongsTo(RefCutis::class)->withDefault(false);
+    }
+    public function cabelo_tipo()
+    {
+        return $this->belongsTo(RefCabeloTipo::class)->withDefault(false);
+    }
+    public function cabelo_cor()
+    {
+        return $this->belongsTo(RefCabeloCor::class)->withDefault(false);
+    }
+    public function olho_cor()
+    {
+        return $this->belongsTo(RefCabeloCor::class)->withDefault(false);
+    }
+    public function olho_tipo()
+    {
+        return $this->belongsTo(RefOlhoTipo::class)->withDefault(false);
+    }
+    public function crenca()
+    {
+        return $this->belongsTo(RefCrenca::class)->withDefault(false);
     }
 }

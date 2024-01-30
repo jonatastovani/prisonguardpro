@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
+use App\Common\ValidacoesReferenciasId;
 use App\Events\testeWebsocket;
 use App\Models\IncEntrada;
 use App\Models\IncEntradaPreso;
@@ -134,7 +135,7 @@ class IncEntradaController extends Controller
         $novo = new IncEntrada();
 
         // Valida se a origem existe e não está excluída
-        $this->validarOrigemExistente($novo, $request, $arrErrors);
+        ValidacoesReferenciasId::incOrigem($novo, $request, $arrErrors);
 
         $novo->data_entrada = $request->input('data_entrada');
 
@@ -154,8 +155,6 @@ class IncEntradaController extends Controller
 
         // Inicia a transação
         DB::beginTransaction();
-
-        $this->executarEventoWebsocket();
 
         try {
 
@@ -177,6 +176,8 @@ class IncEntradaController extends Controller
             $novo['presos'] = $presos;
 
             DB::commit();
+
+            $this->executarEventoWebsocket();
 
             $response = RestResponse::createSuccessResponse($novo, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
@@ -238,7 +239,7 @@ class IncEntradaController extends Controller
         $resource = $this->buscarRecurso($request->id);
 
         // Valida se a origem existe e não está excluída
-        $this->validarOrigemExistente($resource, $request, $arrErrors);
+        ValidacoesReferenciasId::incOrigem($resource, $request, $arrErrors);
 
         $resource->data_entrada = $request->input('data_entrada');
 
@@ -258,8 +259,6 @@ class IncEntradaController extends Controller
 
         // Inicia a transação
         DB::beginTransaction();
-
-        $this->executarEventoWebsocket();
  
         try {
 
@@ -293,6 +292,8 @@ class IncEntradaController extends Controller
             $resource->refresh();
 
             DB::commit();
+
+            $this->executarEventoWebsocket();
 
             $response = RestResponse::createSuccessResponse($resource, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
@@ -346,25 +347,6 @@ class IncEntradaController extends Controller
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
         return $resource;
-    }
-
-    private function validarOrigemExistente($resource, $request, &$arrErrors)
-    {
-        $resource->origem_id = $request->input('origem_id');
-
-        $resource = RefIncOrigem::find($resource->origem_id);
-
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
-            // Gerar um log
-            $mensagem = "A origem informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
-
-            $arrErrors['origem'] = [
-                'error' => $mensagem,
-                'trace_id' => $traceId
-            ];
-        }
     }
 
     private function preencherPreso($preso, $entradaId = null)
