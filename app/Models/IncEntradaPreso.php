@@ -81,4 +81,9 @@ class IncEntradaPreso extends Model
         return $this->hasOne(IncQualificativaProvisoria::class,'passagem_id')->latest();
     }
 
+    public function convivio_tipo()
+    {
+        return $this->belongsTo(RefPresoConvivioTipo::class);
+    }
+
 }

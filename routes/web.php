@@ -36,4 +36,4 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
 
 // Route::get('test', [TestController::class, 'test']);
-// Route::view('bbb', 'checandoWebsocket');
+Route::view('teste', 'teste.pagina');

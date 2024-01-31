@@ -4,6 +4,7 @@ import { enumAction } from "../../comuns/enumAction.js";
 import { funcoesComuns } from "../../comuns/funcoesComuns.js";
 import { funcoesPresos } from "../../comuns/funcoesPresos.js";
 import { modalMessage } from "../../comuns/modalMessage.js";
+import { alterarPresoConvivio } from "../../modals/inclusao/modalAlterarPresoConvivio.js";
 
 $(document).ready(function () {
 
@@ -68,10 +69,10 @@ $(document).ready(function () {
                     div.find('input[name="matricula"]').val(matricula).trigger('input');
                     div.find('input[name="nome"]').val(preso.nome);
                     div.find('input[name="nome_social"]').val(preso.nome_social);
-                    div.find('input[name="rg"]').val(preso.rg);
-                    div.find('input[name="cpf"]').val(preso.cpf);
-                    div.find('input[name="mae"]').val(preso.mae);
-                    div.find('input[name="pai"]').val(preso.pai);
+                    // div.find('input[name="rg"]').val(preso.rg);
+                    // div.find('input[name="cpf"]').val(preso.cpf);
+                    // div.find('input[name="mae"]').val(preso.mae);
+                    // div.find('input[name="pai"]').val(preso.pai);
                     div.find('input[name="data_prisao"]').val(preso.data_prisao);
                     div.find('input[name="informacoes"]').val(preso.informacoes);
                     div.find('input[name="observacoes"]').val(preso.observacoes);
@@ -89,21 +90,23 @@ $(document).ready(function () {
 
         const idDiv = `${id}${Date.now()}`;
         const strDataId = id ? `data-id="${id}"` : '';
+
         let strPreso = `
             <div id="${idDiv}" ${strDataId}
                 class="p-2 col-md-6 col-12 bg-info bg-opacity-10 border border-info rounded position-relative">
                 <button type="button" ${strDataId} class="btn-close position-absolute top-0 end-0" aria-label="Close"></button>
                 <input type="hidden" class="form-control " name="id" id="id${idDiv}">
+                <input type="hidden" class="form-control " name="convivio_tipo_id" id="tipo_preso_id${idDiv}">
 
                 <div class="row">
-                    <div class="col-5">
+                    <div class="col-6">
                         <label for="matricula${idDiv}" class="form-label">Matrícula</label>
                         <div class="input-group">
                             <input type="text" class="form-control w-75" name="matricula" id="matricula${idDiv}">
                             <input type="text" class="form-control " name="digito" id="digito${idDiv}" disabled>
                         </div>
                     </div>
-                    <div class="col-7 d-flex justify-content-end align-items-center">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
                         <span class="passagem_id mh-100"></span>
                     </div>
                 </div>
@@ -121,13 +124,12 @@ $(document).ready(function () {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
-                        <label for="rg${idDiv}" class="form-label">RG</label>
-                        <input type="text" class="form-control" name="rg" id="rg${idDiv}">
+                    <div class="col-4">
+                        <label for="data_prisao${idDiv}" class="form-label">Data prisão</label>
+                        <input type="date" class="form-control" name="data_prisao" id="data_prisao${idDiv}">
                     </div>
-                    <div class="col-6">
-                        <label for="cpf${idDiv}" class="form-label">CPF</label>
-                        <input type="text" class="form-control" name="cpf" id="cpf${idDiv}">
+                    <div class="col-8 d-flex justify-content-end align-items-center">
+                        <button type="button" id="btnAlterarPresoConvivio${idDiv}" class="btn btn-outline-warning btn-mini" title="Clique para inserir ou retirar o preso do seguro"><i class="bi bi-shield-fill-exclamation"></i></button>
                     </div>
                 </div>
                 <div class="row">
@@ -138,24 +140,6 @@ $(document).ready(function () {
                     </div>
                 </div>
                 <div id="camposAdicionais${idDiv}" style="display: none;">
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="mae${idDiv}" class="form-label">Mãe</label>
-                            <input type="text" class="form-control" name="mae" id="mae${idDiv}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="pai${idDiv}" class="form-label">Pai</label>
-                            <input type="text" class="form-control" name="pai" id="pai${idDiv}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="data_prisao${idDiv}" class="form-label">Data prisão</label>
-                            <input type="date" class="form-control" name="data_prisao" id="data_prisao${idDiv}">
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-12">
                             <label for="informacoes${idDiv}" class="form-label">Informações (Ex: link da
@@ -171,6 +155,11 @@ $(document).ready(function () {
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12"
+                        <p id="convivio_tipo_nome${idDiv}"></p>
+                    </div>
+                </div>
             </div>`;
 
         containerPresos.append(strPreso);
@@ -181,16 +170,29 @@ $(document).ready(function () {
 
     function addEventosBotoesDaConsulta(idDiv) {
 
-        const matricula = $(`#${idDiv}`).find('input[name="matricula"]');
-        const digito = $(`#${idDiv}`).find('input[name="digito"]');
+        const div = $(`#${idDiv}`);
+        const matricula = div.find('input[name="matricula"]');
+        const digito = div.find('input[name="digito"]');
         funcoesComuns.aplicarMascaraNumero(matricula, { formato: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
         funcoesComuns.eventoEsconderExibir($(`#camposAdicionais${idDiv}`), $(`#toggleCamposAdicionais${idDiv}`));
+
+        $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function(){
+            const obj = new alterarPresoConvivio();
+            obj.setElemFocoFechamento = this;
+            obj.setIdDiv = idDiv;
+            obj.modalAbrir().then(function (result) {
+                if (result) {
+                    div.find('input[name="convivio_tipo_id"]').val(result.id);
+                    div.find(`#convivio_tipo_nome${idDiv}`).html(result.nome);
+                }
+            });
+        });
 
         matricula.on('input', function () {
             digito.val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
 
-        $(`#${idDiv}`).find('.btn-close').on("click", function () {
+        div.find('.btn-close').on("click", function () {
             const idPreso = $(this).data('id');
             if (idPreso) {
                 acaoBtnDeletar(idDiv, this);

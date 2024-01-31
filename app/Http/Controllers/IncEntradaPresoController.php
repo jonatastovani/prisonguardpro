@@ -102,7 +102,7 @@ class IncEntradaPresoController extends Controller
 
                     foreach ($arrFiltosTexto['palavras'] as $palavra) {
                         $query->where(function ($query) use ($palavra, $likeInicio, $likeFim) {
-                            $arrCampos = ['nome', 'nome_social', 'matricula', 'mae', 'pai', 'rg', 'cpf', 'data_prisao', 'informacoes', 'observacoes'];
+                            $arrCampos = ['nome', 'nome_social', 'matricula', 'data_prisao', 'informacoes', 'observacoes'];
                             foreach ($arrCampos as $campo) {
                                 $query->orWhere($campo, 'LIKE', $likeInicio . $palavra . $likeFim);
                                 $query->orWhereHas('preso', function ($query) use ($palavra, $likeInicio, $likeFim) {
@@ -169,7 +169,7 @@ class IncEntradaPresoController extends Controller
                     $query->orderByRaw("DATE_FORMAT(inc_entradas.data_entrada, '%Y-%m-%d')");
                 }
             })
-            ->with(['entrada.origem', 'preso.pessoa', 'status.nome'])
+            ->with(['entrada.origem', 'preso.pessoa', 'status.nome', 'convivio_tipo'])
             ->get();
 
         $response = RestResponse::createSuccessResponse($resource, 200);

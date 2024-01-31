@@ -11,7 +11,103 @@ export class funcoesComuns {
     static retornaSomenteNumeros(num) {
         return String(num).replace(/\D/g, '');
     }
-    
+
+    /**
+     * Valida um número de CPF (Cadastro de Pessoa Física).
+     * @param {string} numCPF - O número do CPF a ser validado.
+     * @returns {boolean} - Verdadeiro se o CPF for válido, falso caso contrário.
+     */
+    static CPFValidacao(numCPF) {
+
+        var num = this.returnsOnlyNumber(numCPF);
+
+        if (num.length !== 11 || /^(\d)\1*$/.test(num)) {
+            return false;
+        }
+
+        var sum = 0;
+        for (var i = 0; i < 9; i++) {
+            sum += parseInt(num.charAt(i)) * (10 - i);
+        }
+        var rest = sum % 11;
+        var dig1 = rest < 2 ? 0 : 11 - rest;
+
+        if (parseInt(num.charAt(9)) !== dig1) {
+            return false;
+        }
+
+        sum = 0;
+        for (i = 0; i < 10; i++) {
+            sum += parseInt(num.charAt(i)) * (11 - i);
+        }
+        rest = sum % 11;
+        var dig2 = rest < 2 ? 0 : 11 - rest;
+
+        if (parseInt(num.charAt(10)) !== dig2) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+    * Adiciona um manipulador de eventos para verificar e validar um campo de entrada do CPF (Cadastro de Pessoas Físicas).
+     * @param {string} seletor - O seletor jQuery do campo de entrada onde a máscara deve ser aplicada.
+     * @param {string} evento - Evento que irá executar a validação.
+     */
+    static CPFAdicionaEventoVisual(seletor, evento) {
+
+        $(seletor).on(evento, function () {
+
+            const num = funcoesComuns.retornaSomenteNumeros(this.value);
+
+            if (num.length == 11) {
+                if (!funcoesComuns.CPFValidacao($(this).val())) {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            } else if (num.length < 11 && num.length > 0) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+
+        });
+
+    }
+
+    /**
+      * Formata o número do CPF (Cadastro de Pessoa Física) como string.
+      * @param {string} numCPF – O número do CPF a ser formatado.
+      * @returns {string} - O número do CPF formatado.
+      */
+    static CPFFormatacao(numCPF) {
+        let num = this.returnsOnlyNumber(numCPF);
+
+        if (num.length == 11) {
+            return num.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        } else if (num == '') {
+            return '';
+        } else {
+            return num;
+        }
+    }
+
+    /**
+     * Aplica uma máscara de CPF a um campo de entrada.
+     * @param {string} seletor - O seletor jQuery do campo de entrada onde a máscara deve ser aplicada.
+     */
+    static CPFMascara(seletor, options = {}) {
+        const { addEventoVisual = true, eventoValidacao = 'change' } = options;
+
+        $(seletor).mask('000.000.000-00');
+        if (addEventoVisual){
+            this.CPFAdicionaEventoVisual(seletor,eventoValidacao);
+        }
+    }
+
     /**
      * Gera um formulário e redireciona o usuário para a URL especificada.
      *
@@ -48,7 +144,7 @@ export class funcoesComuns {
             let newInput = document.createElement('input');
             newInput.type = input.type ? input.type : 'hidden';
             newInput.name = input.name;
-            if(Array.isArray(input.value)){
+            if (Array.isArray(input.value)) {
                 newInput.value = JSON.stringify(input.value);
             } else {
                 newInput.value = input.value;
@@ -233,7 +329,7 @@ export class funcoesComuns {
         }
 
     }
-    
+
     static addEventToggleDiv(dataSearchDiv, toggleButton, options = {}) {
         const { self = null, minWidht = 991 } = options;
 
@@ -373,7 +469,7 @@ export class funcoesComuns {
         });
 
     }
-    
+
     static eventoEsconderExibir(elem, botao) {
         botao.click(function () {
             elem.toggle();

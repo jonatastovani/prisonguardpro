@@ -70,14 +70,7 @@
 
     <input type="hidden" id="id" value="{{ isset($id) ? $id : '' }}">
 
-    <?php // include_once "view/popup/budgets/popupEditBudgets.php"
-    ?>
-    <?php // include_once "view/popup/orders/popupOrders.php"
-    ?>
-    <?php // include_once "view/popup/products/popupProducts.php"
-    ?>
-    <?php // include_once "view/popup/products/popupNewProduct.php"
-    ?>
+	@include('modals.inclusao.modalAlterarPresoConvivio')
 
     <script type="module" src="{{ asset('js/setores/inclusao/cadastroEntradasPresos.js') }}"></script>
 

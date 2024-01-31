@@ -9,8 +9,10 @@ use App\Common\ValidacoesReferenciasId;
 use App\Events\EntradasPresos;
 use App\Models\IncEntrada;
 use App\Models\IncEntradaPreso;
+use App\Models\RefPresoConvivioTipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use restResponse as GlobalRestResponse;
 
 class IncEntradaController extends Controller
 {
@@ -119,12 +121,10 @@ class IncEntradaController extends Controller
             'origem_id' => 'required|integer',
             'data_entrada' => 'required|date_format:Y-m-d H:i:s',
             'presos' => 'required|array',
-            // 'presos.*' => 'present',
             'presos.*.nome' => 'required|regex:/^[^0-9]+$/u',
             'presos.*.nome_social' => 'nullable|regex:/^[^0-9]+$/u',
             'presos.*.matricula' => 'nullable|regex:/^[0-9]+$/',
-            // 'presos.*.mae' => 'nullable|regex:/^[^0-9]+$/u',
-            // 'presos.*.pai' => 'nullable|regex:/^[^0-9]+$/u',
+            'presos.*.convivio_tipo_id' => 'nullable|integer',
             'presos.*.data_prisao' => 'nullable|date',
             'presos.*.informacoes' => 'nullable|text',
             'presos.*.observacoes' => 'nullable|text',
@@ -142,7 +142,7 @@ class IncEntradaController extends Controller
 
         $arrIncPreso = [];
         foreach ($request->input('presos') as $preso) {
-            $retorno = $this->preencherPreso($preso);
+            $retorno = $this->preencherPreso($preso, null, $arrErrors);
 
             if ($retorno instanceof IncEntradaPreso) {
                 $arrIncPreso[] = $retorno;
@@ -225,13 +225,13 @@ class IncEntradaController extends Controller
             'origem_id' => 'required|integer',
             'data_entrada' => 'required|date_format:Y-m-d H:i:s',
             'presos' => 'required|array',
-            // 'presos.*' => 'present',
             'presos.*.nome' => 'required|regex:/^[^0-9]+$/u',
             'presos.*.nome_social' => 'nullable|regex:/^[^0-9]+$/u',
             'presos.*.matricula' => 'nullable|regex:/^[0-9]+$/',
-            'presos.*.mae' => 'nullable|regex:/^[^0-9]+$/u',
-            'presos.*.pai' => 'nullable|regex:/^[^0-9]+$/u',
+            'presos.*.convivio_tipo_id' => 'nullable|integer',
             'presos.*.data_prisao' => 'nullable|date',
+            'presos.*.informacoes' => 'nullable|text',
+            'presos.*.observacoes' => 'nullable|text',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -246,7 +246,7 @@ class IncEntradaController extends Controller
 
         $arrIncPreso = [];
         foreach ($request->input('presos') as $preso) {
-            $retorno = $this->preencherPreso($preso, $resource->id);
+            $retorno = $this->preencherPreso($preso, $resource->id, $arrErrors);
 
             if ($retorno instanceof IncEntradaPreso) {
                 $arrIncPreso[] = $retorno;
@@ -260,7 +260,7 @@ class IncEntradaController extends Controller
 
         // Inicia a transação
         DB::beginTransaction();
- 
+
         try {
 
             CommonsFunctions::inserirInfoUpdated($resource);
@@ -350,10 +350,10 @@ class IncEntradaController extends Controller
         return $resource;
     }
 
-    private function preencherPreso($preso, $entradaId = null)
+    private function preencherPreso($preso, $entradaId = null, &$arrErrors)
     {
         $retorno = new IncEntradaPreso();
-        $camposValidos = ['entrada_id', 'nome', 'nome_social', 'matricula', 'data_prisao', 'informacoes', 'observacoes'];
+        $camposValidos = ['entrada_id', 'nome', 'nome_social', 'convivio_tipo_id', 'matricula', 'data_prisao', 'informacoes', 'observacoes'];
 
         if (isset($preso['id'])) {
             $retorno = $this->buscarRecursoPreso($preso['id'], $entradaId);
@@ -361,11 +361,15 @@ class IncEntradaController extends Controller
 
         if ($retorno instanceof IncEntradaPreso) {
             foreach ($camposValidos as $campo) {
-                if (isset($preso[$campo]) && !empty($preso[$campo])) {
-                    $retorno->$campo = $preso[$campo];
+                if ($campo === 'convivio_tipo_id') {
+                    $this->verificaConvivioTipo($retorno, $preso, $arrErrors);
                 } else {
-                    if ($entradaId && !in_array($campo, ['entrada_id'])) {
-                        $retorno->$campo = null;
+                    if (isset($preso[$campo]) && !empty($preso[$campo])) {
+                        $retorno->$campo = $preso[$campo];
+                    } else {
+                        if ($entradaId && !in_array($campo, ['entrada_id'])) {
+                            $retorno->$campo = null;
+                        }
                     }
                 }
             }
@@ -373,7 +377,7 @@ class IncEntradaController extends Controller
         return $retorno;
     }
 
-    private function buscarRecursoPreso($id, $entradaId)
+    private function buscarRecursoPreso($id, $entradaId): IncEntradaPreso | array
     {
         $resource = FuncoesPresos::buscarRecursoPassagemPreso($id);
 
@@ -397,5 +401,29 @@ class IncEntradaController extends Controller
     private function executarEventoWebsocket()
     {
         event(new EntradasPresos);
+    }
+
+    private static function verificaConvivioTipo(IncEntradaPreso $retorno, $preso, &$arrErrors)
+    {
+        if (isset($preso['convivio_tipo_id'])) {
+            $retorno->convivio_tipo_id = $preso['convivio_tipo_id'];
+
+            $resource = RefPresoConvivioTipo::find($retorno->convivio_tipo_id);
+
+            // Verifique se o modelo foi encontrado e não foi excluído
+            if (!$resource || $resource->trashed()) {
+                // Gerar um log
+                $mensagem = "O tipo de preso informado não existe ou foi excluído.";
+                $traceId = CommonsFunctions::generateLog($mensagem . "| Preso: " . json_encode($preso));
+
+                $arrErrors['preso_tipo'] = [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ];
+            }
+        } else {
+            // Valor padrão para tipo de preso da unidade
+            $retorno->convivio_tipo_id = 1;
+        }
     }
 }

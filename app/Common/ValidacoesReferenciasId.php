@@ -13,6 +13,7 @@ use App\Models\RefGenero;
 use App\Models\RefIncOrigem;
 use App\Models\RefOlhoCor;
 use App\Models\RefOlhoTipo;
+use App\Models\RefPresoConvivioTipo;
 
 class ValidacoesReferenciasId
 {
@@ -223,6 +224,25 @@ class ValidacoesReferenciasId
             $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
 
             $arrErrors['crenca'] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
+
+    public static function presoTipo($resource, $request, &$arrErrors)
+    {
+        $resource->preso_tipo_id = $request->input('preso_tipo_id');
+
+        $resource = RefPresoConvivioTipo::find($resource->preso_tipo_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $mensagem = "O tipo de preso informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+
+            $arrErrors['preso_tipo'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
