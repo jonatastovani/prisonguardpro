@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
             RefStatusTipoSeeder::class,
             RefStatusNomeSeeder::class,
             RefStatusSeeder::class,
+            RefCoresSeeder::class,
             RefPresoConvivioTipoSeeder::class,
             PessoaSeeder::class, // Faker
             PessoaDocumentoSeeder::class, // Faker

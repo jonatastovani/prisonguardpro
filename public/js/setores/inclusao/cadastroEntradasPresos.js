@@ -156,9 +156,7 @@ $(document).ready(function () {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12"
-                        <p id="convivio_tipo_nome${idDiv}"></p>
-                    </div>
+                    <div class="col-12 campoInfo"></div>
                 </div>
             </div>`;
 
@@ -178,12 +176,36 @@ $(document).ready(function () {
 
         $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function(){
             const obj = new alterarPresoConvivio();
-            obj.setElemFocoFechamento = this;
+            obj.setFocoNoElementoAoFechar = this;
             obj.setIdDiv = idDiv;
             obj.modalAbrir().then(function (result) {
+                console.log(result)
+                
                 if (result) {
+                    if (result.cor){
+                        div.removeClass('bg-info');
+                        div.css('color', result.cor.cor_texto);
+                        div.css('background-color', result.cor.cor_fundo);
+                    } else {
+                        div.addClass('bg-info');
+                        div.removeAttr('style');
+                    }
                     div.find('input[name="convivio_tipo_id"]').val(result.id);
-                    div.find(`#convivio_tipo_nome${idDiv}`).html(result.nome);
+
+                    const nomeConvivio = !result.convivio_padrao_bln ? result.nome : null;
+                    const campoInfo = div.find('.campoInfo');
+                    const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
+                    console.log('nomeConvivio', nomeConvivio)
+                    console.log('campoInfo', campoInfo)
+                    console.log('infoConvivio', infoConvivio)
+                    if(!infoConvivio.length && nomeConvivio) {
+                        campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
+                    } else if (infoConvivio.length && nomeConvivio) {
+                        infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
+                    } else if (infoConvivio.length && !nomeConvivio) {
+                        infoConvivio.remove();
+                    }
+
                 }
             });
         });

@@ -10,6 +10,7 @@ use App\Models\Preso;
 use App\Models\RefIncOrigem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use restResponse as GlobalRestResponse;
 
 class IncEntradaPresoController extends Controller
 {
@@ -83,7 +84,8 @@ class IncEntradaPresoController extends Controller
 
         // RestResponse::createTesteResponse($$request->all(), 200);
 
-        $resource = IncEntradaPreso::join('inc_entradas', 'inc_entradas.id', '=', 'inc_entrada_presos.entrada_id')
+        $resource = IncEntradaPreso::select('inc_entrada_presos.*')
+        ->join('inc_entradas', 'inc_entradas.id', '=', 'inc_entrada_presos.entrada_id')
             ->when($request, function ($query, $request) {
                 $query->where('inc_entradas.data_entrada', '>=', $request->filtros['data_entrada']['inicio'] . " 00:00:00")
                     ->when(isset($request->filtros['data_entrada']['fim']), function ($query) use ($request) {
@@ -169,8 +171,10 @@ class IncEntradaPresoController extends Controller
                     $query->orderByRaw("DATE_FORMAT(inc_entradas.data_entrada, '%Y-%m-%d')");
                 }
             })
-            ->with(['entrada.origem', 'preso.pessoa', 'status.nome', 'convivio_tipo'])
-            ->get();
+            ->with(['entrada.origem', 'preso.pessoa', 'status.nome', 'convivio_tipo.cor'])
+            ->get()
+            ;
+
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());

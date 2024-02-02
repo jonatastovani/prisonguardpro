@@ -26,11 +26,6 @@
     color: var(--cor1) !important;
 }
 
-table .fade-out {
-    opacity: 0;
-    transition: opacity 0.5s; /* Definindo uma transição de 0,5 segundo para o efeito de desaparecimento */
-}
-
 .parameters-regex { color: blue; font-weight: bold; }
 .punctuation-regex { color: blueviolet; font-weight: bold; }
 .name-parameters-regex { color: green; font-weight: bold; font-style: italic; }

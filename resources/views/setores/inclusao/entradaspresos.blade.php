@@ -102,7 +102,7 @@
 
     <div class="row flex-fill overflow-auto">
         <div class="table-responsive mt-2">
-            <table id="table-entradaspresos" class="table table-hover">
+            <table id="table-entradaspresos" class="table table-striped">
                 <thead>
                     <tr class="text-center">
                         <th>#</th>

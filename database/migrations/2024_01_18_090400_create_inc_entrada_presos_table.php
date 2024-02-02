@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('informacoes')->nullable();
             $table->text('observacoes')->nullable();
 
-            $table->unsignedBigInteger('convivio_tipo_id')->default(1);
+            $table->unsignedBigInteger('convivio_tipo_id');
             $table->foreign('convivio_tipo_id')->references('id')->on('ref_preso_convivio_tipos');
 
             $table->unsignedBigInteger('preso_id')->nullable();

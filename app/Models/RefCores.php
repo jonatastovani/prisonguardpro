@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class RefPresoConvivioTipo extends Model
+class RefCores extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
@@ -37,7 +37,4 @@ class RefPresoConvivioTipo extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    public function cor() {
-        return $this->belongsTo(RefCores::class)->withDefault(false);
-    }
 }

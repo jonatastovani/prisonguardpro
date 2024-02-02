@@ -422,8 +422,21 @@ class IncEntradaController extends Controller
                 ];
             }
         } else {
-            // Valor padrão para tipo de preso da unidade
-            $retorno->convivio_tipo_id = 1;
+            // Busca padrão para tipo de preso da unidade
+            $convivio = RefPresoConvivioTipo::where('convivio_padrao_bln', true)->first();
+            // Verifique se o modelo foi encontrado e não foi excluído
+            if (!$convivio || $convivio->trashed()) {
+                // Gerar um log
+                $mensagem = "O Tipo de Convivio padrão não foi encontrado para ser inserido.";
+                $traceId = CommonsFunctions::generateLog($mensagem . "| Preso: " . json_encode($preso));
+
+                $arrErrors['convivio_padrao'] = [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ];
+            } else {
+                $retorno->convivio_tipo_id = $convivio->id;
+            }
         }
     }
 }

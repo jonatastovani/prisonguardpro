@@ -134,17 +134,23 @@ $(document).ready(function () {
                     }
 
                     matricula = matricula ? funcoesPresos.retornaMatriculaFormatada(matricula) : 'N/C'
-
-                    strHTML += `<tr>`;
-                    strHTML += `<td class="text-center"><b><span>${result.id}</span></b></td>`;
-                    strHTML += `<td class="text-center"><div class="col-12 d-flex justify-content-center">
+                    
+                    let strTitle = ``;
+                    let strStyle = ``;
+                    if (!result.convivio_tipo.convivio_padrao_bln) {
+                        strTitle = `Convívio: ${result.convivio_tipo.nome}`;
+                        strStyle = `style="color: ${result.convivio_tipo.cor.cor_texto}; background-color: ${result.convivio_tipo.cor.cor_fundo};"`;
+                    }
+                    strHTML += `<tr title="${strTitle}">`;
+                    strHTML += `<td class="text-center" ${strStyle}><b><span>${result.id}</span></b></td>`;
+                    strHTML += `<td class="text-center" ${strStyle}><div class="col-12 d-flex justify-content-center">
                         <a href="entradas/${result.entrada_id}" class="btn btn-primary btn-mini me-2" title="Editar Entrada de Preso ${result.entrada_id}"><i class="bi bi-pencil"></i></a></td>`;
-                    strHTML += `<td class="text-center text-nowrap"><span>${matricula}</span></td>`;
-                    strHTML += `<td><span>${nome}</span></td>`;
-                    strHTML += `<td class="text-center text-nowrap"><span>${result.rg ? result.rg : 'N/C'}</span></td>`;
-                    strHTML += `<td class="text-center"><span>${data_entrada}</span></td>`;
-                    strHTML += `<td><span>${result.entrada.origem.nome}</span></td>`;
-                    strHTML += `<td><span>${result.status.nome.nome}</span></td>`;
+                    strHTML += `<td class="text-center text-nowrap" ${strStyle}><span>${matricula}</span></td>`;
+                    strHTML += `<td ${strStyle}><span>${nome}</span></td>`;
+                    strHTML += `<td class="text-center text-nowrap" ${strStyle}><span>${result.rg ? result.rg : 'N/C'}</span></td>`;
+                    strHTML += `<td class="text-center" ${strStyle}><span>${data_entrada}</span></td>`;
+                    strHTML += `<td ${strStyle}><span>${result.entrada.origem.nome}</span></td>`;
+                    strHTML += `<td ${strStyle}><span>${result.status.nome.nome}</span></td>`;
                     // strHTML += `<td class="text-center"><div class="col-12 d-flex justify-content-center">
                     //     <form action="/entradaspresos/${result.id}" method="get"><button class="btn btn-primary btn-sm edit me-2" type="submit" title="Editar este orçamento"><i class="bi bi-pencil"></i></button></form>`;
                     // strHTML += `<button class="btn btn-danger btn-sm delete" data-id="${result.id}" title="Deletar este orçamento"><i class="bi bi-trash"></i></button>
@@ -160,9 +166,8 @@ $(document).ready(function () {
             .catch(function (error) {
 
                 console.error(error);
-                const message = funcoesComuns.firstUppercaseLetter(error.message);
-                tableEntradasPresos.html(`<td colspan=8>${message}</td>`);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${message}`, 'error');
+                tableEntradasPresos.html(`<td colspan=8>${error.message}</td>`);
+                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
 
             });
 

@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ref_preso_convivio_tipos', function (Blueprint $table) {
+        Schema::create('ref_cores', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('descricao');
-            $table->boolean('convivio_padrao_bln')->default(false);
-
-            $table->unsignedBigInteger('cor_id')->nullable();
-            $table->foreign('cor_id')->references('id')->on('ref_cores');
+            $table->string('cor_fundo', 7);
+            $table->string('cor_texto', 7);
 
             $table->unsignedBigInteger('created_user_id');
             $table->foreign('created_user_id')->references('id')->on('users');
@@ -42,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ref_preso_convivio_tipos');
+        Schema::dropIfExists('ref_cores');
     }
 };

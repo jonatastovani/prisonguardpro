@@ -14,6 +14,7 @@
     const urlIncEntrada = `${urlApiVersion}/inclusao/entradas`;
     const urlIncEntradaPreso = `${urlApiVersion}/inclusao/entradas/presos`;
     const urlRefStatus = `${urlApiVersion}/ref/status`;
+    const urlPresoConvivio = `${urlApiVersion}/ref/presos/convivios`;
 
     console.log(urlLogin);
 </script>

@@ -213,6 +213,9 @@ export class conectAjax {
 
             console.error('Erro HTTP:', xhr.status);
             console.error(`Código de erro: ${responseText.trace_id}`);
+            if(xhr.status == 422) {
+                console.error(responseText.data);
+            }
 
             // console.log(responseText)
             if (responseText.data && responseText.data.errors) {

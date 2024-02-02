@@ -1,3 +1,4 @@
+import { conectAjax } from "../../ajax/conectAjax.js";
 
 export class alterarPresoConvivio {
 
@@ -17,7 +18,7 @@ export class alterarPresoConvivio {
      * Elemento de foco ao fechar o modal
      */
     #elemFocoFechamento;
-    
+
     #idDiv;
     constructor() {
         this.#idModal = "#modalAlterarPresoConvivio";
@@ -25,13 +26,14 @@ export class alterarPresoConvivio {
         this.#elemFocoFechamento = null;
         this.#finalizaTimer = false;
         this.#idDiv = undefined;
+        this.addEventsButtons();
     }
 
     /**
      * Define o elemento de foco de fechamento.
      * @param {jQuery} elem - O elemento jQuery a ser definido como foco de fechamento.
      */
-    set setElemFocoFechamento(elem) {
+    set setFocoNoElementoAoFechar(elem) {
         this.#elemFocoFechamento = elem;
     }
 
@@ -48,6 +50,7 @@ export class alterarPresoConvivio {
         const self = this;
         if (self.#idDiv) {
 
+            self.getDataAll();
             $(self.#idModal).modal('show');
 
             return new Promise(function (resolve) {
@@ -59,17 +62,16 @@ export class alterarPresoConvivio {
                         clearInterval(checkConfirmacao);
                         if (self.#retornoPromisse !== undefined) {
                             resolve(self.#retornoPromisse);
-                            self.modalFechar();
                         }
-    
+
+                        self.#retornoPromisse = undefined;
+                        self.#finalizaTimer = false;
+                        self.modalFechar();
+
                     }
-                    resolve({id:1,nome:'Preso do Seguro'});
-    
-                    self.#retornoPromisse = undefined;
-                    self.#finalizaTimer = false;
-    
+
                 }, 100);
-                
+
             });
 
         } else {
@@ -84,10 +86,8 @@ export class alterarPresoConvivio {
 
         const self = this;
 
-        self.#finalizaTimer = true;
-
         $(self.#idModal).modal('hide');
-        self.#idDiv = undefined;
+        self.modalLimpar();
 
         if (self.#elemFocoFechamento !== null && $(self.#elemFocoFechamento).length) {
             $(self.#elemFocoFechamento).focus();
@@ -96,21 +96,74 @@ export class alterarPresoConvivio {
 
     }
 
-    addEventosBotoes() {
+    modalLimpar() {
+
+        const self = this;
+        self.#idDiv = undefined;
+        $(self.#idModal).find('.conviviosTipo').html('');
+
+    }
+
+    addEventsButtons() {
 
         const self = this;
 
-        $(self.#idModal).find(".btn-close").click(function () {
+        $(self.#idModal).on('click','.btn-cancel, .btn-close', function () {
             self.#finalizaTimer = true;
         });
 
         $(self.#idModal).on('keydown', function (e) {
             if (e.key === 'Escape') {
-                btnClose.click();
+                self.#finalizaTimer = true;
                 e.stopPropagation();
             }
         });
 
+    }
+
+    async getDataAll() {
+
+        const self = this;
+        const obj = new conectAjax(`${urlPresoConvivio}/tipos`);
+        const conviviosTipo = $(self.#idModal).find('.conviviosTipo');
+
+        try {
+            const response = await obj.getRequest();
+            if (response.data.length) {
+                response.data.forEach(tipo => {
+
+                    let strPadrao = tipo.convivio_padrao_bln ? ' (Padrão)' : '';
+                    let strCor = '';
+                    if (tipo.cor) {
+                        strCor = `style="color: ${tipo.cor.cor_texto}; background-color: ${tipo.cor.cor_fundo};"`
+                    }
+
+                    conviviosTipo.append(`
+                    <div class="row mt-2">
+                        <button id="btnConvivoTipo${tipo.id}" class="btn" ${strCor}>
+                            <h5>${tipo.nome}${strPadrao}</h5>
+                            <p>${tipo.descricao}</p>
+                        </button>
+                    </div>`);
+
+                    self.addQueryEvents(tipo);
+
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            self.modalFechar();
+        }
+
+    }
+
+    addQueryEvents(tipo) {
+
+        const self = this;
+        const btn = $(`#btnConvivoTipo${tipo.id}`).click(function(){
+            self.#retornoPromisse = tipo;
+        })
     }
 
 }
