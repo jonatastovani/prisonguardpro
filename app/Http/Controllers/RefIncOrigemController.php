@@ -14,7 +14,7 @@ class RefIncOrigemController extends Controller
      */
     public function index()
     {
-        $resource = RefIncOrigem::all();
+        $resource = RefIncOrigem::orderBy('nome')->get();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }

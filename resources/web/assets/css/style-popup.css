@@ -1,0 +1,97 @@
+@charset "UTF-8";
+
+.body-popup{
+    position: absolute;
+    top: -150%;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(255, 255, 255, 0.541);
+    font-family: "Releway",sans-serif;
+    overflow: auto;
+    height: 100vh;
+    width: 100vw;
+    transition: top 0s ease-in-out 600ms,
+                opacity 500ms ease-in-out 0s;
+}
+
+.body-popup.active {
+    position: fixed;
+    top: 0;
+    opacity: 1;
+    z-index: 9;
+    transition: top 0ms ease-in-out 0s,
+                opacity 500ms ease-in-out 0s;
+}
+
+.popup {
+    position: absolute;
+    top: -150%;
+    left: 50%;
+    opacity: 0;
+    background: #fff;
+    padding-bottom: 5px;
+    box-shadow: 2px 2px 5px 5px rgba(0,0,0,0.15);
+    border-radius: 10px;
+    transform: translate(-50%,-50%) scale(1.25);
+    transition: top 0ms ease-in-out 200ms,
+                opacity 500ms ease-in-out 200ms,
+                transform 1s ease-in-out 200ms;
+}
+
+.popup.max-h {
+    max-height: 100vh;
+}
+
+.popup.active {
+    position: absolute;
+    top: 50%;
+    opacity: 2;
+    z-index: 10;
+    transform: translate(-50%, -50%) scale(1);
+    transition: top 0ms ease-in-out 200ms,
+                opacity 500ms ease-in-out 200ms,
+                transform 1s ease-in-out 200ms;
+    overflow: auto;
+    max-height: 100vh;
+}
+
+@media (max-width: 500px) {
+    .popup.active.top-sm-popup {
+      max-height: 93vh;
+      top: 0;
+      transform: translateX(-50%);
+    }
+}
+
+.popup .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 15px;
+    height: 15px;
+    background: #888;
+    color: #eee;
+    text-align: center;
+    line-height: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+#popPhoto, #popEmployees, #popProducts,
+#popTemplates {
+    width: 100%;
+    max-width: 800px;
+}
+
+#popDepartments, #popRoles, #popNewBudgets,
+#popNewBasicClient, #popNewProduct, #popNewTemplate,
+#popNewItemTemplate, #popSearchTemplates, #popEditBudgets,
+#popOrders {
+    width: 100%;
+    max-width: 600px;
+}
+
+#popSearchClients, #popSearchOrders, #popItems {
+    width: 100%;
+    max-width: 1000px;
+}

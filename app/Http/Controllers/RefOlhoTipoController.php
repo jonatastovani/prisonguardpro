@@ -14,14 +14,14 @@ class RefOlhoTipoController extends Controller
      */
     public function index()
     {
-        $resource = RefOlhoTipo::all();
+        $resource = RefOlhoTipo::orderBy('nome')->get();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
     public function indexNomeDescricao()
     {
-        $resource = RefOlhoTipo::all();
+        $resource = RefOlhoTipo::orderBy('nome')->get();
         $retorno = $resource->map(function($item){
             return [
                 'id' => $item->id,

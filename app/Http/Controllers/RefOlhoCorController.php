@@ -14,7 +14,7 @@ class RefOlhoCorController extends Controller
      */
     public function index()
     {
-        $resource = RefOlhoCor::all();
+        $resource = RefOlhoCor::orderBy('nome')->get();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }

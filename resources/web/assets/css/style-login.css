@@ -1,0 +1,57 @@
+@import url("style.css");
+
+.container-login {
+    position: relative;
+    width: 380px;
+    height: 420px;
+    background-color: #1c1c1c;;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.container-login::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 380px;
+    height: 420px;
+    background: linear-gradient(0deg, transparent, var(--cor1), var(--cor1));
+    transform-origin: bottom right;
+    animation: animate 6s linear infinite;
+}
+
+.container-login::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    width: 380px;
+    height: 420px;
+    background: linear-gradient(180deg, transparent, var(--cor1), var(--cor1));
+    transform-origin: top left;
+    animation: animate 6s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#login form {
+    position: absolute;
+    inset: 5px;
+    background-color: #23242a;
+    z-index: 10;
+    border-radius: 8px;
+    padding: 50px 40px;
+    color: var(--cor1);
+}
+
+#login h2 {
+    font-weight: 900;
+}

@@ -5,6 +5,7 @@ import { funcoesComuns } from "../../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
 import { modalAlterarPresoConvivio } from "../../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
 import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
 import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
 import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
@@ -25,7 +26,6 @@ $(document).ready(function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
 
-        funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
         funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
         funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
         funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`,{idOpcaoSelecionada:1});
@@ -73,6 +73,21 @@ $(document).ready(function () {
             obj.modalOpen().then(function (result) {
                 if (result && result.refresh) {
                     preencherEstadoCivil();
+                }
+            });
+        });
+
+        const preencherCutis = () => {
+            funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
+        }
+        preencherCutis();
+
+        $(`#btnCutisCadastro`).on('click', function(){
+            const obj = new modalCadastroCutis();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCutis();
                 }
             });
         });

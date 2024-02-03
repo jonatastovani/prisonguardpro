@@ -1,0 +1,46 @@
+:root {
+    --cor1: #45f3ff;
+}
+
+/* *{
+    font-size: 11pt;
+} */
+
+.nav-sub {
+    display: none !important;
+}
+
+#navbar a {
+    text-decoration: none !important;
+}
+
+#systemName {
+    font-weight: 700 !important;
+}
+
+#navbar .nav-link, #navbar i, #systemName {
+    color: var(--cor1) !important;
+}
+
+.navbar-toggler-icon {
+    color: var(--cor1) !important;
+}
+
+table .fade-out {
+    opacity: 0;
+    transition: opacity 0.5s; /* Definindo uma transição de 0,5 segundo para o efeito de desaparecimento */
+}
+
+.parameters-regex { color: blue; font-weight: bold; }
+.punctuation-regex { color: blueviolet; font-weight: bold; }
+.name-parameters-regex { color: green; font-weight: bold; font-style: italic; }
+.operators-regex { color: deeppink; font-weight: bold; }
+
+.btn-mini {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.6rem;
+}
+
+.form-label {
+    margin-bottom: 0;
+}

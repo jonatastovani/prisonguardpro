@@ -85,7 +85,11 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="cutis_id" class="form-label">Cutis</label>
-                    <select name="cutis_id" id="cutis_id" class="form-select"></select>
+                    <div class="input-group">
+                        <select name="cutis_id" id="cutis_id" class="form-select"></select>
+                        <button id="btnCutisCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
                 <div class="col-sm-3">
                     <label for="cabelo_tipo_id" class="form-label">Tipo de Cabelo</label>
@@ -184,6 +188,7 @@
     @include('modals.inclusao.modalAlterarPresoConvivio')
     @include('modals.referencias.modalCadastroGenero')
     @include('modals.referencias.modalCadastroEscolaridade')
+    @include('modals.referencias.modalCadastroCutis')
     @include('modals.referencias.modalCadastroEstadoCivil')
 
     <script type="module" src="{{ asset('js/setores/inclusao/qualificativa/cadastroQualificativa.js') }}"></script>

@@ -1,0 +1,160 @@
+<div id="pop-popSearchClients" class="body-popup">
+    <div class="popup" id="popSearchClients">
+        <div class="close-btn">&times;</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mt-2">
+                    <h3 class="text-center">Busca de Clientes</h3>
+                </div>
+            </div>
+
+            <form>
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-11 dataSearch">
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-6 mt-2">
+                                <div class="input-group">
+                                    <div class="input-group-text"><label for="nameSearchClients">Nome</label></div>
+                                    <input type="text" class="form-control inputActionSearch" name="name" id="nameSearchClients">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-6 mt-2">
+                                <div class="row h-100 align-items-center">
+                                    <div class="col-6">
+                                        <div class="form-check" title="Forma de ordenação em ordem ascendente, ou seja, do menor para o maior">
+                                            <input type="radio" class="form-check-input inputActionSearch" id="rbAscSearchClients" name="method" value="asc" checked>
+                                            <label class="form-check-label" for="rbAscSearchClients">Ascendente</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check" title="Forma de ordenação em ordem descendente, ou seja, ou do maior para o menor">
+                                            <input type="radio" class="form-check-input inputActionSearch" id="rbDescSearchClients" name="method" value="desc">
+                                            <label class="form-check-label" for="rbDescSearchClients">Descendente</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6 mt-2">
+                                <div class="row h-100 align-items-center">
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input inputActionSearch" id="rbCpfSearchClients" name="document" value="cpf" checked>
+                                            <label class="form-check-label" for="rbCpfSearchClients">CPF</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input inputActionSearch" id="rbCnpjSearchClients" name="document" value="cnpj">
+                                            <label class="form-check-label" for="rbCnpjSearchClients">CNPJ</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 mt-2">
+                                <div class="input-group group-cpfSearchClients">
+                                    <div class="input-group-text"><label for="cpfSearchClients">CPF</label></div>
+                                    <input type="text" name="cpf" class="form-control inputActionSearch" id="cpfSearchClients">
+                                </div>
+                                <div class="input-group group-cnpjSearchClients" hidden>
+                                    <div class="input-group-text"><label for="cnpjSearchClients">CNPJ</label></div>
+                                    <input type="text" name="cnpj" class="form-control inputActionSearch" id="cnpjSearchClients" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-5 mt-2">
+                                <div class="row h-100 align-items-center">
+                                    <div class="col-6">
+                                        <div class="form-check" title="Data de Cadastro">
+                                            <input type="radio" class="form-check-input inputActionSearch" id="rbCreatedSearchClients" name="dateSearch" value="created" checked>
+                                            <label class="form-check-label" for="rbCreatedSearchClients">Cadastro</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check" title="Data de Atualização">
+                                            <input type="radio" class="form-check-input inputActionSearch" id="rbUpdatedSearchClients" name="dateSearch" value="updated">
+                                            <label class="form-check-label" for="rbUpdatedSearchClients">Atualização</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7 mt-2 group-createdSearchClients" title="Filtro para busca informando o intervalo de datas que o cliente foi cadastrado">
+                                <div class="row">
+                                    <div class="col-lg-7 col-md-6">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="createdAfterSearchClients">Cadastrado de:</label>
+                                            <input type="date" class="form-control inputActionSearch" id="createdAfterSearchClients" name="createdAfterSearchClients">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-6">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="createdBeforeSearchClients">até:</label>
+                                            <input type="date" class="form-control inputActionSearch" id="createdBeforeSearchClients" name="createdBeforeSearchClients">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7 mt-2 group-updatedSearchClients" title="Filtro para busca informando o intervalo de datas que o orçamento foi atualizado pela última vez" hidden>
+                                <div class="row">
+                                    <div class="col-lg-7 col-md-6">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="updatedAfterSearchClients">Atualizado de:</label>
+                                            <input type="date" class="form-control inputActionSearch" id="updatedAfterSearchClients" name="updatedAfterSearchClients" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-6">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="updatedBeforeSearchClients">até:</label>
+                                            <input type="date" class="form-control inputActionSearch" id="updatedBeforeSearchClients" name="updatedBeforeSearchClients" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-auto flex-fill text-end">
+                        <button class="btn btn-outline-secondary btn-mini d-lg-none toggleDataSearchButton">
+                            <i class="bi bi-view-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="table-responsive mt-2">
+                <table class="table table-hover">
+                    <thead class="sticky-top bg-white">
+                        <tr class="text-center">
+                            <th></th>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>CPF</th>
+                            <th>CNPJ</th>
+                            <th>Cidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-end">Total de Registros: <span class="totalRegisters">0</span></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/assets/js/popup/clients/popupSearchClients.js"></script>
