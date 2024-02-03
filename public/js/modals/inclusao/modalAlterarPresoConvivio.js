@@ -1,6 +1,6 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
 
-export class alterarPresoConvivio {
+export class modalAlterarPresoConvivio {
 
     /**
      * ID do modal

@@ -56,10 +56,10 @@ class DatabaseSeeder extends Seeder
             RefStatusSeeder::class,
             RefCoresSeeder::class,
             RefPresoConvivioTipoSeeder::class,
-            PessoaSeeder::class, // Faker
-            PessoaDocumentoSeeder::class, // Faker
-            PresoSeeder::class, // Faker
-            PessoaProfissaoSeeder::class, // Faker
+            // PessoaSeeder::class, // Faker
+            // PessoaDocumentoSeeder::class, // Faker
+            // PresoSeeder::class, // Faker
+            // PessoaProfissaoSeeder::class, // Faker
         ]);
     }
 }

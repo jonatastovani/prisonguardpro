@@ -1,8 +1,8 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
-import { configuracoesApp } from "../../comuns/configuracoesApp.js";
-import { enumAction } from "../../comuns/enumAction.js";
-import { funcoesComuns } from "../../comuns/funcoesComuns.js";
-import { funcoesPresos } from "../../comuns/funcoesPresos.js";
+import { configuracoesApp } from "../../common/configuracoesApp.js";
+import { enumAction } from "../../common/enumAction.js";
+import { funcoesComuns } from "../../common/funcoesComuns.js";
+import { funcoesPresos } from "../../common/funcoesPresos.js";
 
 $(document).ready(function () {
 
@@ -115,8 +115,6 @@ $(document).ready(function () {
 
         obj.envRequest()
             .then(function (response) {
-
-                console.log(response)
 
                 response.data.forEach(result => {
 

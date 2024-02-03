@@ -1,10 +1,10 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
-import { configuracoesApp } from "../../comuns/configuracoesApp.js";
-import { enumAction } from "../../comuns/enumAction.js";
-import { funcoesComuns } from "../../comuns/funcoesComuns.js";
-import { funcoesPresos } from "../../comuns/funcoesPresos.js";
-import { modalMessage } from "../../comuns/modalMessage.js";
-import { alterarPresoConvivio } from "../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { configuracoesApp } from "../../common/configuracoesApp.js";
+import { enumAction } from "../../common/enumAction.js";
+import { funcoesComuns } from "../../common/funcoesComuns.js";
+import { funcoesPresos } from "../../common/funcoesPresos.js";
+import { modalMessage } from "../../common/modalMessage.js";
+import { modalAlterarPresoConvivio } from "../../modals/inclusao/modalAlterarPresoConvivio.js";
 
 $(document).ready(function () {
 
@@ -110,20 +110,20 @@ $(document).ready(function () {
 
         let strPreso = `
             <div id="${idDiv}" ${strDataId}
-                class="p-2 col-md-6 col-12 bg-info bg-opacity-10 border border-info rounded position-relative">
+                class="p-2 col-md-6 col-12 bg-info bg-opacity-10 border rounded position-relative">
                 <button type="button" ${strDataId} class="btn-close position-absolute top-0 end-0" aria-label="Close"></button>
-                <input type="hidden" class="form-control " name="id" id="id${idDiv}">
-                <input type="hidden" class="form-control " name="convivio_tipo_id" id="tipo_preso_id${idDiv}">
+                <input type="hidden" class="form-control" name="id" id="id${idDiv}">
+                <input type="hidden" class="form-control" name="convivio_tipo_id" id="tipo_preso_id${idDiv}">
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col">
                         <label for="matricula${idDiv}" class="form-label">Matrícula</label>
                         <div class="input-group">
-                            <input type="text" class="form-control w-75" name="matricula" id="matricula${idDiv}">
-                            <input type="text" class="form-control " name="digito" id="digito${idDiv}" disabled>
+                            <input type="text" class="form-control text-end" name="matricula" id="matricula${idDiv}">
+                            <input type="text" style="max-width: 40px;" class="form-control text-center" name="digito" id="digito${idDiv}" disabled>
                         </div>
                     </div>
-                    <div class="col-6 d-flex justify-content-end align-items-center">
+                    <div class="col d-flex justify-content-end align-items-center">
                         <span class="passagem_id mh-100"></span>
                     </div>
                 </div>
@@ -192,11 +192,10 @@ $(document).ready(function () {
         funcoesComuns.eventoEsconderExibir($(`#camposAdicionais${idDiv}`), $(`#toggleCamposAdicionais${idDiv}`));
 
         $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function(){
-            const obj = new alterarPresoConvivio();
+            const obj = new modalAlterarPresoConvivio();
             obj.setFocoNoElementoAoFechar = this;
             obj.setIdDiv = idDiv;
             obj.modalAbrir().then(function (result) {
-                console.log(result)
                 
                 if (result) {
                     if (result.cor){

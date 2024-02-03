@@ -255,7 +255,7 @@ export class commonFunctions {
      * @returns {object|string} - An object with the values ​​of the form elements (returnType 1)
      *                            or a string formatted with the element values ​​(returnType 2).
      */
-    static getInputsValues(container, returnType, blnDisabled = false, keyId = true) {
+    static getInputsValues(container, returnType = 1, blnDisabled = false, keyId = false) {
 
         const formData = {};
         let strReturn = '';
@@ -666,68 +666,85 @@ export class commonFunctions {
     }
 
     /**
-     * Sets up default event handlers for popups, such as close, cancel, and save actions.
+     * Sets up default event handlers for modals, such as close, cancel, and save actions.
      *
      * @param {Object} self - The reference to the current object.
      * @param {Object} options - Additional options to configure the event handlers.
      * @param {boolean} options.formRegister - Whether to include additional event handlers for registration forms (default: false).
      */
-    static eventDefaultPopups(self, options = {}) {
+    static eventDefaultModals(self, options = {}) {
         const { formRegister = false,
             inputsSearchs = null
         } = options;
 
-        const idPop = self.getIdPop();
+        const idModal = self.getIdModal;
+        const modal = $(idModal);
 
-        $(idPop).find(".close-btn").on("click", () => {
-            self.closePop();
+        modal.find('.btn-close').on('click', function () {
+            self.setEndTimer = true;
         });
 
-        $(idPop).find('.btnCancelPop').on('click', () => {
-
+        modal.find('.btn-cancel').on('click', function () {
             if (formRegister == true) {
-
-                if (typeof self.cancelPop === 'function') {
-                    self.cancelPop();
+                if (typeof self.modalCancel === 'function') {
+                    self.modalCancel();
                 } else {
-                    self.closePop();
+                    self.setEndTimer = true;
                 }
-
             } else {
-                self.closePop();
+                self.setEndTimer = true;
             }
-
         });
 
-        $(idPop).find('.btnSavePop').on('click', (event) => {
-            event.preventDefault();
-            self.saveButtonAction();
-        });
-
-        $(idPop).on('keydown', function (e) {
+        modal.on('keydown', function (e) {
             if (e.key === 'Escape') {
+                self.setEndTimer = true;
                 e.stopPropagation();
-                self.closePop();
             }
         });
 
         if (formRegister == true) {
-            this.eventDefaultPopupsRegisters(self);
-        }
-
-        if (inputsSearchs != null) {
-
-            inputsSearchs.on("input", function () {
-
-                clearTimeout(self.timerSearch);
-
-                self.timerSearch = setTimeout(function () {
-                    self.generateFilters();
-                }, 1000);
-
+            modal.find('form').on('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    if (typeof self.modalCancel === 'function') {
+                        self.modalCancel();
+                    } else {
+                        self.setEndTimer = true;
+                    }
+                    e.stopPropagation();
+                }
             });
-
         }
+
+        // $(idPop).find('.btnSavePop').on('click', (event) => {
+        //     event.preventDefault();
+        //     self.saveButtonAction();
+        // });
+
+        // $(idPop).on('keydown', function (e) {
+        //     if (e.key === 'Escape') {
+        //         e.stopPropagation();
+        //         self.closePop();
+        //     }
+        // });
+
+        // if (formRegister == true) {
+        //     this.eventDefaultPopupsRegisters(self);
+        // }
+
+        // if (inputsSearchs != null) {
+
+        //     inputsSearchs.on("input", function () {
+
+        //         clearTimeout(self.timerSearch);
+
+        //         self.timerSearch = setTimeout(function () {
+        //             self.generateFilters();
+        //         }, 1000);
+
+        //     });
+
+        // }
 
     }
 
@@ -831,7 +848,7 @@ export class commonFunctions {
 
     }
 
-    static configurarCampoSelect2(elem,urlApi,options={}) {
+    static configurarCampoSelect2(elem, urlApi, options = {}) {
         const {
             minimo = 3, placeholder = 'Selecione uma opção'
         } = options;
@@ -854,7 +871,7 @@ export class commonFunctions {
                 delay: 250,
                 transport: function (params, success) {
                     var texto = params.data.term; // Captura o valor do texto
-        
+
                     // Adiciona o valor do texto ao corpo da solicitação
                     var ajaxOptions = {
                         url: urlApi,

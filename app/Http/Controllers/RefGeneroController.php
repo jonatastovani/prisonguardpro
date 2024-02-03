@@ -15,7 +15,7 @@ class RefGeneroController extends Controller
      */
     public function index()
     {
-        $resource = RefGenero::all();
+        $resource = RefGenero::orderBy('nome')->get();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }

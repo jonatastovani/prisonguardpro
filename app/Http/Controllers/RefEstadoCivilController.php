@@ -14,7 +14,7 @@ class RefEstadoCivilController extends Controller
      */
     public function index()
     {
-        $resource = RefEstadoCivil::all();
+        $resource = RefEstadoCivil::orderBy('nome')->get();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }

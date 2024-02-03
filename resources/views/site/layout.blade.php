@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/bootstrap-5.3.2-dist/css/bootstrap.css">
     <link rel="stylesheet" href="/bootstrap-icons-1.11.1/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style-popup.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/style-popup.css') }}"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('css/modal.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -55,7 +55,7 @@
     </div>
 
     @include('site.includesDefault')
-    @include('comuns.modalMessage')
+    @include('common.modalMessage')
     <script type="module" src="{{ asset('js/script.js') }}"></script>
 
 </body>

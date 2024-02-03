@@ -14,7 +14,7 @@ class RefEscolaridadeController extends Controller
      */
     public function index()
     {
-        $resource = RefEscolaridade::all();
+        $resource = RefEscolaridade::orderBy('nome')->get();
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }

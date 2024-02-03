@@ -1,10 +1,13 @@
 import { conectAjax } from "../../../ajax/conectAjax.js";
-import { configuracoesApp } from "../../../comuns/configuracoesApp.js";
-import { enumAction } from "../../../comuns/enumAction.js";
-import { funcoesComuns } from "../../../comuns/funcoesComuns.js";
-import { funcoesPresos } from "../../../comuns/funcoesPresos.js";
-import { modalMessage } from "../../../comuns/modalMessage.js";
-import { alterarPresoConvivio } from "../../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { configuracoesApp } from "../../../common/configuracoesApp.js";
+import { enumAction } from "../../../common/enumAction.js";
+import { funcoesComuns } from "../../../common/funcoesComuns.js";
+import { funcoesPresos } from "../../../common/funcoesPresos.js";
+import { modalMessage } from "../../../common/modalMessage.js";
+import { modalAlterarPresoConvivio } from "../../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
+import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
+import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
 
 $(document).ready(function () {
 
@@ -22,15 +25,57 @@ $(document).ready(function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
 
-        funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`,{idOpcaoSelecionada:1});
-        funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
-        funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
         funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
         funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
         funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
         funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`,{idOpcaoSelecionada:1});
         funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
         funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
+
+        const preencherGenero = () => {
+            funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`,{idOpcaoSelecionada:1});
+        }
+        preencherGenero();
+
+        $(`#btnGeneroCadastro`).on('click', function(){
+            const obj = new modalCadastroGenero();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherGenero();
+                }
+            });
+        });
+
+        const preencherEscolaridade = () => {
+            funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
+        }
+        preencherEscolaridade();
+
+        $(`#btnEscolaridadeCadastro`).on('click', function(){
+            const obj = new modalCadastroEscolaridade();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherEscolaridade();
+                }
+            });
+        });
+
+        const preencherEstadoCivil = () => {
+            funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
+        }
+        preencherEstadoCivil();
+
+        $(`#btnEstadoCivilCadastro`).on('click', function(){
+            const obj = new modalCadastroEstadoCivil();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherEstadoCivil();
+                }
+            });
+        });
 
         if (id) {
             buscarDadosTodos();
@@ -206,7 +251,7 @@ $(document).ready(function () {
         funcoesComuns.eventoEsconderExibir($(`#camposAdicionais${idDiv}`), $(`#toggleCamposAdicionais${idDiv}`));
 
         $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function () {
-            const obj = new alterarPresoConvivio();
+            const obj = new modalAlterarPresoConvivio();
             obj.setFocoNoElementoAoFechar = this;
             obj.setIdDiv = idDiv;
             obj.modalAbrir().then(function (result) {
@@ -254,8 +299,8 @@ $(document).ready(function () {
         const obj = new modalMessage();
         obj.setMessage(`Confirma a exclusão deste preso?`);
         obj.setTitle('Confirmação de exclusão de preso');
-        obj.setElemFocusClose(button);
-        obj.openModal().then(function (result) {
+        obj.setFocusElementWhenClosingModal(button);
+        obj.modalOpen().then(function (result) {
 
             if (result) {
                 $(`#${idDiv}`).remove();

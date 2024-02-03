@@ -1,6 +1,6 @@
 import { conectAjax } from "../ajax/conectAjax.js";
-import { enumAction } from "../comuns/enumAction.js";
-import { funcoesComuns } from "../comuns/funcoesComuns.js";
+import { enumAction } from "../common/enumAction.js";
+import { funcoesComuns } from "../common/funcoesComuns.js";
 
 $(document).ready(function() {
 

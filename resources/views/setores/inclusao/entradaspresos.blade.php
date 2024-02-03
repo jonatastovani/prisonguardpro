@@ -38,9 +38,9 @@
                             <label for="ordenacaoEntradasPresos">Ordenação</label>
                         </div>
                         <select name="ordenacao" id="ordenacaoEntradasPresos" class="form-select inputActionEntradasPresosSearch">
+                            <option value="data_entrada">Data entrada</option>
                             <option value="matricula">Matrícula</option>
                             <option value="nome">Nome do preso</option>
-                            <option value="data_entrada">Data entrada</option>
                         </select>
                     </div>
                 </div>

@@ -57,6 +57,7 @@
 			<div class="row text-end">
 				<div class="col-12 mt-2">
 					<button type="submit" id="btnSalvar" class="btn btn-success me-2 w-25" title="Salvar alterações">
+						<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
 						Salvar
 					</button>
 					<a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
