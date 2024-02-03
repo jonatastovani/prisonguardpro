@@ -45,7 +45,7 @@
                 @endcomponent
 
                 <div class="row flex-fill overflow-auto">
-                    <div class="col-12 mx-auto d-flex flex-column flex-nowrap mh-100" style="max-width: 1000px;">
+                    <div class="col-12 mx-auto d-flex flex-column flex-nowrap mh-100" style="max-width: 1200px;">
                         @yield('conteudo')
                     </div>
                 </div>

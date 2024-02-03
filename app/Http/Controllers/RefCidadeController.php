@@ -21,6 +21,29 @@ class RefCidadeController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexSelect(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'texto' => 'required|min:3',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resources = RefCidade::where('nome', 'LIKE', "%{$request->texto}%")->with('estado.nacionalidade')->get();
+
+        // Mapear os resultados para criar um array com os campos id e text
+        $mappedResults = $resources->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'text' => $item->nome."-".$item->estado->sigla." | ".$item->estado->nacionalidade->pais ,
+            ];
+        });
+
+        $response = RestResponse::createSuccessResponse($mappedResults, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

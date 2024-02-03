@@ -9,12 +9,24 @@
     const urlApiVersion = `${urlApi}${urlVersion}`;
     const urlLogin = `${urlApi}/auth`;
 
-    const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
-    const urlRefIncOrigem = `${urlApiVersion}/ref/inclusao/origem`;
     const urlIncEntrada = `${urlApiVersion}/inclusao/entradas`;
     const urlIncEntradaPreso = `${urlApiVersion}/inclusao/entradas/presos`;
-    const urlRefStatus = `${urlApiVersion}/ref/status`;
+
     const urlPresoConvivio = `${urlApiVersion}/ref/presos/convivios`;
+
+    const urlRefArtigos = `${urlApiVersion}/ref/artigos`;
+    const urlRefCabeloTipo = `${urlApiVersion}/ref/cabelotipos`;
+    const urlRefCabeloCor = `${urlApiVersion}/ref/cabelocores`;
+    const urlRefCidades = `${urlApiVersion}/ref/cidades`;
+    const urlRefCrenca = `${urlApiVersion}/ref/crencas`;
+    const urlRefCutis = `${urlApiVersion}/ref/cutis`;
+    const urlRefEscolaridade = `${urlApiVersion}/ref/escolaridades`;
+    const urlRefEstadoCivil = `${urlApiVersion}/ref/estadocivil`;
+    const urlRefGenero = `${urlApiVersion}/ref/generos`;
+    const urlRefIncOrigem = `${urlApiVersion}/ref/inclusao/origem`;
+    const urlRefOlhoTipo = `${urlApiVersion}/ref/olhotipos`;
+    const urlRefOlhoCor = `${urlApiVersion}/ref/olhocores`;
+    const urlRefStatus = `${urlApiVersion}/ref/status`;
 
     console.log(urlLogin);
 </script>

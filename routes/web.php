@@ -29,6 +29,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                 Route::get('/criar', 'cadastroEntradasPresos')->name('inclusao.criarEntradasPresos');
                 Route::match(['get','post'],'/{id}','cadastroEntradasPresos')->name('inclusao.editarEntradasPresos');
             });
+
+            Route::prefix('/qualificativa')->group(function () {
+                // Route::match(['get','post'],'', 'entradasPresos')->name('inclusao.entradasPresos');
+                // Route::get('/criar', 'cadastroEntradasPresos')->name('inclusao.criarEntradasPresos');
+                Route::match(['get','post'],'/{id}','cadastroQualificativa')->name('inclusao.qualificativa.cadastroQualificativa');
+            });
         });
     });
 });

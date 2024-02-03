@@ -205,7 +205,7 @@ class IncEntradaController extends Controller
         $resource = $this->buscarRecurso($id);
 
         // Carrega os presos relacionados
-        $resource->load(['presos.preso.pessoa', 'origem']);
+        $resource->load(['presos.preso.pessoa', 'presos.convivio_tipo.cor', 'origem']);
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());

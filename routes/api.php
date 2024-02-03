@@ -59,7 +59,7 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefCabeloCorController
             Route::controller(RefCabeloCorController::class)->group(function () {
-                Route::prefix('/cabelocor')->group(function () {
+                Route::prefix('/cabelocores')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -70,7 +70,7 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefCabeloTipoController
             Route::controller(RefCabeloTipoController::class)->group(function () {
-                Route::prefix('/cabelotipo')->group(function () {
+                Route::prefix('/cabelotipos')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -81,12 +81,17 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefCidadeController
             Route::controller(RefCidadeController::class)->group(function () {
-                Route::prefix('/cidade')->group(function () {
+                Route::prefix('/cidades')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/busca')->group(function () {
+                        Route::post('/select', 'indexSelect');
+                        
+                    });
                 });
             });
 
@@ -103,7 +108,7 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefCutisController
             Route::controller(RefCrencaController::class)->group(function () {
-                Route::prefix('/crenca')->group(function () {
+                Route::prefix('/crencas')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -147,7 +152,7 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefEscolaridadeController
             Route::controller(RefEscolaridadeController::class)->group(function () {
-                Route::prefix('/escolaridade')->group(function () {
+                Route::prefix('/escolaridades')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -180,7 +185,7 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefGeneroController
             Route::controller(RefGeneroController::class)->group(function () {
-                Route::prefix('/genero')->group(function () {
+                Route::prefix('/generos')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -223,7 +228,7 @@ route::prefix('/v1')->group(function () {
                 });
             });
 
-            Route::prefix('/presos')->group(function(){
+            Route::prefix('/presos')->group(function () {
 
                 // Rotas relacionadas ao RefPresoConvivioTipoController
                 Route::controller(RefPresoConvivioTipoController::class)->group(function () {
@@ -235,13 +240,11 @@ route::prefix('/v1')->group(function () {
                         // Route::delete('/{id}', 'destroy');
                     });
                 });
-
             });
-
 
             // Rotas relacionadas ao RefOlhoCorController
             Route::controller(RefOlhoCorController::class)->group(function () {
-                Route::prefix('/olhocor')->group(function () {
+                Route::prefix('/olhocores')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
@@ -252,8 +255,9 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefOlhoTipoController
             Route::controller(RefOlhoTipoController::class)->group(function () {
-                Route::prefix('/olhotipo')->group(function () {
+                Route::prefix('/olhotipos')->group(function () {
                     Route::get('', 'index');
+                    Route::get('/comdescricao', 'indexNomeDescricao');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
@@ -318,11 +322,8 @@ route::prefix('/v1')->group(function () {
                         Route::put('/{id}', 'update');
                         Route::delete('/{id}', 'destroy');
                     });
-
                 });
-
             });
-
         });
 
         // Rotas relacionadas ao PessoaController

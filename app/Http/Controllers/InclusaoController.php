@@ -25,4 +25,14 @@ class InclusaoController extends Controller
 
         return view('setores.inclusao.cadastroEntradasPresos', $dataToCompact);
     }
+
+    public function cadastroQualificativa(Request $request)
+    {
+        $id = $request->id ?? '';
+        $redirecionamentoAnterior = $request->redirecionamentoAnterior ?? '';
+
+        $dataToCompact = compact('id', 'redirecionamentoAnterior');
+
+        return view('setores.inclusao.qualificativa.cadastroQualificativa', $dataToCompact);
+    }
 }

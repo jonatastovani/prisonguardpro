@@ -17,7 +17,7 @@ class RefCidadeSeeder extends Seeder
 
         $insert = [
             ['nome' => 'Americana', 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
-            ['nome' => "Santa Bárbara D'Oeste'", 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['nome' => "Santa Bárbara D'Oeste", 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
             ['nome' => 'Sumaré', 'estado_id' => 25, 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
         

@@ -19,6 +19,20 @@ class RefOlhoTipoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexNomeDescricao()
+    {
+        $resource = RefOlhoTipo::all();
+        $retorno = $resource->map(function($item){
+            return [
+                'id' => $item->id,
+                'nome' => $item->nome." (".$item->descricao.")",
+            ];
+        });
+
+        $response = RestResponse::createSuccessResponse($retorno, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

@@ -45,11 +45,11 @@ return new class extends Migration
             $table->unsignedBigInteger('cabelo_cor_id')->nullable();
             $table->foreign('cabelo_cor_id')->references('id')->on('ref_cabelo_cor');
 
-            $table->unsignedBigInteger('olho_cor_id')->nullable();
-            $table->foreign('olho_cor_id')->references('id')->on('ref_olho_cor');
-
             $table->unsignedBigInteger('olho_tipo_id')->nullable();
             $table->foreign('olho_tipo_id')->references('id')->on('ref_olho_tipos');
+
+            $table->unsignedBigInteger('olho_cor_id')->nullable();
+            $table->foreign('olho_cor_id')->references('id')->on('ref_olho_cor');
 
             $table->unsignedBigInteger('crenca_id')->nullable();
             $table->foreign('crenca_id')->references('id')->on('ref_crencas');

@@ -1,10 +1,10 @@
-import { conectAjax } from "../../ajax/conectAjax.js";
-import { configuracoesApp } from "../../comuns/configuracoesApp.js";
-import { enumAction } from "../../comuns/enumAction.js";
-import { funcoesComuns } from "../../comuns/funcoesComuns.js";
-import { funcoesPresos } from "../../comuns/funcoesPresos.js";
-import { modalMessage } from "../../comuns/modalMessage.js";
-import { alterarPresoConvivio } from "../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { conectAjax } from "../../../ajax/conectAjax.js";
+import { configuracoesApp } from "../../../comuns/configuracoesApp.js";
+import { enumAction } from "../../../comuns/enumAction.js";
+import { funcoesComuns } from "../../../comuns/funcoesComuns.js";
+import { funcoesPresos } from "../../../comuns/funcoesPresos.js";
+import { modalMessage } from "../../../comuns/modalMessage.js";
+import { alterarPresoConvivio } from "../../../modals/inclusao/modalAlterarPresoConvivio.js";
 
 $(document).ready(function () {
 
@@ -14,8 +14,23 @@ $(document).ready(function () {
 
     function init() {
 
-        funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
-        $('#origem_idEntradasPresos').focus();
+        const matricula = $('#matricula');
+        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/busca/select`);
+        funcoesComuns.aplicarMascaraNumero(matricula, { formato: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
+
+        matricula.on('input', function () {
+            $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
+        })
+
+        funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`,{idOpcaoSelecionada:1});
+        funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
+        funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
+        funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
+        funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
+        funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
+        funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`,{idOpcaoSelecionada:1});
+        funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
+        funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
 
         if (id) {
             buscarDadosTodos();
@@ -25,7 +40,7 @@ $(document).ready(function () {
 
     $(window).on('resize', function () {
 
-        funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
+        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/busca/select`);
 
     });
 
@@ -74,7 +89,7 @@ $(document).ready(function () {
                     div.find('input[name="observacoes"]').val(preso.observacoes);
                     div.find('input[name="convivio_tipo_id"]').val(preso.convivio_tipo_id);
 
-                    if (preso.convivio_tipo.cor){
+                    if (preso.convivio_tipo.cor) {
                         div.removeClass('bg-info');
                         div.css('color', preso.convivio_tipo.cor.cor_texto);
                         div.css('background-color', preso.convivio_tipo.cor.cor_fundo);
@@ -86,7 +101,7 @@ $(document).ready(function () {
                     const nomeConvivio = !preso.convivio_tipo.convivio_padrao_bln ? preso.convivio_tipo.nome : null;
                     const campoInfo = div.find('.campoInfo');
                     const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
-                    if(!infoConvivio.length && nomeConvivio) {
+                    if (!infoConvivio.length && nomeConvivio) {
                         campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
                     } else if (infoConvivio.length && nomeConvivio) {
                         infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
@@ -188,18 +203,17 @@ $(document).ready(function () {
         const div = $(`#${idDiv}`);
         const matricula = div.find('input[name="matricula"]');
         const digito = div.find('input[name="digito"]');
-        funcoesComuns.aplicarMascaraNumero(matricula, { formato: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
         funcoesComuns.eventoEsconderExibir($(`#camposAdicionais${idDiv}`), $(`#toggleCamposAdicionais${idDiv}`));
 
-        $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function(){
+        $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function () {
             const obj = new alterarPresoConvivio();
             obj.setFocoNoElementoAoFechar = this;
             obj.setIdDiv = idDiv;
             obj.modalAbrir().then(function (result) {
                 console.log(result)
-                
+
                 if (result) {
-                    if (result.cor){
+                    if (result.cor) {
                         div.removeClass('bg-info');
                         div.css('color', result.cor.cor_texto);
                         div.css('background-color', result.cor.cor_fundo);
@@ -212,7 +226,7 @@ $(document).ready(function () {
                     const nomeConvivio = !result.convivio_padrao_bln ? result.nome : null;
                     const campoInfo = div.find('.campoInfo');
                     const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
-                    if(!infoConvivio.length && nomeConvivio) {
+                    if (!infoConvivio.length && nomeConvivio) {
                         campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
                     } else if (infoConvivio.length && nomeConvivio) {
                         infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
@@ -223,10 +237,6 @@ $(document).ready(function () {
                 }
             });
         });
-
-        matricula.on('input', function () {
-            digito.val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
-        })
 
         div.find('.btn-close').on("click", function () {
             const idPreso = $(this).data('id');

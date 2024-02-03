@@ -33,7 +33,12 @@
 
 .btn-mini {
     padding: 0.2rem 0.4rem !important;
-    font-size: 0.6rem !important;
+    /* font-size: 0.6rem !important; */
+}
+
+.btn-mini-2 {
+    padding: 0.1rem 0.2rem !important;
+    /* font-size: 0.4rem !important; */
 }
 
 .form-label {
