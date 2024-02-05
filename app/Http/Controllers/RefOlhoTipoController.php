@@ -23,13 +23,32 @@ class RefOlhoTipoController extends Controller
     {
         $resource = RefOlhoTipo::orderBy('nome')->get();
         $retorno = $resource->map(function($item){
+            $descricao = '';
+            if($item->descricao) {
+                $descricao = " (".$item->descricao.")";
+            }
             return [
                 'id' => $item->id,
-                'nome' => $item->nome." (".$item->descricao.")",
+                'nome' => $item->nome . $descricao,
             ];
         });
 
         $response = RestResponse::createSuccessResponse($retorno, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+        
+        $resource = RefOlhoTipo::where('nome','LIKE', '%'. $request->input('text') .'%')
+        ->orderBy('nome')->get();
+        $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 

@@ -1,21 +1,4 @@
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1050; /* Valor alto para garantir que fique sobre outros elementos */
-}
-
-.modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
+.modal .modal-reduce-padding {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
 }

@@ -1,8 +1,8 @@
-<div class="modal fade" id="modalCadastroGenero" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalCadastroCrenca" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header modal-reduce-padding">
-                <h4 class="modal-title">Listagem de Gêneros</h4>
+                <h4 class="modal-title">Listagem de Crença</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body position-relative pt-0">
@@ -11,14 +11,13 @@
                     <div class="col-12 dataSearch">
                         <div class="input-group">
                             <div class="input-group-text">
-                                <label for="nomeSearchModalCadastroGenero">Busca</label>
+                                <label for="nomeSearchModalCadastroCrenca">Busca</label>
                             </div>
-                            <input type="text" id="nomeSearchModalCadastroGenero"
-                                class="form-control inputActionSearchModalCadastroGenero" name="search">
+                            <input type="text" id="nomeSearchModalCadastroCrenca"
+                                class="form-control inputActionSearchModalCadastroCrenca" name="search">
                         </div>
                     </div>
                 </div>
-
                 <div class="row flex-fill overflow-auto">
                     <div class="table-responsive mt-2">
                         <table class="table table-striped">
@@ -34,6 +33,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer modal-reduce-padding">
                 <div class="col-12">
                     <div class="row">
@@ -48,13 +48,13 @@
                         <form>
                             <div class="col-12 divRegistrationFields" style="display: none;">
                                 <div class="row">
-                                    <h5 class="register-title">Novo Gênero</h5>
+                                    <h5 class="register-title">Nova Crença</h5>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="modalCadastroGenero" class="form-label">Nome</label>
+                                        <label for="modalCadastroCrenca" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
-                                            id="modalCadastroGenero">
+                                            id="modalCadastroCrenca">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -78,4 +78,4 @@
     </div>
 </div>
 
-<script type="module" src="{{ asset('js/modals/referencias/modalCadastroGenero.js') }}"></script>
+<script type="module" src="{{ asset('js/modals/referencias/modalCadastroCrenca.js') }}"></script>

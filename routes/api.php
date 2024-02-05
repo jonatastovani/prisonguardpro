@@ -65,6 +65,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -76,6 +81,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -88,7 +98,7 @@ route::prefix('/v1')->group(function () {
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
 
-                    Route::prefix('/busca')->group(function () {
+                    Route::prefix('/search')->group(function () {
                         Route::post('/select', 'indexSelect');
                         
                     });
@@ -114,6 +124,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -125,6 +140,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -158,6 +178,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -169,6 +194,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -191,6 +221,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -214,6 +249,39 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+                });
+            });
+
+            // Rotas relacionadas ao RefOlhoCorController
+            Route::controller(RefOlhoCorController::class)->group(function () {
+                Route::prefix('/olhocores')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
+                });
+            });
+
+            // Rotas relacionadas ao RefOlhoTipoController
+            Route::controller(RefOlhoTipoController::class)->group(function () {
+                Route::prefix('/olhotipos')->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/comdescricao', 'indexNomeDescricao');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -250,6 +318,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 
@@ -262,6 +335,11 @@ route::prefix('/v1')->group(function () {
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+
                 });
             });
 

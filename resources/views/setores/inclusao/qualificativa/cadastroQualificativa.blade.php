@@ -93,23 +93,43 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="cabelo_tipo_id" class="form-label">Tipo de Cabelo</label>
-                    <select name="cabelo_tipo_id" id="cabelo_tipo_id" class="form-select"></select>
+                    <div class="input-group">
+                        <select name="cabelo_tipo_id" id="cabelo_tipo_id" class="form-select"></select>
+                        <button id="btnCabeloTipoCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
                 <div class="col-sm-3">
                     <label for="cabelo_cor_id" class="form-label">Cor de Cabelo</label>
-                    <select name="cabelo_cor_id" id="cabelo_cor_id" class="form-select"></select>
+                    <div class="input-group">
+                        <select name="cabelo_cor_id" id="cabelo_cor_id" class="form-select"></select>
+                        <button id="btnCabeloCorCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
                 <div class="col-sm-3">
                     <label for="olho_tipo_id" class="form-label">Tipo de Olhos</label>
-                    <select name="olho_tipo_id" id="olho_tipo_id" class="form-select"></select>
+                    <div class="input-group">
+                        <select name="olho_tipo_id" id="olho_tipo_id" class="form-select"></select>
+                        <button id="btnOlhoTipoCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
                 <div class="col-sm-3">
                     <label for="olho_cor_id" class="form-label">Cor de Olhos</label>
-                    <select name="olho_cor_id" id="olho_cor_id" class="form-select"></select>
+                    <div class="input-group">
+                        <select name="olho_cor_id" id="olho_cor_id" class="form-select"></select>
+                        <button id="btnOlhoCorCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
                 <div class="col-sm-3">
                     <label for="crenca_id" class="form-label">Crença</label>
-                    <select name="crenca_id" id="crenca_id" class="form-select"></select>
+                    <div class="input-group">
+                        <select name="crenca_id" id="crenca_id" class="form-select"></select>
+                        <button id="btnCrencaCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
             </div>
 
@@ -132,10 +152,10 @@
                 </div>
             </div> --}}
 
-            <div class="row flex-fill">
-                <div class="col-12 d-flex flex-wrap overflow-auto border border-dark-subtle rounded p-0"
-                    style="max-height: 380px">
-                    <div class="card col-md-4 col-sm-6">
+            <div class="row">
+                <div class="col-12 d-flex flex-wrap overflow-auto border border-dark-subtle rounded p-0 me-n4"
+                    style="min-height: 100px; max-height: 380px;">
+                    {{-- <div class="card col-md-4 col-sm-6">
                         <div class="card-header p-1">
                             Artigo
                         </div>
@@ -145,7 +165,7 @@
                                 artigo.Observações do artigo.Observações do artigo.</p>
                             <a href="#" class="btn btn-mini-2 btn-outline-primary">Alterar observacoes</a>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
@@ -171,13 +191,13 @@
             <div class="row text-end">
                 <div class="col-12 mt-2">
                     <button type="submit" id="btnSalvar" class="btn btn-success me-2 w-25" title="Salvar alterações"
-                        style="max-width: 90px;">
+                        style="max-width: 100px;">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         Salvar
                     </button>
                     <a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
                         class="btn btn-danger w-25 redirecionamentoAnterior" title="Sair da edição da Entrada de Presos"
-                        style="max-width: 90px;">
+                        style="max-width: 100px;">
                         Sair
                     </a>
                 </div>
@@ -190,6 +210,11 @@
     @include('modals.referencias.modalCadastroEscolaridade')
     @include('modals.referencias.modalCadastroCutis')
     @include('modals.referencias.modalCadastroEstadoCivil')
+    @include('modals.referencias.modalCadastroCabeloTipo')
+    @include('modals.referencias.modalCadastroCabeloCor')
+    @include('modals.referencias.modalCadastroOlhoTipo')
+    @include('modals.referencias.modalCadastroOlhoCor')
+    @include('modals.referencias.modalCadastroCrenca')
 
     <script type="module" src="{{ asset('js/setores/inclusao/qualificativa/cadastroQualificativa.js') }}"></script>
 

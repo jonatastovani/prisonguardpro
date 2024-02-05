@@ -19,6 +19,21 @@ class RefOlhoCorController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+        
+        $resource = RefOlhoCor::where('nome','LIKE', '%'. $request->input('text') .'%')
+        ->orderBy('nome')->get();
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

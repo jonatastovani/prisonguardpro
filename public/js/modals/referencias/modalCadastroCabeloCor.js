@@ -3,7 +3,7 @@ import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
 
-export class modalCadastroEscolaridade {
+export class modalCadastroCabeloCor {
 
     /**
      * URL do endpoint da Api
@@ -39,8 +39,8 @@ export class modalCadastroEscolaridade {
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefEscolaridade;
-        this.#idModal = "#modalCadastroEscolaridade";
+        this.#urlApi = urlRefCabeloCor;
+        this.#idModal = "#modalCadastroCabeloCor";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
@@ -178,11 +178,11 @@ export class modalCadastroEscolaridade {
 
         const self = this;
         const modal = $(self.#idModal);
-        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroEscolaridade') });
+        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroCabeloCor') });
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
-            modal.find('.register-title').html('Nova Escolaridade');
+            modal.find('.register-title').html('Nova Cor de Cabelo');
             self.#actionsHideShowRegistrationFields(true);
             modal.find('input[name="nome"]').focus();
         });
@@ -266,7 +266,7 @@ export class modalCadastroEscolaridade {
             if (response.data) {
                 const form = $(self.#idModal).find('form');
                 form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('.register-title').html(`Editar Escolaridade: ${response.data.id} - ${response.data.nome}`);
+                form.find('.register-title').html(`Editar Cor de Cabelo: ${response.data.id} - ${response.data.nome}`);
             }
         } catch (error) {
             console.error(error);
@@ -353,8 +353,8 @@ export class modalCadastroEscolaridade {
 
         try {
             const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Escolaridade';
-            obj.setMessage = `Confirma a exclusão da Escolaridade <b>${nameDel}</b>?`;
+            obj.setTitle = 'Confirmação de exclusão de Cor de Cabelo';
+            obj.setMessage = `Confirma a exclusão da Cor de Cabelo <b>${nameDel}</b>?`;
             obj.setFocusElementWhenClosingModal = button;
             self.#modalHideShow(false);
             const result = await obj.modalOpen();
@@ -380,7 +380,7 @@ export class modalCadastroEscolaridade {
             try {
                 const response = await obj.deleteRequest();
 
-                $.notify(`Escolaridade deletada com sucesso!`, 'success');
+                $.notify(`Cor de Cabelo deletada com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();

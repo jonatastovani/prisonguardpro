@@ -680,6 +680,11 @@ export class commonFunctions {
         const idModal = self.getIdModal;
         const modal = $(idModal);
 
+        modal.find(".btn-save").on("click", function (e) {
+            e.preventDefault();
+            self.saveButtonAction();
+        });
+
         modal.find('.btn-close').on('click', function () {
             self.setEndTimer = true;
         });
@@ -698,53 +703,18 @@ export class commonFunctions {
 
         modal.on('keydown', function (e) {
             if (e.key === 'Escape') {
-                self.setEndTimer = true;
                 e.stopPropagation();
+                self.setEndTimer = true;
             }
         });
 
         if (formRegister == true) {
-            modal.find('form').on('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    if (typeof self.modalCancel === 'function') {
-                        self.modalCancel();
-                    } else {
-                        self.setEndTimer = true;
-                    }
-                    e.stopPropagation();
-                }
-            });
+            this.addDefaultRegistrationModalEvents(self);
         }
 
-        // $(idPop).find('.btnSavePop').on('click', (event) => {
-        //     event.preventDefault();
-        //     self.saveButtonAction();
-        // });
-
-        // $(idPop).on('keydown', function (e) {
-        //     if (e.key === 'Escape') {
-        //         e.stopPropagation();
-        //         self.closePop();
-        //     }
-        // });
-
-        // if (formRegister == true) {
-        //     this.eventDefaultPopupsRegisters(self);
-        // }
-
-        // if (inputsSearchs != null) {
-
-        //     inputsSearchs.on("input", function () {
-
-        //         clearTimeout(self.timerSearch);
-
-        //         self.timerSearch = setTimeout(function () {
-        //             self.generateFilters();
-        //         }, 1000);
-
-        //     });
-
-        // }
+        if (inputsSearchs != null) {
+            this.addDefaultSearchModalEvents(self, inputsSearchs);
+        }
 
     }
 
@@ -753,15 +723,33 @@ export class commonFunctions {
      *
      * @param {Object} self - The reference to the current object.
      */
-    static eventDefaultPopupsRegisters(self) {
+    static addDefaultRegistrationModalEvents(self) {
 
-        const idPop = self.getIdPop();
+        const idModal = self.getIdModal;
+        const modal = $(idModal);
 
-        $(idPop).find('form').on('keydown', function (e) {
+        modal.find('form').on('keydown', function (e) {
             if (e.key === 'Escape') {
-                self.cancelPop();
                 e.stopPropagation();
+                if (typeof self.modalCancel === 'function') {
+                    self.modalCancel();
+                } else {
+                    self.setEndTimer = true;
+                }
             }
+        });
+
+
+    }
+
+    static addDefaultSearchModalEvents(self, inputsSearchs) {
+
+        inputsSearchs.on("input", function () {
+            clearTimeout(self.timerSearch);
+            self.timerSearch = setTimeout(function () {
+                self.generateFilters();
+            }, 1000);
+
         });
 
     }
@@ -773,23 +761,17 @@ export class commonFunctions {
             const screenWidth = $(window).width();
 
             if (screenWidth <= minWidht) {
-                dataSearchDiv.hide();
-                toggleButton.show();
+                dataSearchDiv.hide("slow");
+                toggleButton.show("slow");
             } else {
-                dataSearchDiv.show();
-                toggleButton.hide();
+                dataSearchDiv.show("slow");
+                toggleButton.hide("slow");
             }
 
-            if (self != null) {
-                if (typeof self.adjustTableHeight === 'function') {
-                    self.adjustTableHeight();
-                }
-            }
         }
 
-        toggleButton.click(function (event) {
-            event.preventDefault();
-            dataSearchDiv.toggle();
+        toggleButton.click(function () {
+            dataSearchDiv.slideToggle();
         });
 
         $(window).on('resize.toggleDataSearch', function () {

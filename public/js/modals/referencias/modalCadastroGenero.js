@@ -33,6 +33,10 @@ export class modalCadastroGenero {
      * ID do cadastro que está sendo alterado
      */
     #idRegister;
+    /**
+     * Variável para reservar o timeOut da consulta pelo search
+     */
+    timerSearch;
 
     constructor() {
         this.#urlApi = urlRefGenero;
@@ -73,7 +77,7 @@ export class modalCadastroGenero {
         const self = this;
 
         self.#getDataAll();
-        self.#modalCancel();
+        self.modalCancel();
 
         self.#promisseReturnValue = {
             refresh: false
@@ -122,7 +126,7 @@ export class modalCadastroGenero {
         modal.find('.table tbody').html('');
         modal.find("*").off();
         modal.off('keydown');
-        self.#modalCancel();
+        self.modalCancel();
 
         if (self.#focusElementWhenClosingModal !== null && $(self.#focusElementWhenClosingModal).length) {
             $(self.#focusElementWhenClosingModal).focus();
@@ -131,7 +135,7 @@ export class modalCadastroGenero {
 
     }
 
-    #modalCancel() {
+    modalCancel() {
 
         const self = this;
 
@@ -162,10 +166,10 @@ export class modalCadastroGenero {
 
         if (status) {
             modal.find('.divBtnAdd').slideUp();
-            modal.find(".divRegistrationFields, .divBtnRegister").slideDown();
+            modal.find(".divRegistrationFields").slideDown();
         } else {
             modal.find('.divBtnAdd').slideDown();
-            modal.find(".divRegistrationFields, .divBtnRegister").slideUp();
+            modal.find(".divRegistrationFields").slideUp();
         }
 
     }
@@ -174,7 +178,7 @@ export class modalCadastroGenero {
 
         const self = this;
         const modal = $(self.#idModal);
-        commonFunctions.eventDefaultModals(self, { formRegister: true });
+        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroGenero') });
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
@@ -183,28 +187,38 @@ export class modalCadastroGenero {
             modal.find('input[name="nome"]').focus();
         });
 
-        modal.find(".btn-save").on("click", function (e) {
-            e.preventDefault();
-            self.#saveButtonAction();
-        });
+    }
+
+    async generateFilters() {
+
+        const self = this;
+        const dataSearch = $(self.#idModal).find('.dataSearch');
+
+        let data = {
+            text: dataSearch.find('input[name="search"]').val()
+        };
+        await self.#getDataAll(data);
 
     }
 
-    async #getDataAll() {
+    async #getDataAll(data) {
 
         const self = this;
-        const obj = new conectAjax(`${self.#urlApi}`);
-        const tabela = $(self.#idModal).find('.table tbody');
-        tabela.html('');
 
         try {
-            const response = await obj.getRequest();
-            if (response.data.length) {
-                for (let i = 0; i < response.data.length; i++) {
-                    const item = response.data[i];
+            const obj = new conectAjax(`${self.#urlApi}/search/all`);
+            const tabela = $(self.#idModal).find('.table tbody');
+            tabela.html('');
 
-                    const idTr = `${item.id}${Date.now()}`;
-                    tabela.append(`
+            if (obj.setAction(enumAction.POST)) {
+                obj.setData(data);
+                const response = await obj.envRequest();
+                if (response.data.length) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        const item = response.data[i];
+
+                        const idTr = `${item.id}${Date.now()}`;
+                        tabela.append(`
                         <tr id=${idTr}>
                             <td class="text-center"><b>${item.id}</b></td>
                             <td>
@@ -221,20 +235,23 @@ export class modalCadastroGenero {
                         </tr>
                     `);
 
-                    item['idTr'] = idTr;
+                        item['idTr'] = idTr;
 
-                    self.#addQueryEvents(item);
+                        self.#addQueryEvents(item);
 
-                    // Adicionar atraso a cada 1000 registros
-                    if ((i + 1) % 1000 === 0 && i !== response.data.length - 1) {
-                        await new Promise(resolve => setTimeout(resolve, 10));
+                        // Adicionar atraso a cada 1000 registros
+                        if ((i + 1) % 1000 === 0 && i !== response.data.length - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 10));
+                        }
                     }
                 }
+            } else {
+                throw new Error('Action inválido');
             }
         } catch (error) {
+            self.#endTimer = true;
             console.error(error);
             $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-            self.#endTimer=true;
         }
 
     }
@@ -277,7 +294,7 @@ export class modalCadastroGenero {
 
     }
 
-    #saveButtonAction() {
+    saveButtonAction() {
 
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
@@ -309,9 +326,9 @@ export class modalCadastroGenero {
                     $.notify(`Dados enviados com sucesso!`, 'success');
 
                     self.#promisseReturnValue.refresh = true;
-                    self.#getDataAll();
+                    self.generateFilters();
                     if (self.#action === enumAction.PUT) {
-                        self.#modalCancel();
+                        self.modalCancel();
                     } else {
                         self.#clearForm();
                         $(self.#idModal).find('form').find('input[name="nome"]').focus();
@@ -336,7 +353,7 @@ export class modalCadastroGenero {
 
         try {
             const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Cadastro de Gênero';
+            obj.setTitle = 'Confirmação de exclusão de Gênero';
             obj.setMessage = `Confirma a exclusão do Gênero <b>${nameDel}</b>?`;
             obj.setFocusElementWhenClosingModal = button;
             self.#modalHideShow(false);
@@ -366,8 +383,8 @@ export class modalCadastroGenero {
                 $.notify(`Gênero deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
-                self.#modalCancel();
-                self.#getDataAll();
+                self.modalCancel();
+                self.generateFilters();
 
             } catch (error) {
                 console.error(error);

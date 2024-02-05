@@ -9,11 +9,11 @@
 
     <title>{{ config('sistema.sigla') }} @yield('title')</title>
 
-    <link rel="stylesheet" href="/bootstrap-5.3.2-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/bootstrap-icons-1.11.1/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('/bootstrap-5.3.2-dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/bootstrap-icons-1.11.1/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('css/style-popup.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('css/modal.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/modal.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="{{asset('build/assets/app-e3b0c442.css')}}">

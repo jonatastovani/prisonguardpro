@@ -5,10 +5,15 @@ import { funcoesComuns } from "../../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
 import { modalAlterarPresoConvivio } from "../../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
+import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
+import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
 import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
 import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
 import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
 import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
+import { modalCadastroOlhoCor } from "../../../modals/referencias/modalCadastroOlhoCor.js";
+import { modalCadastroOlhoTipo } from "../../../modals/referencias/modalCadastroOlhoTipo.js";
 
 $(document).ready(function () {
 
@@ -19,25 +24,19 @@ $(document).ready(function () {
     function init() {
 
         const matricula = $('#matricula');
-        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/busca/select`);
+        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
         funcoesComuns.aplicarMascaraNumero(matricula, { formato: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
 
-        funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
-        funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
-        funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`,{idOpcaoSelecionada:1});
-        funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
-        funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
-
         const preencherGenero = () => {
-            funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`,{idOpcaoSelecionada:1});
+            funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
         }
         preencherGenero();
 
-        $(`#btnGeneroCadastro`).on('click', function(){
+        $(`#btnGeneroCadastro`).on('click', function () {
             const obj = new modalCadastroGenero();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
@@ -52,7 +51,7 @@ $(document).ready(function () {
         }
         preencherEscolaridade();
 
-        $(`#btnEscolaridadeCadastro`).on('click', function(){
+        $(`#btnEscolaridadeCadastro`).on('click', function () {
             const obj = new modalCadastroEscolaridade();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
@@ -67,7 +66,7 @@ $(document).ready(function () {
         }
         preencherEstadoCivil();
 
-        $(`#btnEstadoCivilCadastro`).on('click', function(){
+        $(`#btnEstadoCivilCadastro`).on('click', function () {
             const obj = new modalCadastroEstadoCivil();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
@@ -82,12 +81,87 @@ $(document).ready(function () {
         }
         preencherCutis();
 
-        $(`#btnCutisCadastro`).on('click', function(){
+        $(`#btnCutisCadastro`).on('click', function () {
             const obj = new modalCadastroCutis();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
                 if (result && result.refresh) {
                     preencherCutis();
+                }
+            });
+        });
+
+        const preencherCabeloTipo = () => {
+            funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
+        }
+        preencherCabeloTipo();
+
+        $(`#btnCabeloTipoCadastro`).on('click', function () {
+            const obj = new modalCadastroCabeloTipo();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCabeloTipo();
+                }
+            });
+        });
+
+        const preencherCabeloCor = () => {
+            funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
+        }
+        preencherCabeloCor();
+
+        $(`#btnCabeloCorCadastro`).on('click', function () {
+            const obj = new modalCadastroCabeloCor();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCabeloCor();
+                }
+            });
+        });
+
+        const preencherOlhoTipo = () => {
+            funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
+        }
+        preencherOlhoTipo();
+
+        $(`#btnOlhoTipoCadastro`).on('click', function () {
+            const obj = new modalCadastroOlhoTipo();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherOlhoTipo();
+                }
+            });
+        });
+
+        const preencherOlhoCor = () => {
+            funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
+        }
+        preencherOlhoCor();
+
+        $(`#btnOlhoCorCadastro`).on('click', function () {
+            const obj = new modalCadastroOlhoCor();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherOlhoCor();
+                }
+            });
+        });
+
+        const preencherCrenca = () => {
+            funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
+        }
+        preencherCrenca();
+
+        $(`#btnCrencaCadastro`).on('click', function () {
+            const obj = new modalCadastroCrenca();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCrenca();
                 }
             });
         });
@@ -100,7 +174,7 @@ $(document).ready(function () {
 
     $(window).on('resize', function () {
 
-        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/busca/select`);
+        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
 
     });
 

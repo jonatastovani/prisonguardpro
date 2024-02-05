@@ -1,8 +1,8 @@
-<div class="modal fade" id="modalCadastroGenero" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalCadastroCabeloCor" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header modal-reduce-padding">
-                <h4 class="modal-title">Listagem de Gêneros</h4>
+                <h4 class="modal-title">Listagem de Cor de Cabelo</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body position-relative pt-0">
@@ -11,28 +11,28 @@
                     <div class="col-12 dataSearch">
                         <div class="input-group">
                             <div class="input-group-text">
-                                <label for="nomeSearchModalCadastroGenero">Busca</label>
+                                <label for="nomeSearchModalCadastroCabeloCor">Busca</label>
                             </div>
-                            <input type="text" id="nomeSearchModalCadastroGenero"
-                                class="form-control inputActionSearchModalCadastroGenero" name="search">
+                            <input type="text" id="nomeSearchModalCadastroCabeloCor"
+                                class="form-control inputActionSearchModalCadastroCabeloCor" name="search">
                         </div>
                     </div>
                 </div>
-
-                <div class="row flex-fill overflow-auto">
-                    <div class="table-responsive mt-2">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>#</th>
-                                    <th>Ação</th>
-                                    <th>Nome</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="row flex-fill overflow-auto">
+                        <div class="table-responsive mt-2">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>#</th>
+                                        <th>Ação</th>
+                                        <th>Nome</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+
             </div>
             <div class="modal-footer modal-reduce-padding">
                 <div class="col-12">
@@ -48,13 +48,13 @@
                         <form>
                             <div class="col-12 divRegistrationFields" style="display: none;">
                                 <div class="row">
-                                    <h5 class="register-title">Novo Gênero</h5>
+                                    <h5 class="register-title">Nova Cor de Cabelo</h5>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="modalCadastroGenero" class="form-label">Nome</label>
+                                        <label for="modalCadastroCabeloCor" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
-                                            id="modalCadastroGenero">
+                                            id="modalCadastroCabeloCor">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -78,4 +78,4 @@
     </div>
 </div>
 
-<script type="module" src="{{ asset('js/modals/referencias/modalCadastroGenero.js') }}"></script>
+<script type="module" src="{{ asset('js/modals/referencias/modalCadastroCabeloCor.js') }}"></script>

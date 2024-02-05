@@ -75,10 +75,8 @@ export class modalMessage {
 
             return new Promise(function (resolve) {
 
-                let contador = 0;
                 const checkConfirmation = setInterval(function () {
-                    console.log(contador)
-                    contador++;
+
                     if (self.#confirmResult !== undefined) {
                         clearInterval(checkConfirmation);
                         resolve(self.#confirmResult);
