@@ -71,7 +71,7 @@
 
     <input type="hidden" id="id" value="{{ isset($id) ? $id : '' }}">
 
-	@include('modals.inclusao.modalAlterarPresoConvivio')
+	@include('modals.preso.modalAlterarPresoConvivio')
 
     <script type="module" src="{{ asset('js/setores/inclusao/cadastroEntradasPresos.js') }}"></script>
 

@@ -48,12 +48,16 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefArtigoController
             Route::controller(RefArtigoController::class)->group(function () {
-                Route::prefix('/artigo')->group(function () {
+                Route::prefix('/artigos')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/select', 'indexSelect');
+                    });
                 });
             });
 
@@ -69,7 +73,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -85,7 +88,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -100,7 +102,6 @@ route::prefix('/v1')->group(function () {
 
                     Route::prefix('/search')->group(function () {
                         Route::post('/select', 'indexSelect');
-                        
                     });
                 });
             });
@@ -128,7 +129,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -144,7 +144,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -182,7 +181,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -198,7 +196,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -225,7 +222,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -264,7 +260,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -281,7 +276,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -322,7 +316,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 
@@ -339,7 +332,6 @@ route::prefix('/v1')->group(function () {
                     Route::prefix('/search')->group(function () {
                         Route::post('/all', 'indexSearchAll');
                     });
-
                 });
             });
 

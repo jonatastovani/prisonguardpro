@@ -830,7 +830,7 @@ export class commonFunctions {
 
     }
 
-    static configurarCampoSelect2(elem, urlApi, options = {}) {
+    static addEventsSelect2(elem, urlApi, options = {}) {
         const {
             minimo = 3, placeholder = 'Selecione uma opção'
         } = options;
@@ -852,13 +852,13 @@ export class commonFunctions {
                 dataType: 'json',
                 delay: 250,
                 transport: function (params, success) {
-                    var texto = params.data.term; // Captura o valor do texto
+                    var text = params.data.term; // Captura o valor do texto
 
                     // Adiciona o valor do texto ao corpo da solicitação
                     var ajaxOptions = {
                         url: urlApi,
                         type: 'POST',
-                        data: { 'texto': texto },
+                        data: { 'text': text },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -885,4 +885,5 @@ export class commonFunctions {
         });
 
     }
+
 }

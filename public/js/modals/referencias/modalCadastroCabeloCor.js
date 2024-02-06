@@ -298,7 +298,6 @@ export class modalCadastroCabeloCor {
 
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
-        console.log(data)
         self.#save(data);
 
     }

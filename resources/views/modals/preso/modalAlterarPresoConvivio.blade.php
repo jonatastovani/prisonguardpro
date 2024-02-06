@@ -15,4 +15,4 @@
     </div>
 </div>
 
-<script type="module" src="{{ asset('js/modals/inclusao/modalAlterarPresoConvivio.js') }}"></script>
+<script type="module" src="{{ asset('js/modals/preso/modalAlterarPresoConvivio.js') }}"></script>

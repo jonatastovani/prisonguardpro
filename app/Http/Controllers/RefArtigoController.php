@@ -43,6 +43,31 @@ class RefArtigoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexSelect(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'required',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resources = RefArtigo::where('nome', 'LIKE', "%{$request->texto}%")
+            ->orWhere('descricao', 'LIKE', "%{$request->texto}%")
+            ->get();
+
+        // Mapear os resultados para criar um array com os campos id e text
+        $mappedResults = $resources->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'text' => $item->nome . "(" . $item->descricao . ")",
+            ];
+        });
+
+        $response = RestResponse::createSuccessResponse($mappedResults, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

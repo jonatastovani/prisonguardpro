@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{asset('build/assets/app-e3b0c442.css')}}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <script src="{{ asset('js/jquery/jquery-3.7.0.min.js') }}"></script>
+    <script src="{{ asset('js/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('js/jquery/jquery.mask-1.14.16.min.js') }}"></script>
     <script src="{{ asset('js/jquery/jquery.Jcrop.min.js') }}"></script>
     <script src="{{ asset('js/jquery/jquery-maskmoney-v3.0.2.min.js') }}"></script>
@@ -56,7 +56,7 @@
 
     @include('site.includesDefault')
     @include('common.modalMessage')
-    <script type="module" src="{{ asset('js/script.js') }}"></script>
+    {{-- <script type="module" src="{{ asset('js/script.js') }}"></script> --}}
 
 </body>
 

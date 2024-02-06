@@ -4,7 +4,7 @@ import { enumAction } from "../../common/enumAction.js";
 import { funcoesComuns } from "../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../common/funcoesPresos.js";
 import { modalMessage } from "../../common/modalMessage.js";
-import { modalAlterarPresoConvivio } from "../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { modalAlterarPresoConvivio } from "../../modals/preso/modalAlterarPresoConvivio.js";
 
 $(document).ready(function () {
 

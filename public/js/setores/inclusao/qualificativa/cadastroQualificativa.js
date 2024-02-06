@@ -1,10 +1,12 @@
 import { conectAjax } from "../../../ajax/conectAjax.js";
+import { commonFunctions } from "../../../common/commonFunctions.js";
 import { configuracoesApp } from "../../../common/configuracoesApp.js";
 import { enumAction } from "../../../common/enumAction.js";
 import { funcoesComuns } from "../../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
-import { modalAlterarPresoConvivio } from "../../../modals/inclusao/modalAlterarPresoConvivio.js";
+import { modalAlterarPresoConvivio } from "../../../modals/preso/modalAlterarPresoConvivio.js";
+import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
 import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
 import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
 import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
@@ -20,12 +22,13 @@ $(document).ready(function () {
     const id = $('#id').val();
     const containerPresos = $('#containerPresos');
     const redirecionamento = $('.redirecionamentoAnterior').attr('href');
-
+    let arrArtigos = [];
+    
     function init() {
 
         const matricula = $('#matricula');
         funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
-        funcoesComuns.aplicarMascaraNumero(matricula, { formato: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
+        commonFunctions.applyCustomNumberMask(matricula, { format: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
@@ -170,13 +173,19 @@ $(document).ready(function () {
             buscarDadosTodos();
         }
 
+        $(`#btnAddArtigo`).on('click', function () {
+            const obj = new modalCadastroPresoArtigo();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    console.log('Atualizar Artigos')
+                }
+            });
+        });
+
+        $(`#btnAddArtigo`).click();
+
     };
-
-    $(window).on('resize', function () {
-
-        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
-
-    });
 
     $('#btnInserirPreso').on("click", (event) => {
 

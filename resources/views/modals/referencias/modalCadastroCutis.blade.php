@@ -51,9 +51,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="modalCadastroCutis" class="form-label">Nome</label>
+                                        <label for="nomeModalCadastroCutis" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
-                                            id="modalCadastroCutis">
+                                            id="nomeModalCadastroCutis">
                                     </div>
                                 </div>
                                 <div class="row">

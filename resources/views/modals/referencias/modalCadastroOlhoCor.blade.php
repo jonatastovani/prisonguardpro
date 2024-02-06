@@ -49,9 +49,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="modalCadastroOlhoCor" class="form-label">Nome</label>
+                                        <label for="nomeModalCadastroOlhoCor" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
-                                            id="modalCadastroOlhoCor">
+                                            id="nomeModalCadastroOlhoCor">
                                     </div>
                                 </div>
                                 <div class="row">

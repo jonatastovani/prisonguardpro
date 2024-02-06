@@ -52,9 +52,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="modalCadastroCrenca" class="form-label">Nome</label>
+                                        <label for="nomeModalCadastroCrenca" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
-                                            id="modalCadastroCrenca">
+                                            id="nomeModalCadastroCrenca">
                                     </div>
                                 </div>
                                 <div class="row">
