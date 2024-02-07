@@ -832,7 +832,8 @@ export class commonFunctions {
 
     static addEventsSelect2(elem, urlApi, options = {}) {
         const {
-            minimo = 3, placeholder = 'Selecione uma opção'
+            minimum = 3, placeholder = 'Selecione uma opção',
+            dropdownParent = $(document.body)
         } = options;
 
         elem.select2({
@@ -880,8 +881,8 @@ export class commonFunctions {
             },
             placeholder: placeholder,
             allowClear: true,
-            minimumInputLength: minimo
-
+            minimumInputLength: minimum,
+            dropdownParent: dropdownParent,
         });
 
     }

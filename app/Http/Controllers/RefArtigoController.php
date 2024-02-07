@@ -47,7 +47,7 @@ class RefArtigoController extends Controller
     {
         // Regras de validação
         $rules = [
-            'text' => 'required',
+            'text' => 'string',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -60,7 +60,7 @@ class RefArtigoController extends Controller
         $mappedResults = $resources->map(function ($item) {
             return [
                 'id' => $item->id,
-                'text' => $item->nome . "(" . $item->descricao . ")",
+                'text' => $item->nome . " (" . $item->descricao . ")",
             ];
         });
 

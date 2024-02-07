@@ -178,6 +178,7 @@ $(document).ready(function () {
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
                 if (result && result.refresh) {
+                    console.log(result)
                     console.log('Atualizar Artigos')
                 }
             });

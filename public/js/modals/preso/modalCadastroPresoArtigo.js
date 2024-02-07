@@ -1,7 +1,4 @@
-import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
-import { enumAction } from "../../common/enumAction.js";
-import { modalMessage } from "../../common/modalMessage.js";
 
 export class modalCadastroPresoArtigo {
 
@@ -28,10 +25,6 @@ export class modalCadastroPresoArtigo {
     /**
      * Elemento de foco ao fechar o modal
      */
-    #action;
-    /**
-     * ID do cadastro que está sendo alterado
-     */
     #idRegister;
     /**
      * Variável para reservar o timeOut da consulta pelo search
@@ -44,7 +37,6 @@ export class modalCadastroPresoArtigo {
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
-        this.#action = enumAction.POST;
         this.#idRegister = null;
         this.#addEventsDefault();
     }
@@ -79,7 +71,11 @@ export class modalCadastroPresoArtigo {
         // self.#getDataAll();
         self.modalCancel();
 
-        self.#promisseReturnValue = {refresh: false};
+        self.#promisseReturnValue = {
+            refresh: false,
+            idRegister: this.#idRegister
+        };
+        
         $(self.#idModal).modal('show');
 
         return new Promise(function (resolve) {
@@ -136,7 +132,7 @@ export class modalCadastroPresoArtigo {
 
         const self = this;
 
-        // self.#clearForm();
+        self.#clearForm();
         setTimeout(() => {
             $(self.#idModal).find('.btnNewRegister').focus();
         }, 500);
@@ -149,7 +145,6 @@ export class modalCadastroPresoArtigo {
         const modal = $(self.#idModal);
 
         self.#idRegister = null;
-        self.#action = enumAction.POST;
         modal.find('form')[0].reset();
         modal.find('form').find('select').val('');
 
@@ -161,209 +156,113 @@ export class modalCadastroPresoArtigo {
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
 
-        $('#artigo_idModalCadastroPresoArtigo').select2({
-            dropdownParent: modal
+        $('#artigo_idModalCadastroPresoArtigo').select2();
+
+        commonFunctions.addEventsSelect2($('#artigo_idModalCadastroPresoArtigo'), `${urlRefArtigos}/search/select`, {
+            dropdownParent: modal, minimum: 0
         });
 
-        // commonFunctions.addEventsSelect2($('#artigo_idModalCadastroPresoArtigo'), `${urlRefArtigos}/search/select`);
-
-        // modal.find(".btnNewRegister").on("click", () => {
-        //     self.#action = enumAction.POST;
-        //     modal.find('.register-title').html('Nova Cor de Cabelo');
-        //     modal.find('input[name="nome"]').focus();
-        // });
-
     }
 
-    async #getDataAll() {
+    // async #getDataAll() {
 
-        const self = this;
+    //     const self = this;
 
-        try {
-            const obj = new conectAjax(`${self.#urlApi}/search/all`);
-            const tabela = $(self.#idModal).find('.table tbody');
-            tabela.html('');
+    //     try {
+    //         const obj = new conectAjax(`${self.#urlApi}/search/all`);
+    //         const tabela = $(self.#idModal).find('.table tbody');
+    //         tabela.html('');
 
-            if (obj.setAction(enumAction.POST)) {
-                obj.setData(data);
-                const response = await obj.envRequest();
-                if (response.data.length) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        const item = response.data[i];
+    //         if (obj.setAction(enumAction.POST)) {
+    //             obj.setData(data);
+    //             const response = await obj.envRequest();
+    //             if (response.data.length) {
+    //                 for (let i = 0; i < response.data.length; i++) {
+    //                     const item = response.data[i];
 
-                        const idTr = `${item.id}${Date.now()}`;
-                        tabela.append(`
-                        <tr id=${idTr}>
-                            <td class="text-center"><b>${item.id}</b></td>
-                            <td>
-                                <div class="d-flex wrap-nowrap justify-content-center">
-                                    <button class="btn btn-outline-primary btn-mini-2 me-2 btn-edit" title="Editar cadastro">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td>${item.nome}</td>
-                        </tr>
-                    `);
+    //                     const idTr = `${item.id}${Date.now()}`;
+    //                     tabela.append(`
+    //                     <tr id=${idTr}>
+    //                         <td class="text-center"><b>${item.id}</b></td>
+    //                         <td>
+    //                             <div class="d-flex wrap-nowrap justify-content-center">
+    //                                 <button class="btn btn-outline-primary btn-mini-2 me-2 btn-edit" title="Editar cadastro">
+    //                                     <i class="bi bi-pencil"></i>
+    //                                 </button>
+    //                                 <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro">
+    //                                     <i class="bi bi-trash"></i>
+    //                                 </button>
+    //                             </div>
+    //                         </td>
+    //                         <td>${item.nome}</td>
+    //                     </tr>
+    //                 `);
 
-                        item['idTr'] = idTr;
+    //                     item['idTr'] = idTr;
 
-                        self.#addQueryEvents(item);
+    //                     self.#addQueryEvents(item);
 
-                        // Adicionar atraso a cada 1000 registros
-                        if ((i + 1) % 1000 === 0 && i !== response.data.length - 1) {
-                            await new Promise(resolve => setTimeout(resolve, 10));
-                        }
-                    }
-                }
-            } else {
-                throw new Error('Action inválido');
-            }
-        } catch (error) {
-            self.#endTimer = true;
-            console.error(error);
-            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-        }
+    //                     // Adicionar atraso a cada 1000 registros
+    //                     if ((i + 1) % 1000 === 0 && i !== response.data.length - 1) {
+    //                         await new Promise(resolve => setTimeout(resolve, 10));
+    //                     }
+    //                 }
+    //             }
+    //         } else {
+    //             throw new Error('Action inválido');
+    //         }
+    //     } catch (error) {
+    //         self.#endTimer = true;
+    //         console.error(error);
+    //         $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+    //     }
 
-    }
+    // }
 
-    async #getRecurse() {
+    // async #getRecurse() {
 
-        const self = this;
-        const obj = new conectAjax(`${self.#urlApi}`);
-        obj.setParam(self.#idRegister);
-        try {
-            const response = await obj.getRequest();
-            if (response.data) {
-                const form = $(self.#idModal).find('form');
-                form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('.register-title').html(`Editar Cor de Cabelo: ${response.data.id} - ${response.data.nome}`);
-            }
-        } catch (error) {
-            console.error(error);
-            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-            self.#modalClose();
-        }
+    //     const self = this;
+    //     const obj = new conectAjax(`${self.#urlApi}`);
+    //     obj.setParam(self.#idRegister);
+    //     try {
+    //         const response = await obj.getRequest();
+    //         if (response.data) {
+    //             const form = $(self.#idModal).find('form');
+    //             form.find('input[name="nome"]').val(response.data.nome).focus();
+    //             form.find('.register-title').html(`Editar Cor de Cabelo: ${response.data.id} - ${response.data.nome}`);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+    //         self.#modalClose();
+    //     }
 
-    }
+    // }
 
-    #addQueryEvents(item) {
+    // #addQueryEvents(item) {
 
-        const self = this;
-        const tr = $(`#${item.idTr}`);
+    //     const self = this;
+    //     const tr = $(`#${item.idTr}`);
 
-        tr.find(`.btn-edit`).click(async function () {
-            self.#idRegister = item.id
-            self.#action = enumAction.PUT;
-            self.#getRecurse();
-        })
+    //     tr.find(`.btn-edit`).click(async function () {
+    //         self.#idRegister = item.id
+    //         self.#action = enumAction.PUT;
+    //         self.#getRecurse();
+    //     })
 
-        tr.find(`.btn-delete`).click(async function () {
-            self.#delButtonAction(item.id, item.nome, this);
-        })
+    //     tr.find(`.btn-delete`).click(async function () {
+    //         self.#delButtonAction(item.id, item.nome, this);
+    //     })
 
-    }
+    // }
 
     saveButtonAction() {
 
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
-        self.#save(data);
-
-    }
-
-    async #save(data) {
-
-        const self = this;
-        const obj = new conectAjax(self.#urlApi);
-
-        if (obj.setAction(self.#action)) {
-
-            const btn = $(self.#idModal).find('.btn-save');
-            try {
-
-                commonFunctions.simulateLoading(btn);
-
-                obj.setData(data);
-
-                if (self.#action === enumAction.PUT) {
-                    obj.setParam(self.#idRegister);
-                }
-
-                const response = await obj.envRequest();
-                if (response.data) {
-                    $.notify(`Dados enviados com sucesso!`, 'success');
-
-                    self.#promisseReturnValue.refresh = true;
-                    self.generateFilters();
-                    if (self.#action === enumAction.PUT) {
-                        self.modalCancel();
-                    } else {
-                        self.#clearForm();
-                        $(self.#idModal).find('form').find('input[name="nome"]').focus();
-                    }
-
-                }
-            } catch (error) {
-
-                console.log(error);
-                $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-            }
-            finally {
-                commonFunctions.simulateLoading(btn, false);
-            };
-        }
-
-    }
-
-    async #delButtonAction(idDel, nameDel, button = null) {
-
-        const self = this;
-
-        try {
-            const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Cor de Cabelo';
-            obj.setMessage = `Confirma a exclusão da Cor de Cabelo <b>${nameDel}</b>?`;
-            obj.setFocusElementWhenClosingModal = button;
-            self.#modalHideShow(false);
-            const result = await obj.modalOpen();
-            if (result) {
-                self.#delRecurse(idDel);
-            }
-            self.#modalHideShow(true);
-
-        } catch (error) {
-            console.log(error);
-            self.#modalHideShow(true);
-        }
-
-    }
-
-    async #delRecurse(idDel) {
-
-        const self = this;
-        const obj = new conectAjax(self.#urlApi);
-
-        if (obj.setAction(enumAction.DELETE)) {
-            obj.setParam(idDel);
-            try {
-                const response = await obj.deleteRequest();
-
-                $.notify(`Cor de Cabelo deletada com sucesso!`, 'success');
-                self.#promisseReturnValue.refresh = true;
-
-                self.modalCancel();
-                self.generateFilters();
-
-            } catch (error) {
-                console.error(error);
-                $.notify(`Não foi possível executar a ação. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-            }
-        }
-
+        self.#promisseReturnValue.refresh = true;
+        self.#promisseReturnValue['data'] = data;
+        self.#endTimer = true;
     }
 
 }
