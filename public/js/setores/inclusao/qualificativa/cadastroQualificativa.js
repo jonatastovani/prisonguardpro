@@ -5,7 +5,6 @@ import { enumAction } from "../../../common/enumAction.js";
 import { funcoesComuns } from "../../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
-import { modalAlterarPresoConvivio } from "../../../modals/preso/modalAlterarPresoConvivio.js";
 import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
 // import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
 // import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
@@ -183,7 +182,6 @@ $(document).ready(function () {
             });
         });
 
-        // $(`#btnAddArtigo`).click();
         inserirArtigos({
             artigo_id: 1,
             observacoes: 'Observacoes do artigo id 1'
@@ -331,10 +329,17 @@ $(document).ready(function () {
 
         containerArtigos.append(strPreso);
         arrData['idDiv'] = idDiv;
+        addEventosBotoesDaConsulta(arrData);
 
-        console.log(arrArtigos);
+        return idDiv;
+    }
 
-        $(`#${idDiv}`).find('.btn-edit').on('click', function () {
+    function addEventosBotoesDaConsulta(arrData) {
+
+        const idDiv = arrData.idDiv;
+        const div = $(`#${idDiv}`);
+
+        div.find('.btn-edit').on('click', function () {
             const index = arrArtigos.findIndex((item) => item.idDiv === arrData.idDiv);
             if (index != -1) {
                 const obj = new modalCadastroPresoArtigo();
@@ -355,58 +360,19 @@ $(document).ready(function () {
                 console.error(arrArtigos, `Index: ${index}`);
                 $.notify(`Não foi possível editar o artigo. Se o problema persistir consulte o programador.\nErro: ${message}`, 'error');
             }
-
+            
         });
-
-        return idDiv;
-    }
-
-    function addEventosBotoesDaConsulta(idDiv) {
-
-        const div = $(`#${idDiv}`);
-        const matricula = div.find('input[name="matricula"]');
-        const digito = div.find('input[name="digito"]');
-        funcoesComuns.eventoEsconderExibir($(`#camposAdicionais${idDiv}`), $(`#toggleCamposAdicionais${idDiv}`));
-
-        $(`#btnAlterarPresoConvivio${idDiv}`).on('click', function () {
-            const obj = new modalAlterarPresoConvivio();
-            obj.setFocoNoElementoAoFechar = this;
-            obj.setIdDiv = idDiv;
-            obj.modalAbrir().then(function (result) {
-                console.log(result)
-
-                if (result) {
-                    if (result.cor) {
-                        div.removeClass('bg-info');
-                        div.css('color', result.cor.cor_texto);
-                        div.css('background-color', result.cor.cor_fundo);
-                    } else {
-                        div.addClass('bg-info');
-                        div.removeAttr('style');
-                    }
-                    div.find('input[name="convivio_tipo_id"]').val(result.id);
-
-                    const nomeConvivio = !result.convivio_padrao_bln ? result.nome : null;
-                    const campoInfo = div.find('.campoInfo');
-                    const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
-                    if (!infoConvivio.length && nomeConvivio) {
-                        campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                    } else if (infoConvivio.length && nomeConvivio) {
-                        infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                    } else if (infoConvivio.length && !nomeConvivio) {
-                        infoConvivio.remove();
-                    }
-
-                }
-            });
-        });
-
-        div.find('.btn-close').on("click", function () {
-            const idPreso = $(this).data('id');
-            if (idPreso) {
+        
+        
+        div.find('.btn-delete').on("click", function () {
+            console.log(arrArtigos)
+            console.log(arrData.idDiv);
+            arrArtigos = arrArtigos.filter((item)=>item.idDiv!=arrData.idDiv);
+            
+            if (arrData.id) {
                 acaoBtnDeletar(idDiv, this);
             } else {
-                $(`#${idDiv}`).remove();
+                div.remove();
             }
         });
 
@@ -415,8 +381,8 @@ $(document).ready(function () {
     function acaoBtnDeletar(idDiv, button) {
 
         const obj = new modalMessage();
-        obj.setMessage(`Confirma a exclusão deste preso?`);
-        obj.setTitle('Confirmação de exclusão de preso');
+        obj.setMessage(`Confirma a exclusão deste artigo para o preso?`);
+        obj.setTitle('Confirmação de exclusão de artigo');
         obj.setFocusElementWhenClosingModal(button);
         obj.modalOpen().then(function (result) {
 
