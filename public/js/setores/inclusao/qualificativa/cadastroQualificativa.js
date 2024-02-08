@@ -7,167 +7,167 @@ import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
 import { modalAlterarPresoConvivio } from "../../../modals/preso/modalAlterarPresoConvivio.js";
 import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
-import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
-import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
-import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
-import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
-import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
-import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
-import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
-import { modalCadastroOlhoCor } from "../../../modals/referencias/modalCadastroOlhoCor.js";
-import { modalCadastroOlhoTipo } from "../../../modals/referencias/modalCadastroOlhoTipo.js";
+// import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
+// import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
+// import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
+// import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
+// import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
+// import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
+// import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
+// import { modalCadastroOlhoCor } from "../../../modals/referencias/modalCadastroOlhoCor.js";
+// import { modalCadastroOlhoTipo } from "../../../modals/referencias/modalCadastroOlhoTipo.js";
 
 $(document).ready(function () {
 
     const id = $('#id').val();
-    const containerPresos = $('#containerPresos');
+    const containerArtigos = $('#containerArtigos');
     const redirecionamento = $('.redirecionamentoAnterior').attr('href');
     let arrArtigos = [];
-    
+
     function init() {
 
         const matricula = $('#matricula');
         funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
         commonFunctions.applyCustomNumberMask(matricula, { format: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
-        matricula.on('input', function () {
-            $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
-        })
+        // matricula.on('input', function () {
+        //     $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
+        // })
 
-        const preencherGenero = () => {
-            funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
-        }
-        preencherGenero();
+        // const preencherGenero = () => {
+        //     funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
+        // }
+        // preencherGenero();
 
-        $(`#btnGeneroCadastro`).on('click', function () {
-            const obj = new modalCadastroGenero();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherGenero();
-                }
-            });
-        });
+        // $(`#btnGeneroCadastro`).on('click', function () {
+        //     const obj = new modalCadastroGenero();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherGenero();
+        //         }
+        //     });
+        // });
 
-        const preencherEscolaridade = () => {
-            funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
-        }
-        preencherEscolaridade();
+        // const preencherEscolaridade = () => {
+        //     funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
+        // }
+        // preencherEscolaridade();
 
-        $(`#btnEscolaridadeCadastro`).on('click', function () {
-            const obj = new modalCadastroEscolaridade();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherEscolaridade();
-                }
-            });
-        });
+        // $(`#btnEscolaridadeCadastro`).on('click', function () {
+        //     const obj = new modalCadastroEscolaridade();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherEscolaridade();
+        //         }
+        //     });
+        // });
 
-        const preencherEstadoCivil = () => {
-            funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
-        }
-        preencherEstadoCivil();
+        // const preencherEstadoCivil = () => {
+        //     funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
+        // }
+        // preencherEstadoCivil();
 
-        $(`#btnEstadoCivilCadastro`).on('click', function () {
-            const obj = new modalCadastroEstadoCivil();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherEstadoCivil();
-                }
-            });
-        });
+        // $(`#btnEstadoCivilCadastro`).on('click', function () {
+        //     const obj = new modalCadastroEstadoCivil();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherEstadoCivil();
+        //         }
+        //     });
+        // });
 
-        const preencherCutis = () => {
-            funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
-        }
-        preencherCutis();
+        // const preencherCutis = () => {
+        //     funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
+        // }
+        // preencherCutis();
 
-        $(`#btnCutisCadastro`).on('click', function () {
-            const obj = new modalCadastroCutis();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherCutis();
-                }
-            });
-        });
+        // $(`#btnCutisCadastro`).on('click', function () {
+        //     const obj = new modalCadastroCutis();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherCutis();
+        //         }
+        //     });
+        // });
 
-        const preencherCabeloTipo = () => {
-            funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
-        }
-        preencherCabeloTipo();
+        // const preencherCabeloTipo = () => {
+        //     funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
+        // }
+        // preencherCabeloTipo();
 
-        $(`#btnCabeloTipoCadastro`).on('click', function () {
-            const obj = new modalCadastroCabeloTipo();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherCabeloTipo();
-                }
-            });
-        });
+        // $(`#btnCabeloTipoCadastro`).on('click', function () {
+        //     const obj = new modalCadastroCabeloTipo();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherCabeloTipo();
+        //         }
+        //     });
+        // });
 
-        const preencherCabeloCor = () => {
-            funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
-        }
-        preencherCabeloCor();
+        // const preencherCabeloCor = () => {
+        //     funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
+        // }
+        // preencherCabeloCor();
 
-        $(`#btnCabeloCorCadastro`).on('click', function () {
-            const obj = new modalCadastroCabeloCor();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherCabeloCor();
-                }
-            });
-        });
+        // $(`#btnCabeloCorCadastro`).on('click', function () {
+        //     const obj = new modalCadastroCabeloCor();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherCabeloCor();
+        //         }
+        //     });
+        // });
 
-        const preencherOlhoTipo = () => {
-            funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
-        }
-        preencherOlhoTipo();
+        // const preencherOlhoTipo = () => {
+        //     funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
+        // }
+        // preencherOlhoTipo();
 
-        $(`#btnOlhoTipoCadastro`).on('click', function () {
-            const obj = new modalCadastroOlhoTipo();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherOlhoTipo();
-                }
-            });
-        });
+        // $(`#btnOlhoTipoCadastro`).on('click', function () {
+        //     const obj = new modalCadastroOlhoTipo();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherOlhoTipo();
+        //         }
+        //     });
+        // });
 
-        const preencherOlhoCor = () => {
-            funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
-        }
-        preencherOlhoCor();
+        // const preencherOlhoCor = () => {
+        //     funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
+        // }
+        // preencherOlhoCor();
 
-        $(`#btnOlhoCorCadastro`).on('click', function () {
-            const obj = new modalCadastroOlhoCor();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherOlhoCor();
-                }
-            });
-        });
+        // $(`#btnOlhoCorCadastro`).on('click', function () {
+        //     const obj = new modalCadastroOlhoCor();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherOlhoCor();
+        //         }
+        //     });
+        // });
 
-        const preencherCrenca = () => {
-            funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
-        }
-        preencherCrenca();
+        // const preencherCrenca = () => {
+        //     funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
+        // }
+        // preencherCrenca();
 
-        $(`#btnCrencaCadastro`).on('click', function () {
-            const obj = new modalCadastroCrenca();
-            obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
-                    preencherCrenca();
-                }
-            });
-        });
+        // $(`#btnCrencaCadastro`).on('click', function () {
+        //     const obj = new modalCadastroCrenca();
+        //     obj.setFocusElementWhenClosingModal = this;
+        //     obj.modalOpen().then(function (result) {
+        //         if (result && result.refresh) {
+        //             preencherCrenca();
+        //         }
+        //     });
+        // });
 
         if (id) {
             buscarDadosTodos();
@@ -178,19 +178,38 @@ $(document).ready(function () {
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
                 if (result && result.refresh) {
-                    console.log(result)
-                    console.log('Atualizar Artigos')
+                    inserirArtigos(result.arrData);
                 }
             });
         });
 
-        $(`#btnAddArtigo`).click();
+        // $(`#btnAddArtigo`).click();
+        inserirArtigos({
+            artigo_id: 1,
+            observacoes: 'Observacoes do artigo id 1'
+        })
+        inserirArtigos({
+            artigo_id: 2,
+            observacoes: 'Observacoes do artigo id 2'
+        })
+        inserirArtigos({
+            artigo_id: 3,
+            observacoes: `Observacoes do artigo id 3`
+        })
+        inserirArtigos({
+            artigo_id: 4,
+            observacoes: 'Observacoes do artigo id 4'
+        })
+        inserirArtigos({
+            artigo_id: 5,
+            observacoes: 'Observacoes do artigo id 5'
+        })
 
     };
 
     $('#btnInserirPreso').on("click", (event) => {
 
-        const idDiv = inserirFormularioPreso();
+        const idDiv = inserirArtigos();
         $(`#${idDiv}`).find('input[name="matricula"]').focus();
 
     });
@@ -219,7 +238,7 @@ $(document).ready(function () {
 
                 data.presos.forEach(preso => {
 
-                    const idDiv = inserirFormularioPreso(preso.id);
+                    const idDiv = inserirArtigos(preso.id);
                     const div = $(`#${idDiv}`);
                     const matricula = preso.matricula ? funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2) : '';
 
@@ -256,88 +275,88 @@ $(document).ready(function () {
                 });
             })
             .catch(function (error) {
-                $('input, .btn, select').prop('disabled', true);
+                $('input, .btn, select, textarea').prop('disabled', true);
                 $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
             });
 
     }
 
-    function inserirFormularioPreso(id = '') {
+    async function inserirArtigos(arrData) {
 
-        const idDiv = `${id}${Date.now()}`;
-        const strDataId = id ? `data-id="${id}"` : '';
+        const id = arrData.id ? arrData.id : '';
+        let idDiv = '';
+        if (!arrData.idDiv) {
+            idDiv = `${id}${Date.now()}`;
+        }
+        const observacoes = arrData.observacoes ? arrData.observacoes : '';
 
+        arrArtigos.push({
+            id: id,
+            artigo_id: arrData.artigo_id,
+            idDiv: idDiv,
+            observacoes: observacoes
+        })
+
+        let nome = 'N/C'
+        let descricao = 'N/C';
+
+        try {
+            const response = await commonFunctions.getRecurseWithTrashed(urlRefArtigos, { param: arrData.artigo_id });
+            nome = response.data.nome;
+            descricao = response.data.descricao;
+        } catch (error) {
+            console.error(error);
+            $.notify(`Não foi possível obter os dados do ID Artigo ${arrData.artigo_id} para o preso. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+        }
         let strPreso = `
-            <div id="${idDiv}" ${strDataId}
-                class="p-2 col-md-6 col-12 bg-info bg-opacity-10 border border-info rounded position-relative">
-                <button type="button" ${strDataId} class="btn-close position-absolute top-0 end-0" aria-label="Close"></button>
-                <input type="hidden" class="form-control " name="id" id="id${idDiv}">
-                <input type="hidden" class="form-control " name="convivio_tipo_id" id="tipo_preso_id${idDiv}">
-
-                <div class="row">
-                    <div class="col-6">
-                        <label for="matricula${idDiv}" class="form-label">Matrícula</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control w-75" name="matricula" id="matricula${idDiv}">
-                            <input type="text" class="form-control " name="digito" id="digito${idDiv}" disabled>
+            <div id="${idDiv}" class="card col-lg-4 col-sm-6 p-0">
+                <div class="card-header py-1">
+                    ${nome}
+                </div>
+                <div class="card-body p-1">
+                    <div class="row m-0 p-0">
+                        <div class="col px-1" style="max-heigth: 100px;">
+                            <h5 class="card-title">
+                                ${descricao}
+                            </h5>
+                            <p class="card-text">${commonFunctions.formatStringToHTML(observacoes)}</p>
+                        </div>
+                        <div class="col-sm-2 d-flex flex-sm-column px-1">
+                            <button class="btn btn-sm btn-outline-primary btn-edit" title="Editar observação"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger btn-delete" title="Excluir artigo"><i class="bi bi-trash"></i></button>
                         </div>
                     </div>
-                    <div class="col-6 d-flex justify-content-end align-items-center">
-                        <span class="passagem_id mh-100"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <label for="nome${idDiv}" class="form-label">Nome</label>
-                        <input type="text" class="form-control" name="nome" id="nome${idDiv}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12"
-                        title="Nome pelo qual o preso deseja ser chamado. Este nome ficará mais aparente nos documentos, caso seja informado.">
-                        <label for="nome${idDiv}" class="form-label">Nome social</label>
-                        <input type="text" class="form-control" name="nome_social" id="nome_social${idDiv}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
-                        <label for="data_prisao${idDiv}" class="form-label">Data prisão</label>
-                        <input type="date" class="form-control" name="data_prisao" id="data_prisao${idDiv}">
-                    </div>
-                    <div class="col-8 d-flex justify-content-end align-items-center">
-                        <button type="button" id="btnAlterarPresoConvivio${idDiv}" class="btn btn-outline-warning btn-mini" title="Clique para inserir ou retirar o preso do seguro"><i class="bi bi-shield-fill-exclamation"></i></button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-auto flex-fill text-end">
-                        <button id="toggleCamposAdicionais${idDiv}" class="btn btn-outline-secondary btn-mini">
-                            <i class="bi bi-view-list"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="camposAdicionais${idDiv}" style="display: none;">
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="informacoes${idDiv}" class="form-label">Informações (Ex: link da
-                                notícia)</label>
-                            <textarea class="form-control" name="informacoes" id="informacoes${idDiv}" cols="30" rows="2"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12"
-                            title="Observações sobre o preso (este campo não é impresso na qualificativa)">
-                            <label for="observacoes${idDiv}" class="form-label">Observações</label>
-                            <textarea class="form-control" name="observacoes" id="observacoes${idDiv}" cols="30" rows="2"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 campoInfo"></div>
                 </div>
             </div>`;
 
-        containerPresos.append(strPreso);
-        addEventosBotoesDaConsulta(idDiv);
+        containerArtigos.append(strPreso);
+        arrData['idDiv'] = idDiv;
+
+        console.log(arrArtigos);
+
+        $(`#${idDiv}`).find('.btn-edit').on('click', function () {
+            const index = arrArtigos.findIndex((item) => item.idDiv === arrData.idDiv);
+            if (index != -1) {
+                const obj = new modalCadastroPresoArtigo();
+                obj.setArrData = { ...arrArtigos[index] };
+                obj.modalOpen().then(function (result) {
+                    if (result && result.refresh) {
+                        const observacoes = result.arrData.observacoes ? result.arrData.observacoes : '';
+                        const card = $(`#${result.arrData.idDiv}`);
+                        card.find('.card-header').html(result.arrData.nome);
+                        card.find('.card-title').html(result.arrData.descricao);
+                        card.find('.card-text').html(commonFunctions.formatStringToHTML(observacoes));
+                        arrArtigos[index].observacoes = result.arrData.observacoes;
+                    }
+                });
+            } else {
+                message = 'Artigo não encontrado no Array Artigos'
+                console.error(message);
+                console.error(arrArtigos, `Index: ${index}`);
+                $.notify(`Não foi possível editar o artigo. Se o problema persistir consulte o programador.\nErro: ${message}`, 'error');
+            }
+
+        });
 
         return idDiv;
     }
@@ -416,7 +435,7 @@ $(document).ready(function () {
         data['data_entrada'] = `${data['data_entrada']} ${data['hora_entrada']}:00`;
         delete data['hora_entrada'];
 
-        const presos = containerPresos.children();
+        const presos = containerArtigos.children();
         for (let i = 0; i < presos.length; i++) {
 
             let preso = funcoesComuns.obterValoresDosInputs($(presos[i]), 1, true);

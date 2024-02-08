@@ -147,19 +147,9 @@
             </div>
 
             <div class="row ps-2 pe-2">
-                <div class="col-12 d-flex flex-wrap overflow-auto border border-dark-subtle rounded p-0 me-n4"
-                    style="min-height: 100px; max-height: 380px;">
-                    <div class="card col-md-4 col-sm-6">
-                        <div class="card-header p-1">
-                            Artigo
-                        </div>
-                        <div class="card-body p-1">
-                            <h5 class="card-title mb-0">Descrição do Artigo</h5>
-                            <p class="card-text mb-0">Observações do artigo.Observações do artigo.Observações do
-                                artigo.Observações do artigo.Observações do artigo.</p>
-                            <a href="#" class="btn btn-mini-2 btn-outline-primary">Alterar observacoes</a>
-                        </div>
-                    </div>
+                <div class="col-12">
+                    <div id="containerArtigos" class="row overflow-auto border border-dark-subtle rounded"
+                    style="min-height: 100px; max-height: 380px;"></div>
                 </div>
             </div>
 

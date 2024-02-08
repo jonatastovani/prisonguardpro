@@ -17,16 +17,16 @@
                             </select>
                         </div>
                             <div class="col-1">
-                                <label for="artigo_idModalCadastroPresoArtigo" class="form-label"></label>
+                                <label class="form-label"></label>
                                 <button id="btnArtigosCadastro" class="btn btn-outline-secondary btn-mini-2"><i
                                         class="bi bi-pencil"></i></button>
                             </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="descricaoModalCadastroPresoArtigo" class="form-label">Descricao
+                            <label for="observacoesModalCadastroPresoArtigo" class="form-label">Observações
                                 (Opcional)</label>
-                            <textarea name="descricao" id="descricaoModalCadastroPresoArtigo" cols="12" rows="2" class="form-control"
+                            <textarea name="observacoes" id="observacoesModalCadastroPresoArtigo" cols="12" rows="2" class="form-control"
                                 placeholder="Nome da vítima em caso de esposa/companheira, quantidade de drogas..."></textarea>
                         </div>
                     </div>

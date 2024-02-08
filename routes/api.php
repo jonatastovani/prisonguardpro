@@ -50,7 +50,7 @@ route::prefix('/v1')->group(function () {
             Route::controller(RefArtigoController::class)->group(function () {
                 Route::prefix('/artigos')->group(function () {
                     Route::get('', 'index');
-                    Route::get('/{id}', 'show');
+                    Route::match(['get', 'post'], '/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');

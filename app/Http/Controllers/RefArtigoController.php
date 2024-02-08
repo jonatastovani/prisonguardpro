@@ -47,13 +47,13 @@ class RefArtigoController extends Controller
     {
         // Regras de validação
         $rules = [
-            'text' => 'string',
+            'text' => 'nullable|string',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        $resources = RefArtigo::where('nome', 'LIKE', "%{$request->texto}%")
-            ->orWhere('descricao', 'LIKE', "%{$request->texto}%")
+        $resources = RefArtigo::where('nome', 'LIKE', "%{$request->text}%")
+            ->orWhere('descricao', 'LIKE', "%{$request->text}%")
             ->get();
 
         // Mapear os resultados para criar um array com os campos id e text
@@ -100,10 +100,14 @@ class RefArtigoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Request $request)
     {
+        $trashed = false;
+        if ($request->has('trashed')) {
+            $trashed = true;
+        }
         // Verifica se o modelo existe
-        $resource = $this->buscarRecurso($id);
+        $resource = $this->buscarRecurso($request->id, $trashed);
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -161,22 +165,36 @@ class RefArtigoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    private function buscarRecurso($id)
+    private function buscarRecurso($id, $trashed = false)
     {
-        $resource = RefArtigo::find($id);
+        // Verifica se o recurso está excluído apenas se $trashed for falso
+        $resource = !$trashed ? RefArtigo::find($id) : RefArtigo::withTrashed()->find($id);
 
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
+        // Verifique se o modelo foi encontrado
+        if (!$resource) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O ID do artigo informado não existe ou foi excluído.";
+            $mensagem = "O ID do artigo informado não existe.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
+
+        // Verifique se o modelo está excluído, se necessário
+        if (!$trashed && $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O ID do artigo informado foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+
         return $resource;
     }
+
 
     private function validarRecursoExistente($request, $id = null)
     {

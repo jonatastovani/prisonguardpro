@@ -1,4 +1,6 @@
+import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
+import { enumAction } from "../../common/enumAction.js";
 
 export class modalCadastroPresoArtigo {
 
@@ -10,6 +12,10 @@ export class modalCadastroPresoArtigo {
      * ID do modal
      */
     #idModal;
+    /** 
+     * ID da Div que está sendo alterada
+    */
+    #arrData;
     /** 
      * Conteúdo a ser retornado na promisse como resolve()
     */
@@ -23,21 +29,21 @@ export class modalCadastroPresoArtigo {
      */
     #focusElementWhenClosingModal;
     /**
-     * Elemento de foco ao fechar o modal
-     */
-    #idRegister;
-    /**
      * Variável para reservar o timeOut da consulta pelo search
      */
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefCabeloCor;
+        this.#urlApi = urlRefArtigos;
         this.#idModal = "#modalCadastroPresoArtigo";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
-        this.#idRegister = null;
+        this.#arrData = {
+            idDiv: undefined,
+            artigo_id: null,
+            observacoes: null
+        };
         this.#addEventsDefault();
     }
 
@@ -57,6 +63,14 @@ export class modalCadastroPresoArtigo {
     }
 
     /**
+     * Define o array com os dados do artigo que está sendo alterado.
+     * @param {Array} arrData - Array com os dados do artigo.
+     */
+    set setArrData(arrData) {
+        this.#arrData = arrData;
+    }
+
+    /**
      * Define o valor do timer de fim, utilizado na função modalOpen.
      * @param {Boolean} value - Novo valor para indicar o término do timer.
      */
@@ -68,14 +82,16 @@ export class modalCadastroPresoArtigo {
 
         const self = this;
 
-        // self.#getDataAll();
         self.modalCancel();
 
         self.#promisseReturnValue = {
             refresh: false,
-            idRegister: this.#idRegister
+            arrData: self.#arrData
         };
-        
+        if(self.#arrData.idDiv!=undefined){
+            self.#fillDataAll();
+        }
+
         $(self.#idModal).modal('show');
 
         return new Promise(function (resolve) {
@@ -134,9 +150,8 @@ export class modalCadastroPresoArtigo {
 
         self.#clearForm();
         setTimeout(() => {
-            $(self.#idModal).find('.btnNewRegister').focus();
+            $(self.#idModal).find('select[name="artigo_id"]').focus();
         }, 500);
-
     }
 
     #clearForm() {
@@ -144,9 +159,8 @@ export class modalCadastroPresoArtigo {
         const self = this;
         const modal = $(self.#idModal);
 
-        self.#idRegister = null;
         modal.find('form')[0].reset();
-        modal.find('form').find('select').val('');
+        modal.find('form').find('select').val('').trigger('change');
 
     }
 
@@ -155,69 +169,36 @@ export class modalCadastroPresoArtigo {
         const self = this;
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
-
-        $('#artigo_idModalCadastroPresoArtigo').select2();
-
-        commonFunctions.addEventsSelect2($('#artigo_idModalCadastroPresoArtigo'), `${urlRefArtigos}/search/select`, {
+        commonFunctions.addEventsSelect2($('#artigo_idModalCadastroPresoArtigo'), `${self.#urlApi}/search/select`, {
             dropdownParent: modal, minimum: 0
         });
 
     }
 
-    // async #getDataAll() {
+    async #fillDataAll() {
 
-    //     const self = this;
+        const self = this;
 
-    //     try {
-    //         const obj = new conectAjax(`${self.#urlApi}/search/all`);
-    //         const tabela = $(self.#idModal).find('.table tbody');
-    //         tabela.html('');
+        try {
+            const obj = new conectAjax(self.#urlApi);
+            obj.setParam(self.#arrData.artigo_id);
+            obj.setAction(enumAction.POST);
+            obj.setData({trashed: true});
 
-    //         if (obj.setAction(enumAction.POST)) {
-    //             obj.setData(data);
-    //             const response = await obj.envRequest();
-    //             if (response.data.length) {
-    //                 for (let i = 0; i < response.data.length; i++) {
-    //                     const item = response.data[i];
+            console.log(self.#arrData)
+            const response = await obj.envRequest();
+            const data = response.data;
+            if (data) {
+                $(self.#idModal).find('select[name="artigo_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
+                $(self.#idModal).find('textarea[name="observacoes"]').val(self.#arrData.observacoes);
+            }
+        } catch (error) {
+            self.#endTimer = true;
+            console.error(error);
+            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+        }
 
-    //                     const idTr = `${item.id}${Date.now()}`;
-    //                     tabela.append(`
-    //                     <tr id=${idTr}>
-    //                         <td class="text-center"><b>${item.id}</b></td>
-    //                         <td>
-    //                             <div class="d-flex wrap-nowrap justify-content-center">
-    //                                 <button class="btn btn-outline-primary btn-mini-2 me-2 btn-edit" title="Editar cadastro">
-    //                                     <i class="bi bi-pencil"></i>
-    //                                 </button>
-    //                                 <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro">
-    //                                     <i class="bi bi-trash"></i>
-    //                                 </button>
-    //                             </div>
-    //                         </td>
-    //                         <td>${item.nome}</td>
-    //                     </tr>
-    //                 `);
-
-    //                     item['idTr'] = idTr;
-
-    //                     self.#addQueryEvents(item);
-
-    //                     // Adicionar atraso a cada 1000 registros
-    //                     if ((i + 1) % 1000 === 0 && i !== response.data.length - 1) {
-    //                         await new Promise(resolve => setTimeout(resolve, 10));
-    //                     }
-    //                 }
-    //             }
-    //         } else {
-    //             throw new Error('Action inválido');
-    //         }
-    //     } catch (error) {
-    //         self.#endTimer = true;
-    //         console.error(error);
-    //         $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-    //     }
-
-    // }
+    }
 
     // async #getRecurse() {
 
@@ -261,8 +242,10 @@ export class modalCadastroPresoArtigo {
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
         self.#promisseReturnValue.refresh = true;
-        self.#promisseReturnValue['data'] = data;
+        self.#promisseReturnValue.arrData.artigo_id = data.artigo_id
+        self.#promisseReturnValue.arrData.observacoes = data.observacoes;
         self.#endTimer = true;
+
     }
 
 }

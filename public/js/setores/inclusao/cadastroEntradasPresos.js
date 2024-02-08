@@ -23,12 +23,6 @@ $(document).ready(function () {
 
     };
 
-    $(window).on('resize', function () {
-
-        funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
-
-    });
-
     $('#btnInserirPreso').on("click", (event) => {
 
         const idDiv = inserirFormularioPreso();

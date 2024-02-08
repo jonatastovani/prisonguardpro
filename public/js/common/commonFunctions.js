@@ -887,4 +887,35 @@ export class commonFunctions {
 
     }
 
+    static async getRecurseWithTrashed(urlApi, options = {}) {
+        const {
+            data = { trashed: true },
+            action = enumAction.POST,
+            param = ''
+        } = options;
+
+        try {
+            const obj = new conectAjax(urlApi);
+            obj.setParam(param);
+            obj.setAction(action);
+            obj.setData(data);
+            const response = await obj.envRequest();
+            return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
+    }
+
+    static formatStringToHTML(str) {
+        str = str.replace(/  /g, '&nbsp; ');
+        str = str.replace(/'/g, '&apos;');
+        str = str.replace(/"/g, '&quot;');
+        str = str.replace(/</g, '&lt;');
+        str = str.replace(/>/g, '&gt;');
+        str = str.replace(/\n/g, '<br>');
+        str = str.trim();
+        return str;
+    }
 }
