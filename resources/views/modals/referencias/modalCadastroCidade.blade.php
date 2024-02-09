@@ -53,12 +53,12 @@
                                     <h5 class="register-title">Nova Cidade</h5>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-lg-6">
                                         <label for="nomeModalCadastroCidade" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
                                             id="nomeModalCadastroCidade">
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-lg-6">
                                         <label for="estado_idModalCadastroEstado" class="form-label">Estado</label>
                                         <div class="input-group">
                                             <select name="estado_id" id="estado_idModalCadastroEstado"></select>

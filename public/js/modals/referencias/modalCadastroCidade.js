@@ -198,7 +198,7 @@ export class modalCadastroCidade {
             dropdownParent: modal, minimum: 0
         });
 
-        modal.find(`.btnPaisCadastro`).on('click', function () {
+        modal.find(`.btnEstadoCadastro`).on('click', function () {
             const obj = new modalCadastroEstado();
             obj.setFocusElementWhenClosingModal = this;
             self.#modalHideShow(false);
