@@ -21,7 +21,7 @@ class RefCidadeController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    public function indexSelect(Request $request)
+    public function indexSelect2(Request $request)
     {
         // Regras de validação
         $rules = [
@@ -30,7 +30,9 @@ class RefCidadeController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        $resources = RefCidade::where('nome', 'LIKE', "%{$request->texto}%")->with('estado.nacionalidade')->get();
+        $resources = RefCidade::where('nome', 'LIKE', "%{$request->texto}%")
+        ->with('estado.nacionalidade')
+        ->get();
 
         // Mapear os resultados para criar um array com os campos id e text
         $mappedResults = $resources->map(function ($item) {
@@ -41,6 +43,36 @@ class RefCidadeController extends Controller
         });
 
         $response = RestResponse::createSuccessResponse($mappedResults, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resource = RefCidade::select('ref_cidades.*')
+            ->join('ref_estados', 'ref_estados.id', '=', 'ref_cidades.estado_id')
+            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.pais_id')
+            ->where('ref_cidades.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.pais', 'LIKE', '%' . $request->input('text') . '%')
+            ->with('estado.nacionalidade')
+            ->orderBy('ref_cidades.nome')
+            // ->toSql();
+            ->get();
+
+
+        // RestResponse::createTesteResponse($resource);
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 

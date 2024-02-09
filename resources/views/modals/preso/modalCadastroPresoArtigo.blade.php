@@ -20,20 +20,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="row">
-                        <div class="col">
-                            <label for="artigo_idModalCadastroPresoArtigo" class="form-label">Artigo</label>
-                            <br>
-                            <select name="artigo_id" id="artigo_idModalCadastroPresoArtigo" class="form-select"
-                                style="width: 100%;">
-                            </select>
-                        </div>
-                        <div class="col-1">
-                            <label class="form-label"></label>
-                            <button type="button" id="btnArtigosCadastro"
-                                class="btn btn-outline-secondary btn-mini-2"><i class="bi bi-pencil"></i></button>
-                        </div>
-                    </div> --}}
                     <div class="row">
                         <div class="col-12">
                             <label for="observacoesModalCadastroPresoArtigo" class="form-label">Observações

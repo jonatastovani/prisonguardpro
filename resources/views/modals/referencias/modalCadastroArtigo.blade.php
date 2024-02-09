@@ -21,11 +21,11 @@
 
                 <div class="row flex-fill overflow-auto">
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-striped table-hover">
                             <thead>
-                                <tr class="text-center">
-                                    <th>#</th>
-                                    <th>Ação</th>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Ação</th>
                                     <th>Nome</th>
                                     <th>Descrição</th>
                                 </tr>
@@ -57,6 +57,8 @@
                                         <input type="text" class="form-control" name="nome"
                                             id="nomeModalCadastroArtigo">
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-12">
                                         <label for="descricaoModalCadastroArtigo" class="form-label">Descrição</label>
                                         <input type="text" class="form-control" name="descricao"
@@ -82,7 +84,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script type="module" src="{{ asset('js/modals/referencias/modalCadastroArtigo.js') }}"></script>

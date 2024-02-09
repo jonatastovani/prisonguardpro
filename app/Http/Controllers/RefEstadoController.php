@@ -21,6 +21,67 @@ class RefEstadoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resource = RefEstado::select('ref_estados.*')
+            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.pais_id')
+            ->where('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.pais', 'LIKE', '%' . $request->input('text') . '%')
+            ->with('nacionalidade')
+            ->orderBy('ref_estados.nome')
+            // ->toSql();
+            ->get();
+
+
+        // RestResponse::createTesteResponse($resource);
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    public function indexSelect2(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resources = RefEstado::select('ref_estados.*')
+            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.pais_id')
+            ->where('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.pais', 'LIKE', '%' . $request->input('text') . '%')
+            ->with('nacionalidade')
+            ->orderBy('ref_estados.nome')
+            // ->toSql();
+            ->get();
+
+        // Mapear os resultados para criar um array com os campos id e text
+        $mappedResults = $resources->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'text' => $item->nome . "-" . $item->sigla . " (" . $item->nacionalidade->pais . "-" . $item->nacionalidade->sigla . ")",
+            ];
+        });
+
+        $response = RestResponse::createSuccessResponse($mappedResults, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -67,6 +128,7 @@ class RefEstadoController extends Controller
     {
         // Verifica se o modelo existe
         $resource = $this->buscarRecurso($id);
+        $resource->load('nacionalidade');
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());

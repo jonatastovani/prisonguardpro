@@ -29,6 +29,19 @@ class RefNacionalidade extends Model
         return CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo($value);
     }
 
+    protected $fillable = ['sigla'];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Registrando o evento saving
+        static::saving(function ($model) {
+            $model->sigla = mb_strtoupper($model->nome, 'UTF-8');
+        });
+    }
+
+
     public function getActivitylogOptions(): LogOptions
     {
         $logOptions = new LogOptions();

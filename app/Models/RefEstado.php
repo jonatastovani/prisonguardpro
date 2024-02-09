@@ -37,6 +37,18 @@ class RefEstado extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
+    protected $fillable = ['sigla'];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Registrando o evento saving
+        static::saving(function ($model) {
+            $model->sigla = mb_strtoupper($model->sigla, 'UTF-8');
+        });
+    }
+
     public function nacionalidade()
     {
 

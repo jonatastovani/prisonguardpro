@@ -21,9 +21,11 @@
     const urlRefCrenca = `${urlApiVersion}/ref/crencas`;
     const urlRefCutis = `${urlApiVersion}/ref/cutis`;
     const urlRefEscolaridade = `${urlApiVersion}/ref/escolaridades`;
+    const urlRefEstados = `${urlApiVersion}/ref/estados`;
     const urlRefEstadoCivil = `${urlApiVersion}/ref/estadocivil`;
     const urlRefGenero = `${urlApiVersion}/ref/generos`;
     const urlRefIncOrigem = `${urlApiVersion}/ref/inclusao/origem`;
+    const urlRefNacionalidades = `${urlApiVersion}/ref/nacionalidades`;
     const urlRefOlhoTipo = `${urlApiVersion}/ref/olhotipos`;
     const urlRefOlhoCor = `${urlApiVersion}/ref/olhocores`;
     const urlRefStatus = `${urlApiVersion}/ref/status`;

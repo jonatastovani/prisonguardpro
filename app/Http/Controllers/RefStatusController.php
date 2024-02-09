@@ -16,7 +16,7 @@ class RefStatusController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    public function preencherSelect(Request $request)
+    public function fillSelect(Request $request)
     {
         // Regras de validação
         $rules = [

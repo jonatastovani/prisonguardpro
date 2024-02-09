@@ -2,13 +2,18 @@ import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
+import { modalCadastroEstado } from "./modalCadastroEstado.js";
 
-export class modalCadastroArtigo {
+export class modalCadastroCidade {
 
     /**
      * URL do endpoint da Api
      */
     #urlApi;
+    /**
+     * URL do endpoint da Api Nacionalidades
+     */
+    #urlApiEstados;
     /**
      * ID do modal
      */
@@ -39,8 +44,9 @@ export class modalCadastroArtigo {
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefArtigos;
-        this.#idModal = "#modalCadastroArtigo";
+        this.#urlApi = urlRefCidades;
+        this.#urlApiEstados = urlRefEstados;
+        this.#idModal = "#modalCadastroCidade";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
@@ -151,11 +157,11 @@ export class modalCadastroArtigo {
 
         const self = this;
         const modal = $(self.#idModal);
-        
+
         self.#idRegister = null;
         self.#action = enumAction.POST;
         modal.find('form')[0].reset();
-        modal.find('form').find('select').val('');
+        modal.find('form').find('select').val('').trigger('change');
 
     }
 
@@ -178,13 +184,35 @@ export class modalCadastroArtigo {
 
         const self = this;
         const modal = $(self.#idModal);
-        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroArtigo') });
+        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroCidade') });
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
-            modal.find('.register-title').html('Novo Artigo');
+            modal.find('.register-title').html('Nova Cidade');
             self.#actionsHideShowRegistrationFields(true);
             modal.find('input[name="nome"]').focus();
+        });
+
+        const selectPais = modal.find('select[name="estado_id"]');
+        commonFunctions.addEventsSelect2(selectPais, `${self.#urlApiEstados}/search/select2`, {
+            dropdownParent: modal, minimum: 0
+        });
+
+        modal.find(`.btnPaisCadastro`).on('click', function () {
+            const obj = new modalCadastroEstado();
+            obj.setFocusElementWhenClosingModal = this;
+            self.#modalHideShow(false);
+            obj.modalOpen().then(async function (result) {
+                if (result && result.refresh) {
+
+                    setTimeout(() => {
+                        modal.find('select[name="estado_id"]').focus();
+                    }, 500);
+                    self.#promisseReturnValue.refresh = true;
+
+                }
+                self.#modalHideShow();
+            });
         });
 
     }
@@ -232,7 +260,8 @@ export class modalCadastroArtigo {
                                 </div>
                             </td>
                             <td>${item.nome}</td>
-                            <td>${item.descricao}</td>
+                            <td>${item.estado.nome} (${item.estado.sigla})</td>
+                            <td>${item.estado.nacionalidade.pais} (${item.estado.nacionalidade.sigla})</td>
                         </tr>
                     `);
 
@@ -265,10 +294,11 @@ export class modalCadastroArtigo {
         try {
             const response = await obj.getRequest();
             if (response.data) {
+                const data = response.data;
                 const form = $(self.#idModal).find('form');
-                form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('input[name="descricao"]').val(response.data.descricao).focus();
-                form.find('.register-title').html(`Editar Artigo: ${response.data.id} - ${response.data.nome}`);
+                form.find('input[name="nome"]').val(data.nome).focus();
+                form.find('select[name="estado_id"]').html(new Option(`${data.estado.pais} (${data.estado.sigla}) | ${data.estado.nacionalidade.pais} (${data.estado.nacionalidade.sigla})`, data.estado_id, true, true)).trigger('change');
+                form.find('.register-title').html(`Editar Cidade: ${data.id} - ${data.nome} | ${data.nacionalidade.sigla}`);
             }
         } catch (error) {
             console.error(error);
@@ -354,8 +384,8 @@ export class modalCadastroArtigo {
 
         try {
             const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Artigo';
-            obj.setMessage = `Confirma a exclusão do Artigo <b>${nameDel}</b>?`;
+            obj.setTitle = 'Confirmação de exclusão de Cidade';
+            obj.setMessage = `Confirma a exclusão do Cidade <b>${nameDel}</b>?`;
             obj.setFocusElementWhenClosingModal = button;
             self.#modalHideShow(false);
             const result = await obj.modalOpen();
@@ -381,7 +411,7 @@ export class modalCadastroArtigo {
             try {
                 const response = await obj.deleteRequest();
 
-                $.notify(`Artigo deletado com sucesso!`, 'success');
+                $.notify(`Cidade deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();

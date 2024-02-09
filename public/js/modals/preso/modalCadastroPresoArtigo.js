@@ -159,7 +159,7 @@ export class modalCadastroPresoArtigo {
         const modal = $(self.#idModal);
 
         modal.find('form')[0].reset();
-        modal.find('form').find('select').val('').trigger('change');
+        modal.find('form').find('select').val('').prop('disabled', false).trigger('change');
 
     }
 
@@ -169,7 +169,7 @@ export class modalCadastroPresoArtigo {
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
         const selectArtigo = modal.find('select[name="artigo_id"]');
-        commonFunctions.addEventsSelect2(selectArtigo, `${self.#urlApi}/search/select`, {
+        commonFunctions.addEventsSelect2(selectArtigo, `${self.#urlApi}/search/select2`, {
             dropdownParent: modal, minimum: 0
         });
 
@@ -190,7 +190,6 @@ export class modalCadastroPresoArtigo {
                 self.#modalHideShow();
             });
         });
-
 
     }
 

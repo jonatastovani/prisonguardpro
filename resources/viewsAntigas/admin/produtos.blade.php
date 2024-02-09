@@ -59,7 +59,7 @@
             </nav>
 
             <div class="card z-depth-4 registros">
-                <table class="table table-striped">
+                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th></th>

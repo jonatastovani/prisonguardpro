@@ -20,11 +20,11 @@
 
                 <div class="row flex-fill overflow-auto">
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-striped table-hover">
                             <thead>
-                                <tr class="text-center">
-                                    <th>#</th>
-                                    <th>Ação</th>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Ação</th>
                                     <th>Nome</th>
                                     <th>Descrição</th>
                                 </tr>

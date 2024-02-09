@@ -6,15 +6,16 @@ import { funcoesComuns } from "../../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
 import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
-// import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
-// import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
-// import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
-// import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
-// import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
-// import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
-// import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
-// import { modalCadastroOlhoCor } from "../../../modals/referencias/modalCadastroOlhoCor.js";
-// import { modalCadastroOlhoTipo } from "../../../modals/referencias/modalCadastroOlhoTipo.js";
+import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
+import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
+import { modalCadastroCidade } from "../../../modals/referencias/modalCadastroCidade.js";
+import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
+import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
+import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
+import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
+import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
+import { modalCadastroOlhoCor } from "../../../modals/referencias/modalCadastroOlhoCor.js";
+import { modalCadastroOlhoTipo } from "../../../modals/referencias/modalCadastroOlhoTipo.js";
 
 $(document).ready(function () {
 
@@ -26,12 +27,25 @@ $(document).ready(function () {
     function init() {
 
         const matricula = $('#matricula');
-        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
         commonFunctions.applyCustomNumberMask(matricula, { format: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
+
+        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select2`);
+
+        $(`#btnCidadeCadastro`).on('click', function () {
+            const obj = new modalCadastroCidade();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    setTimeout(() => {
+                        $('#cidade_nasc_id').focus();
+                    }, 500);
+                }
+            });
+        });
 
         const preencherGenero = () => {
             funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
@@ -198,12 +212,7 @@ $(document).ready(function () {
             artigo_id: 4,
             observacoes: 'Observacoes do artigo id 4'
         })
-        inserirArtigos({
-            artigo_id: 5,
-            observacoes: 'Observacoes do artigo id 5'
-        })
 
-        // $(`#btnAddArtigo`).click();
     };
 
     $('#btnInserirPreso').on("click", (event) => {

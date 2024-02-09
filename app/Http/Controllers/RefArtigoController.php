@@ -59,7 +59,7 @@ class RefArtigoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    public function indexSelect(Request $request)
+    public function indexSelect2(Request $request)
     {
         // Regras de validação
         $rules = [

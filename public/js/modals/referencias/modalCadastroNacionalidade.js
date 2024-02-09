@@ -3,7 +3,7 @@ import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
 
-export class modalCadastroArtigo {
+export class modalCadastroNacionalidade {
 
     /**
      * URL do endpoint da Api
@@ -39,8 +39,8 @@ export class modalCadastroArtigo {
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefArtigos;
-        this.#idModal = "#modalCadastroArtigo";
+        this.#urlApi = urlRefNacionalidades;
+        this.#idModal = "#modalCadastroNacionalidade";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
@@ -178,11 +178,11 @@ export class modalCadastroArtigo {
 
         const self = this;
         const modal = $(self.#idModal);
-        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroArtigo') });
+        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroNacionalidade') });
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
-            modal.find('.register-title').html('Novo Artigo');
+            modal.find('.register-title').html('Nova Nacionalidade');
             self.#actionsHideShowRegistrationFields(true);
             modal.find('input[name="nome"]').focus();
         });
@@ -232,7 +232,8 @@ export class modalCadastroArtigo {
                                 </div>
                             </td>
                             <td>${item.nome}</td>
-                            <td>${item.descricao}</td>
+                            <td>${item.pais}</td>
+                            <td>${item.sigla}</td>
                         </tr>
                     `);
 
@@ -267,8 +268,9 @@ export class modalCadastroArtigo {
             if (response.data) {
                 const form = $(self.#idModal).find('form');
                 form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('input[name="descricao"]').val(response.data.descricao).focus();
-                form.find('.register-title').html(`Editar Artigo: ${response.data.id} - ${response.data.nome}`);
+                form.find('input[name="pais"]').val(response.data.pais);
+                form.find('input[name="sigla"]').val(response.data.sigla);
+                form.find('.register-title').html(`Editar Nacionalidade: ${response.data.id} - ${response.data.nome}`);
             }
         } catch (error) {
             console.error(error);
@@ -354,8 +356,8 @@ export class modalCadastroArtigo {
 
         try {
             const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Artigo';
-            obj.setMessage = `Confirma a exclusão do Artigo <b>${nameDel}</b>?`;
+            obj.setTitle = 'Confirmação de exclusão de Nacionalidade';
+            obj.setMessage = `Confirma a exclusão do Nacionalidade <b>${nameDel}</b>?`;
             obj.setFocusElementWhenClosingModal = button;
             self.#modalHideShow(false);
             const result = await obj.modalOpen();
@@ -381,7 +383,7 @@ export class modalCadastroArtigo {
             try {
                 const response = await obj.deleteRequest();
 
-                $.notify(`Artigo deletado com sucesso!`, 'success');
+                $.notify(`Nacionalidade deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();

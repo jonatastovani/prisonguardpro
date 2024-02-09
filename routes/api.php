@@ -56,7 +56,7 @@ route::prefix('/v1')->group(function () {
                     Route::delete('/{id}', 'destroy');
 
                     Route::prefix('/search')->group(function () {
-                        Route::post('/select', 'indexSelect');
+                        Route::post('/select2', 'indexSelect2');
                         Route::post('/all', 'indexSearchAll');
                     });
                 });
@@ -102,7 +102,8 @@ route::prefix('/v1')->group(function () {
                     Route::delete('/{id}', 'destroy');
 
                     Route::prefix('/search')->group(function () {
-                        Route::post('/select', 'indexSelect');
+                        Route::post('/select2', 'indexSelect2');
+                        Route::post('/all', 'indexSearchAll');
                     });
                 });
             });
@@ -180,6 +181,7 @@ route::prefix('/v1')->group(function () {
                     Route::delete('/{id}', 'destroy');
 
                     Route::prefix('/search')->group(function () {
+                        Route::post('/select2', 'indexSelect2');
                         Route::post('/all', 'indexSearchAll');
                     });
                 });
@@ -202,12 +204,17 @@ route::prefix('/v1')->group(function () {
 
             // Rotas relacionadas ao RefEstadoController
             Route::controller(RefEstadoController::class)->group(function () {
-                Route::prefix('/estado')->group(function () {
+                Route::prefix('/estados')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/select2', 'indexSelect2');
+                        Route::post('/all', 'indexSearchAll');
+                    });
                 });
             });
 
@@ -230,22 +237,30 @@ route::prefix('/v1')->group(function () {
             Route::controller(RefIncOrigemController::class)->group(function () {
                 Route::prefix('/inclusao/origem')->group(function () {
                     Route::get('', 'index');
-                    Route::post('/busca/select', 'indexBusca');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/select2', 'indexSelect2');
+                    });
                 });
             });
 
             // Rotas relacionadas ao RefNacionalidadeController
             Route::controller(RefNacionalidadeController::class)->group(function () {
-                Route::prefix('/nacionalidade')->group(function () {
+                Route::prefix('/nacionalidades')->group(function () {
                     Route::get('', 'index');
                     Route::get('/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/select2', 'indexSelect2');
+                        Route::post('/all', 'indexSearchAll');
+                    });
                 });
             });
 
@@ -345,8 +360,8 @@ route::prefix('/v1')->group(function () {
                     // Route::put('/{id}', 'update');
                     // Route::delete('/{id}', 'destroy');
 
-                    Route::prefix('/busca')->group(function () {
-                        Route::post('/select', 'preencherSelect');
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/select', 'fillSelect');
                     });
                 });
             });

@@ -51,7 +51,11 @@
             <div class="row">
                 <div class="col-xl-4 col-lg-9 col-md-8 mt-2">
                     <label for="cidade_nasc_id" class="form-label">Cidade Nascimento</label>
-                    <select name="cidade_nasc_id" id="cidade_nasc_id" style="width: 100%;"></select>
+                    <div class="input-group">
+                        <select name="cidade_nasc_id" id="cidade_nasc_id" style="width: 100%;"></select>
+                        <button id="btnCidadeCadastro" class="btn btn-outline-secondary"><i
+                                class="bi bi-pencil"></i></button>
+                    </div>
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mt-2">
                     <label for="data_nasc" class="form-label">Data Nascimento</label>
@@ -149,7 +153,7 @@
                 <div class="row ps-2 pe-2">
                     <div class="col-12">
                         <div id="containerArtigos" class="row overflow-auto border border-dark-subtle rounded"
-                        style="min-height: 100px; max-height: 380px;"></div>
+                            style="min-height: 100px; max-height: 380px;"></div>
                     </div>
                 </div>
             </figure>
@@ -166,7 +170,8 @@
                             notícia)</label>
                         <textarea class="form-control" name="informacoes" id="informacoes" cols="30" rows="2"></textarea>
                     </div>
-                    <div class="col-md-6 mt-2" title="Observações sobre o preso (este campo não é impresso na qualificativa)">
+                    <div class="col-md-6 mt-2"
+                        title="Observações sobre o preso (este campo não é impresso na qualificativa)">
                         <label for="observacoes" class="form-label">Observações</label>
                         <textarea class="form-control" name="observacoes" id="observacoes" cols="30" rows="2"></textarea>
                     </div>
@@ -182,14 +187,14 @@
         <div class="col-12">
             <div class="row text-end">
                 <div class="col-12 mt-2">
-                    <button type="submit" id="btnSalvar" class="btn btn-outline-success me-2 w-25" title="Salvar alterações"
-                        style="max-width: 100px;">
+                    <button type="submit" id="btnSalvar" class="btn btn-outline-success me-2 w-25"
+                        title="Salvar alterações" style="max-width: 100px;">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         Salvar
                     </button>
                     <a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
-                        class="btn btn-outline-danger w-25 redirecionamentoAnterior" title="Sair da edição da Entrada de Presos"
-                        style="max-width: 100px;">
+                        class="btn btn-outline-danger w-25 redirecionamentoAnterior"
+                        title="Sair da edição da Entrada de Presos" style="max-width: 100px;">
                         Sair
                     </a>
                 </div>
@@ -199,6 +204,7 @@
 
     @include('modals.preso.modalAlterarPresoConvivio')
     @include('modals.preso.modalCadastroPresoArtigo')
+    @include('modals.referencias.modalCadastroCidade')
     @include('modals.referencias.modalCadastroGenero')
     @include('modals.referencias.modalCadastroEscolaridade')
     @include('modals.referencias.modalCadastroCutis')
