@@ -151,7 +151,7 @@ export class modalCadastroArtigo {
 
         const self = this;
         const modal = $(self.#idModal);
-
+        console.log(modal)
         self.#idRegister = null;
         self.#action = enumAction.POST;
         modal.find('form')[0].reset();

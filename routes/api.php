@@ -57,6 +57,7 @@ route::prefix('/v1')->group(function () {
 
                     Route::prefix('/search')->group(function () {
                         Route::post('/select', 'indexSelect');
+                        Route::post('/all', 'indexSearchAll');
                     });
                 });
             });

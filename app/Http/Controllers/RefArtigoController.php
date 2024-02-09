@@ -43,6 +43,22 @@ class RefArtigoController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resource = RefArtigo::where('nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('descricao', 'LIKE', '%' . $request->input('text') . '%')
+            ->orderBy('nome')->get();
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     public function indexSelect(Request $request)
     {
         // Regras de validação
@@ -52,8 +68,8 @@ class RefArtigoController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        $resources = RefArtigo::where('nome', 'LIKE', "%{$request->text}%")
-            ->orWhere('descricao', 'LIKE', "%{$request->text}%")
+        $resources = RefArtigo::where('nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('descricao', 'LIKE', '%' . $request->input('text') . '%')
             ->get();
 
         // Mapear os resultados para criar um array com os campos id e text

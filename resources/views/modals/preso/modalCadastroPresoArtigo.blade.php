@@ -15,8 +15,8 @@
                             <div class="input-group">
                                 <select name="artigo_id" id="artigo_idModalCadastroPresoArtigo" class="form-select">
                                 </select>
-                                <button type="button" id="btnArtigosCadastro"
-                                    class="btn btn-outline-secondary btn-mini-2"><i class="bi bi-pencil"></i></button>
+                                <button type="button"
+                                    class="btn btn-outline-secondary btnArtigosCadastro"><i class="bi bi-pencil"></i></button>
                             </div>
                         </div>
                     </div>
@@ -59,6 +59,6 @@
     </div>
 </div>
 
-@include('modals.referencias.modalCadastroCrenca')
+@include('modals.referencias.modalCadastroArtigo')
 
 <script type="module" src="{{ asset('js/modals/preso/modalCadastroPresoArtigo.js') }}"></script>

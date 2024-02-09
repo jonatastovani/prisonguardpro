@@ -14,7 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('css/style-popup.css') }}"> --}}
-    <link rel="stylesheet" href="{{ asset('css/modal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/modal-custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="{{asset('build/assets/app-e3b0c442.css')}}">
@@ -44,8 +45,8 @@
                 @component('componentes.nav')
                 @endcomponent
 
-                <div class="row flex-fill overflow-auto">
-                    <div class="col-12 mx-auto d-flex flex-column flex-nowrap mh-100" style="max-width: 1200px;">
+                <div class="container d-flex flex-fill overflow-auto">
+                    <div class="col-12 mx-auto d-flex flex-column flex-nowrap mh-100">
                         @yield('conteudo')
                     </div>
                 </div>

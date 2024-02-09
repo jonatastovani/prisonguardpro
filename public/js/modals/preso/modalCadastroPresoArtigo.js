@@ -1,6 +1,5 @@
-import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
-import { enumAction } from "../../common/enumAction.js";
+import { modalCadastroArtigo } from "../referencias/modalCadastroArtigo.js";
 
 export class modalCadastroPresoArtigo {
 
@@ -90,9 +89,9 @@ export class modalCadastroPresoArtigo {
         };
         if(self.#arrData.idDiv!=undefined){
             self.#fillDataAll();
+        } else {
+            $(self.#idModal).modal('show');
         }
-
-        $(self.#idModal).modal('show');
 
         return new Promise(function (resolve) {
 
@@ -132,7 +131,7 @@ export class modalCadastroPresoArtigo {
         const self = this;
         const modal = $(self.#idModal);
 
-        $(self.#idModal).modal('hide');
+        modal.modal('hide');
         modal.find("*").off();
         modal.off('keydown');
         self.modalCancel();
@@ -169,17 +168,26 @@ export class modalCadastroPresoArtigo {
         const self = this;
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
-        commonFunctions.addEventsSelect2($('#artigo_idModalCadastroPresoArtigo'), `${self.#urlApi}/search/select`, {
+        const selectArtigo = modal.find('select[name="artigo_id"]');
+        commonFunctions.addEventsSelect2(selectArtigo, `${self.#urlApi}/search/select`, {
             dropdownParent: modal, minimum: 0
         });
 
-        $(`#btnArtigosCadastro`).on('click', function () {
-            const obj = new modalCadastroEstadoCivil();
+        modal.find(`.btnArtigosCadastro`).on('click', function () {
+            const obj = new modalCadastroArtigo();
             obj.setFocusElementWhenClosingModal = this;
-            obj.modalOpen().then(function (result) {
+            self.#modalHideShow(false);
+            obj.modalOpen().then(async function (result) {
                 if (result && result.refresh) {
-                    preencherEstadoCivil();
+
+                    const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.artigo_id });
+                    const data = response.data;
+                    modal.find('select[name="artigo_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
+                    
+                    self.#promisseReturnValue.refresh = true;
+
                 }
+                self.#modalHideShow();
             });
         });
 
@@ -189,64 +197,25 @@ export class modalCadastroPresoArtigo {
     async #fillDataAll() {
 
         const self = this;
+        const modal = $(self.#idModal);
 
         try {
-            const obj = new conectAjax(self.#urlApi);
-            obj.setParam(self.#arrData.artigo_id);
-            obj.setAction(enumAction.POST);
-            obj.setData({trashed: true});
-
-            console.log(self.#arrData)
-            const response = await obj.envRequest();
+            const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.artigo_id });
             const data = response.data;
-            if (data) {
-                $(self.#idModal).find('select[name="artigo_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
-                $(self.#idModal).find('textarea[name="observacoes"]').val(self.#arrData.observacoes);
-            }
+            const selectArtigo = modal.find('select[name="artigo_id"]');
+
+            selectArtigo.html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
+            selectArtigo.attr('disabled', true);
+            modal.find('textarea[name="observacoes"]').val(self.#arrData.observacoes);
+            $(self.#idModal).modal('show');
+
         } catch (error) {
-            self.#endTimer = true;
             console.error(error);
             $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            self.#endTimer = true;
         }
 
     }
-
-    // async #getRecurse() {
-
-    //     const self = this;
-    //     const obj = new conectAjax(`${self.#urlApi}`);
-    //     obj.setParam(self.#idRegister);
-    //     try {
-    //         const response = await obj.getRequest();
-    //         if (response.data) {
-    //             const form = $(self.#idModal).find('form');
-    //             form.find('input[name="nome"]').val(response.data.nome).focus();
-    //             form.find('.register-title').html(`Editar Cor de Cabelo: ${response.data.id} - ${response.data.nome}`);
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //         $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
-    //         self.#modalClose();
-    //     }
-
-    // }
-
-    // #addQueryEvents(item) {
-
-    //     const self = this;
-    //     const tr = $(`#${item.idTr}`);
-
-    //     tr.find(`.btn-edit`).click(async function () {
-    //         self.#idRegister = item.id
-    //         self.#action = enumAction.PUT;
-    //         self.#getRecurse();
-    //     })
-
-    //     tr.find(`.btn-delete`).click(async function () {
-    //         self.#delButtonAction(item.id, item.nome, this);
-    //     })
-
-    // }
 
     saveButtonAction() {
 

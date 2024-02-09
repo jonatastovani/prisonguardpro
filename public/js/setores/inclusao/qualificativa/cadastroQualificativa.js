@@ -29,144 +29,144 @@ $(document).ready(function () {
         funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select`);
         commonFunctions.applyCustomNumberMask(matricula, { format: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
-        // matricula.on('input', function () {
-        //     $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
-        // })
+        matricula.on('input', function () {
+            $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
+        })
 
-        // const preencherGenero = () => {
-        //     funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
-        // }
-        // preencherGenero();
+        const preencherGenero = () => {
+            funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
+        }
+        preencherGenero();
 
-        // $(`#btnGeneroCadastro`).on('click', function () {
-        //     const obj = new modalCadastroGenero();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherGenero();
-        //         }
-        //     });
-        // });
+        $(`#btnGeneroCadastro`).on('click', function () {
+            const obj = new modalCadastroGenero();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherGenero();
+                }
+            });
+        });
 
-        // const preencherEscolaridade = () => {
-        //     funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
-        // }
-        // preencherEscolaridade();
+        const preencherEscolaridade = () => {
+            funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
+        }
+        preencherEscolaridade();
 
-        // $(`#btnEscolaridadeCadastro`).on('click', function () {
-        //     const obj = new modalCadastroEscolaridade();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherEscolaridade();
-        //         }
-        //     });
-        // });
+        $(`#btnEscolaridadeCadastro`).on('click', function () {
+            const obj = new modalCadastroEscolaridade();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherEscolaridade();
+                }
+            });
+        });
 
-        // const preencherEstadoCivil = () => {
-        //     funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
-        // }
-        // preencherEstadoCivil();
+        const preencherEstadoCivil = () => {
+            funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
+        }
+        preencherEstadoCivil();
 
-        // $(`#btnEstadoCivilCadastro`).on('click', function () {
-        //     const obj = new modalCadastroEstadoCivil();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherEstadoCivil();
-        //         }
-        //     });
-        // });
+        $(`#btnEstadoCivilCadastro`).on('click', function () {
+            const obj = new modalCadastroEstadoCivil();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherEstadoCivil();
+                }
+            });
+        });
 
-        // const preencherCutis = () => {
-        //     funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
-        // }
-        // preencherCutis();
+        const preencherCutis = () => {
+            funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
+        }
+        preencherCutis();
 
-        // $(`#btnCutisCadastro`).on('click', function () {
-        //     const obj = new modalCadastroCutis();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherCutis();
-        //         }
-        //     });
-        // });
+        $(`#btnCutisCadastro`).on('click', function () {
+            const obj = new modalCadastroCutis();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCutis();
+                }
+            });
+        });
 
-        // const preencherCabeloTipo = () => {
-        //     funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
-        // }
-        // preencherCabeloTipo();
+        const preencherCabeloTipo = () => {
+            funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
+        }
+        preencherCabeloTipo();
 
-        // $(`#btnCabeloTipoCadastro`).on('click', function () {
-        //     const obj = new modalCadastroCabeloTipo();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherCabeloTipo();
-        //         }
-        //     });
-        // });
+        $(`#btnCabeloTipoCadastro`).on('click', function () {
+            const obj = new modalCadastroCabeloTipo();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCabeloTipo();
+                }
+            });
+        });
 
-        // const preencherCabeloCor = () => {
-        //     funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
-        // }
-        // preencherCabeloCor();
+        const preencherCabeloCor = () => {
+            funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
+        }
+        preencherCabeloCor();
 
-        // $(`#btnCabeloCorCadastro`).on('click', function () {
-        //     const obj = new modalCadastroCabeloCor();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherCabeloCor();
-        //         }
-        //     });
-        // });
+        $(`#btnCabeloCorCadastro`).on('click', function () {
+            const obj = new modalCadastroCabeloCor();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCabeloCor();
+                }
+            });
+        });
 
-        // const preencherOlhoTipo = () => {
-        //     funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
-        // }
-        // preencherOlhoTipo();
+        const preencherOlhoTipo = () => {
+            funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
+        }
+        preencherOlhoTipo();
 
-        // $(`#btnOlhoTipoCadastro`).on('click', function () {
-        //     const obj = new modalCadastroOlhoTipo();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherOlhoTipo();
-        //         }
-        //     });
-        // });
+        $(`#btnOlhoTipoCadastro`).on('click', function () {
+            const obj = new modalCadastroOlhoTipo();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherOlhoTipo();
+                }
+            });
+        });
 
-        // const preencherOlhoCor = () => {
-        //     funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
-        // }
-        // preencherOlhoCor();
+        const preencherOlhoCor = () => {
+            funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
+        }
+        preencherOlhoCor();
 
-        // $(`#btnOlhoCorCadastro`).on('click', function () {
-        //     const obj = new modalCadastroOlhoCor();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherOlhoCor();
-        //         }
-        //     });
-        // });
+        $(`#btnOlhoCorCadastro`).on('click', function () {
+            const obj = new modalCadastroOlhoCor();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherOlhoCor();
+                }
+            });
+        });
 
-        // const preencherCrenca = () => {
-        //     funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
-        // }
-        // preencherCrenca();
+        const preencherCrenca = () => {
+            funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
+        }
+        preencherCrenca();
 
-        // $(`#btnCrencaCadastro`).on('click', function () {
-        //     const obj = new modalCadastroCrenca();
-        //     obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             preencherCrenca();
-        //         }
-        //     });
-        // });
+        $(`#btnCrencaCadastro`).on('click', function () {
+            const obj = new modalCadastroCrenca();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherCrenca();
+                }
+            });
+        });
 
         if (id) {
             buscarDadosTodos();
@@ -203,7 +203,7 @@ $(document).ready(function () {
             observacoes: 'Observacoes do artigo id 5'
         })
 
-        $(`#btnAddArtigo`).click();
+        // $(`#btnAddArtigo`).click();
     };
 
     $('#btnInserirPreso').on("click", (event) => {
@@ -345,14 +345,16 @@ $(document).ready(function () {
             if (index != -1) {
                 const obj = new modalCadastroPresoArtigo();
                 obj.setArrData = { ...arrArtigos[index] };
-                obj.modalOpen().then(function (result) {
+                obj.modalOpen().then(async function (result) {
+                    console.log(result)
                     if (result && result.refresh) {
-                        const observacoes = result.arrData.observacoes ? result.arrData.observacoes : '';
+                        const response = await commonFunctions.getRecurseWithTrashed(urlRefArtigos, { param: arrArtigos[index].artigo_id });
+                        arrArtigos[index].observacoes = result.arrData.observacoes ? result.arrData.observacoes : '';
+            
                         const card = $(`#${result.arrData.idDiv}`);
-                        card.find('.card-header').html(result.arrData.nome);
-                        card.find('.card-title').html(result.arrData.descricao);
-                        card.find('.card-text').html(commonFunctions.formatStringToHTML(observacoes));
-                        arrArtigos[index].observacoes = result.arrData.observacoes;
+                        card.find('.card-header').html(response.data.nome);
+                        card.find('.card-title').html(response.data.descricao);
+                        card.find('.card-text').html(commonFunctions.formatStringToHTML(arrArtigos[index].observacoes));
                     }
                 });
             } else {
