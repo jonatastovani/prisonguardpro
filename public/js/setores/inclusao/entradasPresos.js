@@ -163,7 +163,7 @@ $(document).ready(function () {
 
                 console.error(error);
                 tableEntradasPresos.html(`<td colspan=8>${error.message}</td>`);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
 
             });
 

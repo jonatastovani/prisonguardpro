@@ -46,7 +46,7 @@ $(document).ready(function() {
                 .catch(function (error) {
 
                     console.error(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`,'error');
+                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`,'error');
 
                 });
         }

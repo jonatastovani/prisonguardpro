@@ -146,7 +146,7 @@
                     echo json_encode($retorno);
                     exit();    
                 }else{
-                    $retorno = array('MENSAGEM' => "<li class = 'mensagem-erro'> Não foi possível inserir o CPF para o visitante informado. Se o problema persistir, comunique o programador. </li>");
+                    $retorno = array('MENSAGEM' => "<li class = 'mensagem-erro'> Não foi possível inserir o CPF para o visitante informado.\nSe o problema persistir, comunique o programador. </li>");
                     echo json_encode($retorno);
                     exit();    
                 }
@@ -172,7 +172,7 @@
                     echo json_encode($retorno);
                     exit();    
                 // }else{
-                //     $retorno = array('MENSAGEM' => "<li class = 'mensagem-erro'> Não foi possível inserir o CPF para o visitante informado. Se o problema persistir, comunique o programador. </li>");
+                //     $retorno = array('MENSAGEM' => "<li class = 'mensagem-erro'> Não foi possível inserir o CPF para o visitante informado.\nSe o problema persistir, comunique o programador. </li>");
                 //     echo json_encode($retorno);
                 //     exit();    
                 // }
@@ -312,7 +312,7 @@
                     echo json_encode($retorno);
                     exit();    
                 // }else{
-                //     $retorno = array('MENSAGEM' => "<li class = 'mensagem-erro'> Não foi possível inserir o CPF para o visitante informado. Se o problema persistir, comunique o programador. </li>");
+                //     $retorno = array('MENSAGEM' => "<li class = 'mensagem-erro'> Não foi possível inserir o CPF para o visitante informado.\nSe o problema persistir, comunique o programador. </li>");
                 //     echo json_encode($retorno);
                 //     exit();    
                 // }

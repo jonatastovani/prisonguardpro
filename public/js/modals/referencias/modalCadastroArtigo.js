@@ -3,7 +3,7 @@ import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
 
-export class modalCadastroEscolaridade {
+export class modalCadastroArtigo {
 
     /**
      * URL do endpoint da Api
@@ -39,8 +39,8 @@ export class modalCadastroEscolaridade {
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefEscolaridade;
-        this.#idModal = "#modalCadastroEscolaridade";
+        this.#urlApi = urlRefArtigos;
+        this.#idModal = "#modalCadastroArtigo";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
@@ -76,7 +76,7 @@ export class modalCadastroEscolaridade {
 
         const self = this;
 
-        self.#getDataAll();
+        self.generateFilters();
         self.modalCancel();
 
         self.#promisseReturnValue = {
@@ -178,11 +178,11 @@ export class modalCadastroEscolaridade {
 
         const self = this;
         const modal = $(self.#idModal);
-        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroEscolaridade') });
+        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroArtigo') });
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
-            modal.find('.register-title').html('Nova Escolaridade');
+            modal.find('.register-title').html('Novo Artigo');
             self.#actionsHideShowRegistrationFields(true);
             modal.find('input[name="nome"]').focus();
         });
@@ -232,6 +232,7 @@ export class modalCadastroEscolaridade {
                                 </div>
                             </td>
                             <td>${item.nome}</td>
+                            <td>${item.descricao}</td>
                         </tr>
                     `);
 
@@ -266,7 +267,8 @@ export class modalCadastroEscolaridade {
             if (response.data) {
                 const form = $(self.#idModal).find('form');
                 form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('.register-title').html(`Editar Escolaridade: ${response.data.id} - ${response.data.nome}`);
+                form.find('input[name="descricao"]').val(response.data.descricao).focus();
+                form.find('.register-title').html(`Editar Artigo: ${response.data.id} - ${response.data.nome}`);
             }
         } catch (error) {
             console.error(error);
@@ -352,8 +354,8 @@ export class modalCadastroEscolaridade {
 
         try {
             const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Escolaridade';
-            obj.setMessage = `Confirma a exclusão da Escolaridade <b>${nameDel}</b>?`;
+            obj.setTitle = 'Confirmação de exclusão de Artigo';
+            obj.setMessage = `Confirma a exclusão do Artigo <b>${nameDel}</b>?`;
             obj.setFocusElementWhenClosingModal = button;
             self.#modalHideShow(false);
             const result = await obj.modalOpen();
@@ -379,7 +381,7 @@ export class modalCadastroEscolaridade {
             try {
                 const response = await obj.deleteRequest();
 
-                $.notify(`Escolaridade deletada com sucesso!`, 'success');
+                $.notify(`Artigo deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();

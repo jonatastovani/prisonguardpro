@@ -92,7 +92,7 @@ export class modalMessage {
         } else {
             const message = 'Nenhuma mensagem foi definida';
             console.error(message);
-            $.notify(`Não foi possível abrir a confirmação. Se o problema persistir consulte o desenvolvedor.\nErro: ${message}`, 'error');
+            $.notify(`Não foi possível abrir a confirmação.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${message}`, 'error');
             self.modalClose();
         }
 

@@ -12,16 +12,28 @@
                         <div class="col">
                             <label for="artigo_idModalCadastroPresoArtigo" class="form-label">Artigo</label>
                             <br>
+                            <div class="input-group">
+                                <select name="artigo_id" id="artigo_idModalCadastroPresoArtigo" class="form-select">
+                                </select>
+                                <button type="button" id="btnArtigosCadastro"
+                                    class="btn btn-outline-secondary btn-mini-2"><i class="bi bi-pencil"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="row">
+                        <div class="col">
+                            <label for="artigo_idModalCadastroPresoArtigo" class="form-label">Artigo</label>
+                            <br>
                             <select name="artigo_id" id="artigo_idModalCadastroPresoArtigo" class="form-select"
                                 style="width: 100%;">
                             </select>
                         </div>
-                            <div class="col-1">
-                                <label class="form-label"></label>
-                                <button id="btnArtigosCadastro" class="btn btn-outline-secondary btn-mini-2"><i
-                                        class="bi bi-pencil"></i></button>
-                            </div>
-                    </div>
+                        <div class="col-1">
+                            <label class="form-label"></label>
+                            <button type="button" id="btnArtigosCadastro"
+                                class="btn btn-outline-secondary btn-mini-2"><i class="bi bi-pencil"></i></button>
+                        </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-12">
                             <label for="observacoesModalCadastroPresoArtigo" class="form-label">Observações
@@ -34,7 +46,8 @@
                 <div class="modal-footer modal-reduce-padding">
                     <div class="col-12 text-end mt-2">
                         <button type="submit" class="btn btn-outline-success btn-save w-50" style="max-width: 100px;">
-                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            <span class="spinner-border spinner-border-sm d-none" role="status"
+                                aria-hidden="true"></span>
                             Salvar
                         </button>
                         <button type="button" class="btn btn-outline-danger btn-cancel w-50"
@@ -45,5 +58,7 @@
         </div>
     </div>
 </div>
+
+@include('modals.referencias.modalCadastroCrenca')
 
 <script type="module" src="{{ asset('js/modals/preso/modalCadastroPresoArtigo.js') }}"></script>

@@ -203,6 +203,7 @@ $(document).ready(function () {
             observacoes: 'Observacoes do artigo id 5'
         })
 
+        $(`#btnAddArtigo`).click();
     };
 
     $('#btnInserirPreso').on("click", (event) => {
@@ -274,7 +275,7 @@ $(document).ready(function () {
             })
             .catch(function (error) {
                 $('input, .btn, select, textarea').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
+                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
             });
 
     }
@@ -304,7 +305,7 @@ $(document).ready(function () {
             descricao = response.data.descricao;
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados do ID Artigo ${arrData.artigo_id} para o preso. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            $.notify(`Não foi possível obter os dados do ID Artigo ${arrData.artigo_id} para o preso.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
         }
         let strPreso = `
             <div id="${idDiv}" class="card col-lg-4 col-sm-6 p-0">
@@ -358,7 +359,7 @@ $(document).ready(function () {
                 message = 'Artigo não encontrado no Array Artigos'
                 console.error(message);
                 console.error(arrArtigos, `Index: ${index}`);
-                $.notify(`Não foi possível editar o artigo. Se o problema persistir consulte o programador.\nErro: ${message}`, 'error');
+                $.notify(`Não foi possível editar o artigo.\nSe o problema persistir consulte o programador.\nErro: ${message}`, 'error');
             }
             
         });
@@ -443,7 +444,7 @@ $(document).ready(function () {
                 .catch(function (error) {
 
                     console.error(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
 
                 })
                 .finally(function () {

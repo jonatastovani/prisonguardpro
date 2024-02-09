@@ -156,7 +156,7 @@ export class popProducts {
 
                         console.error(error);
                         console.error(`ID Item: ${id}`);
-                        $.notify(`Não foi possível recuperar os dados do item. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}\nID Item: ${id}`,'error');
+                        $.notify(`Não foi possível recuperar os dados do item.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}\nID Item: ${id}`,'error');
     
                     });
             }
@@ -255,7 +255,7 @@ export class popProducts {
 
                         console.error(error);
                         console.error(`ID Item: ${item.item_id}`);
-                        $.notify(`Não foi possível recuperar os dados do item. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}\nID Item: ${item.item_id}`,'error');
+                        $.notify(`Não foi possível recuperar os dados do item.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}\nID Item: ${item.item_id}`,'error');
 
                     });
             }
@@ -306,7 +306,7 @@ export class popProducts {
 
     //                         console.error(error);
     //                         console.error(`ID Item: ${item.item_id}`);
-    //                         $.notify(`Não foi possível recuperar os dados do item. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}\nID Item: ${item.item_id}`,'error');
+    //                         $.notify(`Não foi possível recuperar os dados do item.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}\nID Item: ${item.item_id}`,'error');
         
     //                     });
         

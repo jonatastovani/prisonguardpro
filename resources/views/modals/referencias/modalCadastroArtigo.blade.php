@@ -1,8 +1,8 @@
-<div class="modal fade" id="modalCadastroOlhoTipo" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+<div class="modal fade" id="modalCadastroArtigo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header modal-reduce-padding">
-                <h4 class="modal-title">Listagem de Tipos de Olhos</h4>
+                <h4 class="modal-title">Listagem de Artigos</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body position-relative pt-0">
@@ -10,10 +10,11 @@
                 <div class="row sticky-top bg-white pt-2 pb-2">
                     <div class="col-12 dataSearch">
                         <div class="input-group">
-                            <div class="input-group-text"><label for="nomeSearchModalCadastroOlhoTipo">Busca</label>
+                            <div class="input-group-text">
+                                <label for="nomeSearchModalCadastroArtigo">Busca</label>
                             </div>
-                            <input type="text" id="nomeSearchModalCadastroOlhoTipo"
-                                class="form-control inputActionSearchModalCadastroOlhoTipo" name="search">
+                            <input type="text" id="nomeSearchModalCadastroArtigo"
+                                class="form-control inputActionSearchModalCadastroArtigo" name="search">
                         </div>
                     </div>
                 </div>
@@ -48,20 +49,18 @@
                         <form>
                             <div class="col-12 divRegistrationFields" style="display: none;">
                                 <div class="row">
-                                    <h5 class="register-title">Novo Tipo de Olhos</h5>
+                                    <h5 class="register-title">Novo Artigo</h5>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="nomeModalCadastroOlhoTipo" class="form-label">Nome</label>
+                                        <label for="nomeModalCadastroArtigo" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
-                                            id="nomeModalCadastroOlhoTipo">
+                                            id="nomeModalCadastroArtigo">
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-12">
-                                        <label for="descricaoModalCadastroOlhoTipo" class="form-label">Descrição</label>
+                                        <label for="descricaoModalCadastroArtigo" class="form-label">Descrição</label>
                                         <input type="text" class="form-control" name="descricao"
-                                            id="descricaoModalCadastroOlhoTipo">
+                                            id="descricaoModalCadastroArtigo">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -84,5 +83,6 @@
         </div>
     </div>
 </div>
+</div>
 
-<script type="module" src="{{ asset('js/modals/referencias/modalCadastroOlhoTipo.js') }}"></script>
+<script type="module" src="{{ asset('js/modals/referencias/modalCadastroArtigo.js') }}"></script>

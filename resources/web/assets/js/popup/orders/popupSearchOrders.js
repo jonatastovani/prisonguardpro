@@ -247,7 +247,7 @@ export class popSearchOrders {
                 console.error(error);
                 const description = commonFunctions.firstUppercaseLetter(error.description);
                 table.html(`<td colspan=10>${description}</td>`);
-                $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${description}`, 'error');
+                $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${description}`, 'error');
 
             });
 

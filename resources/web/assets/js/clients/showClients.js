@@ -151,7 +151,7 @@ $(document).ready(function () {
                 console.error(error);
                 const description = commonFunctions.firstUppercaseLetter(error.description);
                 tableClients.html(`<td colspan=7>${description}</td>`);
-                $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${description}`, 'error');
+                $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${description}`, 'error');
 
             });
 
@@ -206,7 +206,7 @@ $(document).ready(function () {
                 .catch(function (error) {
 
                     console.log(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
+                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
 
                 });
         }

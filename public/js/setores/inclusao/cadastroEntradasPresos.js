@@ -92,7 +92,7 @@ $(document).ready(function () {
             })
             .catch(function (error) {
                 $('input, .btn, select').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
+                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
             });
 
     }
@@ -297,7 +297,7 @@ $(document).ready(function () {
                 .catch(function (error) {
 
                     console.error(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
 
                 })
                 .finally(function () {

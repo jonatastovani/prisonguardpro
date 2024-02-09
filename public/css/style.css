@@ -44,3 +44,12 @@
 .form-label {
     margin-bottom: 0;
 }
+
+.input-group .select2 {
+    flex: 1;
+}
+
+.input-group .select2-selection {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}

@@ -173,6 +173,17 @@ export class modalCadastroPresoArtigo {
             dropdownParent: modal, minimum: 0
         });
 
+        $(`#btnArtigosCadastro`).on('click', function () {
+            const obj = new modalCadastroEstadoCivil();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    preencherEstadoCivil();
+                }
+            });
+        });
+
+
     }
 
     async #fillDataAll() {
@@ -195,7 +206,7 @@ export class modalCadastroPresoArtigo {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
         }
 
     }
@@ -214,7 +225,7 @@ export class modalCadastroPresoArtigo {
     //         }
     //     } catch (error) {
     //         console.error(error);
-    //         $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+    //         $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
     //         self.#modalClose();
     //     }
 

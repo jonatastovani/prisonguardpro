@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header modal-reduce-padding">
-                <h4 class="modal-title">Listagem de Tipo de Cabelo</h4>
+                <h4 class="modal-title">Listagem de Tipos de Cabelo</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body position-relative pt-0">

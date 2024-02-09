@@ -786,7 +786,7 @@ function buscaIDUsuarioLogado(){
 function buscaIDDecodificado(idtipo,idbuscar,tiporetorno=1){
     let result = [];
     if(idbuscar==0 || idbuscar==undefined || idbuscar==NaN || idbuscar==null){
-        inserirMensagemTela('<li class="mensagem-aviso"> ID do Atendimento não informado. Se o problema persistir, informe ao programador. </li>')
+        inserirMensagemTela('<li class="mensagem-aviso"> ID do Atendimento não informado.\nSe o problema persistir, informe ao programador. </li>')
         idbuscar = 0;
     }else{
         $.ajax({

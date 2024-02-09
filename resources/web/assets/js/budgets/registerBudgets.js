@@ -178,7 +178,7 @@ export class registerBudgets {
             .catch(function (error) {
 
                 $('#form1 :input').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o programador.\nErro: ${error}`, 'error');
+                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error}`, 'error');
 
             });
 
@@ -306,7 +306,7 @@ export class registerBudgets {
                 .catch(function (error) {
 
                     console.error(error);
-                    $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
+                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${commonFunctions.firstUppercaseLetter(error.description)}`, 'error');
 
                 });
         }

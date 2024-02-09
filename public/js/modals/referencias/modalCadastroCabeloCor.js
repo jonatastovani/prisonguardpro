@@ -251,7 +251,7 @@ export class modalCadastroCabeloCor {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
         }
 
     }
@@ -270,7 +270,7 @@ export class modalCadastroCabeloCor {
             }
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
             self.#modalClose();
         }
 
@@ -337,7 +337,7 @@ export class modalCadastroCabeloCor {
             } catch (error) {
 
                 console.log(error);
-                $.notify(`Não foi possível enviar os dados. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
             }
             finally {
                 commonFunctions.simulateLoading(btn, false);
@@ -387,7 +387,7 @@ export class modalCadastroCabeloCor {
 
             } catch (error) {
                 console.error(error);
-                $.notify(`Não foi possível executar a ação. Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                $.notify(`Não foi possível executar a ação.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
             }
         }
 
