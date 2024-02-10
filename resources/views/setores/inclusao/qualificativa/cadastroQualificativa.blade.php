@@ -158,29 +158,26 @@
                 </div>
             </figure>
 
-            <figure>
-                <div class="row mt-2">
-                    <div class="col-12 text-end">
-                        <button id="btnAddArtigo" class="btn btn-outline-primary btn-sm">Adicionar Artigo</button>
-                    </div>
+            <div class="row mt-2">
+                <div class="col-12 text-end">
+                    <button id="btnAddArtigo" class="btn btn-outline-primary btn-sm">Adicionar Artigo</button>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-md-6 mt-2">
-                        <label for="informacoes" class="form-label">Informações (Ex: link da
-                            notícia)</label>
-                        <textarea class="form-control" name="informacoes" id="informacoes" cols="30" rows="2"></textarea>
-                    </div>
-                    <div class="col-md-6 mt-2"
-                        title="Observações sobre o preso (este campo não é impresso na qualificativa)">
-                        <label for="observacoes" class="form-label">Observações</label>
-                        <textarea class="form-control" name="observacoes" id="observacoes" cols="30" rows="2"></textarea>
-                    </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6 mt-2">
+                    <label for="informacoes" class="form-label">Informações (Ex: link da
+                        notícia)</label>
+                    <textarea class="form-control" name="informacoes" id="informacoes" cols="30" rows="2"></textarea>
                 </div>
-                <caption>Teste</caption>
-            </figure>
+                <div class="col-md-6 mt-2" title="Observações sobre o preso (este campo não é impresso na qualificativa)">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea class="form-control" name="observacoes" id="observacoes" cols="30" rows="2"></textarea>
+                </div>
+            </div>
         </div>
 
-        {{-- <input type="hidden" id="id" value="{{ isset($id) ? $id : '' }}"> --}}
+        <input type="hidden" id="id" value="{{ isset($id) ? $id : '' }}">
+        <input type="hidden" id="qualificativaProvisoria" value="{{ isset($qualificativaProvisoria) ? $qualificativaProvisoria : false }}">
     </div>
 
     <div class="row mb-2">
@@ -192,7 +189,7 @@
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         Salvar
                     </button>
-                    <a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
+                    <a href="{{ URL::previous() }}"
                         class="btn btn-outline-danger w-25 redirecionamentoAnterior"
                         title="Sair da edição da Entrada de Presos" style="max-width: 100px;">
                         Sair

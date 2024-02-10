@@ -1,4 +1,5 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
+import { commonFunctions } from "../../common/commonFunctions.js";
 import { configuracoesApp } from "../../common/configuracoesApp.js";
 import { enumAction } from "../../common/enumAction.js";
 import { funcoesComuns } from "../../common/funcoesComuns.js";
@@ -120,19 +121,19 @@ $(document).ready(function () {
 
                     let strHTML = '';
                     const data_entrada = moment(result.entrada.data_entrada).format('DD/MM/YYYY HH:mm');
-                    
+
                     let matricula = result.matricula;
                     let nome = result.nome;
 
-                    if(result.preso) {
+                    if (result.preso) {
                         matricula = result.preso.matricula;
                     }
-                    if(result.preso && result.preso.nome) {
+                    if (result.preso && result.preso.nome) {
                         nome = result.preso.nome;
                     }
 
                     matricula = matricula ? funcoesPresos.retornaMatriculaFormatada(matricula) : 'N/C'
-                    
+
                     let strTitle = ``;
                     let strStyle = ``;
                     if (!result.convivio_tipo.convivio_padrao_bln) {
@@ -170,25 +171,21 @@ $(document).ready(function () {
     }
 
     function preencherSelectStatus() {
-
-        const opcoes = {
-            tipoRequest: enumAction.POST,
+        const options = {
+            typeRequest: enumAction.POST,
             envData: {
                 tipo: 2
             },
         }
-
-        funcoesComuns.preencherSelect($('#statusEntradasPresos'), `${urlRefStatus}/busca/select`, opcoes)
-
-
+        commonFunctions.fillSelect($('#statusEntradasPresos'), `${urlRefStatus}/search/select`, options)
     }
 
     setTimeout(() => {
         window.Echo.channel('EntradasPresos')
-        .listen('.EntradasPresos',(e)=>{
-            tableEntradasPresos.html('');
-            gerarFiltros();
-        })
+            .listen('.EntradasPresos', (e) => {
+                tableEntradasPresos.html('');
+                gerarFiltros();
+            })
     }, 1000);
 
     init();

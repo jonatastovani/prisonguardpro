@@ -54,7 +54,7 @@ class RefNacionalidadeController extends Controller
         $mappedResults = $resources->map(function ($item) {
             return [
                 'id' => $item->id,
-                'text' => $item->nome . " (" . $item->pais . "-" . $item->sigla . ")",
+                'text' => $item->pais . " - " . $item->sigla,
             ];
         });
 

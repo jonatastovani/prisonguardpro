@@ -427,35 +427,35 @@ export class commonFunctions {
      *
      * @param {jQuery} elem - O elemento de seleção encapsulado em jQuery a ser preenchido.
      * @param {string} urlApi – A URL da API da qual buscar dados.
-     * @param {Object} opcoes - Opções adicionais para personalizar o processo de preenchimento.
-     * @param {boolean} options.inserirPrimeiraOpcao - Se deseja inserir a primeira opção (padrão: true).
-     * @param {string} options.primeiraOpcaoNome - O nome da primeira opção (padrão: 'Selecione').
-     * @param {string} options.primeiraOpcaoValor - O valor da primeira opção (padrão: '').
-     * @param {string} options.idOpcaoSelecionada - O ID da opção a ser marcada como selecionada (padrão: o valor atual do elemento select).
-     * @param {string} options.campoExibir - O nome da coluna a ser exibida nas opções (padrão: 'nome').
-     * @param {string} options.tipoRequest - O tipo de solicitação (por exemplo, "GET" ou "POST").
+     * @param {Object} options - Opções adicionais para personalizar o processo de preenchimento.
+     * @param {boolean} options.insertFirstOption - Se deseja inserir a primeira opção (padrão: true).
+     * @param {string} options.firstOptionName - O nome da primeira opção (padrão: 'Selecione').
+     * @param {string} options.firstOptionValue - O valor da primeira opção (padrão: '').
+     * @param {string} options.selectedIdOption - O ID da opção a ser marcada como selecionada (padrão: o valor atual do elemento select).
+     * @param {string} options.displayColumnName - O nome da coluna a ser exibida nas opções (padrão: 'nome').
+     * @param {string} options.typeRequest - O tipo de solicitação (por exemplo, "GET" ou "POST").
      * @returns {Promise} - Uma promessa que é resolvida quando o elemento selecionado é preenchido ou rejeitado por erro.
      */
-    static async preencherSelect(elem, urlApi, opcoes = {}) {
+    static async fillSelect(elem, urlApi, options = {}) {
         const {
-            inserirPrimeiraOpcao: inserirPrimeiraOpcao = true,
-            primeiraOpcaoNome: primeiraOpcaoNome = 'Selecione',
-            primeiraOpcaoValor: primeiraOpcaoValor = '',
-            idOpcaoSelecionada: idOpcaoSelecionada = elem.val(),
-            campoExibir: campoExibir = 'nome',
-            tipoRequest: tipoRequest = enumAction.GET,
+            insertFirstOption: insertFirstOption = true,
+            firstOptionName: firstOptionName = 'Selecione',
+            firstOptionValue: firstOptionValue = '',
+            selectedIdOption: selectedIdOption = elem.val(),
+            displayColumnName: displayColumnName = 'nome',
+            typeRequest: typeRequest = enumAction.GET,
             envData: envData = {},
-        } = opcoes;
+        } = options;
 
         const obj = new conectAjax(urlApi);
 
         try {
             let response;
 
-            if (tipoRequest === enumAction.GET) {
+            if (typeRequest === enumAction.GET) {
                 response = await obj.getRequest();
-            } else if (tipoRequest === enumAction.POST) {
-                obj.setAction(tipoRequest);
+            } else if (typeRequest === enumAction.POST) {
+                obj.setAction(typeRequest);
                 obj.setData(envData);
                 response = await obj.envRequest();
             } else {
@@ -464,14 +464,14 @@ export class commonFunctions {
 
             let strOptions = '';
 
-            if (inserirPrimeiraOpcao) {
-                strOptions += `<option value="${primeiraOpcaoValor}">${primeiraOpcaoNome}</option>`;
+            if (insertFirstOption) {
+                strOptions += `<option value="${firstOptionValue}">${firstOptionName}</option>`;
             }
 
             response.data.forEach(result => {
                 const id = result.id;
-                const valor = result[campoExibir];
-                const strSelected = (id == idOpcaoSelecionada ? ' selected' : '');
+                const valor = result[displayColumnName];
+                const strSelected = (id == selectedIdOption ? ' selected' : '');
                 strOptions += `\n<option value="${id}"${strSelected}>${valor}</option>`;
             });
 
@@ -739,7 +739,6 @@ export class commonFunctions {
             }
         });
 
-
     }
 
     static addDefaultSearchModalEvents(self, inputsSearchs) {
@@ -865,9 +864,8 @@ export class commonFunctions {
                         },
                         success: success,
                         error: function (xhr, textStatus, errorThrown) {
-                            const objAjax = new conectAjax('');
-                            const erro = objAjax.tratamentoErro(xhr);
-                            $.notify(erro.message, 'error');
+                            const error = commonFunctions.errorHandling(xhr);
+                            $.notify(error.message, 'error');
                         }
                     };
                     return $.ajax(ajaxOptions);
@@ -885,6 +883,51 @@ export class commonFunctions {
             dropdownParent: dropdownParent,
         });
 
+    }
+
+    static errorHandling(xhr) {
+        try {
+            console.error(xhr)
+            const responseText = JSON.parse(xhr.responseText);
+            let mensagens = [];
+
+            console.error('Erro HTTP:', xhr.status);
+            console.error(`Código de erro: ${responseText.trace_id}`);
+            if(xhr.status == 422) {
+                console.error(responseText.data);
+            }
+
+            // console.log(responseText)
+            if (responseText.data && responseText.data.errors) {
+                // Verifica se 'errors' é um array ou um objeto
+                if (Array.isArray(responseText.data.errors)) {
+                    mensagens = responseText.data.errors.map(error => error);
+                } else {
+                    Object.keys(responseText.data.errors).forEach(key => {
+                        if (responseText.data.errors[key].error) {
+                            mensagens.push(responseText.data.errors[key].error);
+                        } else {
+                            mensagens.push(responseText.data.errors[key]);
+                        }
+                    });
+                }
+            }
+
+            const mensagem = `${responseText.message}\n${mensagens.join('\n')}`;
+
+            return {
+                status: xhr.status,
+                message: mensagem
+            };
+        } catch (error) {
+            console.error(error);
+            console.error('Erro HTTP:', error.status);
+            console.error(`Descrição do erro: ${error.responseText}`);
+            return {
+                status: error.status,
+                descricao: error.responseText
+            };
+        }
     }
 
     static async getRecurseWithTrashed(urlApi, options = {}) {

@@ -28,7 +28,7 @@
                 
                 <div class="container">
 
-                    <form id="form1" >
+                    <form id="form1" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-12">

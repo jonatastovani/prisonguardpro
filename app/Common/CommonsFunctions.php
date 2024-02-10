@@ -26,23 +26,25 @@ class CommonsFunctions
      */
     static function generateLog($mensagem): string
     {
-
         $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1);
-
         $chamador = end($trace);
-
         $diretorio = isset($chamador['file']) ? $chamador['file'] : null;
         $linha = isset($chamador['line']) ? $chamador['line'] : null;
-
         $traceId = CommonsFunctions::generateTraceId();
 
-        // Registre o erro no log com o trace ID
+        // Capturar informações da URL e do método HTTP
+        $url = request()->fullUrl();
+        $metodoHttp = request()->method();
+
+        // Registre o erro no log com o trace ID e informações da requisição
         $mensagem .= $diretorio !== null ? " | Arquivo: $diretorio" : '';
         $mensagem .= $linha !== null ? " | Linha: $linha" : '';
         $mensagem .= " | UserId: " . auth()->id();
+        $mensagem .= " | UserIp: " . UserInfo::get_ip();
         $mensagem .= " | Trace ID: $traceId";
+        $mensagem .= " | URL: $url";
+        $mensagem .= " | Método HTTP: $metodoHttp";
 
-        // Log::error($mensagem);
         Log::channel('pgplog_file')->info($mensagem);
         return $traceId;
     }
@@ -67,7 +69,7 @@ class CommonsFunctions
             'required_with' => 'O campo :attribute deve ser informado.',
             'between' => 'O campo :attribute deve estar entre :min e :max.',
             'in' => 'O campo :attribute deve ser um dos seguintes valores: :values.',
-    
+
             'nome.regex' => 'O campo :attribute não deve conter números.',
             'nome_social.regex' => 'O campo :attribute não deve conter números.',
             'mae.regex' => 'O campo :attribute não deve conter números.',

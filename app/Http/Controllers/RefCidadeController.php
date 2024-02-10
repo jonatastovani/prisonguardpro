@@ -38,7 +38,7 @@ class RefCidadeController extends Controller
         $mappedResults = $resources->map(function ($item) {
             return [
                 'id' => $item->id,
-                'text' => $item->nome."-".$item->estado->sigla." | ".$item->estado->nacionalidade->pais ,
+                'text' => $item->nome." - ".$item->estado->sigla." | ".$item->estado->nacionalidade->pais ,
             ];
         });
 

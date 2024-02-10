@@ -239,12 +239,12 @@ export class conectAjax {
                 status: xhr.status,
                 message: mensagem
             };
-        } catch (parseError) {
-            console.error('Erro HTTP:', xhr.status);
-            console.error(`Descrição do erro: ${xhr.responseText}`);
+        } catch (error) {
+            console.error('Erro HTTP:', error.status);
+            console.error(`Descrição do erro: ${error.responseText}`);
             return {
-                status: xhr.status,
-                descricao: xhr.responseText
+                status: error.status,
+                descricao: error.responseText
             };
         }
     }

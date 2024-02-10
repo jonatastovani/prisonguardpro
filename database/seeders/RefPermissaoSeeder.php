@@ -76,13 +76,13 @@ class RefPermissaoSeeder extends Seeder
             ],
             [
                 'id' => 11,
-                'nome' => 'Incluir Presos na Unidade',
+                'nome' => 'Vincular Matrícula',
                 'nome_completo' => null,
-                'descricao' => 'Incluir presos na Unidade após ser lançado incluso pela Inclusão.',
+                'descricao' => 'Vincula preso a uma matrícula após preso incluso na Unidade pela Inclusão.',
             ],
             [
                 'id' => 12,
-                'nome' => 'Alterar Qualificativa de Preso',
+                'nome' => 'Alterar Matricula',
                 'nome_completo' => null,
                 'descricao' => 'Alterar as informações da Qualificativa do Preso.',
             ],
@@ -136,7 +136,7 @@ class RefPermissaoSeeder extends Seeder
             ],
             [
                 'id' => 21,
-                'nome' => 'Imprimir Termo de Abertura',
+                'nome' => 'Permissões Básicas do CIMIC',
                 'nome_completo' => null,
                 'descricao' => 'Imprimir Termo de Abertura das Inclusões do Preso.',
             ],

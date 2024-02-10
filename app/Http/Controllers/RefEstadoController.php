@@ -74,7 +74,7 @@ class RefEstadoController extends Controller
         $mappedResults = $resources->map(function ($item) {
             return [
                 'id' => $item->id,
-                'text' => $item->nome . "-" . $item->sigla . " (" . $item->nacionalidade->pais . "-" . $item->nacionalidade->sigla . ")",
+                'text' => $item->nome . " - " . $item->sigla . " (" . $item->nacionalidade->pais . ")",
             ];
         });
 

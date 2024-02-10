@@ -37,7 +37,7 @@ class RefNacionalidade extends Model
 
         // Registrando o evento saving
         static::saving(function ($model) {
-            $model->sigla = mb_strtoupper($model->nome, 'UTF-8');
+            $model->sigla = mb_strtoupper($model->sigla, 'UTF-8');
         });
     }
 

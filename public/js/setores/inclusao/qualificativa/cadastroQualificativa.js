@@ -359,7 +359,7 @@ $(document).ready(function () {
                     if (result && result.refresh) {
                         const response = await commonFunctions.getRecurseWithTrashed(urlRefArtigos, { param: arrArtigos[index].artigo_id });
                         arrArtigos[index].observacoes = result.arrData.observacoes ? result.arrData.observacoes : '';
-            
+
                         const card = $(`#${result.arrData.idDiv}`);
                         card.find('.card-header').html(response.data.nome);
                         card.find('.card-title').html(response.data.descricao);
@@ -372,15 +372,15 @@ $(document).ready(function () {
                 console.error(arrArtigos, `Index: ${index}`);
                 $.notify(`Não foi possível editar o artigo.\nSe o problema persistir consulte o programador.\nErro: ${message}`, 'error');
             }
-            
+
         });
-        
-        
+
+
         div.find('.btn-delete').on("click", function () {
             console.log(arrArtigos)
             console.log(arrData.idDiv);
-            arrArtigos = arrArtigos.filter((item)=>item.idDiv!=arrData.idDiv);
-            
+            arrArtigos = arrArtigos.filter((item) => item.idDiv != arrData.idDiv);
+
             if (arrData.id) {
                 acaoBtnDeletar(idDiv, this);
             } else {
