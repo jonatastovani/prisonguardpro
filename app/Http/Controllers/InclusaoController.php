@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Common\FuncoesPresos;
 use App\Common\PermissaoService;
 use App\Models\IncEntradaPreso;
+use App\Models\IncQualificativaProvisoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -33,18 +34,26 @@ class InclusaoController extends Controller
 
     public function cadastroQualificativa(Request $request)
     {
-        $arrCompact = ['id'];
-        $id = $request->id;
+        $passagem_id = $request->id;
+        $permAtribuirMatricula = false;
+        $idQualProv = null;
 
-        $resource = FuncoesPresos::buscarRecursoPassagemPreso($id);
+        $resource = FuncoesPresos::buscarRecursoPassagemPreso($passagem_id);
 
         if ($resource instanceof IncEntradaPreso) {
-            if (PermissaoService::temPermissaoRecursivaAcima(Auth::user(), [45, 68])) {
-                // Aqui faço o que eu quiser
+            // if (PermissaoService::temPermissaoRecursivaAcima(Auth::user(), [45, 68])) {
+            $permAtribuirMatriculaBln = true;
+            // }
+            $preso_id_bln = $resource->preso_id ? true : false;
+            if (!$preso_id_bln) {
+                $qualProv = IncQualificativaProvisoria::where('passagem_id', $passagem_id);
+                if ($qualProv->exists()) {
+                    $idQualProv = $qualProv->first()->id;
+                }
             }
         } else {
-            $motivo = $resource["passagem.$id"]['error'];
-            $traceId = $resource["passagem.$id"]['trace_id'];
+            $motivo = $resource["passagem.$passagem_id"]['error'];
+            $traceId = $resource["passagem.$passagem_id"]['trace_id'];
 
             $data = [
                 'title' => 'Página não encontrada',
@@ -57,7 +66,7 @@ class InclusaoController extends Controller
             return response()->view('errors.custom', $data);
         }
 
-        $dataToCompact = compact($arrCompact);
+        $dataToCompact = compact('passagem_id', 'permAtribuirMatriculaBln', 'preso_id_bln', 'idQualProv');
 
         return view('setores.inclusao.qualificativa.cadastroQualificativa', $dataToCompact);
     }

@@ -19,9 +19,13 @@ import { modalCadastroOlhoTipo } from "../../../modals/referencias/modalCadastro
 
 $(document).ready(function () {
 
-    const id = $('#id').val();
+    let action = $('#preso_id_bln').val() ? enumAction.PUT : enumAction.POST;
+    const passagem_id = $('#passagem_id').val();
+    const qual_prov_id = $('#qual_prov_id').val();
+    const preso_id_bln = $('#preso_id_bln').val();
+    const perm_atribuir_matricula_bln = $('#perm_atribuir_matricula_bln').val();
+    const redirect = $('.redirectUrl').attr('href');
     const containerArtigos = $('#containerArtigos');
-    const redirecionamento = $('.redirecionamentoAnterior').attr('href');
     let arrArtigos = [];
 
     function init() {
@@ -182,10 +186,6 @@ $(document).ready(function () {
             });
         });
 
-        if (id) {
-            buscarDadosTodos();
-        }
-
         $(`#btnAddArtigo`).on('click', function () {
             const obj = new modalCadastroPresoArtigo();
             obj.setFocusElementWhenClosingModal = this;
@@ -196,22 +196,24 @@ $(document).ready(function () {
             });
         });
 
-        inserirArtigos({
-            artigo_id: 1,
-            observacoes: 'Observacoes do artigo id 1'
-        })
-        inserirArtigos({
-            artigo_id: 2,
-            observacoes: 'Observacoes do artigo id 2'
-        })
-        inserirArtigos({
-            artigo_id: 3,
-            observacoes: `Observacoes do artigo id 3`
-        })
-        inserirArtigos({
-            artigo_id: 4,
-            observacoes: 'Observacoes do artigo id 4'
-        })
+        buscarDadosTodos();
+
+        // inserirArtigos({
+        //     artigo_id: 1,
+        //     observacoes: 'Observacoes do artigo id 1'
+        // })
+        // inserirArtigos({
+        //     artigo_id: 2,
+        //     observacoes: 'Observacoes do artigo id 2'
+        // })
+        // inserirArtigos({
+        //     artigo_id: 3,
+        //     observacoes: `Observacoes do artigo id 3`
+        // })
+        // inserirArtigos({
+        //     artigo_id: 4,
+        //     observacoes: 'Observacoes do artigo id 4'
+        // })
 
     };
 
@@ -230,62 +232,73 @@ $(document).ready(function () {
 
     function buscarDadosTodos() {
 
-        const obj = new conectAjax(urlIncEntrada);
-        obj.setParam(id);
-
-        obj.getRequest()
-            .then(function (response) {
-
-                const data = response.data;
-                const data_entrada = moment(data.data_entrada).format('yyyy-MM-DD');
-                const hora_entrada = moment(data.data_entrada).format('HH:mm');
-
-                $('#origem_idEntradasPresos').html(new Option(data.origem.nome, data.origem_id, true, true)).trigger('change');
-                $('#data_entradaEntradasPresos').val(data_entrada);
-                $('#hora_entradaEntradasPresos').val(hora_entrada);
-
-                data.presos.forEach(preso => {
-
-                    const idDiv = inserirArtigos(preso.id);
-                    const div = $(`#${idDiv}`);
-                    const matricula = preso.matricula ? funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2) : '';
-
-                    div.find('input[name="id"]').val(preso.id);
-                    div.find('.passagem_id').html(`ID Passagem ${preso.id}`);
-                    div.find('input[name="matricula"]').val(matricula).trigger('input');
-                    div.find('input[name="nome"]').val(preso.nome);
-                    div.find('input[name="nome_social"]').val(preso.nome_social);
-                    div.find('input[name="data_prisao"]').val(preso.data_prisao);
-                    div.find('input[name="informacoes"]').val(preso.informacoes);
-                    div.find('input[name="observacoes"]').val(preso.observacoes);
-                    div.find('input[name="convivio_tipo_id"]').val(preso.convivio_tipo_id);
-
-                    if (preso.convivio_tipo.cor) {
-                        div.removeClass('bg-info');
-                        div.css('color', preso.convivio_tipo.cor.cor_texto);
-                        div.css('background-color', preso.convivio_tipo.cor.cor_fundo);
-                    } else {
-                        div.addClass('bg-info');
-                        div.removeAttr('style');
-                    }
-
-                    const nomeConvivio = !preso.convivio_tipo.convivio_padrao_bln ? preso.convivio_tipo.nome : null;
-                    const campoInfo = div.find('.campoInfo');
-                    const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
-                    if (!infoConvivio.length && nomeConvivio) {
-                        campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                    } else if (infoConvivio.length && nomeConvivio) {
-                        infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                    } else if (infoConvivio.length && !nomeConvivio) {
-                        infoConvivio.remove();
-                    }
-
+        if(preso_id_bln || qual_prov_id){
+            
+            let url = `${urlIncQualificativa}/${passagem_id}`;
+    
+            if(perm_atribuir_matricula_bln && !preso_id_bln && qual_prov_id ||
+                !perm_atribuir_matricula_bln && qual_prov_id) {
+                url += `/provisoria/${qual_prov_id}`
+            }
+    
+            const obj = new conectAjax(url);
+            obj.setParam(passagem_id);
+            obj.getRequest()
+                .then(function (response) {
+                    console.log(response);
+    
+                    // const data = response.data;
+                    // const data_entrada = moment(data.data_entrada).format('yyyy-MM-DD');
+                    // const hora_entrada = moment(data.data_entrada).format('HH:mm');
+    
+                    // $('#origem_idEntradasPresos').html(new Option(data.origem.nome, data.origem_id, true, true)).trigger('change');
+                    // $('#data_entradaEntradasPresos').val(data_entrada);
+                    // $('#hora_entradaEntradasPresos').val(hora_entrada);
+    
+                    // data.presos.forEach(preso => {
+    
+                    //     const idDiv = inserirArtigos(preso.id);
+                    //     const div = $(`#${idDiv}`);
+                    //     const matricula = preso.matricula ? funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2) : '';
+    
+                    //     div.find('input[name="id"]').val(preso.id);
+                    //     div.find('.passagem_id').html(`ID Passagem ${preso.id}`);
+                    //     div.find('input[name="matricula"]').val(matricula).trigger('input');
+                    //     div.find('input[name="nome"]').val(preso.nome);
+                    //     div.find('input[name="nome_social"]').val(preso.nome_social);
+                    //     div.find('input[name="data_prisao"]').val(preso.data_prisao);
+                    //     div.find('input[name="informacoes"]').val(preso.informacoes);
+                    //     div.find('input[name="observacoes"]').val(preso.observacoes);
+                    //     div.find('input[name="convivio_tipo_id"]').val(preso.convivio_tipo_id);
+    
+                    //     if (preso.convivio_tipo.cor) {
+                    //         div.removeClass('bg-info');
+                    //         div.css('color', preso.convivio_tipo.cor.cor_texto);
+                    //         div.css('background-color', preso.convivio_tipo.cor.cor_fundo);
+                    //     } else {
+                    //         div.addClass('bg-info');
+                    //         div.removeAttr('style');
+                    //     }
+    
+                    //     const nomeConvivio = !preso.convivio_tipo.convivio_padrao_bln ? preso.convivio_tipo.nome : null;
+                    //     const campoInfo = div.find('.campoInfo');
+                    //     const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
+                    //     if (!infoConvivio.length && nomeConvivio) {
+                    //         campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
+                    //     } else if (infoConvivio.length && nomeConvivio) {
+                    //         infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
+                    //     } else if (infoConvivio.length && !nomeConvivio) {
+                    //         infoConvivio.remove();
+                    //     }
+    
+                    // });
+                })
+                .catch(function (error) {
+                    $('input, .btn, select, textarea').prop('disabled', true);
+                    $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
                 });
-            })
-            .catch(function (error) {
-                $('input, .btn, select, textarea').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
-            });
+
+        }
 
     }
 
@@ -431,8 +444,8 @@ $(document).ready(function () {
         const obj = new conectAjax(urlIncEntrada);
         let action = enumAction.POST;
 
-        if (id) {
-            obj.setParam(id);
+        if (passagem_id) {
+            obj.setParam(passagem_id);
             action = enumAction.PUT;
         }
         if (obj.setAction(action)) {
@@ -445,8 +458,8 @@ $(document).ready(function () {
                 .then(function (result) {
                     const token = result.token;
 
-                    let btn = funcoesComuns.formularioRedirecionamento(redirecionamento, [
-                        { name: 'arrNotifyMessage', value: [{ message: `Entrada de Presos ${id} alterada com sucesso!`, type: 'success' }] },
+                    let btn = funcoesComuns.formularioRedirecionamento(redirect, [
+                        { name: 'arrNotifyMessage', value: [{ message: `Entrada de Presos ${passagem_id} alterada com sucesso!`, type: 'success' }] },
                         { name: '_token', value: token }
                     ]);
                     btn.click();

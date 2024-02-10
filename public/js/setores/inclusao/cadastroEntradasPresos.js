@@ -1,4 +1,5 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
+import { commonFunctions } from "../../common/commonFunctions.js";
 import { configuracoesApp } from "../../common/configuracoesApp.js";
 import { enumAction } from "../../common/enumAction.js";
 import { funcoesComuns } from "../../common/funcoesComuns.js";
@@ -14,7 +15,7 @@ $(document).ready(function () {
 
     function init() {
 
-        funcoesComuns.configurarCampoSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/busca/select`);
+        commonFunctions.addEventsSelect2($('#origem_idEntradasPresos'), `${urlRefIncOrigem}/search/select2`);
         $('#origem_idEntradasPresos').focus();
 
         if (id) {

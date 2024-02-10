@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\IncEntradaController;
 use App\Http\Controllers\IncEntradaPresoController;
-use App\Http\Controllers\IncQualificativaProvisoriaController;
+use App\Http\Controllers\IncQualificativaController;
 use App\Http\Controllers\RefArtigoController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
@@ -399,16 +399,14 @@ route::prefix('/v1')->group(function () {
 
             Route::prefix('/qualificativa')->group(function () {
 
-                Route::prefix('/provisoria')->group(function () {
-
-                    // Rotas relacionadas ao IncQualificativaProvisoriaController
-                    Route::controller(IncQualificativaProvisoriaController::class)->group(function () {
-                        Route::get('/{id}', 'show');
-                        Route::post('', 'store');
-                        Route::put('/{id}', 'update');
-                        Route::delete('/{id}', 'destroy');
-                    });
+                // Rotas relacionadas ao IncQualificativaController
+                Route::controller(IncQualificativaController::class)->group(function () {
+                    Route::get('/{passagem_id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
                 });
+
             });
         });
 

@@ -1,6 +1,6 @@
 @extends('site.layout')
 @php
-    $titulo = 'Qualificativa';
+    $titulo = 'Qualificativa' . (!$preso_id_bln && !$permAtribuirMatriculaBln ? ' Provisória' : '');
 @endphp
 @section('title', $titulo)
 
@@ -8,7 +8,14 @@
 
     <div class="row">
         <div class="col-12 mt-2 text-center">
-            <h3>Qualificativa de Preso</h3>
+
+            @php
+                if (!$preso_id_bln) {
+                    $titulo = "Nova $titulo";
+                }
+            @endphp
+
+            <h3>{{ $titulo }}</h3>
         </div>
     </div>
 
@@ -22,6 +29,10 @@
                         <input type="text" class="form-control text-end" name="matricula" id="matricula">
                         <input type="text" style="max-width: 40px;" class="form-control text-center" name="digito"
                             id="digito" disabled>
+                        <input type="hidden" id="preso_id_bln" value="{{ $preso_id_bln }}">
+                        <input type="hidden" id="passagem_id" value="{{ $passagem_id }}">
+                        <input type="hidden" id="qual_prov_id" value="{{ $idQualProv }}">
+                        <input type="hidden" id="perm_atribuir_matricula_bln" value="{{ $permAtribuirMatriculaBln }}">
                     </div>
                 </div>
             </div>
@@ -175,9 +186,6 @@
                 </div>
             </div>
         </div>
-
-        <input type="hidden" id="id" value="{{ isset($id) ? $id : '' }}">
-        <input type="hidden" id="qualificativaProvisoria" value="{{ isset($qualificativaProvisoria) ? $qualificativaProvisoria : false }}">
     </div>
 
     <div class="row mb-2">
@@ -189,8 +197,7 @@
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         Salvar
                     </button>
-                    <a href="{{ URL::previous() }}"
-                        class="btn btn-outline-danger w-25 redirecionamentoAnterior"
+                    <a href="{{ URL::previous() }}" class="btn btn-outline-danger w-25 redirectUrl"
                         title="Sair da edição da Entrada de Presos" style="max-width: 100px;">
                         Sair
                     </a>

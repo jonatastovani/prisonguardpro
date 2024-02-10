@@ -94,7 +94,8 @@ class FuncoesPresos
 
             return ["passagem.$id" => [
                 'error' => $mensagem,
-                'trace_id' => $traceId
+                'trace_id' => $traceId,
+                'code' => $codigo,
             ]];
         }
 

@@ -30,8 +30,6 @@ class IncEntradaPresoController extends Controller
      */
     public function indexBusca(Request $request)
     {
-        $arrErrors = [];
-
         // $this->authorize('store', IncEntradaPreso::class);
 
         // Regras de validação

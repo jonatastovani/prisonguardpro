@@ -11,6 +11,7 @@
 
     const urlIncEntrada = `${urlApiVersion}/inclusao/entradas`;
     const urlIncEntradaPreso = `${urlApiVersion}/inclusao/entradas/presos`;
+    const urlIncQualificativa = `${urlApiVersion}/inclusao/qualificativa`;
 
     const urlPresoConvivio = `${urlApiVersion}/ref/presos/convivios`;
 

@@ -12,7 +12,7 @@ use App\Models\PresoPassagemArtigo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class IncQualificativaProvisoriaController extends Controller
+class IncQualificativaController extends Controller
 {
     /**
      * Store a newly created resource in storage.
@@ -131,13 +131,22 @@ class IncQualificativaProvisoriaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+    public function show($passagem_id)
     {
         // Verifica se o modelo existe
-        $resource = $this->buscarRecurso($id);
+        $resource = $this->buscarRecurso($passagem_id);
+
+        // Carrega os presos relacionados
+        $resource->load(['passagem.artigos_passagem']);
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    public function showProvisoria($passagem_id, $provisoria_id)
+    {
+        // Verifica se o modelo existe
+        $resource = $this->buscarRecurso($passagem_id);
 
         // Carrega os presos relacionados
         $resource->load(['passagem.artigos_passagem']);
@@ -317,20 +326,21 @@ class IncQualificativaProvisoriaController extends Controller
         return $resource;
     }
 
-    private function buscarRecurso($id): IncQualificativaProvisoria
+    private function buscarRecurso($passagem_id, $provisoria_id = null)
     {
-        $resource = IncQualificativaProvisoria::find($id);
-
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
+        $resource = FuncoesPresos::buscarRecursoPassagemPreso($passagem_id);
+        if(!$resource instanceof IncEntradaPreso){
             // Gerar um log
-            $codigo = 404;
-            $mensagem = "O ID da Qualificativa Provisória informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+            $codigo = $resource["passagem.$passagem_id"]['code'];
+            $mensagem = $resource["passagem.$passagem_id"]['error'];
+            $traceId = $resource["passagem.$passagem_id"]['trace_id'];
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
+
+        $resource->load('preso.pessoa');
+        
         return $resource;
     }
 
