@@ -297,8 +297,8 @@ export class modalCadastroCidade {
                 const data = response.data;
                 const form = $(self.#idModal).find('form');
                 form.find('input[name="nome"]').val(data.nome).focus();
-                form.find('select[name="estado_id"]').html(new Option(`${data.estado.pais} (${data.estado.sigla}) | ${data.estado.nacionalidade.pais} (${data.estado.nacionalidade.sigla})`, data.estado_id, true, true)).trigger('change');
-                form.find('.register-title').html(`Editar Cidade: ${data.id} - ${data.nome} | ${data.nacionalidade.sigla}`);
+                form.find('select[name="estado_id"]').html(new Option(`${data.estado.nome} - ${data.estado.sigla} (${data.estado.nacionalidade.pais})`, data.estado_id, true, true)).trigger('change');
+                form.find('.register-title').html(`Editar Cidade: ${data.id} - ${data.nome} | ${data.estado.sigla}`);
             }
         } catch (error) {
             console.error(error);

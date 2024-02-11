@@ -137,19 +137,12 @@ class IncQualificativaController extends Controller
         $resource = $this->buscarRecurso($passagem_id);
 
         // Carrega os presos relacionados
-        $resource->load(['passagem.artigos_passagem']);
 
-        $response = RestResponse::createSuccessResponse($resource, 200);
-        return response()->json($response->toArray(), $response->getStatusCode());
-    }
+        $resource->load('preso.cutis', 'preso.cabelo_tipo', 'preso.cabelo_cor', 'preso.olho_tipo', 'preso.olho_cor', 'preso.crenca');
 
-    public function showProvisoria($passagem_id, $provisoria_id)
-    {
-        // Verifica se o modelo existe
-        $resource = $this->buscarRecurso($passagem_id);
+        $resource->load('preso.pessoa', 'preso.pressoa.cidade_nasc', 'preso.pressoa.genero', 'preso.pressoa.escolaridade', 'preso.pressoa.estado_civil', 'preso.pressoa.documentos');
 
-        // Carrega os presos relacionados
-        $resource->load(['passagem.artigos_passagem']);
+        $resource->load('art_passagem','qual_prov','convivio_tipo');
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -326,10 +319,10 @@ class IncQualificativaController extends Controller
         return $resource;
     }
 
-    private function buscarRecurso($passagem_id, $provisoria_id = null)
+    private function buscarRecurso($passagem_id)
     {
         $resource = FuncoesPresos::buscarRecursoPassagemPreso($passagem_id);
-        if(!$resource instanceof IncEntradaPreso){
+        if (!$resource instanceof IncEntradaPreso) {
             // Gerar um log
             $codigo = $resource["passagem.$passagem_id"]['code'];
             $mensagem = $resource["passagem.$passagem_id"]['error'];
@@ -339,8 +332,6 @@ class IncQualificativaController extends Controller
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
 
-        $resource->load('preso.pessoa');
-        
         return $resource;
     }
 

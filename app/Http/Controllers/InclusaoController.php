@@ -42,7 +42,7 @@ class InclusaoController extends Controller
 
         if ($resource instanceof IncEntradaPreso) {
             // if (PermissaoService::temPermissaoRecursivaAcima(Auth::user(), [45, 68])) {
-            $permAtribuirMatriculaBln = true;
+            $permAtribuirMatriculaBln = false;
             // }
             $preso_id_bln = $resource->preso_id ? true : false;
             if (!$preso_id_bln) {

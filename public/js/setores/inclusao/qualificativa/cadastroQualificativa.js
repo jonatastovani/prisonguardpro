@@ -232,73 +232,98 @@ $(document).ready(function () {
 
     function buscarDadosTodos() {
 
-        if(preso_id_bln || qual_prov_id){
-            
-            let url = `${urlIncQualificativa}/${passagem_id}`;
-    
-            if(perm_atribuir_matricula_bln && !preso_id_bln && qual_prov_id ||
-                !perm_atribuir_matricula_bln && qual_prov_id) {
-                url += `/provisoria/${qual_prov_id}`
-            }
-    
-            const obj = new conectAjax(url);
-            obj.setParam(passagem_id);
-            obj.getRequest()
-                .then(function (response) {
-                    console.log(response);
-    
-                    // const data = response.data;
-                    // const data_entrada = moment(data.data_entrada).format('yyyy-MM-DD');
-                    // const hora_entrada = moment(data.data_entrada).format('HH:mm');
-    
-                    // $('#origem_idEntradasPresos').html(new Option(data.origem.nome, data.origem_id, true, true)).trigger('change');
-                    // $('#data_entradaEntradasPresos').val(data_entrada);
-                    // $('#hora_entradaEntradasPresos').val(hora_entrada);
-    
-                    // data.presos.forEach(preso => {
-    
-                    //     const idDiv = inserirArtigos(preso.id);
-                    //     const div = $(`#${idDiv}`);
-                    //     const matricula = preso.matricula ? funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2) : '';
-    
-                    //     div.find('input[name="id"]').val(preso.id);
-                    //     div.find('.passagem_id').html(`ID Passagem ${preso.id}`);
-                    //     div.find('input[name="matricula"]').val(matricula).trigger('input');
-                    //     div.find('input[name="nome"]').val(preso.nome);
-                    //     div.find('input[name="nome_social"]').val(preso.nome_social);
-                    //     div.find('input[name="data_prisao"]').val(preso.data_prisao);
-                    //     div.find('input[name="informacoes"]').val(preso.informacoes);
-                    //     div.find('input[name="observacoes"]').val(preso.observacoes);
-                    //     div.find('input[name="convivio_tipo_id"]').val(preso.convivio_tipo_id);
-    
-                    //     if (preso.convivio_tipo.cor) {
-                    //         div.removeClass('bg-info');
-                    //         div.css('color', preso.convivio_tipo.cor.cor_texto);
-                    //         div.css('background-color', preso.convivio_tipo.cor.cor_fundo);
-                    //     } else {
-                    //         div.addClass('bg-info');
-                    //         div.removeAttr('style');
-                    //     }
-    
-                    //     const nomeConvivio = !preso.convivio_tipo.convivio_padrao_bln ? preso.convivio_tipo.nome : null;
-                    //     const campoInfo = div.find('.campoInfo');
-                    //     const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
-                    //     if (!infoConvivio.length && nomeConvivio) {
-                    //         campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                    //     } else if (infoConvivio.length && nomeConvivio) {
-                    //         infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                    //     } else if (infoConvivio.length && !nomeConvivio) {
-                    //         infoConvivio.remove();
-                    //     }
-    
-                    // });
-                })
-                .catch(function (error) {
-                    $('input, .btn, select, textarea').prop('disabled', true);
-                    $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
-                });
+        // if(preso_id_bln || qual_prov_id){
 
-        }
+        // let url = `${urlIncQualificativa}/${passagem_id}`;
+
+        // if(perm_atribuir_matricula_bln && !preso_id_bln && qual_prov_id ||
+        //     !perm_atribuir_matricula_bln && qual_prov_id) {
+        //     url += `/provisoria/${qual_prov_id}`
+        // }
+
+        const obj = new conectAjax(urlIncQualificativa);
+        obj.setParam(passagem_id);
+        obj.getRequest()
+            .then(function (response) {
+                console.log(response);
+
+                // const data = response.data;
+                // const data_entrada = moment(data.data_entrada).format('yyyy-MM-DD');
+                // const hora_entrada = moment(data.data_entrada).format('HH:mm');
+
+                // $('#origem_idEntradasPresos').html(new Option(data.origem.nome, data.origem_id, true, true)).trigger('change');
+                // $('#data_entradaEntradasPresos').val(data_entrada);
+                // $('#hora_entradaEntradasPresos').val(hora_entrada);
+
+                // data.presos.forEach(preso => {
+
+                //     const idDiv = inserirArtigos(preso.id);
+                //     const div = $(`#${idDiv}`);
+                //     const matricula = preso.matricula ? funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2) : '';
+
+                //     div.find('input[name="id"]').val(preso.id);
+                //     div.find('.passagem_id').html(`ID Passagem ${preso.id}`);
+                //     div.find('input[name="matricula"]').val(matricula).trigger('input');
+                //     div.find('input[name="nome"]').val(preso.nome);
+                //     div.find('input[name="nome_social"]').val(preso.nome_social);
+                //     div.find('input[name="data_prisao"]').val(preso.data_prisao);
+                //     div.find('input[name="informacoes"]').val(preso.informacoes);
+                //     div.find('input[name="observacoes"]').val(preso.observacoes);
+                //     div.find('input[name="convivio_tipo_id"]').val(preso.convivio_tipo_id);
+
+                //     if (preso.convivio_tipo.cor) {
+                //         div.removeClass('bg-info');
+                //         div.css('color', preso.convivio_tipo.cor.cor_texto);
+                //         div.css('background-color', preso.convivio_tipo.cor.cor_fundo);
+                //     } else {
+                //         div.addClass('bg-info');
+                //         div.removeAttr('style');
+                //     }
+
+                //     const nomeConvivio = !preso.convivio_tipo.convivio_padrao_bln ? preso.convivio_tipo.nome : null;
+                //     const campoInfo = div.find('.campoInfo');
+                //     const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
+                //     if (!infoConvivio.length && nomeConvivio) {
+                //         campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
+                //     } else if (infoConvivio.length && nomeConvivio) {
+                //         infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
+                //     } else if (infoConvivio.length && !nomeConvivio) {
+                //         infoConvivio.remove();
+                //     }
+
+                // });
+            })
+            .catch(function (error) {
+                $('input, .btn, select, textarea').prop('disabled', true);
+                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
+            });
+
+        // }
+
+    }
+
+    function preencherDados(response) {
+
+        const preso = response.preso;
+
+        $('#nome').val(preso.nome);
+        $('#nome_social').val(preso.nome_social);
+        $('#mae').val(preso.mae);
+        $('#pai').val(preso.pai);
+        $('#cidade_nasc_id').html(new Option(`${data.cidade.nome} - ${data.cidade.estado.sigla} | ${data.cidade.estado.nacionalidade.pais}`, data.cidade_id, true, true)).trigger('change');
+        $('#data_nasc').val(preso.data_nasc);
+        $('#genero_id').val(preso.genero_id);
+        $('#escolaridade_id').val(preso.escolaridade_id);
+        $('#estado_civil_id').val(preso.estado_civil_id);
+        $('#cutis_id').val(preso.cutis_id);
+        $('#cabelo_tipo_id').val(preso.cabelo_tipo_id);
+        $('#cabelo_cor_id').val(preso.cabelo_cor_id);
+        $('#olho_tipo_id').val(preso.olho_tipo_id);
+        $('#olho_cor_id').val(preso.olho_cor_id);
+        $('#crenca_id').val(preso.crenca_id);
+        $('#sinais').val(preso.sinais);
+        $('#informacoes').val(preso.informacoes);
+        $('#observacoes').val(preso.observacoes);
 
     }
 

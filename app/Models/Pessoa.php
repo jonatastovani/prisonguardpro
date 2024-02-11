@@ -38,19 +38,19 @@ class Pessoa extends Model
     }
 
     public function cidade_nasc() {
-        return $this->belongsTo(RefCidade::class,'cidade_nasc_id');
+        return $this->belongsTo(RefCidade::class);
     }
 
     public function genero() {
-        return $this->belongsTo(RefGenero::class,'genero_id');
+        return $this->belongsTo(RefGenero::class);
     }
     
     public function escolaridade() {
-        return $this->belongsTo(RefEscolaridade::class,'escolaridade_id');
+        return $this->belongsTo(RefEscolaridade::class);
     }
     
     public function estado_civil() {
-        return $this->belongsTo(RefEstadoCivil::class,'estado_civil_id');
+        return $this->belongsTo(RefEstadoCivil::class);
     }
     
     public function documentos() {

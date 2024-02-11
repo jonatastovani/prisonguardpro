@@ -194,7 +194,7 @@ class RefCidadeController extends Controller
 
     private function buscarRecurso($id)
     {
-        $resource = RefCidade::with('estado')->find($id);
+        $resource = RefCidade::with('estado.nacionalidade')->find($id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {

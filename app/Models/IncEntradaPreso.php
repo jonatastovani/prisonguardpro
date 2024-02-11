@@ -71,12 +71,12 @@ class IncEntradaPreso extends Model
         return $this->belongsTo(RefStatus::class);
     }
 
-    public function artigos_passagem()
+    public function art_passagem()
     {
         return $this->hasMany(PresoPassagemArtigo::class,'passagem_id');
     }
 
-    public function qualificativa_provisoria()
+    public function qual_prov()
     {
         return $this->hasOne(IncQualificativaProvisoria::class,'passagem_id')->latest();
     }
