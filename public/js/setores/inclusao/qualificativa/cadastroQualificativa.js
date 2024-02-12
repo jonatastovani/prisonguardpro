@@ -247,51 +247,8 @@ $(document).ready(function () {
             .then(function (response) {
                 console.log(response);
 
-                // const data = response.data;
-                // const data_entrada = moment(data.data_entrada).format('yyyy-MM-DD');
-                // const hora_entrada = moment(data.data_entrada).format('HH:mm');
+                preencherDados(response);
 
-                // $('#origem_idEntradasPresos').html(new Option(data.origem.nome, data.origem_id, true, true)).trigger('change');
-                // $('#data_entradaEntradasPresos').val(data_entrada);
-                // $('#hora_entradaEntradasPresos').val(hora_entrada);
-
-                // data.presos.forEach(preso => {
-
-                //     const idDiv = inserirArtigos(preso.id);
-                //     const div = $(`#${idDiv}`);
-                //     const matricula = preso.matricula ? funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2) : '';
-
-                //     div.find('input[name="id"]').val(preso.id);
-                //     div.find('.passagem_id').html(`ID Passagem ${preso.id}`);
-                //     div.find('input[name="matricula"]').val(matricula).trigger('input');
-                //     div.find('input[name="nome"]').val(preso.nome);
-                //     div.find('input[name="nome_social"]').val(preso.nome_social);
-                //     div.find('input[name="data_prisao"]').val(preso.data_prisao);
-                //     div.find('input[name="informacoes"]').val(preso.informacoes);
-                //     div.find('input[name="observacoes"]').val(preso.observacoes);
-                //     div.find('input[name="convivio_tipo_id"]').val(preso.convivio_tipo_id);
-
-                //     if (preso.convivio_tipo.cor) {
-                //         div.removeClass('bg-info');
-                //         div.css('color', preso.convivio_tipo.cor.cor_texto);
-                //         div.css('background-color', preso.convivio_tipo.cor.cor_fundo);
-                //     } else {
-                //         div.addClass('bg-info');
-                //         div.removeAttr('style');
-                //     }
-
-                //     const nomeConvivio = !preso.convivio_tipo.convivio_padrao_bln ? preso.convivio_tipo.nome : null;
-                //     const campoInfo = div.find('.campoInfo');
-                //     const infoConvivio = campoInfo.find(`.convivio_tipo_nome`);
-                //     if (!infoConvivio.length && nomeConvivio) {
-                //         campoInfo.append(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                //     } else if (infoConvivio.length && nomeConvivio) {
-                //         infoConvivio.html(`<p class="convivio_tipo_nome mb-0"><b><i>${nomeConvivio}</i></b></p>`);
-                //     } else if (infoConvivio.length && !nomeConvivio) {
-                //         infoConvivio.remove();
-                //     }
-
-                // });
             })
             .catch(function (error) {
                 $('input, .btn, select, textarea').prop('disabled', true);
@@ -310,7 +267,7 @@ $(document).ready(function () {
         $('#nome_social').val(preso.nome_social);
         $('#mae').val(preso.mae);
         $('#pai').val(preso.pai);
-        $('#cidade_nasc_id').html(new Option(`${data.cidade.nome} - ${data.cidade.estado.sigla} | ${data.cidade.estado.nacionalidade.pais}`, data.cidade_id, true, true)).trigger('change');
+        $('#cidade_nasc_id').html(new Option(`${preso.cidade.nome} - ${preso.cidade.estado.sigla} | ${preso.cidade.estado.nacionalidade.pais}`, preso.cidade_id, true, true)).trigger('change');
         $('#data_nasc').val(preso.data_nasc);
         $('#genero_id').val(preso.genero_id);
         $('#escolaridade_id').val(preso.escolaridade_id);
@@ -322,8 +279,31 @@ $(document).ready(function () {
         $('#olho_cor_id').val(preso.olho_cor_id);
         $('#crenca_id').val(preso.crenca_id);
         $('#sinais').val(preso.sinais);
-        $('#informacoes').val(preso.informacoes);
-        $('#observacoes').val(preso.observacoes);
+        $('#informacoes').val(response.informacoes);
+        $('#observacoes').val(response.observacoes);
+
+    }
+
+    function preencherDadosProvisorio(response) {
+
+        $('#nome').val(response.nome);
+        $('#nome_social').val(response.nome_social);
+        $('#mae').val(response.mae);
+        $('#pai').val(response.pai);
+        $('#cidade_nasc_id').html(new Option(`${response.cidade.nome} - ${response.cidade.estado.sigla} | ${response.cidade.estado.nacionalidade.pais}`, response.cidade_id, true, true)).trigger('change');
+        $('#data_nasc').val(response.data_nasc);
+        $('#genero_id').val(response.genero_id);
+        $('#escolaridade_id').val(response.escolaridade_id);
+        $('#estado_civil_id').val(response.estado_civil_id);
+        $('#cutis_id').val(response.cutis_id);
+        $('#cabelo_tipo_id').val(response.cabelo_tipo_id);
+        $('#cabelo_cor_id').val(response.cabelo_cor_id);
+        $('#olho_tipo_id').val(response.olho_tipo_id);
+        $('#olho_cor_id').val(response.olho_cor_id);
+        $('#crenca_id').val(response.crenca_id);
+        $('#sinais').val(response.sinais);
+        $('#informacoes').val(response.informacoes);
+        $('#observacoes').val(response.observacoes);
 
     }
 
