@@ -53,16 +53,19 @@ class IncQualificativaController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        // Valida se não existe outra qualificativa com o mesmo passagem_id
-        $this->validarRecursoExistente($request);
-
-        // Se a validação passou, atualize registro de passagem
         $passagem = FuncoesPresos::buscarRecursoPassagemPreso($request->input('passagem_id'));
+        if (!$passagem instanceof IncEntradaPreso) {
+
+        }
+
         if ($passagem instanceof IncEntradaPreso) {
             $passagem->matricula = $request->input('matricula');
             $passagem->nome = $request->input('nome');
             $passagem->nome_social = $request->input('nome_social');
         }
+
+        // Valida se não existe outra qualificativa com o mesmo passagem_id
+        $this->validarRecursoExistente($request);
 
         // Se a validação passou, crie um novo registro
         $novo = new IncQualificativaProvisoria();

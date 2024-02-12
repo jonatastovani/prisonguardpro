@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="row flex-fill overflow-auto">
+    <div id="dadosQualificativa" class="row flex-fill overflow-auto">
         <div class="col-12">
 
             <div class="row">

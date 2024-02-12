@@ -196,24 +196,24 @@ $(document).ready(function () {
             });
         });
 
-        buscarDadosTodos();
+        buscarDados();
 
-        // inserirArtigos({
-        //     artigo_id: 1,
-        //     observacoes: 'Observacoes do artigo id 1'
-        // })
-        // inserirArtigos({
-        //     artigo_id: 2,
-        //     observacoes: 'Observacoes do artigo id 2'
-        // })
-        // inserirArtigos({
-        //     artigo_id: 3,
-        //     observacoes: `Observacoes do artigo id 3`
-        // })
-        // inserirArtigos({
-        //     artigo_id: 4,
-        //     observacoes: 'Observacoes do artigo id 4'
-        // })
+        inserirArtigos({
+            artigo_id: 1,
+            observacoes: 'Observacoes do artigo id 1'
+        })
+        inserirArtigos({
+            artigo_id: 2,
+            observacoes: 'Observacoes do artigo id 2'
+        })
+        inserirArtigos({
+            artigo_id: 3,
+            observacoes: `Observacoes do artigo id 3`
+        })
+        inserirArtigos({
+            artigo_id: 4,
+            observacoes: 'Observacoes do artigo id 4'
+        })
 
     };
 
@@ -230,7 +230,7 @@ $(document).ready(function () {
 
     });
 
-    function buscarDadosTodos() {
+    function buscarDados() {
 
         // if(preso_id_bln || qual_prov_id){
 
@@ -247,27 +247,38 @@ $(document).ready(function () {
             .then(function (response) {
                 console.log(response);
 
-                preencherDados(response);
+                if(response.preso){
+
+                    preencherQualificativa(response.data);
+                } else {
+                    preencherQualificativaProvisoria(response.data);
+                }
 
             })
             .catch(function (error) {
                 $('input, .btn, select, textarea').prop('disabled', true);
                 $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
+                console.log(error);
             });
 
         // }
 
     }
 
-    function preencherDados(response) {
+    function preencherQualificativa(data) {
 
-        const preso = response.preso;
+        console.log('Normal = ', data);
 
+        const preso = data.preso;
+
+        $('#matricula').val(preso.matricula);
         $('#nome').val(preso.nome);
         $('#nome_social').val(preso.nome_social);
         $('#mae').val(preso.mae);
         $('#pai').val(preso.pai);
-        $('#cidade_nasc_id').html(new Option(`${preso.cidade.nome} - ${preso.cidade.estado.sigla} | ${preso.cidade.estado.nacionalidade.pais}`, preso.cidade_id, true, true)).trigger('change');
+        if(preso.cidade){
+            $('#cidade_nasc_id').html(new Option(`${preso.cidade.nome} - ${preso.cidade.estado.sigla} | ${preso.cidade.estado.nacionalidade.pais}`, preso.cidade_id, true, true)).trigger('change');
+        }
         $('#data_nasc').val(preso.data_nasc);
         $('#genero_id').val(preso.genero_id);
         $('#escolaridade_id').val(preso.escolaridade_id);
@@ -279,31 +290,36 @@ $(document).ready(function () {
         $('#olho_cor_id').val(preso.olho_cor_id);
         $('#crenca_id').val(preso.crenca_id);
         $('#sinais').val(preso.sinais);
-        $('#informacoes').val(response.informacoes);
-        $('#observacoes').val(response.observacoes);
+        $('#informacoes').val(data.informacoes);
+        $('#observacoes').val(data.observacoes);
 
     }
 
-    function preencherDadosProvisorio(response) {
+    function preencherQualificativaProvisoria(data) {
 
-        $('#nome').val(response.nome);
-        $('#nome_social').val(response.nome_social);
-        $('#mae').val(response.mae);
-        $('#pai').val(response.pai);
-        $('#cidade_nasc_id').html(new Option(`${response.cidade.nome} - ${response.cidade.estado.sigla} | ${response.cidade.estado.nacionalidade.pais}`, response.cidade_id, true, true)).trigger('change');
-        $('#data_nasc').val(response.data_nasc);
-        $('#genero_id').val(response.genero_id);
-        $('#escolaridade_id').val(response.escolaridade_id);
-        $('#estado_civil_id').val(response.estado_civil_id);
-        $('#cutis_id').val(response.cutis_id);
-        $('#cabelo_tipo_id').val(response.cabelo_tipo_id);
-        $('#cabelo_cor_id').val(response.cabelo_cor_id);
-        $('#olho_tipo_id').val(response.olho_tipo_id);
-        $('#olho_cor_id').val(response.olho_cor_id);
-        $('#crenca_id').val(response.crenca_id);
-        $('#sinais').val(response.sinais);
-        $('#informacoes').val(response.informacoes);
-        $('#observacoes').val(response.observacoes);
+        console.log('Provisória = ', data);
+
+        $('#matricula').val(data.matricula);
+        $('#nome').val(data.nome);
+        $('#nome_social').val(data.nome_social);
+        $('#mae').val(data.mae);
+        $('#pai').val(data.pai);
+        if(data.cidade){
+            $('#cidade_nasc_id').html(new Option(`${data.cidade.nome} - ${data.cidade.estado.sigla} | ${data.cidade.estado.nacionalidade.pais}`, data.cidade_id, true, true)).trigger('change');
+        }
+        $('#data_nasc').val(data.data_nasc);
+        $('#genero_id').val(data.genero_id);
+        $('#escolaridade_id').val(data.escolaridade_id);
+        $('#estado_civil_id').val(data.estado_civil_id);
+        $('#cutis_id').val(data.cutis_id);
+        $('#cabelo_tipo_id').val(data.cabelo_tipo_id);
+        $('#cabelo_cor_id').val(data.cabelo_cor_id);
+        $('#olho_tipo_id').val(data.olho_tipo_id);
+        $('#olho_cor_id').val(data.olho_cor_id);
+        $('#crenca_id').val(data.crenca_id);
+        $('#sinais').val(data.sinais);
+        $('#informacoes').val(data.informacoes);
+        $('#observacoes').val(data.observacoes);
 
     }
 
@@ -357,12 +373,12 @@ $(document).ready(function () {
 
         containerArtigos.append(strPreso);
         arrData['idDiv'] = idDiv;
-        addEventosBotoesDaConsulta(arrData);
+        addEventosArtigos(arrData);
 
         return idDiv;
     }
 
-    function addEventosBotoesDaConsulta(arrData) {
+    function addEventosArtigos(arrData) {
 
         const idDiv = arrData.idDiv;
         const div = $(`#${idDiv}`);
@@ -426,25 +442,20 @@ $(document).ready(function () {
 
     function acaoBtnSalvar() {
 
-        let data = funcoesComuns.obterValoresDosInputs($('#dadosEntradaEntradasPresos'));
-        data['presos'] = [];
-        data['data_entrada'] = `${data['data_entrada']} ${data['hora_entrada']}:00`;
-        delete data['hora_entrada'];
-
-        const presos = containerArtigos.children();
-        for (let i = 0; i < presos.length; i++) {
-
-            let preso = funcoesComuns.obterValoresDosInputs($(presos[i]), 1, true);
-            preso['matricula'] = preso['matricula'] + preso['digito'];
-            preso['matricula'] = funcoesComuns.retornaSomenteNumeros(preso['matricula']);
-            data['presos'].push(preso);
-
-        }
+        let data = commonFunctions.getInputsValues($('#dadosQualificativa'));
+        data['matricula'] = funcoesPresos.insereDigitoMatricula(data['matricula']);
+        data['artigos'] = arrArtigos;
+        data['passagem_id'] = passagem_id;
+        data['qual_prov_id'] = qual_prov_id;
+        data['preso_id_bln'] = preso_id_bln;
+        data['perm_atribuir_matricula_bln'] = perm_atribuir_matricula_bln;
 
         salvar(data);
     }
 
     function salvar(data) {
+        console.log(data);
+        return;
 
         const obj = new conectAjax(urlIncEntrada);
         let action = enumAction.POST;
