@@ -53,6 +53,8 @@ class IncQualificativaController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
+        RestResponse::createTesteResponse($request->all());
+
         $passagem = FuncoesPresos::buscarRecursoPassagemPreso($request->input('passagem_id'));
         if (!$passagem instanceof IncEntradaPreso) {
 

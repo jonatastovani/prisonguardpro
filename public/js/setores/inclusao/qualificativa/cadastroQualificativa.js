@@ -2,7 +2,6 @@ import { conectAjax } from "../../../ajax/conectAjax.js";
 import { commonFunctions } from "../../../common/commonFunctions.js";
 import { configuracoesApp } from "../../../common/configuracoesApp.js";
 import { enumAction } from "../../../common/enumAction.js";
-import { funcoesComuns } from "../../../common/funcoesComuns.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalMessage } from "../../../common/modalMessage.js";
 import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
@@ -36,8 +35,9 @@ $(document).ready(function () {
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
+        preencherTodosSelects();
 
-        funcoesComuns.configurarCampoSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select2`);
+        commonFunctions.addEventsSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select2`);
 
         $(`#btnCidadeCadastro`).on('click', function () {
             const obj = new modalCadastroCidade();
@@ -52,9 +52,9 @@ $(document).ready(function () {
         });
 
         const preencherGenero = () => {
-            funcoesComuns.preencherSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
+            commonFunctions.fillSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
         }
-        preencherGenero();
+        // preencherGenero();
 
         $(`#btnGeneroCadastro`).on('click', function () {
             const obj = new modalCadastroGenero();
@@ -67,9 +67,9 @@ $(document).ready(function () {
         });
 
         const preencherEscolaridade = () => {
-            funcoesComuns.preencherSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
+            commonFunctions.fillSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
         }
-        preencherEscolaridade();
+        // preencherEscolaridade();
 
         $(`#btnEscolaridadeCadastro`).on('click', function () {
             const obj = new modalCadastroEscolaridade();
@@ -82,9 +82,9 @@ $(document).ready(function () {
         });
 
         const preencherEstadoCivil = () => {
-            funcoesComuns.preencherSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
+            commonFunctions.fillSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
         }
-        preencherEstadoCivil();
+        // preencherEstadoCivil();
 
         $(`#btnEstadoCivilCadastro`).on('click', function () {
             const obj = new modalCadastroEstadoCivil();
@@ -97,9 +97,9 @@ $(document).ready(function () {
         });
 
         const preencherCutis = () => {
-            funcoesComuns.preencherSelect($('#cutis_id'), `${urlRefCutis}`);
+            commonFunctions.fillSelect($('#cutis_id'), `${urlRefCutis}`);
         }
-        preencherCutis();
+        // preencherCutis();
 
         $(`#btnCutisCadastro`).on('click', function () {
             const obj = new modalCadastroCutis();
@@ -112,9 +112,9 @@ $(document).ready(function () {
         });
 
         const preencherCabeloTipo = () => {
-            funcoesComuns.preencherSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
+            commonFunctions.fillSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
         }
-        preencherCabeloTipo();
+        // preencherCabeloTipo();
 
         $(`#btnCabeloTipoCadastro`).on('click', function () {
             const obj = new modalCadastroCabeloTipo();
@@ -127,9 +127,9 @@ $(document).ready(function () {
         });
 
         const preencherCabeloCor = () => {
-            funcoesComuns.preencherSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
+            commonFunctions.fillSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
         }
-        preencherCabeloCor();
+        // preencherCabeloCor();
 
         $(`#btnCabeloCorCadastro`).on('click', function () {
             const obj = new modalCadastroCabeloCor();
@@ -142,9 +142,9 @@ $(document).ready(function () {
         });
 
         const preencherOlhoTipo = () => {
-            funcoesComuns.preencherSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
+            commonFunctions.fillSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
         }
-        preencherOlhoTipo();
+        // preencherOlhoTipo();
 
         $(`#btnOlhoTipoCadastro`).on('click', function () {
             const obj = new modalCadastroOlhoTipo();
@@ -157,9 +157,9 @@ $(document).ready(function () {
         });
 
         const preencherOlhoCor = () => {
-            funcoesComuns.preencherSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
+            commonFunctions.fillSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
         }
-        preencherOlhoCor();
+        // preencherOlhoCor();
 
         $(`#btnOlhoCorCadastro`).on('click', function () {
             const obj = new modalCadastroOlhoCor();
@@ -172,9 +172,9 @@ $(document).ready(function () {
         });
 
         const preencherCrenca = () => {
-            funcoesComuns.preencherSelect($('#crenca_id'), `${urlRefCrenca}`);
+            commonFunctions.fillSelect($('#crenca_id'), `${urlRefCrenca}`);
         }
-        preencherCrenca();
+        // preencherCrenca();
 
         $(`#btnCrencaCadastro`).on('click', function () {
             const obj = new modalCadastroCrenca();
@@ -210,12 +210,32 @@ $(document).ready(function () {
             artigo_id: 3,
             observacoes: `Observacoes do artigo id 3`
         })
-        inserirArtigos({
-            artigo_id: 4,
-            observacoes: 'Observacoes do artigo id 4'
-        })
+        // inserirArtigos({
+        //     artigo_id: 4,
+        //     observacoes: 'Observacoes do artigo id 4'
+        // })
 
     };
+
+    async function preencherTodosSelects() {
+        const requests = [
+            commonFunctions.fillSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 }),
+            commonFunctions.fillSelect($('#escolaridade_id'), `${urlRefEscolaridade}`),
+            commonFunctions.fillSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`),
+            commonFunctions.fillSelect($('#cutis_id'), `${urlRefCutis}`),
+            commonFunctions.fillSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`),
+            commonFunctions.fillSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`),
+            commonFunctions.fillSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 }),
+            commonFunctions.fillSelect($('#olho_cor_id'), `${urlRefOlhoCor}`),
+            commonFunctions.fillSelect($('#crenca_id'), `${urlRefCrenca}`)
+        ];
+
+        try {
+            await Promise.all(requests);
+        } catch (error) {
+            console.error("Erro ao preencher os selects:", error);
+        }
+    }
 
     $('#btnInserirPreso').on("click", (event) => {
 
@@ -247,8 +267,7 @@ $(document).ready(function () {
             .then(function (response) {
                 console.log(response);
 
-                if(response.preso){
-
+                if (response.preso) {
                     preencherQualificativa(response.data);
                 } else {
                     preencherQualificativaProvisoria(response.data);
@@ -276,7 +295,7 @@ $(document).ready(function () {
         $('#nome_social').val(preso.nome_social);
         $('#mae').val(preso.mae);
         $('#pai').val(preso.pai);
-        if(preso.cidade){
+        if (preso.cidade) {
             $('#cidade_nasc_id').html(new Option(`${preso.cidade.nome} - ${preso.cidade.estado.sigla} | ${preso.cidade.estado.nacionalidade.pais}`, preso.cidade_id, true, true)).trigger('change');
         }
         $('#data_nasc').val(preso.data_nasc);
@@ -304,7 +323,7 @@ $(document).ready(function () {
         $('#nome_social').val(data.nome_social);
         $('#mae').val(data.mae);
         $('#pai').val(data.pai);
-        if(data.cidade){
+        if (data.cidade) {
             $('#cidade_nasc_id').html(new Option(`${data.cidade.nome} - ${data.cidade.estado.sigla} | ${data.cidade.estado.nacionalidade.pais}`, data.cidade_id, true, true)).trigger('change');
         }
         $('#data_nasc').val(data.data_nasc);
@@ -454,43 +473,43 @@ $(document).ready(function () {
     }
 
     function salvar(data) {
-        console.log(data);
-        return;
 
-        const obj = new conectAjax(urlIncEntrada);
+        const obj = new conectAjax(urlIncQualificativa);
         let action = enumAction.POST;
+        console.log(data);
 
         if (passagem_id) {
             obj.setParam(passagem_id);
             action = enumAction.PUT;
         }
-        if (obj.setAction(action)) {
+        obj.setAction(action)
 
-            const btn = $('#btnSalvar');
-            funcoesComuns.simulacaoCarregando(btn);
+        const btn = $('#btnSalvar');
+        commonFunctions.simulateLoading(btn);
 
-            obj.setData(data);
-            obj.envRequest()
-                .then(function (result) {
-                    const token = result.token;
+        obj.setData(data);
+        obj.envRequest()
+            .then(function (result) {
+                console.log(result);
+                // const token = result.token;
 
-                    let btn = funcoesComuns.formularioRedirecionamento(redirect, [
-                        { name: 'arrNotifyMessage', value: [{ message: `Entrada de Presos ${passagem_id} alterada com sucesso!`, type: 'success' }] },
-                        { name: '_token', value: token }
-                    ]);
-                    btn.click();
+                // let btn = funcoesComuns.formularioRedirecionamento(redirect, [
+                //     { name: 'arrNotifyMessage', value: [{ message: `Entrada de Presos ${passagem_id} alterada com sucesso!`, type: 'success' }] },
+                //     { name: '_token', value: token }
+                // ]);
+                // btn.click();
 
-                })
-                .catch(function (error) {
+            })
+            .catch(function (error) {
 
-                    console.error(error);
-                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                console.error(error);
+                $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
 
-                })
-                .finally(function () {
-                    funcoesComuns.simulacaoCarregando(btn, false);
-                });
-        }
+            })
+            .finally(function () {
+                commonFunctions.simulateLoading(btn, false);
+            });
+
 
     }
 

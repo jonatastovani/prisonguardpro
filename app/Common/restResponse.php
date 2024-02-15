@@ -2,6 +2,10 @@
 
 namespace App\Common;
 
+use HTML5_TreeBuilder;
+
+use function PHPUnit\Framework\returnSelf;
+
 class RestResponse
 {
     private $status;
@@ -49,7 +53,7 @@ class RestResponse
 
     public function toJson()
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(),$this->getStatusCode());
     }
 
     public function getStatusCode(): int
@@ -76,6 +80,7 @@ class RestResponse
     {
         $message = '';
         $token = false;
+        $exitAuto = true;
 
         if (isset($options['message'])) {
             $message = $options['message'];
@@ -83,8 +88,12 @@ class RestResponse
         if (isset($options['token'])) {
             $token = $options['token'] === true ? true : false;
         }
+        if (isset($options['exitAuto'])) {
+            $exitAuto = $options['exitAuto'] == false ? false : true;
+        }
 
-        return new self($data, $status, $message, null, $token);
+        $response = new self($data, $status, $message, null, $token);
+        return !$exitAuto ? $response : response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
     }
 
     public static function createTesteResponse($data = [], $message = 'Retorno teste')

@@ -25,13 +25,17 @@ class RefCidadeController extends Controller
     {
         // Regras de validação
         $rules = [
-            'texto' => 'required|min:3',
+            'text' => 'required|string|min:3',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        $resources = RefCidade::where('nome', 'LIKE', "%{$request->texto}%")
-        ->with('estado.nacionalidade')
+        $resources = RefCidade::select('ref_cidades.*')
+        ->join('ref_estados', 'ref_estados.id', '=', 'ref_cidades.estado_id')
+        ->where('ref_cidades.nome', 'LIKE', '%' . $request->input('text') . '%')
+        ->orWhere('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
+        ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
+        ->with('estado')
         ->get();
 
         // Mapear os resultados para criar um array com os campos id e text
