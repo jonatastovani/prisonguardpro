@@ -31,7 +31,7 @@
                             id="digito" disabled>
                         <input type="hidden" id="preso_id_bln" value="{{ $preso_id_bln }}">
                         <input type="hidden" id="passagem_id" value="{{ $passagem_id }}">
-                        <input type="hidden" id="qual_prov_id" value="{{ $idQualProv }}">
+                        <input type="hidden" id="qual_prov_id" value="{{ $qual_prov_id }}">
                         <input type="hidden" id="perm_atribuir_matricula_bln" value="{{ $permAtribuirMatriculaBln }}">
                     </div>
                 </div>

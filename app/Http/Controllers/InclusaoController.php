@@ -35,20 +35,20 @@ class InclusaoController extends Controller
     public function cadastroQualificativa(Request $request)
     {
         $passagem_id = $request->id;
-        $permAtribuirMatricula = false;
-        $idQualProv = null;
+        $perm_atribuir_matricula_bln = false;
+        $qual_prov_id = null;
 
         $resource = FuncoesPresos::buscarRecursoPassagemPreso($passagem_id);
 
         if ($resource instanceof IncEntradaPreso) {
             // if (PermissaoService::temPermissaoRecursivaAcima(Auth::user(), [45, 68])) {
-            $permAtribuirMatriculaBln = false;
+            $perm_atribuir_matricula_bln = false;
             // }
             $preso_id_bln = $resource->preso_id ? true : false;
             if (!$preso_id_bln) {
                 $qualProv = IncQualificativaProvisoria::where('passagem_id', $passagem_id);
                 if ($qualProv->exists()) {
-                    $idQualProv = $qualProv->first()->id;
+                    $qual_prov_id = $qualProv->latest()->first()->id;
                 }
             }
         } else {
@@ -66,7 +66,7 @@ class InclusaoController extends Controller
             return response()->view('errors.custom', $data);
         }
 
-        $dataToCompact = compact('passagem_id', 'permAtribuirMatriculaBln', 'preso_id_bln', 'idQualProv');
+        $dataToCompact = compact('passagem_id', 'perm_atribuir_matricula_bln', 'preso_id_bln', 'qual_prov_id');
 
         return view('setores.inclusao.qualificativa.cadastroQualificativa', $dataToCompact);
     }

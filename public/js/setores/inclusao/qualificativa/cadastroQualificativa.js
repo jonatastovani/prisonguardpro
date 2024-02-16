@@ -20,9 +20,9 @@ $(document).ready(function () {
 
     let action = $('#preso_id_bln').val() ? enumAction.PUT : enumAction.POST;
     const passagem_id = $('#passagem_id').val();
-    const qual_prov_id = $('#qual_prov_id').val();
-    const preso_id_bln = $('#preso_id_bln').val();
-    const perm_atribuir_matricula_bln = $('#perm_atribuir_matricula_bln').val();
+    let qual_prov_id = $('#qual_prov_id').val();
+    let preso_id_bln = $('#preso_id_bln').val();
+    let perm_atribuir_matricula_bln = $('#perm_atribuir_matricula_bln').val();
     const redirect = $('.redirectUrl').attr('href');
     const containerArtigos = $('#containerArtigos');
     let arrArtigos = [];
@@ -478,10 +478,11 @@ $(document).ready(function () {
         let action = enumAction.POST;
         console.log(data);
 
-        if (passagem_id) {
+        if (preso_id_bln) 
+        if (qual_prov_id) {
             obj.setParam(passagem_id);
             action = enumAction.PUT;
-        }
+        } else
         obj.setAction(action)
 
         const btn = $('#btnSalvar');
