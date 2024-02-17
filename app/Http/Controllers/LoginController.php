@@ -40,7 +40,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credenciais, $request->remember)) {
 
-            $response = RestResponse::createSuccessResponse(['redirect' => route('site.index')],200);
+            $response = RestResponse::createSuccessResponse(['redirect' => route('inclusao.entradasPresos')],200);
             return response()->json($response->toArray(), $response->getStatusCode());
 
             // return response()->json([

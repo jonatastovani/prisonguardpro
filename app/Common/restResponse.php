@@ -66,35 +66,20 @@ class RestResponse
         return $this->data;
     }
 
-    public static function createErrorResponse($status, $message, $traceId = null, $options = [])
+    public static function createErrorResponse($status, $message, $traceId = null)
     {
-        $exitAuto = true;
-
-        if (isset($options['exitAuto'])) {
-            $exitAuto = $options['exitAuto'] == false ? false : true;
-        }
-
-        $response = new self(null, $status, $message, $traceId);
-        return !$exitAuto ? $response : response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        return new self(null, $status, $message, $traceId);
     }
 
-    public static function createGenericResponse($data, $status, $message, $traceId = null, $options = [])
+    public static function createGenericResponse($data, $status, $message, $traceId = null)
     {
-        $exitAuto = true;
-
-        if (isset($options['exitAuto'])) {
-            $exitAuto = $options['exitAuto'] == false ? false : true;
-        }
-
-        $response = new self($data, $status, $message, $traceId);
-        return !$exitAuto ? $response : response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+       return new self($data, $status, $message, $traceId);
     }
 
     public static function createSuccessResponse($data, $status, $options = [])
     {
         $message = '';
         $token = false;
-        $exitAuto = true;
 
         if (isset($options['message'])) {
             $message = $options['message'];
@@ -102,23 +87,19 @@ class RestResponse
         if (isset($options['token'])) {
             $token = $options['token'] === true ? true : false;
         }
-        if (isset($options['exitAuto'])) {
-            $exitAuto = $options['exitAuto'] == false ? false : true;
-        }
 
-        $response = new self($data, $status, $message, null, $token);
-        return !$exitAuto ? $response : response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        return new self($data, $status, $message, null, $token);
     }
 
     public static function createTesteResponse($data = [], $message = 'Retorno teste', $options = [])
     {
-        $exitAuto = true;
+        $status = 422;
 
-        if (isset($options['exitAuto'])) {
-            $exitAuto = $options['exitAuto'] == false ? false : true;
+        if (isset($options['status'])) {
+            $status = $options['status'];
         }
 
-        $response = new self($data, 422, $message);
-        return !$exitAuto ? $response : response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        $response = new self($data, $status, $message);
+        return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
     }
 }

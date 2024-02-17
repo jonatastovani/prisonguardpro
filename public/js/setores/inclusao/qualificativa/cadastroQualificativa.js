@@ -22,6 +22,7 @@ $(document).ready(function () {
     const passagem_id = $('#passagem_id').val();
     let qual_prov_id = $('#qual_prov_id').val();
     let preso_id_bln = $('#preso_id_bln').val();
+    let preso_id = undefined;
     let perm_atribuir_matricula_bln = $('#perm_atribuir_matricula_bln').val();
     const redirect = $('.redirectUrl').attr('href');
     const containerArtigos = $('#containerArtigos');
@@ -289,8 +290,9 @@ $(document).ready(function () {
         console.log('Normal = ', data);
 
         const preso = data.preso;
+        preso_id = preso.id;
 
-        $('#matricula').val(preso.matricula);
+        $('#matricula').val(funcoesPresos.retornaMatriculaFormatada(preso.matricula, 2)).trigger('input');
         $('#nome').val(preso.nome);
         $('#nome_social').val(preso.nome_social);
         $('#mae').val(preso.mae);
@@ -317,28 +319,30 @@ $(document).ready(function () {
     function preencherQualificativaProvisoria(data) {
 
         console.log('Provisória = ', data);
+        const qual_prov = data.qual_prov;
 
-        $('#matricula').val(data.matricula);
+        $('#matricula').val(funcoesPresos.retornaMatriculaFormatada(data.matricula, 2)).trigger('input');
         $('#nome').val(data.nome);
         $('#nome_social').val(data.nome_social);
-        $('#mae').val(data.mae);
-        $('#pai').val(data.pai);
-        if (data.cidade) {
-            $('#cidade_nasc_id').html(new Option(`${data.cidade.nome} - ${data.cidade.estado.sigla} | ${data.cidade.estado.nacionalidade.pais}`, data.cidade_id, true, true)).trigger('change');
+
+        $('#mae').val(qual_prov.mae);
+        $('#pai').val(qual_prov.pai);
+        if (qual_prov.cidade) {
+            $('#cidade_nasc_id').html(new Option(`${qual_prov.cidade.nome} - ${qual_prov.cidade.estado.sigla} | ${qual_prov.cidade.estado.nacionalidade.pais}`, qual_prov.cidade_id, true, true)).trigger('change');
         }
-        $('#data_nasc').val(data.data_nasc);
-        $('#genero_id').val(data.genero_id);
-        $('#escolaridade_id').val(data.escolaridade_id);
-        $('#estado_civil_id').val(data.estado_civil_id);
-        $('#cutis_id').val(data.cutis_id);
-        $('#cabelo_tipo_id').val(data.cabelo_tipo_id);
-        $('#cabelo_cor_id').val(data.cabelo_cor_id);
-        $('#olho_tipo_id').val(data.olho_tipo_id);
-        $('#olho_cor_id').val(data.olho_cor_id);
-        $('#crenca_id').val(data.crenca_id);
-        $('#sinais').val(data.sinais);
-        $('#informacoes').val(data.informacoes);
-        $('#observacoes').val(data.observacoes);
+        $('#data_nasc').val(qual_prov.data_nasc);
+        $('#genero_id').val(qual_prov.genero_id);
+        $('#escolaridade_id').val(qual_prov.escolaridade_id);
+        $('#estado_civil_id').val(qual_prov.estado_civil_id);
+        $('#cutis_id').val(qual_prov.cutis_id);
+        $('#cabelo_tipo_id').val(qual_prov.cabelo_tipo_id);
+        $('#cabelo_cor_id').val(qual_prov.cabelo_cor_id);
+        $('#olho_tipo_id').val(qual_prov.olho_tipo_id);
+        $('#olho_cor_id').val(qual_prov.olho_cor_id);
+        $('#crenca_id').val(qual_prov.crenca_id);
+        $('#sinais').val(qual_prov.sinais);
+        $('#informacoes').val(qual_prov.informacoes);
+        $('#observacoes').val(qual_prov.observacoes);
 
     }
 
@@ -462,12 +466,11 @@ $(document).ready(function () {
     function acaoBtnSalvar() {
 
         let data = commonFunctions.getInputsValues($('#dadosQualificativa'));
-        data['matricula'] = funcoesPresos.insereDigitoMatricula(data['matricula']);
+        data['matricula'] = funcoesPresos.insereDigitoMatriculaAoSalvar(data['matricula']);
         data['artigos'] = arrArtigos;
-        data['passagem_id'] = passagem_id;
         data['qual_prov_id'] = qual_prov_id;
-        data['preso_id_bln'] = preso_id_bln;
-        data['perm_atribuir_matricula_bln'] = perm_atribuir_matricula_bln;
+        data['preso_id'] = preso_id;
+        // data['perm_atribuir_matricula_bln'] = perm_atribuir_matricula_bln;
 
         salvar(data);
     }
@@ -478,14 +481,18 @@ $(document).ready(function () {
         let action = enumAction.POST;
         console.log(data);
 
-        if (preso_id_bln) 
-        if (qual_prov_id) {
+        if (preso_id || qual_prov_id) {
+            action = enumAction.PUT
             obj.setParam(passagem_id);
-            action = enumAction.PUT;
-        } else
+        } else {
+            action = enumAction.POST;
+            data['passagem_id'] = passagem_id;
+        }
+
         obj.setAction(action)
 
         const btn = $('#btnSalvar');
+
         commonFunctions.simulateLoading(btn);
 
         obj.setData(data);

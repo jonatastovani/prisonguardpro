@@ -37,7 +37,7 @@ class IncQualificativaProvisoria extends Model
             ->useLogName(strtolower(class_basename($this)));
     }
 
-    protected $fillable = ['nome', 'nome_social', 'mae', 'pai'];
+    protected $fillable = ['mae', 'pai'];
 
     public static function boot()
     {
@@ -45,11 +45,7 @@ class IncQualificativaProvisoria extends Model
 
         // Registrando o evento saving
         static::saving(function ($model) {
-            // Convertendo o valor do campo 'nome' para maiúsculas
-            $model->nome = mb_strtoupper($model->nome, 'UTF-8');
-            if ($model->nome_social) {
-                $model->nome_social = mb_strtoupper($model->nome_social, 'UTF-8');
-            }
+            // Convertendo os valores dos campos para maiúsculas
             if ($model->mae) {
                 $model->mae = mb_strtoupper($model->mae, 'UTF-8');
             }

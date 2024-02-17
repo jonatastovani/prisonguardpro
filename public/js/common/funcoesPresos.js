@@ -78,7 +78,8 @@ export class funcoesPresos {
         return matriculaFormatada;
     }
 
-    static insereDigitoMatricula(matricula) {
+    static insereDigitoMatriculaAoSalvar(matricula) {
+        matricula = commonFunctions.returnsOnlyNumber(matricula);
         return `${matricula}${funcoesPresos.retornaDigitoMatricula(matricula)}`;
     }
 }
