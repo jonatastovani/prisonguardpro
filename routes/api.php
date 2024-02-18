@@ -41,6 +41,11 @@ Route::controller(LoginController::class)->group(function () {
 route::prefix('/v1')->group(function () {
     Route::group(['middleware' => 'auth:sanctum'], function () {
 
+        // Defina uma regra de padrão para todos os parâmetros {id} e {passagem_id}
+        // Route::pattern(['id', 'passagem_id'], '[0-9]+');
+        Route::pattern('passagem_id', '[0-9]+');
+        Route::pattern('id', '[0-9]+');
+
         // Rota de logout
         Route::post('/logout', [LoginController::class, 'logout']);
 
@@ -403,7 +408,7 @@ route::prefix('/v1')->group(function () {
                 Route::controller(IncQualificativaController::class)->group(function () {
                     Route::get('/{passagem_id}', 'show');
                     Route::post('', 'store');
-                    Route::put('/{id}', 'update');
+                    Route::put('/{passagem_id}', 'update');
                     Route::delete('/{id}', 'destroy');
                 });
 

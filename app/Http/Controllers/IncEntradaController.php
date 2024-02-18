@@ -230,8 +230,8 @@ class IncEntradaController extends Controller
             'presos.*.matricula' => 'nullable|regex:/^[0-9]+$/',
             'presos.*.convivio_tipo_id' => 'nullable|integer',
             'presos.*.data_prisao' => 'nullable|date',
-            'presos.*.informacoes' => 'nullable|text',
-            'presos.*.observacoes' => 'nullable|text',
+            'presos.*.informacoes' => 'nullable|alpha_dash',
+            'presos.*.observacoes' => 'nullable|alpha_dash',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);

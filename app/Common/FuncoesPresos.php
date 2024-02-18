@@ -3,6 +3,7 @@
 namespace App\Common;
 
 use App\Models\IncEntradaPreso;
+use App\Models\IncQualificativaProvisoria;
 use App\Models\PresoPassagemArtigo;
 use InvalidArgumentException;
 
@@ -88,14 +89,35 @@ class FuncoesPresos
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
-            $codigo = 404;
+            $status = 404;
             $mensagem = "O ID Passagem $id não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+            $traceId = CommonsFunctions::generateLog("$status | $mensagem | id: $id");
 
             return ["passagem.$id" => [
                 'error' => $mensagem,
                 'trace_id' => $traceId,
-                'code' => $codigo,
+                'status' => $status,
+            ]];
+        }
+
+        return $resource;
+    }
+
+    public static function buscarRecursoQualificativaProvisoria($id) : IncQualificativaProvisoria | array
+    {
+        $resource = IncQualificativaProvisoria::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $status = 404;
+            $mensagem = "A Qualificativa Provisória com ID $id não existe ou foi excluída.";
+            $traceId = CommonsFunctions::generateLog("$status | $mensagem | id: $id");
+
+            return ["qualificativa.$id" => [
+                'error' => $mensagem,
+                'trace_id' => $traceId,
+                'status' => $status,
             ]];
         }
 

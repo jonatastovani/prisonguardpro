@@ -71,7 +71,7 @@ class IncEntradaPreso extends Model
         return $this->belongsTo(RefStatus::class);
     }
 
-    public function art_passagem()
+    public function artigos()
     {
         return $this->hasMany(PresoPassagemArtigo::class,'passagem_id');
     }

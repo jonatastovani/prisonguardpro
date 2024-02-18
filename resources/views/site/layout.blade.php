@@ -56,6 +56,7 @@
     </div>
 
     @include('site.includesDefault')
+    @include('common.modalLoading')
     @include('common.modalMessage')
     {{-- <script type="module" src="{{ asset('js/script.js') }}"></script> --}}
 

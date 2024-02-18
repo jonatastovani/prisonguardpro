@@ -47,15 +47,14 @@ class IncQualificativaController extends Controller
             $this->validarRecursoExistentePreso($request);
 
             // Se passou pelas validações então insere os novos dados na qualificativa
-            $this->storeQualificativa($request);
+            $this->storeQualificativa($request, $passagem);
         } else {
             // Valida se não existe outra qualificativa provisória com o mesmo passagem_id, se existir retorna a mensagem automaticamente
-            $this->validarRecursoExistenteProvisoria($request, $passagem);
+            $this->validarRecursoExistenteProvisoria($request);
 
             // Se passou pelas validações então insere os novos dados na qualificativa
             $this->storeQualificativaProvisoria($request, $passagem);
         }
-
     }
 
     public function storeQualificativa(Request $request, IncEntradaPreso $passagem)
@@ -151,11 +150,9 @@ class IncQualificativaController extends Controller
                     CommonsFunctions::inserirInfoCreated($artigo);
 
                     $artigo->save();
-                    // $artigos[] = $artigo;
                 }
             }
 
-            // $novo['artigos'] = $artigos;
             $novo->refresh();
 
             DB::commit();
@@ -187,8 +184,6 @@ class IncQualificativaController extends Controller
         // Regras de validação
         $rules = [
             'passagem_id' => 'required|integer',
-            // 'qual_prov_id' => 'required|integer',
-            // 'preso_id' => 'required|integer',
             'matricula' => 'nullable|regex:/^[0-9]+$/',
             'nome' => 'required|regex:/^[^0-9]+$/u',
             'nome_social' => 'nullable|regex:/^[^0-9]+$/u',
@@ -208,6 +203,8 @@ class IncQualificativaController extends Controller
             'olho_tipo_id' => 'nullable|integer',
             'crenca_id' => 'nullable|integer',
             'sinais' => 'nullable|string',
+            'informacoes' => 'nullable|string',
+            'observacoes' => 'nullable|string',
             'artigos' => 'nullable|array',
             'artigos.*.id' => 'nullable|integer',
             'artigos.*.artigo_id' => 'required|integer',
@@ -241,7 +238,7 @@ class IncQualificativaController extends Controller
                 }
             }
         }
-        
+
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
@@ -299,7 +296,7 @@ class IncQualificativaController extends Controller
 
         $resource->load('preso.pessoa', 'preso.pressoa.cidade_nasc', 'preso.pressoa.genero', 'preso.pressoa.escolaridade', 'preso.pressoa.estado_civil', 'preso.pressoa.documentos');
 
-        $resource->load('art_passagem', 'qual_prov', 'convivio_tipo');
+        $resource->load('artigos', 'qual_prov', 'convivio_tipo');
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -308,7 +305,170 @@ class IncQualificativaController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request)
+    // {
+    //     $arrErrors = [];
+
+    //     // $this->authorize('store', IncQualificativaProvisoriaPreso::class);
+
+    //     // Regras de validação
+    //     $rules = [
+    //         'passagem_id' => 'required|integer',
+    //         'matricula' => 'nullable|regex:/^[0-9]+$/',
+    //         'nome' => 'required|regex:/^[^0-9]+$/u',
+    //         'nome_social' => 'nullable|regex:/^[^0-9]+$/u',
+    //         'mae' => 'nullable|regex:/^[^0-9]+$/u',
+    //         'pai' => 'nullable|regex:/^[^0-9]+$/u',
+    //         'data_nasc' => 'nullable|date',
+    //         'cidade_nasc_id' => 'nullable|integer',
+    //         'genero_id' => 'nullable|integer',
+    //         'escolaridade_id' => 'nullable|integer',
+    //         'estado_civil_id' => 'nullable|integer',
+    //         'estatura' => 'nullable|numeric|between:0,4',
+    //         'peso' => 'nullable|numeric|between:0,400',
+    //         'cutis_id' => 'nullable|integer',
+    //         'cabelo_tipo_id' => 'nullable|integer',
+    //         'cabelo_cor_id' => 'nullable|integer',
+    //         'olho_cor_id' => 'nullable|integer',
+    //         'olho_tipo_id' => 'nullable|integer',
+    //         'crenca_id' => 'nullable|integer',
+    //         'sinais' => 'nullable|string',
+    //         'artigos' => 'nullable|array',
+    //         'artigos.*.id' => 'nullable|integer',
+    //         'artigos.*.artigo_id' => 'required|integer',
+    //         'artigos.*.observacoes' => 'nullable|string',
+    //     ];
+
+    //     CommonsFunctions::validacaoRequest($request, $rules);
+
+    //     // Valida se não existe outra qualificativa com o mesmo passagem_id
+    //     $this->validarRecursoExistentePreso($request, $request->id);
+
+    //     // Se a validação passou, atualize registro de passagem
+    //     $passagem = FuncoesPresos::buscarRecursoPassagemPreso($request->input('passagem_id'));
+    //     if ($passagem instanceof IncEntradaPreso) {
+    //         $passagem->matricula = $request->input('matricula');
+    //         $passagem->nome = $request->input('nome');
+    //         $passagem->nome_social = $request->input('nome_social');
+    //     }
+
+    //     // Verifica se o modelo existe
+    //     $resource = $this->buscarRecurso($request->id);
+
+    //     $this->preencherCamposProvisoria($resource, $request, $arrErrors);
+
+    //     $arrArtigos = [];
+    //     if ($request->has('artigos') && $request->input('artigos')) {
+    //         foreach ($request->input('artigos') as $preso) {
+    //             $retorno = $this->preencherArtigos($preso);
+
+    //             if ($retorno instanceof PresoPassagemArtigo) {
+    //                 $arrArtigos[] = $retorno;
+    //             } else {
+    //                 $arrErrors = array_merge($arrErrors, $retorno);
+    //             }
+    //         }
+    //     }
+
+    //     // Erros que impedem o processamento
+    //     CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
+
+    //     // Inicia a transação
+    //     DB::beginTransaction();
+
+    //     try {
+    //         CommonsFunctions::inserirInfoUpdated($passagem);
+    //         $passagem->save();
+
+    //         CommonsFunctions::inserirInfoUpdated($resource);
+    //         $resource->save();
+
+    //         foreach ($resource->artigos as $artigosExistente) {
+    //             $artigoEnviado = collect($arrArtigos)->firstWhere('id', $artigosExistente->id);
+
+    //             if (!$artigoEnviado) {
+    //                 // Se o artigo existente não foi enviado, então excluímos
+    //                 CommonsFunctions::inserirInfoDeleted($artigosExistente);
+    //                 $artigosExistente->save();
+    //             }
+    //         }
+
+    //         foreach ($arrArtigos as $artigo) {
+    //             if ($artigo instanceof PresoPassagemArtigo) {
+
+    //                 if (!$artigo->id) {
+    //                     $artigo['passagem_id'] = $passagem->id;
+    //                     CommonsFunctions::inserirInfoCreated($artigo);
+    //                 } else {
+    //                     CommonsFunctions::inserirInfoUpdated($artigo);
+    //                 }
+
+    //                 $artigo->save();
+    //             }
+    //         }
+
+    //         $resource->refresh();
+
+    //         DB::commit();
+
+    //         // $this->executarEventoWebsocket();
+
+    //         $response = RestResponse::createSuccessResponse($resource, 200, ['token' => true]);
+    //         return response()->json($response->toArray(), $response->getStatusCode());
+    //     } catch (\Exception $e) {
+    //         // Se ocorrer algum erro, fazer o rollback da transação
+    //         DB::rollBack();
+
+    //         // Gerar um log
+    //         $codigo = 422;
+    //         $mensagem = "A requisição não pôde ser processada.";
+    //         $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($e->getMessage()));
+
+    //         $response = RestResponse::createGenericResponse(['error' => $e->getMessage()], 422, $mensagem, $traceId);
+    //         return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+    //     }
+    // }
     public function update(Request $request)
+    {
+        // $this->authorize('update', IncQualificativaProvisoriaPreso::class);
+
+        // Regras de validação
+        $rules = [
+            'qual_prov_id' => 'nullable|integer',
+            'preso_id' => 'nullable|integer',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        // Verifica se a passagem existe, se não existir já retorna o erro
+        $passagem = FuncoesPresos::buscarRecursoPassagemPreso($request->passagem_id);
+        if (!$passagem instanceof IncEntradaPreso) {
+            // Erros que impedem o processamento
+            CommonsFunctions::retornaErroQueImpedemProcessamento422($passagem);
+        }
+
+        // Verifica se o usuário tem a permissão necessária
+        // if (PermissaoService::temPermissaoRecursivaAcima(Auth::user(), [45, 68])) {
+        $permAtribuirMatriculaBln = false;
+        // }
+
+        if($request->has('preso_id') && $request->input('preso_id')){
+            // Valida se não existe outra qualificativa com o mesmo passagem_id, se existir retorna a mensagem automaticamente
+            $this->validarRecursoExistentePreso($request, $request->input('preso_id'));
+
+            // Se passou pelas validações então insere os novos dados na qualificativa
+            $this->storeQualificativa($request, $passagem);
+        } else if($request->has('qual_prov_id') && $request->input('qual_prov_id')){
+            // Valida se não existe outra qualificativa provisória com o mesmo passagem_id, se existir retorna a mensagem automaticamente
+            $this->validarRecursoExistenteProvisoria($request, $request->input('qual_prov_id'));
+
+            // Se passou pelas validações então insere os novos dados na qualificativa
+            $this->updateQualificativaProvisoria($request, $passagem);
+        }
+
+    }
+    
+    public function updateQualificativaProvisoria(Request $request, IncEntradaPreso $passagem)
     {
         $arrErrors = [];
 
@@ -316,7 +476,7 @@ class IncQualificativaController extends Controller
 
         // Regras de validação
         $rules = [
-            'passagem_id' => 'required|integer',
+            'qual_prov_id' => 'required|integer',
             'matricula' => 'nullable|regex:/^[0-9]+$/',
             'nome' => 'required|regex:/^[^0-9]+$/u',
             'nome_social' => 'nullable|regex:/^[^0-9]+$/u',
@@ -336,6 +496,8 @@ class IncQualificativaController extends Controller
             'olho_tipo_id' => 'nullable|integer',
             'crenca_id' => 'nullable|integer',
             'sinais' => 'nullable|string',
+            'informacoes' => 'nullable|string',
+            'observacoes' => 'nullable|string',
             'artigos' => 'nullable|array',
             'artigos.*.id' => 'nullable|integer',
             'artigos.*.artigo_id' => 'required|integer',
@@ -344,19 +506,15 @@ class IncQualificativaController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        // Valida se não existe outra qualificativa com o mesmo passagem_id
-        $this->validarRecursoExistentePreso($request, $request->id);
+        // Atualizaça a passagem do preso
+        $passagem->matricula = $request->input('matricula');
+        $passagem->nome = $request->input('nome');
+        $passagem->nome_social = $request->input('nome_social');
+        $passagem->informacoes = $request->input('informacoes');
+        $passagem->observacoes = $request->input('observacoes');
 
-        // Se a validação passou, atualize registro de passagem
-        $passagem = FuncoesPresos::buscarRecursoPassagemPreso($request->input('passagem_id'));
-        if ($passagem instanceof IncEntradaPreso) {
-            $passagem->matricula = $request->input('matricula');
-            $passagem->nome = $request->input('nome');
-            $passagem->nome_social = $request->input('nome_social');
-        }
-
-        // Verifica se o modelo existe
-        $resource = $this->buscarRecurso($request->id);
+        // Cria um novo registro
+        $resource = $this->buscarRecursoProvisoria($request->input('qual_prov_id'));;
 
         $this->preencherCamposProvisoria($resource, $request, $arrErrors);
 
@@ -376,23 +534,23 @@ class IncQualificativaController extends Controller
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
-        // Inicia a transação
-        DB::beginTransaction();
+        // // Inicia a transação
+        // DB::beginTransaction();
 
-        try {
+        // try {
             CommonsFunctions::inserirInfoUpdated($passagem);
             $passagem->save();
 
-            CommonsFunctions::inserirInfoUpdated($resource);
+            CommonsFunctions::inserirInfoCreated($resource);
             $resource->save();
-
-            foreach ($resource->artigos as $artigosExistente) {
-                $artigoEnviado = collect($arrArtigos)->firstWhere('id', $artigosExistente->id);
+            
+            foreach ($passagem->artigos as $artigoExistente) {
+                $artigoEnviado = collect($arrArtigos)->firstWhere('id', $artigoExistente->id);
 
                 if (!$artigoEnviado) {
                     // Se o artigo existente não foi enviado, então excluímos
-                    CommonsFunctions::inserirInfoDeleted($artigosExistente);
-                    $artigosExistente->save();
+                    CommonsFunctions::inserirInfoDeleted($artigoExistente);
+                    $artigoExistente->save();
                 }
             }
 
@@ -410,26 +568,26 @@ class IncQualificativaController extends Controller
                 }
             }
 
-            $resource->refresh();
+            $passagem->refresh();
 
             DB::commit();
 
             // $this->executarEventoWebsocket();
 
-            $response = RestResponse::createSuccessResponse($resource, 200, ['token' => true]);
+            $response = RestResponse::createSuccessResponse($passagem, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
-        } catch (\Exception $e) {
-            // Se ocorrer algum erro, fazer o rollback da transação
-            DB::rollBack();
+        // } catch (\Exception $e) {
+        //     // Se ocorrer algum erro, fazer o rollback da transação
+        //     DB::rollBack();
 
-            // Gerar um log
-            $codigo = 422;
-            $mensagem = "A requisição não pôde ser processada.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($e->getMessage()));
+        //     // Gerar um log
+        //     $codigo = 422;
+        //     $mensagem = "A requisição não pôde ser processada.";
+        //     $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($e->getMessage()));
 
-            $response = RestResponse::createGenericResponse(['error' => $e->getMessage()], 422, $mensagem, $traceId);
-            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
-        }
+        //     $response = RestResponse::createGenericResponse(['error' => $e->getMessage()], 422, $mensagem, $traceId);
+        //     return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        // }
     }
 
     private function preencherArtigos($artigo, $passagem_id = null)
@@ -481,11 +639,27 @@ class IncQualificativaController extends Controller
         $resource = FuncoesPresos::buscarRecursoPassagemPreso($passagem_id);
         if (!$resource instanceof IncEntradaPreso) {
             // Gerar um log
-            $codigo = $resource["passagem.$passagem_id"]['code'];
+            $status = $resource["passagem.$passagem_id"]['status'];
             $mensagem = $resource["passagem.$passagem_id"]['error'];
             $traceId = $resource["passagem.$passagem_id"]['trace_id'];
 
-            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            $response = RestResponse::createErrorResponse($status, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+
+        return $resource;
+    }
+
+    private function buscarRecursoProvisoria($qual_prov_id) : IncQualificativaProvisoria
+    {
+        $resource = FuncoesPresos::buscarRecursoQualificativaProvisoria($qual_prov_id);
+        if (!$resource instanceof IncQualificativaProvisoria) {
+            // Gerar um log
+            $status = $resource["passagem.$qual_prov_id"]['status'];
+            $mensagem = $resource["passagem.$qual_prov_id"]['error'];
+            $traceId = $resource["passagem.$qual_prov_id"]['trace_id'];
+
+            $response = RestResponse::createErrorResponse($status, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
 

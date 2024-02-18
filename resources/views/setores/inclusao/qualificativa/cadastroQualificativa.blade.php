@@ -178,11 +178,11 @@
                 <div class="col-md-6 mt-2">
                     <label for="informacoes" class="form-label">Informações (Ex: link da
                         notícia)</label>
-                    <textarea class="form-control" name="informacoes" id="informacoes" cols="30" rows="2"></textarea>
+                    <textarea class="form-control" name="informacoes" id="informacoes" rows="3"></textarea>
                 </div>
                 <div class="col-md-6 mt-2" title="Observações sobre o preso (este campo não é impresso na qualificativa)">
                     <label for="observacoes" class="form-label">Observações</label>
-                    <textarea class="form-control" name="observacoes" id="observacoes" cols="30" rows="2"></textarea>
+                    <textarea class="form-control" name="observacoes" id="observacoes" rows="3"></textarea>
                 </div>
             </div>
         </div>

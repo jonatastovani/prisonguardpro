@@ -28,17 +28,23 @@ $(document).ready(function () {
     const containerArtigos = $('#containerArtigos');
     let arrArtigos = [];
 
-    function init() {
+    async function init() {
 
         const matricula = $('#matricula');
         commonFunctions.applyCustomNumberMask(matricula, { format: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
+        $("#modalLoading").modal('show');
+        console.log($("#modalLoading"));
+        setTimeout(() => {
+            $("#modalLoading").modal('hide');
+            console.log('terminou')
+        }, 5000);
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
-        preencherTodosSelects();
 
         commonFunctions.addEventsSelect2($('#cidade_nasc_id'), `${urlRefCidades}/search/select2`);
+        await preencherTodosSelects();
 
         $(`#btnCidadeCadastro`).on('click', function () {
             const obj = new modalCadastroCidade();
@@ -199,18 +205,18 @@ $(document).ready(function () {
 
         buscarDados();
 
-        inserirArtigos({
-            artigo_id: 1,
-            observacoes: 'Observacoes do artigo id 1'
-        })
-        inserirArtigos({
-            artigo_id: 2,
-            observacoes: 'Observacoes do artigo id 2'
-        })
-        inserirArtigos({
-            artigo_id: 3,
-            observacoes: `Observacoes do artigo id 3`
-        })
+        // inserirArtigos({
+        //     artigo_id: 1,
+        //     observacoes: 'Observacoes do artigo id 1'
+        // })
+        // inserirArtigos({
+        //     artigo_id: 2,
+        //     observacoes: 'Observacoes do artigo id 2'
+        // })
+        // inserirArtigos({
+        //     artigo_id: 3,
+        //     observacoes: `Observacoes do artigo id 3`
+        // })
         // inserirArtigos({
         //     artigo_id: 4,
         //     observacoes: 'Observacoes do artigo id 4'
@@ -268,10 +274,16 @@ $(document).ready(function () {
             .then(function (response) {
                 console.log(response);
 
-                if (response.preso) {
+                if (response.data.preso) {
                     preencherQualificativa(response.data);
                 } else {
                     preencherQualificativaProvisoria(response.data);
+                }
+
+                if (response.data.artigos){
+                    response.data.artigos.forEach(artigo => {
+                        inserirArtigos(artigo)                
+                    });
                 }
 
             })
@@ -321,43 +333,46 @@ $(document).ready(function () {
         console.log('Provisória = ', data);
         const qual_prov = data.qual_prov;
 
-        $('#matricula').val(funcoesPresos.retornaMatriculaFormatada(data.matricula, 2)).trigger('input');
+        let matricula = data.matricula ? funcoesPresos.retornaMatriculaFormatada(data.matricula, 2) : '';
+        $('#matricula').val(matricula).trigger('input');
         $('#nome').val(data.nome);
         $('#nome_social').val(data.nome_social);
+        $('#informacoes').val(data.informacoes);
+        $('#observacoes').val(data.observacoes);
 
-        $('#mae').val(qual_prov.mae);
-        $('#pai').val(qual_prov.pai);
-        if (qual_prov.cidade) {
-            $('#cidade_nasc_id').html(new Option(`${qual_prov.cidade.nome} - ${qual_prov.cidade.estado.sigla} | ${qual_prov.cidade.estado.nacionalidade.pais}`, qual_prov.cidade_id, true, true)).trigger('change');
+        if (qual_prov) {
+            $('#mae').val(qual_prov.mae);
+            $('#pai').val(qual_prov.pai);
+            if (qual_prov.cidade) {
+                $('#cidade_nasc_id').html(new Option(`${qual_prov.cidade.nome} - ${qual_prov.cidade.estado.sigla} | ${qual_prov.cidade.estado.nacionalidade.pais}`, qual_prov.cidade_id, true, true)).trigger('change');
+            }
+            $('#data_nasc').val(qual_prov.data_nasc);
+            $('#genero_id').val(qual_prov.genero_id);
+            $('#escolaridade_id').val(qual_prov.escolaridade_id);
+            $('#estado_civil_id').val(qual_prov.estado_civil_id);
+            $('#cutis_id').val(qual_prov.cutis_id);
+            $('#cabelo_tipo_id').val(qual_prov.cabelo_tipo_id);
+            $('#cabelo_cor_id').val(qual_prov.cabelo_cor_id);
+            $('#olho_tipo_id').val(qual_prov.olho_tipo_id);
+            $('#olho_cor_id').val(qual_prov.olho_cor_id);
+            $('#crenca_id').val(qual_prov.crenca_id);
+            $('#sinais').val(qual_prov.sinais);
         }
-        $('#data_nasc').val(qual_prov.data_nasc);
-        $('#genero_id').val(qual_prov.genero_id);
-        $('#escolaridade_id').val(qual_prov.escolaridade_id);
-        $('#estado_civil_id').val(qual_prov.estado_civil_id);
-        $('#cutis_id').val(qual_prov.cutis_id);
-        $('#cabelo_tipo_id').val(qual_prov.cabelo_tipo_id);
-        $('#cabelo_cor_id').val(qual_prov.cabelo_cor_id);
-        $('#olho_tipo_id').val(qual_prov.olho_tipo_id);
-        $('#olho_cor_id').val(qual_prov.olho_cor_id);
-        $('#crenca_id').val(qual_prov.crenca_id);
-        $('#sinais').val(qual_prov.sinais);
-        $('#informacoes').val(qual_prov.informacoes);
-        $('#observacoes').val(qual_prov.observacoes);
 
     }
 
-    async function inserirArtigos(arrData) {
+    async function inserirArtigos(arrDataArtigo) {
 
-        const id = arrData.id ? arrData.id : '';
+        const id = arrDataArtigo.id ? arrDataArtigo.id : '';
         let idDiv = '';
-        if (!arrData.idDiv) {
+        if (!arrDataArtigo.idDiv) {
             idDiv = `${id}${Date.now()}`;
         }
-        const observacoes = arrData.observacoes ? arrData.observacoes : '';
+        const observacoes = arrDataArtigo.observacoes ? arrDataArtigo.observacoes : '';
 
         arrArtigos.push({
             id: id,
-            artigo_id: arrData.artigo_id,
+            artigo_id: arrDataArtigo.artigo_id,
             idDiv: idDiv,
             observacoes: observacoes
         })
@@ -366,12 +381,12 @@ $(document).ready(function () {
         let descricao = 'N/C';
 
         try {
-            const response = await commonFunctions.getRecurseWithTrashed(urlRefArtigos, { param: arrData.artigo_id });
+            const response = await commonFunctions.getRecurseWithTrashed(urlRefArtigos, { param: arrDataArtigo.artigo_id });
             nome = response.data.nome;
             descricao = response.data.descricao;
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados do ID Artigo ${arrData.artigo_id} para o preso.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            $.notify(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
         }
         let strPreso = `
             <div id="${idDiv}" class="card col-lg-4 col-sm-6 p-0">
@@ -395,8 +410,8 @@ $(document).ready(function () {
             </div>`;
 
         containerArtigos.append(strPreso);
-        arrData['idDiv'] = idDiv;
-        addEventosArtigos(arrData);
+        arrDataArtigo['idDiv'] = idDiv;
+        addEventosArtigos(arrDataArtigo);
 
         return idDiv;
     }
@@ -434,8 +449,6 @@ $(document).ready(function () {
 
 
         div.find('.btn-delete').on("click", function () {
-            console.log(arrArtigos)
-            console.log(arrData.idDiv);
             arrArtigos = arrArtigos.filter((item) => item.idDiv != arrData.idDiv);
 
             if (arrData.id) {
@@ -450,9 +463,9 @@ $(document).ready(function () {
     function acaoBtnDeletar(idDiv, button) {
 
         const obj = new modalMessage();
-        obj.setMessage(`Confirma a exclusão deste artigo para o preso?`);
-        obj.setTitle('Confirmação de exclusão de artigo');
-        obj.setFocusElementWhenClosingModal(button);
+        obj.setMessage =`Confirma a exclusão deste artigo para o preso?`;
+        obj.setTitle ='Confirmação de exclusão de artigo';
+        obj.setFocusElementWhenClosingModal = button ;
         obj.modalOpen().then(function (result) {
 
             if (result) {
