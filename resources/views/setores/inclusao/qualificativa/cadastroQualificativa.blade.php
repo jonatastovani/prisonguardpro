@@ -155,34 +155,57 @@
                 </div>
             </div>
 
-            <figure>
-                <div class="row pb-0">
-                    <div class="col-12 mt-2">
-                        <h5 class="mb-0">Artigos</h5>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row pb-0">
+                        <div class="col-12 mt-2">
+                            <h5 class="mb-0">Documentos</h5>
+                        </div>
+                    </div>
+                    <div class="row ps-2 pe-2">
+                        <div class="col-12">
+                            <div id="containerDocumentos" class="row overflow-auto border border-dark-subtle rounded"
+                                style="min-height: 100px; max-height: 380px;"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 text-end">
+                            <button id="btnAddDocumentos" class="btn btn-outline-primary btn-sm">Adicionar
+                                Documentos</button>
+                        </div>
                     </div>
                 </div>
-                <div class="row ps-2 pe-2">
-                    <div class="col-12">
-                        <div id="containerArtigos" class="row overflow-auto border border-dark-subtle rounded"
-                            style="min-height: 100px; max-height: 380px;"></div>
-                    </div>
-                </div>
-            </figure>
 
-            <div class="row mt-2">
-                <div class="col-12 text-end">
-                    <button id="btnAddArtigo" class="btn btn-outline-primary btn-sm">Adicionar Artigo</button>
+                <div class="col-lg-6">
+                    <div class="row pb-0">
+                        <div class="col-12 mt-2">
+                            <h5 class="mb-0">Artigos</h5>
+                        </div>
+                    </div>
+                    <div class="row ps-2 pe-2">
+                        <div class="col-12">
+                            <div id="containerArtigos" class="row overflow-auto border border-dark-subtle rounded"
+                                style="min-height: 100px; max-height: 380px;"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 text-end">
+                            <button id="btnAddArtigo" class="btn btn-outline-primary btn-sm">Adicionar Artigo</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div class="row mb-2">
                 <div class="col-md-6 mt-2">
-                    <label for="informacoes" class="form-label">Informações (Ex: link da
-                        notícia)</label>
+                    <label for="informacoes" class="form-label">Informações</label>
                     <textarea class="form-control" name="informacoes" id="informacoes" rows="3"></textarea>
+                    <div class="form-text">Ex: link da notícia</div>
                 </div>
-                <div class="col-md-6 mt-2" title="Observações sobre o preso (este campo não é impresso na qualificativa)">
+                <div class="col-md-6 mt-2" title="Observações sobre o preso">
                     <label for="observacoes" class="form-label">Observações</label>
                     <textarea class="form-control" name="observacoes" id="observacoes" rows="3"></textarea>
+                    <div class="form-text">Este campo não é impresso na qualificativa</div>
                 </div>
             </div>
         </div>
@@ -208,6 +231,7 @@
 
     @include('modals.preso.modalAlterarPresoConvivio')
     @include('modals.preso.modalCadastroPresoArtigo')
+    @include('modals.preso.modalCadastroPresoDocumento')
     @include('modals.referencias.modalCadastroCidade')
     @include('modals.referencias.modalCadastroGenero')
     @include('modals.referencias.modalCadastroEscolaridade')

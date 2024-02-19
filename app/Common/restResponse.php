@@ -44,8 +44,11 @@ class RestResponse
             $responseArray['trace_id'] = $this->traceId;
         }
 
-        if ($this->token === true) {
-            $responseArray['token'] = csrf_token();
+        if ($this->token == true) {
+            $token = csrf_token();
+            if ($token){
+                $responseArray['token'] = $token;
+            }
         }
 
         return $responseArray;

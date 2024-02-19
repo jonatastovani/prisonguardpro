@@ -497,6 +497,7 @@ export class commonFunctions {
      * @param {boolean} options.formAttr.hidden - Specifies if the form should be hidden (default: true).
      * @param {string} options.formAttr.id - The ID attribute for the form.
      * @param {string} options.formAttr.class - The CSS class attribute for the form.
+     * @param {string} options.formAttr.target – The target attribute for the form (default: '_self').
      * @param {Object} options.submit - Attributes for the submit button.
      * @param {string} options.submit.name - The name attribute for the submit button (default: 'submit').
      * @param {boolean} options.submit.hidden - Specifies if the submit button should be hidden (default: false).
@@ -507,33 +508,36 @@ export class commonFunctions {
      * @returns {HTMLFormElement|HTMLInputElement} - The form or submit button element based on the specified return option.
      */
     static redirectForm(redirect, arrInputs, options = {}) {
-        const { formAttr = { method: 'POST', hidden: true, id: '', class: '' },
+        const { formAttr = { method: 'POST', hidden: true, id: '', class: '', target: '_self' },
             submit = { name: 'submit', hidden: false, value: 'Enviar', id: '', class: '' },
             returnElem = 'submit' } = options;
 
         let form = document.createElement('form');
-        form.id = formAttr.id;
-        form.hidden = formAttr.hidden;
-        form.method = formAttr.method;
+        form.id = formAttr.id || '';
+        form.hidden = formAttr.hidden || false;
+        form.method = formAttr.method || 'POST';
         form.action = redirect;
+        form.target = formAttr.target || '_self';
 
         arrInputs.forEach(input => {
-
             let newInput = document.createElement('input');
-            newInput.type = input.type ? input.type : 'hidden';
+            newInput.type = input.type || 'hidden';
             newInput.name = input.name;
-            newInput.value = JSON.stringify(input.value);
+            if (Array.isArray(input.value)) {
+                newInput.value = JSON.stringify(input.value);
+            } else {
+                newInput.value = input.value;
+            }
             form.appendChild(newInput);
-
         });
 
         let submitButton = document.createElement('input');
         submitButton.type = 'submit';
-        submitButton.id = submit.id;
-        submitButton.className = submit.class;
-        submitButton.name = submit.name;
-        submitButton.hidden = submit.hidden;
-        submitButton.value = submit.value;
+        submitButton.id = submit.id || '';
+        submitButton.className = submit.class || '';
+        submitButton.name = submit.name || 'submit';
+        submitButton.hidden = submit.hidden || false;
+        submitButton.value = submit.value || 'Enviar';
         form.appendChild(submitButton);
         document.body.appendChild(form);
 
@@ -543,9 +547,8 @@ export class commonFunctions {
             case 'form':
                 returnElement = form;
                 break;
-
             default:
-                returnElement = submitButton
+                returnElement = submitButton;
         }
 
         return returnElement;
@@ -893,7 +896,7 @@ export class commonFunctions {
 
             console.error('Erro HTTP:', xhr.status);
             console.error(`Código de erro: ${responseText.trace_id}`);
-            if(xhr.status == 422) {
+            if (xhr.status == 422) {
                 console.error(responseText.data);
             }
 
@@ -961,4 +964,33 @@ export class commonFunctions {
         str = str.trim();
         return str;
     }
+
+    /**
+     * Corta um texto conforme os parâmetros especificados.
+     * 
+     * @param {string} string - O texto a ser cortado.
+     * @param {Object} options - As opções para o corte do texto.
+     * @param {number} [options.qttWords=2] - A quantidade de palavras a serem retornadas. Por padrão, são retornadas duas palavras.
+     * @param {number} [options.maxLength=0] - A quantidade máxima de letras a serem retornadas. Se o número de palavras exceder, as letras adicionais são cortadas para atender a esse limite.
+     * @returns {string} O texto cortado conforme as opções especificadas.
+     */
+    static cutText(string, options = {}) {
+        const { qttWords = 2, maxLength = 0 } = options;
+
+        if (maxLength > 0) {
+            let words = string.split(/\s+/);
+            let slicedWords = words.slice(0, qttWords);
+            let slicedText = slicedWords.join(' ');
+
+            if (slicedText.length > maxLength) {
+                slicedText = slicedText.substring(0, maxLength);
+            }
+
+            return slicedText;
+        } else {
+            let words = string.split(/\s+/);
+            return words.slice(0, qttWords).join(' ');
+        }
+    }
+
 }

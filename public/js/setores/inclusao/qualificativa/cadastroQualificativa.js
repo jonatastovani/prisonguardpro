@@ -3,8 +3,10 @@ import { commonFunctions } from "../../../common/commonFunctions.js";
 import { configuracoesApp } from "../../../common/configuracoesApp.js";
 import { enumAction } from "../../../common/enumAction.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
+import { modalLoading } from "../../../common/modalLoading.js";
 import { modalMessage } from "../../../common/modalMessage.js";
 import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
+import { modalCadastroPresoDocumento } from "../../../modals/preso/modalCadastroPresoDocumento.js";
 import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
 import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
 import { modalCadastroCidade } from "../../../modals/referencias/modalCadastroCidade.js";
@@ -27,18 +29,17 @@ $(document).ready(function () {
     const redirect = $('.redirectUrl').attr('href');
     const containerArtigos = $('#containerArtigos');
     let arrArtigos = [];
+    const loading = new modalLoading();
 
     async function init() {
 
         const matricula = $('#matricula');
         commonFunctions.applyCustomNumberMask(matricula, { format: configuracoesApp.mascaraMatriculaSemDigito(), reverse: true });
 
+        loading.modalOpen();
+
         $("#modalLoading").modal('show');
-        console.log($("#modalLoading"));
-        setTimeout(() => {
-            $("#modalLoading").modal('hide');
-            console.log('terminou')
-        }, 5000);
+        
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
@@ -203,24 +204,17 @@ $(document).ready(function () {
             });
         });
 
-        buscarDados();
+        $(`#btnAddDocumentos`).on('click', function () {
+            const obj = new modalCadastroPresoDocumento();
+            obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    inserirArtigos(result.arrData);
+                }
+            });
+        });
 
-        // inserirArtigos({
-        //     artigo_id: 1,
-        //     observacoes: 'Observacoes do artigo id 1'
-        // })
-        // inserirArtigos({
-        //     artigo_id: 2,
-        //     observacoes: 'Observacoes do artigo id 2'
-        // })
-        // inserirArtigos({
-        //     artigo_id: 3,
-        //     observacoes: `Observacoes do artigo id 3`
-        // })
-        // inserirArtigos({
-        //     artigo_id: 4,
-        //     observacoes: 'Observacoes do artigo id 4'
-        // })
+        buscarDados();
 
     };
 
@@ -291,6 +285,9 @@ $(document).ready(function () {
                 $('input, .btn, select, textarea').prop('disabled', true);
                 $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
                 console.log(error);
+            })
+            .finally(function (){
+                loading.modalClose();
             });
 
         // }
@@ -389,7 +386,7 @@ $(document).ready(function () {
             $.notify(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
         }
         let strPreso = `
-            <div id="${idDiv}" class="card col-lg-4 col-sm-6 p-0">
+            <div id="${idDiv}" class="card col-sm-6 p-0">
                 <div class="card-header py-1">
                     ${nome}
                 </div>
@@ -511,14 +508,15 @@ $(document).ready(function () {
         obj.setData(data);
         obj.envRequest()
             .then(function (result) {
-                console.log(result);
-                // const token = result.token;
-
-                // let btn = funcoesComuns.formularioRedirecionamento(redirect, [
-                //     { name: 'arrNotifyMessage', value: [{ message: `Entrada de Presos ${passagem_id} alterada com sucesso!`, type: 'success' }] },
-                //     { name: '_token', value: token }
-                // ]);
-                // btn.click();
+                const token = result.token;
+                const nome = result.data.nome_social?result.data.nome_social : result.data.nome;
+                const message = `Qualificativa do(a) preso(a) ${commonFunctions.cutText(nome)} enviada com sucesso.`;
+                
+                let btn = commonFunctions.redirectForm(redirect, [
+                    { name: 'arrNotifyMessage', value: [{ message: message, type: 'success' }] },
+                    { name: '_token', value: token }
+                ]);
+                btn.click();
 
             })
             .catch(function (error) {

@@ -154,16 +154,17 @@ $(document).ready(function () {
                 <div id="camposAdicionais${idDiv}" style="display: none;">
                     <div class="row">
                         <div class="col-12">
-                            <label for="informacoes${idDiv}" class="form-label">Informações (Ex: link da
-                                notícia)</label>
+                            <label for="informacoes${idDiv}" class="form-label">Informações</label>
                             <textarea class="form-control" name="informacoes" id="informacoes${idDiv}" cols="30" rows="2"></textarea>
+                            <div class="form-text">Ex: link da notícia</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12"
-                            title="Observações sobre o preso (este campo não é impresso na qualificativa)">
+                            title="Observações sobre o preso">
                             <label for="observacoes${idDiv}" class="form-label">Observações</label>
                             <textarea class="form-control" name="observacoes" id="observacoes${idDiv}" cols="30" rows="2"></textarea>
+                            <div class="form-text">Este campo não é impresso na qualificativa</div>
                         </div>
                     </div>
                 </div>

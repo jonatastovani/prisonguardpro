@@ -230,7 +230,6 @@ class IncQualificativaController extends Controller
         if ($request->has('artigos') && $request->input('artigos')) {
             foreach ($request->input('artigos') as $preso) {
                 $retorno = $this->preencherArtigos($preso);
-
                 if ($retorno instanceof PresoPassagemArtigo) {
                     $arrArtigos[] = $retorno;
                 } else {
@@ -302,9 +301,9 @@ class IncQualificativaController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
     // public function update(Request $request)
     // {
     //     $arrErrors = [];
@@ -428,6 +427,7 @@ class IncQualificativaController extends Controller
     //         return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
     //     }
     // }
+
     public function update(Request $request)
     {
         // $this->authorize('update', IncQualificativaProvisoriaPreso::class);
@@ -452,22 +452,21 @@ class IncQualificativaController extends Controller
         $permAtribuirMatriculaBln = false;
         // }
 
-        if($request->has('preso_id') && $request->input('preso_id')){
+        if ($request->has('preso_id') && $request->input('preso_id')) {
             // Valida se não existe outra qualificativa com o mesmo passagem_id, se existir retorna a mensagem automaticamente
             $this->validarRecursoExistentePreso($request, $request->input('preso_id'));
 
             // Se passou pelas validações então insere os novos dados na qualificativa
             $this->storeQualificativa($request, $passagem);
-        } else if($request->has('qual_prov_id') && $request->input('qual_prov_id')){
+        } else if ($request->has('qual_prov_id') && $request->input('qual_prov_id')) {
             // Valida se não existe outra qualificativa provisória com o mesmo passagem_id, se existir retorna a mensagem automaticamente
             $this->validarRecursoExistenteProvisoria($request, $request->input('qual_prov_id'));
 
             // Se passou pelas validações então insere os novos dados na qualificativa
-            $this->updateQualificativaProvisoria($request, $passagem);
+            return $this->updateQualificativaProvisoria($request, $passagem);
         }
-
     }
-    
+
     public function updateQualificativaProvisoria(Request $request, IncEntradaPreso $passagem)
     {
         $arrErrors = [];
@@ -534,16 +533,16 @@ class IncQualificativaController extends Controller
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
-        // // Inicia a transação
-        // DB::beginTransaction();
+        // Inicia a transação
+        DB::beginTransaction();
 
-        // try {
+        try {
             CommonsFunctions::inserirInfoUpdated($passagem);
             $passagem->save();
 
-            CommonsFunctions::inserirInfoCreated($resource);
+            CommonsFunctions::inserirInfoUpdated($resource);
             $resource->save();
-            
+
             foreach ($passagem->artigos as $artigoExistente) {
                 $artigoEnviado = collect($arrArtigos)->firstWhere('id', $artigoExistente->id);
 
@@ -576,18 +575,18 @@ class IncQualificativaController extends Controller
 
             $response = RestResponse::createSuccessResponse($passagem, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
-        // } catch (\Exception $e) {
-        //     // Se ocorrer algum erro, fazer o rollback da transação
-        //     DB::rollBack();
+        } catch (\Exception $e) {
+            // Se ocorrer algum erro, fazer o rollback da transação
+            DB::rollBack();
 
-        //     // Gerar um log
-        //     $codigo = 422;
-        //     $mensagem = "A requisição não pôde ser processada.";
-        //     $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($e->getMessage()));
+            // Gerar um log
+            $codigo = 422;
+            $mensagem = "A requisição não pôde ser processada.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Errors: " . json_encode($e->getMessage()));
 
-        //     $response = RestResponse::createGenericResponse(['error' => $e->getMessage()], 422, $mensagem, $traceId);
-        //     return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
-        // }
+            $response = RestResponse::createGenericResponse(['error' => $e->getMessage()], 422, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
     }
 
     private function preencherArtigos($artigo, $passagem_id = null)
@@ -650,7 +649,7 @@ class IncQualificativaController extends Controller
         return $resource;
     }
 
-    private function buscarRecursoProvisoria($qual_prov_id) : IncQualificativaProvisoria
+    private function buscarRecursoProvisoria($qual_prov_id): IncQualificativaProvisoria
     {
         $resource = FuncoesPresos::buscarRecursoQualificativaProvisoria($qual_prov_id);
         if (!$resource instanceof IncQualificativaProvisoria) {

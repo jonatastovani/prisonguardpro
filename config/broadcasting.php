@@ -38,9 +38,9 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 // 'host' => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'mt1').'.pusher.com',
-                // 'host' => 'http://172.14.239.101', // CDP
+                'host' => 'http://172.14.239.101', // CDP
                 // 'host' => 'http://192.168.15.14', // Apê
-                'host' => 'http://192.168.0.11', // Daniel
+                // 'host' => 'http://192.168.0.11', // Daniel
                 // 'host' => 'http://10.14.239.225', // VM
                 'port' => 6001,
                 'scheme' => 'http',
