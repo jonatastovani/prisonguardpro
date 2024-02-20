@@ -340,8 +340,8 @@ $(document).ready(function () {
         if (qual_prov) {
             $('#mae').val(qual_prov.mae);
             $('#pai').val(qual_prov.pai);
-            if (qual_prov.cidade) {
-                $('#cidade_nasc_id').html(new Option(`${qual_prov.cidade.nome} - ${qual_prov.cidade.estado.sigla} | ${qual_prov.cidade.estado.nacionalidade.pais}`, qual_prov.cidade_id, true, true)).trigger('change');
+            if (qual_prov.cidade_nasc) {
+                $('#cidade_nasc_id').html(new Option(`${qual_prov.cidade_nasc.nome} - ${qual_prov.cidade_nasc.estado.sigla} | ${qual_prov.cidade_nasc.estado.nacionalidade.pais}`, qual_prov.cidade_nasc_id, true, true)).trigger('change');
             }
             $('#data_nasc').val(qual_prov.data_nasc);
             $('#genero_id').val(qual_prov.genero_id);

@@ -64,9 +64,9 @@
                                             id="siglaModalCadastroEstado">
                                     </div>
                                     <div class="col-lg-5 col-sm-8">
-                                        <label for="pais_idModalCadastroEstado" class="form-label">País</label>
+                                        <label for="nacionalidade_idModalCadastroEstado" class="form-label">País</label>
                                         <div class="input-group flex">
-                                            <select name="pais_id" id="pais_idModalCadastroEstado"></select>
+                                            <select name="nacionalidade_id" id="nacionalidade_idModalCadastroEstado"></select>
                                             <button type="button" class="btn btn-outline-secondary btnPaisCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>

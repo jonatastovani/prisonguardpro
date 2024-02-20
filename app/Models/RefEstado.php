@@ -51,7 +51,6 @@ class RefEstado extends Model
 
     public function nacionalidade()
     {
-
-        return $this->belongsTo(RefNacionalidade::class, 'pais_id');
+        return $this->belongsTo(RefNacionalidade::class);
     }
 }

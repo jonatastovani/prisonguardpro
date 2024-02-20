@@ -193,7 +193,7 @@ export class modalCadastroEstado {
             modal.find('input[name="nome"]').focus();
         });
 
-        const selectPais = modal.find('select[name="pais_id"]');
+        const selectPais = modal.find('select[name="nacionalidade_id"]');
         commonFunctions.addEventsSelect2(selectPais, `${self.#urlApiNacionalidades}/search/select2`, {
             dropdownParent: modal, minimum: 0
         });
@@ -206,7 +206,7 @@ export class modalCadastroEstado {
                 if (result && result.refresh) {
 
                     setTimeout(() => {
-                        modal.find('select[name="pais_id"]').focus();
+                        modal.find('select[name="nacionalidade_id"]').focus();
                     }, 500);
                     self.#promisseReturnValue.refresh = true;
 
@@ -298,7 +298,7 @@ export class modalCadastroEstado {
                 const form = $(self.#idModal).find('form');
                 form.find('input[name="nome"]').val(data.nome).focus();
                 form.find('input[name="sigla"]').val(data.sigla);
-                form.find('select[name="pais_id"]').html(new Option(`${data.nacionalidade.pais} (${data.nacionalidade.sigla})`, data.pais_id, true, true)).trigger('change');
+                form.find('select[name="nacionalidade_id"]').html(new Option(`${data.nacionalidade.pais} (${data.nacionalidade.sigla})`, data.nacionalidade_id, true, true)).trigger('change');
                 form.find('.register-title').html(`Editar Estado: ${data.id} - ${data.nome} | ${data.nacionalidade.sigla}`);
             }
         } catch (error) {

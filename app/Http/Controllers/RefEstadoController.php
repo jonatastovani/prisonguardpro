@@ -31,7 +31,7 @@ class RefEstadoController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         $resource = RefEstado::select('ref_estados.*')
-            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.pais_id')
+            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.nacionalidade_id')
             ->where('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
             ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
             ->orWhere('ref_nacionalidades.nome', 'LIKE', '%' . $request->input('text') . '%')
@@ -59,7 +59,7 @@ class RefEstadoController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         $resources = RefEstado::select('ref_estados.*')
-            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.pais_id')
+            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.nacionalidade_id')
             ->where('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
             ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
             ->orWhere('ref_nacionalidades.nome', 'LIKE', '%' . $request->input('text') . '%')
@@ -95,7 +95,7 @@ class RefEstadoController extends Controller
         $rules = [
             'nome' => 'required',
             'sigla' => 'required|min:2',
-            'pais_id' => 'required|integer',
+            'nacionalidade_id' => 'required|integer',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -147,7 +147,7 @@ class RefEstadoController extends Controller
         $rules = [
             'nome' => 'required',
             'sigla' => 'required|min:2',
-            'pais_id' => 'required|integer',
+            'nacionalidade_id' => 'required|integer',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -216,7 +216,7 @@ class RefEstadoController extends Controller
     {
         $query = RefEstado::where('sigla', $request->input('sigla'))
             ->where('nome', $request->input('nome'))
-            ->where('pais_id', $request->input('pais_id'));
+            ->where('nacionalidade_id', $request->input('nacionalidade_id'));
 
         if ($id !== null) {
             $query->whereNot('id', $id);
@@ -225,7 +225,7 @@ class RefEstadoController extends Controller
         // Verificar se o nome já existe no país
         $query->orWhere(function ($query) use ($request, $id) {
             $query->where('nome', $request->input('nome'))
-                ->where('pais_id', $request->input('pais_id'));
+                ->where('nacionalidade_id', $request->input('nacionalidade_id'));
             if ($id !== null) {
                 $query->whereNot('id', $id);
             }
@@ -243,9 +243,9 @@ class RefEstadoController extends Controller
 
     private function validarPaisExistente($resource, $request, &$arrErrors)
     {
-        $resource->pais_id = $request->input('pais_id');
+        $resource->nacionalidade_id = $request->input('nacionalidade_id');
 
-        $resource = RefNacionalidade::find($resource->pais_id);
+        $resource = RefNacionalidade::find($resource->nacionalidade_id);
 
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {

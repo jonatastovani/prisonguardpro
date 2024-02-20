@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('sigla');
             $table->string('nome');
 
-            $table->unsignedBigInteger('pais_id');
-            $table->foreign('pais_id')->references('id')->on('ref_nacionalidades');
+            $table->unsignedBigInteger('nacionalidade_id');
+            $table->foreign('nacionalidade_id')->references('id')->on('ref_nacionalidades');
 
             $table->unsignedBigInteger('created_user_id');
             $table->foreign('created_user_id')->references('id')->on('users');
