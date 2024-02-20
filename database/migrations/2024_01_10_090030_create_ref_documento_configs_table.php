@@ -11,10 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ref_documento_tipos', function (Blueprint $table) {
+        Schema::create('ref_documento_configs', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->boolean('doc_nacional_bln')->default(false);
+
+            $table->unsignedBigInteger('tipo_id');
+            $table->foreign('tipo_id')->references('id')->on('ref_documento_tipos');
+
+            $table->string('mask')->nullable();
+            $table->integer('comprimento_int')->nullable();
+            $table->integer('validade_emissao_int')->nullable();
+
+            $table->unsignedBigInteger('estado_id')->nullable();
+            $table->foreign('estado_id')->references('id')->on('ref_estados');
+
+            $table->unsignedBigInteger('orgao_exp_id')->nullable();
+            $table->foreign('orgao_exp_id')->references('id')->on('ref_documento_orgao_emissor');
+
+            $table->unsignedBigInteger('nacionalidade_id')->nullable();
+            $table->foreign('nacionalidade_id')->references('id')->on('ref_nacionalidades');
 
             $table->unsignedBigInteger('created_user_id');
             $table->foreign('created_user_id')->references('id')->on('users');
@@ -38,6 +53,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ref_documento_tipos');
+        Schema::dropIfExists('ref_documento_configs');
     }
 };

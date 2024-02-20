@@ -17,13 +17,10 @@ class RefDocumentoTipoSeeder extends Seeder
 
         $insert = [
             ['nome' => 'RG', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
-            ['nome' => 'RNE', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
             ['nome' => 'CPF', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
             ['nome' => 'CNH', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
-            ['nome' => 'Título de Eleitor', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
             ['nome' => 'Passaporte', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
             ['nome' => 'Carteirinha SUS', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
-            ['nome' => 'CPF', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
         ];
 
         DB::table('ref_documento_tipos')->insert($insert);

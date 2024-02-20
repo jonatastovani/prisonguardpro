@@ -61,7 +61,7 @@ class RefCidadeController extends Controller
 
         $resource = RefCidade::select('ref_cidades.*')
             ->join('ref_estados', 'ref_estados.id', '=', 'ref_cidades.estado_id')
-            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.pais_id')
+            ->join('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_estados.nacionalidade_id')
             ->where('ref_cidades.nome', 'LIKE', '%' . $request->input('text') . '%')
             ->orWhere('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
             ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
