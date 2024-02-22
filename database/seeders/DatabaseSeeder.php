@@ -46,8 +46,10 @@ class DatabaseSeeder extends Seeder
             RefMovimentacaoPresoMotivoSeeder::class,
             RefMovimentacaoPresoSeeder::class,
             RefIncOrigemSeeder::class,
+
             RefDocumentoTipoSeeder::class,
             RefDocumentoOrgaoEmissorSeeder::class,
+            
             RefProfissaoSeeder::class,
             RefGeneroSeeder::class,
             RefCidadeSeeder::class,

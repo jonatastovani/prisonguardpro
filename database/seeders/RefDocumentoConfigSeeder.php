@@ -15,7 +15,7 @@ class RefDocumentoConfigSeeder extends Seeder
         $iplocal = config('sistema.ipHost');
 
         $insert = [
-            ['tipo_id' => 'RG', 'mask' => 'RG', 'comprimento_int' => 'RG', 'validade_emissao_int' => 'RG', 'estado_id' => 'RG', 'orgao_exp_id' => 'RG', 'nacionalidade_id' => 'RG', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
+            ['tipo_id' => 1, 'mask' => '3', 'comprimento_int' => '3', 'validade_emissao_int' => 'RG', 'estado_id' => 'RG', 'orgao_exp_id' => 'RG', 'nacionalidade_id' => 'RG', 'created_user_id' => 1, 'created_ip' => $iplocal, 'created_at' => now()],
             
         ];
 
