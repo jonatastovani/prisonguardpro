@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->boolean('doc_nacional_bln')->default(false);
+            $table->boolean('bloqueado_perm_adm_bln')->default(false); // Somente a permissão de diretor geral acima podem alterar ou excluir
 
             $table->unsignedBigInteger('created_user_id');
             $table->foreign('created_user_id')->references('id')->on('users');

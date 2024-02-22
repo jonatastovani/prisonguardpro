@@ -48,7 +48,7 @@ class RefEscolaridadeController extends Controller
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
-        // Valida se não existe outro com o mesmo nome
+        // Valida se não existe outro com as mesmas informações
         $this->validarRecursoExistente($request);
 
         // Se a validação passou, crie um novo registro

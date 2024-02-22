@@ -33,14 +33,15 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof AuthorizationException) {
+            $message = $exception->getMessage() ? $exception->getMessage() : 'Você não possui permissão para realizar esta ação.';
+
             return response()->json([
                 'status' => 403,
-                'message' => 'Você não possui permissão para realizar esta ação.',
+                'message' => $message,
                 'timestamp' => CommonsFunctions::formatarDataTimeZonaAmericaSaoPaulo(now()),
             ], 403);
         }
-    
+
         return parent::render($request, $exception);
     }
-    
 }

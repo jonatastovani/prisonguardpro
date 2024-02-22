@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('ref_documento_configs', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
 
             $table->unsignedBigInteger('tipo_id');
             $table->foreign('tipo_id')->references('id')->on('ref_documento_tipos');

@@ -16,7 +16,7 @@ class RefPermissaoConfigSeeder extends Seeder
         $insert = [
             [
                 'permissao_id' => 1,
-                'permite_subst_bln' => '0',
+                'permite_subst_bln' => false,
                 'permissao_pai_id' => null,
                 'grupo_pai_id' => null,
                 'grupo_id' => null,
@@ -24,7 +24,7 @@ class RefPermissaoConfigSeeder extends Seeder
             ],
             [
                 'permissao_id' => 2,
-                'permite_subst_bln' => '0',
+                'permite_subst_bln' => false,
                 'permissao_pai_id' => 1,
                 'grupo_pai_id' => null,
                 'grupo_id' => 1,
@@ -32,7 +32,7 @@ class RefPermissaoConfigSeeder extends Seeder
             ],
             [
                 'permissao_id' => 3,
-                'permite_subst_bln' => '1',
+                'permite_subst_bln' => true,
                 'permissao_pai_id' => 2,
                 'grupo_pai_id' => null,
                 'grupo_id' => 2,
@@ -40,7 +40,7 @@ class RefPermissaoConfigSeeder extends Seeder
             ],
             [
                 'permissao_id' => 4,
-                'permite_subst_bln' => '1',
+                'permite_subst_bln' => true,
                 'permissao_pai_id' => 3,
                 'grupo_pai_id' => null,
                 'grupo_id' => 3,
@@ -48,17 +48,25 @@ class RefPermissaoConfigSeeder extends Seeder
             ],
             [
                 'permissao_id' => 5,
-                'permite_subst_bln' => '1',
+                'permite_subst_bln' => true,
                 'permissao_pai_id' => 4,
                 'grupo_pai_id' => null,
                 'grupo_id' => 4,
+                'ordem' => null,
+            ],
+            [
+                'permissao_id' => 6,
+                'permite_subst_bln' => false,
+                'permissao_pai_id' => 5,
+                'grupo_pai_id' => null,
+                'grupo_id' => 5,
                 'ordem' => null,
             ],
 
 
             // [
             //     'permissao_id' => 4,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 5,
@@ -66,7 +74,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 5,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 5,
@@ -74,7 +82,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 6,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 5,
@@ -82,7 +90,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 7,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 5,
@@ -90,7 +98,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 8,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 5,
@@ -98,7 +106,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 9,
-            //     'permite_subst_bln' => '1',
+            //     'permite_subst_bln' => true,
             //     'permissao_pai_id' => 62,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 3,
@@ -106,7 +114,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 10,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 6,
@@ -114,7 +122,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 11,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 11,
@@ -122,7 +130,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 12,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 11,
@@ -130,7 +138,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 13,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => null,
@@ -138,7 +146,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 14,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => null,
@@ -146,7 +154,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 15,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => null,
@@ -154,7 +162,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 16,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 12,
@@ -162,7 +170,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 17,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 12,
@@ -170,7 +178,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 18,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 12,
@@ -178,7 +186,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 19,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 13,
@@ -186,7 +194,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 20,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 13,
@@ -194,7 +202,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 21,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 11,
@@ -202,7 +210,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 22,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 5,
@@ -210,7 +218,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 23,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 6,
@@ -218,7 +226,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 24,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 7,
@@ -226,7 +234,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 25,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 7,
@@ -234,7 +242,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 26,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 7,
@@ -242,7 +250,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 27,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 7,
@@ -250,7 +258,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 28,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 8,
@@ -258,7 +266,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 29,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 8,
@@ -266,7 +274,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 30,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 8,
@@ -274,7 +282,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 31,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 9,
@@ -282,7 +290,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 32,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 9,
@@ -290,7 +298,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 33,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 9,
@@ -298,7 +306,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 34,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 10,
@@ -306,7 +314,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 35,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 10,
@@ -314,7 +322,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 36,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 10,
@@ -322,7 +330,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 37,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 14,
@@ -330,7 +338,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 38,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 14,
@@ -338,7 +346,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 39,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 14,
@@ -346,7 +354,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 40,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 14,
@@ -354,7 +362,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 41,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 14,
@@ -362,7 +370,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 42,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 14,
@@ -370,7 +378,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 43,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -378,7 +386,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 44,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -386,7 +394,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 45,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -394,7 +402,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 46,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -402,7 +410,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 47,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -410,7 +418,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 48,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -418,7 +426,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 49,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 16,
@@ -426,7 +434,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 50,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 16,
@@ -434,7 +442,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 51,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 16,
@@ -442,7 +450,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 52,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 15,
@@ -450,7 +458,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 54,
-            //     'permite_subst_bln' => '1',
+            //     'permite_subst_bln' => true,
             //     'permissao_pai_id' => 53,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 3,
@@ -458,7 +466,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 55,
-            //     'permite_subst_bln' => '1',
+            //     'permite_subst_bln' => true,
             //     'permissao_pai_id' => 53,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 3,
@@ -466,7 +474,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 56,
-            //     'permite_subst_bln' => '1',
+            //     'permite_subst_bln' => true,
             //     'permissao_pai_id' => 53,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 3,
@@ -474,7 +482,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 57,
-            //     'permite_subst_bln' => '1',
+            //     'permite_subst_bln' => true,
             //     'permissao_pai_id' => 53,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 3,
@@ -482,7 +490,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 58,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 54,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 17,
@@ -490,7 +498,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 59,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 55,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 17,
@@ -498,7 +506,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 60,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 56,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 17,
@@ -506,7 +514,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 61,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 57,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 17,
@@ -514,7 +522,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 63,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => null,
             //     'grupo_pai_id' => 17,
             //     'grupo_id' => 18,
@@ -522,7 +530,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 64,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => null,
             //     'grupo_pai_id' => 17,
             //     'grupo_id' => 18,
@@ -530,7 +538,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 65,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => null,
             //     'grupo_pai_id' => 17,
             //     'grupo_id' => 18,
@@ -538,7 +546,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 66,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => null,
             //     'grupo_pai_id' => 17,
             //     'grupo_id' => 18,
@@ -546,7 +554,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 67,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => null,
             //     'grupo_pai_id' => 17,
             //     'grupo_id' => 18,
@@ -554,7 +562,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 68,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => 17,
             //     'grupo_id' => 18,
@@ -562,7 +570,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 69,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 19,
@@ -570,7 +578,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 70,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 19,
@@ -578,7 +586,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 71,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 20,
@@ -586,7 +594,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 72,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 20,
@@ -594,7 +602,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 73,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 20,
@@ -602,7 +610,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 74,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 21,
@@ -610,7 +618,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 75,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 21,
@@ -618,7 +626,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 76,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 22,
@@ -626,7 +634,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 77,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 22,
@@ -634,7 +642,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 78,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 22,
@@ -642,7 +650,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 79,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 23,
@@ -650,7 +658,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 80,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 23,
@@ -658,7 +666,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 81,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 23,
@@ -666,7 +674,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 82,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 24,
@@ -674,7 +682,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 83,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 24,
@@ -682,7 +690,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 84,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 24,
@@ -690,7 +698,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 85,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 25,
@@ -698,7 +706,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 86,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 25,
@@ -706,7 +714,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 87,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 25,
@@ -714,7 +722,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 88,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 26,
@@ -722,7 +730,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 89,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 26,
@@ -730,7 +738,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 90,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 26,
@@ -738,7 +746,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 91,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 27,
@@ -746,7 +754,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 92,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 27,
@@ -754,7 +762,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 93,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 27,
@@ -762,7 +770,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 94,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 28,
@@ -770,7 +778,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 95,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 28,
@@ -778,7 +786,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 96,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 29,
@@ -786,7 +794,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 97,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 29,
@@ -794,7 +802,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 98,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 30,
@@ -802,7 +810,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 99,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 30,
@@ -810,7 +818,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 100,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 31,
@@ -818,7 +826,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 101,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 31,
@@ -826,7 +834,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 102,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 32,
@@ -834,7 +842,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 103,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 32,
@@ -842,7 +850,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 104,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 33,
@@ -850,7 +858,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 105,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 9,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 33,
@@ -858,7 +866,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 106,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 34,
@@ -866,7 +874,7 @@ class RefPermissaoConfigSeeder extends Seeder
             // ],
             // [
             //     'permissao_id' => 107,
-            //     'permite_subst_bln' => '0',
+            //     'permite_subst_bln' => false,
             //     'permissao_pai_id' => 3,
             //     'grupo_pai_id' => null,
             //     'grupo_id' => 34,

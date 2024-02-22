@@ -14,6 +14,7 @@ use App\Http\Controllers\RefCidadeController;
 use App\Http\Controllers\RefCoresController;
 use App\Http\Controllers\RefCrencaController;
 use App\Http\Controllers\RefCutisController;
+use App\Http\Controllers\RefDocumentoConfigController;
 use App\Http\Controllers\RefDocumentoOrgaoEmissorController;
 use App\Http\Controllers\RefDocumentoTipoController;
 use App\Http\Controllers\RefEscolaridadeController;
@@ -154,27 +155,44 @@ route::prefix('/v1')->group(function () {
                 });
             });
 
-            // Rotas relacionadas ao RefDocumentoTipoController
-            Route::controller(RefDocumentoTipoController::class)->group(function () {
-                Route::prefix('/documentotipo')->group(function () {
-                    Route::get('', 'index');
-                    Route::get('/{id}', 'show');
-                    Route::post('', 'store');
-                    Route::put('/{id}', 'update');
-                    Route::delete('/{id}', 'destroy');
+            // Rotas com prefixo aos Documentos
+            Route::prefix('/documentos')->group(function () {
+                
+                // Rotas relacionadas ao RefDocumentoTipoController
+                Route::controller(RefDocumentoTipoController::class)->group(function () {
+                    Route::prefix('/tipos')->group(function () {
+                        Route::get('', 'index');
+                        Route::get('/{id}', 'show');
+                        Route::post('', 'store');
+                        Route::put('/{id}', 'update');
+                        Route::delete('/{id}', 'destroy');
+                    });
                 });
-            });
 
-            // Rotas relacionadas ao RefDocumentoOrgaoEmissor
-            Route::controller(RefDocumentoOrgaoEmissorController::class)->group(function () {
-                Route::prefix('/documentoemissor')->group(function () {
-                    Route::get('', 'index');
-                    Route::get('/{id}', 'show');
-                    Route::post('', 'store');
-                    Route::put('/{id}', 'update');
-                    Route::delete('/{id}', 'destroy');
+                // Rotas relacionadas ao RefDocumentoOrgaoEmissorController
+                Route::controller(RefDocumentoOrgaoEmissorController::class)->group(function () {
+                    Route::prefix('/orgaoemissor')->group(function () {
+                        Route::get('', 'index');
+                        Route::get('/{id}', 'show');
+                        Route::post('', 'store');
+                        Route::put('/{id}', 'update');
+                        Route::delete('/{id}', 'destroy');
+                    });
                 });
-            });
+                
+                // Rotas relacionadas ao RefDocumentoConfigController
+                Route::controller(RefDocumentoConfigController::class)->group(function () {
+                    Route::prefix('/configs')->group(function () {
+                        Route::get('', 'index');
+                        Route::get('/{id}', 'show');
+                        Route::post('', 'store');
+                        Route::put('/{id}', 'update');
+                        Route::delete('/{id}', 'destroy');
+                    });
+                });
+
+            });    
+
 
             // Rotas relacionadas ao RefEscolaridadeController
             Route::controller(RefEscolaridadeController::class)->group(function () {
@@ -411,7 +429,6 @@ route::prefix('/v1')->group(function () {
                     Route::put('/{passagem_id}', 'update');
                     Route::delete('/{id}', 'destroy');
                 });
-
             });
         });
 

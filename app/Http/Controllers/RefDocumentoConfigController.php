@@ -136,15 +136,28 @@ class RefDocumentoConfigController extends Controller
 
     private function validarRecursoExistente($request, $id = null)
     {
-        $query = RefDocumentoConfig::join('ref_documento_tipos','ref_documento_tipos.id','=','ref_documento_configs.tipo_id')
-        ->where('tipo_id', $request->input('tipo_id'))
+        $query = RefDocumentoConfig::join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.tipo_id')
+            ->where('ref_documento_configs.tipo_id', $request->input('tipo_id'))
+            ->where(function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->when($request, function($query, $request){
+                        if($request->has('estado_id') && $request->input('orgao_exp_id')){
+                            $query->where('ref_documento_configs.estado_id', $request->input('estado_id'))
+                            ->where('ref_documento_configs.orgao_exp_id', $request->input('orgao_exp_id'))
+                            ->where('ref_documento_configs.nacionalidade_id', null);
+                        }
+                    });
+                })->orWhere(function ($query) use ($request) {
+                    $query->when($request, function($query, $request){
+                        if($request->has('nacionalidade_id')){
+                            $query->where('ref_documento_configs.nacionalidade_id', $request->input('nacionalidade_id'))
+                        ->where('ref_documento_tipos.doc_nacional', true);
+                        }
+                    });
+                });
+            });
 
-        // Configirar aqui os filtros para ver se existe o mesmo documento no estado
-        // Se o documento for nacional, então coloca o filtro de país,
-        // Se não for nacional então se aplica o filtro de estado, porque o doc tem que ser por estado
-            ->orWhere('estado_id', $request->input('estado_id'))
-            ->where('doc_nacional', true);
-
+            
         if ($id !== null) {
             $query->whereNot('ref_documento_configs.id', $id);
         }
@@ -159,4 +172,3 @@ class RefDocumentoConfigController extends Controller
         }
     }
 }
-
