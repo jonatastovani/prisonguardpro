@@ -39,7 +39,7 @@ $(document).ready(function () {
         loading.modalOpen();
 
         $("#modalLoading").modal('show');
-        
+
         matricula.on('input', function () {
             $('#digito').val(funcoesPresos.retornaDigitoMatricula(matricula.val()));
         })
@@ -274,9 +274,9 @@ $(document).ready(function () {
                     preencherQualificativaProvisoria(response.data);
                 }
 
-                if (response.data.artigos){
+                if (response.data.artigos) {
                     response.data.artigos.forEach(artigo => {
-                        inserirArtigos(artigo)                
+                        inserirArtigos(artigo)
                     });
                 }
 
@@ -286,7 +286,7 @@ $(document).ready(function () {
                 $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
                 console.log(error);
             })
-            .finally(function (){
+            .finally(function () {
                 loading.modalClose();
             });
 
@@ -460,9 +460,9 @@ $(document).ready(function () {
     function acaoBtnDeletar(idDiv, button) {
 
         const obj = new modalMessage();
-        obj.setMessage =`Confirma a exclusão deste artigo para o preso?`;
-        obj.setTitle ='Confirmação de exclusão de artigo';
-        obj.setFocusElementWhenClosingModal = button ;
+        obj.setMessage = `Confirma a exclusão deste artigo para o preso?`;
+        obj.setTitle = 'Confirmação de exclusão de artigo';
+        obj.setFocusElementWhenClosingModal = button;
         obj.modalOpen().then(function (result) {
 
             if (result) {
@@ -509,9 +509,9 @@ $(document).ready(function () {
         obj.envRequest()
             .then(function (result) {
                 const token = result.token;
-                const nome = result.data.nome_social?result.data.nome_social : result.data.nome;
+                const nome = result.data.nome_social ? result.data.nome_social : result.data.nome;
                 const message = `Qualificativa do(a) preso(a) ${commonFunctions.cutText(nome)} enviada com sucesso.`;
-                
+
                 let btn = commonFunctions.redirectForm(redirect, [
                     { name: 'arrNotifyMessage', value: [{ message: message, type: 'success' }] },
                     { name: '_token', value: token }
@@ -534,4 +534,6 @@ $(document).ready(function () {
 
     init();
 
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 });

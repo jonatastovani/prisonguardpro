@@ -993,4 +993,44 @@ export class commonFunctions {
         }
     }
 
+    static returnArrayToHTML(array, options = {}) {
+        const {
+            tag = 'li'
+        } = options;
+
+        let strItems = '';
+        array.forEach(item => {
+            strItems += `<${tag}>${item}</${tag}>`
+        });
+
+        return strItems;
+    }
+
+    static generateNotification(message, type, options = {}) {
+        const {
+            messageTag = 'h6',
+            messageClass = '',
+            applyTag = true,
+            itemsArray = null,
+            itemsTag = 'li',
+            autoRender = true,
+        } = options;
+
+        if (applyTag) {
+            const cls = messageClass ? `class="${messageClass}"` : '';
+            message = `<${messageTag} ${cls}>${message}</${messageTag}>`
+        }
+
+        let strItems = '';
+        if (itemsArray) {
+            strItems = commonFunctions.returnArrayToHTML(itemsArray, { tag: itemsTag });
+            strItems = strItems ? `<hr class="m-1"><ol class="mb-0">${strItems}</ol>` : '';
+            message += strItems;
+        }
+
+        return new Promise(async function (resolve) {
+            resolve(await new systemNotifications(message, type, autoRender));
+        })
+    }
+
 }

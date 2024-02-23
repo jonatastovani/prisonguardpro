@@ -224,6 +224,11 @@
                         title="Sair da edição da Entrada de Presos" style="max-width: 100px;">
                         Sair
                     </a>
+
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+                        Tooltip on top
+                      </button>
+                      
                 </div>
             </div>
         </div>
