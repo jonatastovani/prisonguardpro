@@ -127,7 +127,7 @@ export class conectAjax {
                             description: 'Este usuário não possui permissão para realizar esta ação.'
                         });
                     } else if (xhr.responseText) {
-                        reject(self.tratamentoErro(xhr));
+                        reject(self.errorHandling(xhr));
                     } else {
                         reject({
                             xhr: xhr,
@@ -193,7 +193,7 @@ export class conectAjax {
                             description: 'Este usuário não possui permissão para realizar esta ação.'
                         });
                     } else if (xhr.responseText) {
-                        reject(self.tratamentoErro(xhr));
+                        reject(self.errorHandling(xhr));
                     } else {
                         reject({
                             xhr: xhr,
@@ -249,6 +249,54 @@ export class conectAjax {
         }
     }
 
+    errorHandling(xhr) {
+        try {
+            const responseText = JSON.parse(xhr.responseText);
+            let itemsMessage = [];
+            let errors = [];
+
+            console.error('Erro HTTP:', xhr.status);
+            console.error(responseText)
+            console.error(`Código de erro: ${responseText.trace_id}`);
+
+            if (responseText.data && responseText.data.errors) {
+                errors = responseText.data.errors;
+                // Verifica se 'errors' é um array ou um objeto
+                if (Array.isArray(responseText.data.errors)) {
+                    itemsMessage = responseText.data.errors.map(error => error);
+                } else {
+                    Object.keys(responseText.data.errors).forEach(key => {
+                        if (responseText.data.errors[key].error) {
+                            itemsMessage = itemsMessage.concat(responseText.data.errors[key].error)
+                        } else {
+                            itemsMessage = itemsMessage.concat(responseText.data.errors[key])
+                        }
+                    });
+                }
+            }
+
+            const messageNotify = `${responseText.message}\n${itemsMessage.join('\n')}`;
+
+            return {
+                status: xhr.status,
+                message: responseText.message,
+                errors: errors,
+                itemsMessage: itemsMessage,
+                joinErrors: itemsMessage.join('\n'),
+                messageNotify: messageNotify,
+                traceId: responseText.trace_id
+                // htmlAlert: commonFunctions.returnHTMLAlert(responseText.message, 'error', { itemsArray: itemsMessage }),
+            };
+        } catch (parseError) {
+            console.error('Erro HTTP:', xhr.status);
+            console.error(`Descrição do erro: ${xhr.responseText}`);
+            return {
+                status: xhr.status,
+                descricao: xhr.responseText
+            };
+        }
+    }
+
     /**
      * Envia uma solicitação 'DELETE' para a API e retorna uma Promise que resolve com os dados de resposta.
      *
@@ -294,7 +342,7 @@ export class conectAjax {
                             description: 'Este usuário não possui permissão para realizar esta ação.'
                         });
                     } else if (xhr.responseText) {
-                        reject(self.tratamentoErro(xhr));
+                        reject(self.errorHandling(xhr));
                     } else {
                         reject({
                             xhr: xhr,

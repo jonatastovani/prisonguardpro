@@ -1,5 +1,6 @@
 import { conectAjax } from "../ajax/conectAjax.js";
 import { enumAction } from "./enumAction.js";
+import { systemNotifications } from "./systemNotifications.js";
 
 export class commonFunctions {
 
@@ -970,26 +971,44 @@ export class commonFunctions {
      * 
      * @param {string} string - O texto a ser cortado.
      * @param {Object} options - As opções para o corte do texto.
-     * @param {number} [options.qttWords=2] - A quantidade de palavras a serem retornadas. Por padrão, são retornadas duas palavras.
+     * @param {number} [options.qttWords=2] - A quantidade de palavras a serem retornadas. Por padrão, é retornada uma palavra.
      * @param {number} [options.maxLength=0] - A quantidade máxima de letras a serem retornadas. Se o número de palavras exceder, as letras adicionais são cortadas para atender a esse limite.
+     * @param {number} [options.firstLastName=false] - Em casos de abreviações de nomes, enviar True para retorno do primeiro e último nome. Esta opção ainda é submetida ao corte de quantidade máxima de letras. (padrão é false)
      * @returns {string} O texto cortado conforme as opções especificadas.
      */
     static cutText(string, options = {}) {
-        const { qttWords = 2, maxLength = 0 } = options;
-
+        const { qttWords = 1, maxLength = 0, firstLastName = false } = options;
+    
         if (maxLength > 0) {
             let words = string.split(/\s+/);
-            let slicedWords = words.slice(0, qttWords);
-            let slicedText = slicedWords.join(' ');
+            let slicedText = ''
+            
+            if (firstLastName) {
+                // Captura o primeiro e último nome
+                slicedText = words[0] + " " + words[words.length - 1];
+            } else {
+                let slicedWords = words.slice(0, qttWords);
+                slicedText = slicedWords.join(' ');
+            }
 
             if (slicedText.length > maxLength) {
                 slicedText = slicedText.substring(0, maxLength);
             }
-
+    
             return slicedText;
         } else {
             let words = string.split(/\s+/);
-            return words.slice(0, qttWords).join(' ');
+            let slicedText = '';
+            
+            if (firstLastName) {
+                // Captura o primeiro e último nome
+                slicedText = words[0] + " " + words[words.length - 1];
+            }else{
+                slicedText = words.slice(0, qttWords).join(' ');
+            }
+            console.log(slicedText)
+    
+            return slicedText;
         }
     }
 
@@ -1014,6 +1033,7 @@ export class commonFunctions {
             itemsArray = null,
             itemsTag = 'li',
             autoRender = true,
+            traceId = undefined,
         } = options;
 
         if (applyTag) {
@@ -1029,7 +1049,9 @@ export class commonFunctions {
         }
 
         return new Promise(async function (resolve) {
-            resolve(await new systemNotifications(message, type, autoRender));
+            const notification = new systemNotifications(message, type);
+            notification.setTraceId = traceId;
+            resolve(await notification.render());
         })
     }
 

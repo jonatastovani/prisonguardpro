@@ -9,7 +9,7 @@ export class bootstrapFunctions {
     static #createOrGetDivToastContainer() {
         let toastContainer = document.getElementById('toastContainer');
         if (!toastContainer) {
-            const body = document.querySelector('.container-boot');
+            const body = document.querySelector('body');
             body.insertAdjacentHTML("beforeend", '<div class="toast-container position-fixed mh-100 overflow-auto top-0 bottom-0 end-0 p-3" id="toastContainer"></div>');
             toastContainer = document.getElementById('toastContainer');
         }
@@ -28,6 +28,7 @@ export class bootstrapFunctions {
      * @param {string} [options.customClass=''] - Classes CSS personalizadas para a notificação.
      * @param {Function} [options.onClose=null] - Callback a ser chamado quando a notificação é fechada.
      * @param {boolean} [options.autoShow=true] - Indica se a notificação deve aparecer automaticamente (padrão: true).
+     * @param {string} [options.traceId=undefined] - Código de erro para ser renderizado juntamente com a mensagem.
      */
     static createNotification(messageHTML, options = {}) {
         const {
@@ -38,7 +39,8 @@ export class bootstrapFunctions {
             autoHide = true,
             customClass = '',
             onClose = null,
-            autoShow = true
+            autoShow = true,
+            traceId = undefined,
         } = options;
 
         let thematic = '';
@@ -73,7 +75,7 @@ export class bootstrapFunctions {
 
         titleHeader = title ? title : titleHeader;
         icoHeader = ico ? ico : icoHeader;
-
+        messageHTML += traceId?`<hr class="m-1"><p class="mb-0 fst-italic fw-semibold">${traceId}</p>`:'';
         const id = `toast${Date.now()}`;
         let toastHTML = `
             <div class="toast ${thematic} ${customClass}" id="${id}" role="alert" aria-live="assertive" aria-atomic="true"
@@ -96,7 +98,7 @@ export class bootstrapFunctions {
         if (autoShow) {
             bsToast.show();
         }
-        
-        return id;
+
+        return Promise.resolve(id);
     }
 }

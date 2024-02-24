@@ -283,7 +283,7 @@ $(document).ready(function () {
             })
             .catch(function (error) {
                 $('input, .btn, select, textarea').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
+                commonFunctions.generateNotification(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.<br>Erro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
                 console.log(error);
             })
             .finally(function () {
@@ -383,8 +383,9 @@ $(document).ready(function () {
             descricao = response.data.descricao;
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            commonFunctions.generateNotification(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso.<br>Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
         }
+
         let strPreso = `
             <div id="${idDiv}" class="card col-sm-6 p-0">
                 <div class="card-header py-1">
@@ -439,7 +440,7 @@ $(document).ready(function () {
                 message = 'Artigo não encontrado no Array Artigos'
                 console.error(message);
                 console.error(arrArtigos, `Index: ${index}`);
-                $.notify(`Não foi possível editar o artigo.\nSe o problema persistir consulte o programador.\nErro: ${message}`, 'error');
+                commonFunctions.generateNotification(`Não foi possível editar o artigo.<br>Se o problema persistir consulte o programador.\nErro: ${message}`, 'error');
             }
 
         });
@@ -507,10 +508,10 @@ $(document).ready(function () {
 
         obj.setData(data);
         obj.envRequest()
-            .then(function (result) {
-                const token = result.token;
-                const nome = result.data.nome_social ? result.data.nome_social : result.data.nome;
-                const message = `Qualificativa do(a) preso(a) ${commonFunctions.cutText(nome)} enviada com sucesso.`;
+            .then(function (response) {
+                const token = response.token;
+                const nome = response.data.nome_social ? response.data.nome_social : response.data.nome;
+                const message = `Qualificativa do(a) preso(a) ${commonFunctions.cutText(nome, { firstLastName: true })} enviada com sucesso.`;
 
                 let btn = commonFunctions.redirectForm(redirect, [
                     { name: 'arrNotifyMessage', value: [{ message: message, type: 'success' }] },
@@ -522,7 +523,7 @@ $(document).ready(function () {
             .catch(function (error) {
 
                 console.error(error);
-                $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: error.traceId ? error.traceId : undefined });
 
             })
             .finally(function () {
@@ -534,6 +535,4 @@ $(document).ready(function () {
 
     init();
 
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 });

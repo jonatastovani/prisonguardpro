@@ -93,7 +93,7 @@ $(document).ready(function () {
             })
             .catch(function (error) {
                 $('input, .btn, select').prop('disabled', true);
-                $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.\nErro: ${error.message}`, 'error');
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: error.traceId ? error.traceId : undefined });
             });
 
     }
@@ -299,7 +299,7 @@ $(document).ready(function () {
                 .catch(function (error) {
 
                     console.error(error);
-                    $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                    commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: error.traceId ? error.traceId : undefined });
 
                 })
                 .finally(function () {

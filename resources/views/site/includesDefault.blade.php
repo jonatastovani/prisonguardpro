@@ -46,15 +46,16 @@ foreach ($_POST as $key => $value) {
 }
 
 if (count($arrNotify)) { ?>
-	<script>
+	<script type="module">
+        import { commonFunctions } from "{{ asset('js/common/commonFunctions.js') }}";
 
 		$(document).ready(function() {
 			const arrNotifyMessage = <?= $arrNotify['arrNotifyMessage'] ?>;
 			
 			arrNotifyMessage.forEach(notifyMessage => {
+                
+                commonFunctions.generateNotification(notifyMessage.message, notifyMessage.type ? notifyMessage.type : 'info');
 
-				$.notify(notifyMessage.message, notifyMessage.type ? notifyMessage.type : 'info');
-				
 			});
 
 		});
