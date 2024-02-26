@@ -157,8 +157,7 @@ $(document).ready(function () {
                     tableEntradasPresos.append(strHTML);
 
                 });
-
-
+                
             })
             .catch(function (error) {
 

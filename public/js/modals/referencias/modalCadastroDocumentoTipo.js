@@ -251,7 +251,7 @@ export class modalCadastroDocumentoTipo {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            commonFunctions.generateNotification(error.message, 'error');
         }
 
     }
@@ -270,7 +270,7 @@ export class modalCadastroDocumentoTipo {
             }
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            commonFunctions.generateNotification(error.message, 'error');
             self.#modalClose();
         }
 
@@ -322,7 +322,7 @@ export class modalCadastroDocumentoTipo {
 
                 const response = await obj.envRequest();
                 if (response.data) {
-                    $.notify(`Dados enviados com sucesso!`, 'success');
+                    commonFunctions.generateNotification(`Dados enviados com sucesso!`, 'success');
 
                     self.#promisseReturnValue.refresh = true;
                     self.generateFilters();
@@ -337,7 +337,7 @@ export class modalCadastroDocumentoTipo {
             } catch (error) {
 
                 console.log(error);
-                $.notify(`Não foi possível enviar os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                commonFunctions.generateNotification(error.message, 'error');
             }
             finally {
                 commonFunctions.simulateLoading(btn, false);
@@ -379,7 +379,7 @@ export class modalCadastroDocumentoTipo {
             try {
                 const response = await obj.deleteRequest();
 
-                $.notify(`Tipo de Documento deletado com sucesso!`, 'success');
+                commonfunctions.generatenotification(`Tipo de Documento deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();
@@ -387,7 +387,7 @@ export class modalCadastroDocumentoTipo {
 
             } catch (error) {
                 console.error(error);
-                $.notify(`Não foi possível executar a ação.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+                commonFunctions.generateNotification(error.message, 'error');
             }
         }
 

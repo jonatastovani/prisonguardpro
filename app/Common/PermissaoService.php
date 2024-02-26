@@ -31,8 +31,8 @@ class PermissaoService
             return self::temPermissaoRecursivaAcima($user, $permissoesPai);
         }
 
-        // return true;
-        return false;
+        return true;
+        // return false;
     }
     
     // public static function temPermissao(User $user, $permissaoId)

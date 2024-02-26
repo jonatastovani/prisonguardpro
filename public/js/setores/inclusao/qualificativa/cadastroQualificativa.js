@@ -283,7 +283,7 @@ $(document).ready(function () {
             })
             .catch(function (error) {
                 $('input, .btn, select, textarea').prop('disabled', true);
-                commonFunctions.generateNotification(`Não foi possível obter os dados.\nSe o problema persistir consulte o programador.<br>Erro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
+                commonFunctions.generateNotification(error.message, 'error', { traceId: error.traceId ? error.traceId : undefined });
                 console.log(error);
             })
             .finally(function () {
@@ -383,7 +383,7 @@ $(document).ready(function () {
             descricao = response.data.descricao;
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso.<br>Se o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
+            commonFunctions.generateNotification(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso. <br>Erro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
         }
 
         let strPreso = `
@@ -440,7 +440,7 @@ $(document).ready(function () {
                 message = 'Artigo não encontrado no Array Artigos'
                 console.error(message);
                 console.error(arrArtigos, `Index: ${index}`);
-                commonFunctions.generateNotification(`Não foi possível editar o artigo.<br>Se o problema persistir consulte o programador.\nErro: ${message}`, 'error');
+                commonFunctions.generateNotification(`Não foi possível editar o artigo. <br>Erro: ${message}`, 'error');
             }
 
         });

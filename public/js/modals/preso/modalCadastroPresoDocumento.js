@@ -210,7 +210,7 @@ export class modalCadastroPresoDocumento {
 
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            commonFunctions.generateNotification(error.message, 'error');
             self.#endTimer = true;
         }
 

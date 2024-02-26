@@ -76,7 +76,7 @@ export class modalAlterarPresoConvivio {
 
         } else {
             const error = `O idDiv não foi informado ou não existe.\nidDiv = '${this.#idDiv}'`;
-            $.notify(`Não foi possível alterar o tipo de preso.\nErro: ${error}`)
+            commonFunctions.generateNotification(`Não foi possível alterar o tipo de preso.\nErro: ${error}`,'error')
             console.error(error);
         }
 
@@ -152,7 +152,7 @@ export class modalAlterarPresoConvivio {
             }
         } catch (error) {
             console.error(error);
-            $.notify(`Não foi possível obter os dados.\nSe o problema persistir consulte o desenvolvedor.\nErro: ${error.message}`, 'error');
+            commonFunctions.generateNotification(error.message, 'error');
             self.modalFechar();
         }
 
