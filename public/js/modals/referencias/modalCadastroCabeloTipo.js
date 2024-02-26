@@ -251,7 +251,8 @@ export class modalCadastroCabeloTipo {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
         }
 
     }
@@ -270,7 +271,8 @@ export class modalCadastroCabeloTipo {
             }
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             self.#modalClose();
         }
 
@@ -337,7 +339,8 @@ export class modalCadastroCabeloTipo {
             } catch (error) {
 
                 console.log(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
             finally {
                 commonFunctions.simulateLoading(btn, false);
@@ -387,7 +390,8 @@ export class modalCadastroCabeloTipo {
 
             } catch (error) {
                 console.error(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
         }
 

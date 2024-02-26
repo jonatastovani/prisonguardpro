@@ -523,7 +523,8 @@ $(document).ready(function () {
             .catch(function (error) {
 
                 console.error(error);
-                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: error.traceId ? error.traceId : undefined });
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
 
             })
             .finally(function () {

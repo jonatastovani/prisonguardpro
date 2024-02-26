@@ -151,7 +151,7 @@ export class modalCadastroArtigo {
 
         const self = this;
         const modal = $(self.#idModal);
-        
+
         self.#idRegister = null;
         self.#action = enumAction.POST;
         modal.find('form')[0].reset();
@@ -252,7 +252,8 @@ export class modalCadastroArtigo {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
         }
 
     }
@@ -272,7 +273,8 @@ export class modalCadastroArtigo {
             }
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             self.#modalClose();
         }
 
@@ -339,7 +341,8 @@ export class modalCadastroArtigo {
             } catch (error) {
 
                 console.log(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
             finally {
                 commonFunctions.simulateLoading(btn, false);
@@ -389,7 +392,8 @@ export class modalCadastroArtigo {
 
             } catch (error) {
                 console.error(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
         }
 

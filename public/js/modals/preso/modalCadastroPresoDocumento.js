@@ -210,8 +210,9 @@ export class modalCadastroPresoDocumento {
 
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
-            self.#endTimer = true;
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
+        self.#endTimer = true;
         }
 
     }

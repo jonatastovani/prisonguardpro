@@ -281,7 +281,8 @@ export class modalCadastroCidade {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
         }
 
     }
@@ -302,7 +303,8 @@ export class modalCadastroCidade {
             }
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             self.#modalClose();
         }
 
@@ -369,7 +371,8 @@ export class modalCadastroCidade {
             } catch (error) {
 
                 console.log(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
             finally {
                 commonFunctions.simulateLoading(btn, false);
@@ -411,7 +414,7 @@ export class modalCadastroCidade {
             try {
                 const response = await obj.deleteRequest();
 
-                commonfunctions.generatenotification(`Cidade deletado com sucesso!`, 'success');
+                commonFunctions.generateNotification(`Cidade deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();
@@ -419,7 +422,8 @@ export class modalCadastroCidade {
 
             } catch (error) {
                 console.error(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
         }
 

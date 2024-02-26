@@ -27,6 +27,8 @@
                                     <th class="text-center">#</th>
                                     <th class="text-center">Ação</th>
                                     <th>Nome</th>
+                                    <th data-bs-toggle="tooltip" data-bs-title="Se o documento único nacionalmente, Ex: CPF, Passaporte...">Doc Nacional</th>
+                                    <th data-bs-toggle="tooltip" data-bs-title="Se o tipo de documento é bloqueado somente para Administradores do Sistema alterarem.">Bloq. Admin</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

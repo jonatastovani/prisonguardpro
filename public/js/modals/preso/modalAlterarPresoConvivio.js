@@ -76,7 +76,7 @@ export class modalAlterarPresoConvivio {
 
         } else {
             const error = `O idDiv não foi informado ou não existe.\nidDiv = '${this.#idDiv}'`;
-            commonFunctions.generateNotification(`Não foi possível alterar o tipo de preso.\nErro: ${error}`,'error')
+            commonFunctions.generateNotification(`Não foi possível alterar o tipo de preso.\nErro: ${error}`, 'error')
             console.error(error);
         }
 
@@ -108,7 +108,7 @@ export class modalAlterarPresoConvivio {
 
         const self = this;
 
-        $(self.#idModal).on('click','.btn-cancel, .btn-close', function () {
+        $(self.#idModal).on('click', '.btn-cancel, .btn-close', function () {
             self.#finalizaTimer = true;
         });
 
@@ -152,7 +152,8 @@ export class modalAlterarPresoConvivio {
             }
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             self.modalFechar();
         }
 
@@ -161,7 +162,7 @@ export class modalAlterarPresoConvivio {
     addQueryEvents(tipo) {
 
         const self = this;
-        const btn = $(`#btnConvivoTipo${tipo.id}`).click(function(){
+        const btn = $(`#btnConvivoTipo${tipo.id}`).click(function () {
             self.#retornoPromisse = tipo;
         })
     }

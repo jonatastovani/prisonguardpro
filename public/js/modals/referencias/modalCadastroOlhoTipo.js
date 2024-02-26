@@ -252,7 +252,8 @@ export class modalCadastroOlhoTipo {
         } catch (error) {
             self.#endTimer = true;
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
         }
 
     }
@@ -272,7 +273,8 @@ export class modalCadastroOlhoTipo {
             }
         } catch (error) {
             console.error(error);
-            commonFunctions.generateNotification(error.message, 'error');
+            const traceId = error.traceId ? error.traceId : undefined;
+            commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             self.#modalClose();
         }
 
@@ -339,7 +341,8 @@ export class modalCadastroOlhoTipo {
             } catch (error) {
 
                 console.log(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
             finally {
                 commonFunctions.simulateLoading(btn, false);
@@ -381,7 +384,7 @@ export class modalCadastroOlhoTipo {
             try {
                 const response = await obj.deleteRequest();
 
-                commonfunctions.generatenotification(`Tipo de Olhos deletado com sucesso!`, 'success');
+                commonFunctions.generateNotification(`Tipo de Olhos deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();
@@ -389,7 +392,8 @@ export class modalCadastroOlhoTipo {
 
             } catch (error) {
                 console.error(error);
-                commonFunctions.generateNotification(error.message, 'error');
+                const traceId = error.traceId ? error.traceId : undefined;
+                commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
             }
         }
 

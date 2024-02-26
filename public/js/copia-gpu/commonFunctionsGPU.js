@@ -2,7 +2,7 @@ import { conectAjax } from "../conectAjax.js";
 import { enumAction } from "./enumAction.js";
 import { systemNotifications } from "./systemNotifications.js";
 
-export class commonFunctions {
+export class commonFunctionsGPU {
 
     /**
      * Removes all non-numeric characters from a string.
