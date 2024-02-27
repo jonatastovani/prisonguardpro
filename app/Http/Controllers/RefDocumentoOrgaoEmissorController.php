@@ -19,6 +19,50 @@ class RefDocumentoOrgaoEmissorController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resource = RefDocumentoOrgaoEmissor::where('nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orderBy('nome')
+            ->get();
+
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
+    public function indexSelect2(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
+
+        CommonsFunctions::validacaoRequest($request, $rules);
+
+        $resources = RefDocumentoOrgaoEmissor::where('nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orderBy('nome')
+            ->get();
+
+        // Mapear os resultados para criar um array com os campos id e text
+        $mappedResults = $resources->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'text' => $item->sigla . " - " . $item->nome,
+            ];
+        });
+
+        $response = RestResponse::createSuccessResponse($mappedResults, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

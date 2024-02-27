@@ -58,7 +58,7 @@
     @include('site.includesDefault')
     @include('common.modalLoading')
     @include('common.modalMessage')
-    {{-- <script type="module" src="{{ asset('js/script.js') }}"></script> --}}
+    {{-- <script type="module" src="{{ asset('js/site/scriptFinal.js') }}"></script> --}}
 
 </body>
 

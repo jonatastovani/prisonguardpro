@@ -257,30 +257,58 @@ export class commonFunctions {
      *                            or a string formatted with the element values ​​(returnType 2).
      */
     static getInputsValues(container, returnType = 1, blnDisabled = false, keyId = false) {
-
         const formData = {};
         let strReturn = '';
 
-        // const elemInput = form.elements;
         const elemInput = $(container).find('input, select, textarea');
 
-        for (let i = 0; i < elemInput.length; i++) {
-            const element = elemInput[i];
+        elemInput.each(function () {
+            const element = $(this)[0];
             const id = element.id;
             const name = element.name;
             const val = element.value;
             const disabled = element.disabled;
 
-            if (blnDisabled || !blnDisabled && !disabled) {
-                if ((id && keyId)) {
-                    formData[id] = val.trim();
-                    strReturn += `${id}:${val.trim()}\n`;
-                } else if ((name && !keyId)) {
-                    formData[name] = val.trim();
-                    strReturn += `${name}:${val.trim()}\n`;
+            if (blnDisabled || (!blnDisabled && !disabled)) {
+                if (element.type === 'radio') {
+                    if (element.checked) {
+                        if ((id && keyId)) {
+                            formData[id] = val.trim();
+                            strReturn += `${id}:${val.trim()}\n`;
+                        } else if ((name && !keyId)) {
+                            formData[name] = val.trim();
+                            strReturn += `${name}:${val.trim()}\n`;
+                        }
+                    }
+                } else if (element.type === 'checkbox') {
+                    if (element.checked) {
+                        if ((id && keyId)) {
+                            formData[id] = true;
+                            strReturn += `${id}:${true}\n`;
+                        } else if ((name && !keyId)) {
+                            formData[name] = true;
+                            strReturn += `${name}:${true}\n`;
+                        }
+                    } else {
+                        if ((id && keyId)) {
+                            formData[id] = false;
+                            strReturn += `${id}:${false}\n`;
+                        } else if ((name && !keyId)) {
+                            formData[name] = false;
+                            strReturn += `${name}:${false}\n`;
+                        }
+                    }
+                } else {
+                    if ((id && keyId)) {
+                        formData[id] = val.trim();
+                        strReturn += `${id}:${val.trim()}\n`;
+                    } else if ((name && !keyId)) {
+                        formData[name] = val.trim();
+                        strReturn += `${name}:${val.trim()}\n`;
+                    }
                 }
             }
-        }
+        });
 
         switch (returnType) {
             case 1:
@@ -289,7 +317,6 @@ export class commonFunctions {
             case 2:
                 return strReturn;
         }
-
     }
 
     /**

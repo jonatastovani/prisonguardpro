@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
 use App\Models\RefDocumentoConfig;
+use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
 
 class RefDocumentoConfigController extends Controller
@@ -31,7 +32,7 @@ class RefDocumentoConfigController extends Controller
             'comprimento' => 'nullable|integer',
             'validade_emissao' => 'nullable|integer',
             'estado_id' => 'nullable|integer',
-            'orgao_exp_id' => 'nullable|integer',
+            'orgao_exp_id' => 'required_with:estado_id|integer',
             'nacionalidade_id' => 'nullable|integer',
         ];
 
@@ -42,8 +43,11 @@ class RefDocumentoConfigController extends Controller
 
         // Se a validação passou, crie um novo registro
         $novo = new RefDocumentoConfig();
-        $novo->nome = $request->input('nome');
+        $novo->tipo_id = $request->input('tipo_id');
+
+        if($request->has(''))
         $novo->sigla = $request->input('sigla');
+
 
         CommonsFunctions::inserirInfoCreated($novo);
 
@@ -125,7 +129,7 @@ class RefDocumentoConfigController extends Controller
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O ID do orgão emissor informado não existe ou foi excluído.";
+            $mensagem = "O Documento informado não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
@@ -157,7 +161,7 @@ class RefDocumentoConfigController extends Controller
                 });
             });
 
-            
+
         if ($id !== null) {
             $query->whereNot('ref_documento_configs.id', $id);
         }
@@ -171,4 +175,28 @@ class RefDocumentoConfigController extends Controller
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
     }
+
+    private function VerificaDocumentoTipo(RefDocumentoConfig $retorno, Request $request, &$arrErrors)
+    {
+        $retorno->tipo_id = $request['tipo_id'];
+
+        $resource = RefDocumentoTipo::find($retorno->tipo_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O Tipo de documento informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $retorno");
+
+            $arrErrors['documento_tipo'] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            
+        }
+
+    }
+
 }

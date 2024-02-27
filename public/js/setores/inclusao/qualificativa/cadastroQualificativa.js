@@ -12,6 +12,7 @@ import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadast
 import { modalCadastroCidade } from "../../../modals/referencias/modalCadastroCidade.js";
 import { modalCadastroCrenca } from "../../../modals/referencias/modalCadastroCrenca.js";
 import { modalCadastroCutis } from "../../../modals/referencias/modalCadastroCutis.js";
+import { modalCadastroDocumento } from "../../../modals/referencias/modalCadastroDocumento.js";
 import { modalCadastroEscolaridade } from "../../../modals/referencias/modalCadastroEscolaridade.js";
 import { modalCadastroEstadoCivil } from "../../../modals/referencias/modalCadastroEstadoCivil.js";
 import { modalCadastroGenero } from "../../../modals/referencias/modalCadastroGenero.js";
@@ -216,6 +217,15 @@ $(document).ready(function () {
 
         buscarDados();
 
+        // $(`#btnAddDocumentos`).on('click', function () {
+            const obj = new modalCadastroDocumento();
+            // obj.setFocusElementWhenClosingModal = this;
+            obj.modalOpen().then(function (result) {
+                if (result && result.refresh) {
+                    // inserirArtigos(result.arrData);
+                }
+            });
+        // });
     };
 
     async function preencherTodosSelects() {
@@ -530,7 +540,6 @@ $(document).ready(function () {
             .finally(function () {
                 commonFunctions.simulateLoading(btn, false);
             });
-
 
     }
 

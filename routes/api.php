@@ -29,6 +29,7 @@ use App\Http\Controllers\RefPresoConvivioTipoController;
 use App\Http\Controllers\RefProfissaoController;
 use App\Http\Controllers\RefStatusController;
 use App\Http\Controllers\UserPermissaoController;
+use App\Models\RefDocumentoConfig;
 use Illuminate\Support\Facades\Route;
 
 // Rotas relacionadas ao LoginController
@@ -157,7 +158,20 @@ route::prefix('/v1')->group(function () {
 
             // Rotas com prefixo aos Documentos
             Route::prefix('/documentos')->group(function () {
-                
+
+                // Rotas relacionadas ao RefDocumentoConfigController
+                Route::controller(RefDocumentoConfigController::class)->group(function () {
+                    Route::get('', 'index');
+                    Route::get('/{id}', 'show');
+                    Route::post('', 'store');
+                    Route::put('/{id}', 'update');
+                    Route::delete('/{id}', 'destroy');
+
+                    Route::prefix('/search')->group(function () {
+                        Route::post('/all', 'indexSearchAll');
+                    });
+                });
+
                 // Rotas relacionadas ao RefDocumentoTipoController
                 Route::controller(RefDocumentoTipoController::class)->group(function () {
                     Route::prefix('/tipos')->group(function () {
@@ -166,6 +180,10 @@ route::prefix('/v1')->group(function () {
                         Route::post('', 'store');
                         Route::put('/{id}', 'update');
                         Route::delete('/{id}', 'destroy');
+
+                        Route::prefix('/search')->group(function () {
+                            Route::post('/all', 'indexSearchAll');
+                        });
                     });
                 });
 
@@ -177,9 +195,14 @@ route::prefix('/v1')->group(function () {
                         Route::post('', 'store');
                         Route::put('/{id}', 'update');
                         Route::delete('/{id}', 'destroy');
+
+                        Route::prefix('/search')->group(function () {
+                            Route::post('/select2', 'indexSelect2');
+                            Route::post('/all', 'indexSearchAll');
+                        });
                     });
                 });
-                
+
                 // Rotas relacionadas ao RefDocumentoConfigController
                 Route::controller(RefDocumentoConfigController::class)->group(function () {
                     Route::prefix('/configs')->group(function () {
@@ -190,9 +213,7 @@ route::prefix('/v1')->group(function () {
                         Route::delete('/{id}', 'destroy');
                     });
                 });
-
-            });    
-
+            });
 
             // Rotas relacionadas ao RefEscolaridadeController
             Route::controller(RefEscolaridadeController::class)->group(function () {
@@ -204,7 +225,6 @@ route::prefix('/v1')->group(function () {
                     Route::delete('/{id}', 'destroy');
 
                     Route::prefix('/search')->group(function () {
-                        Route::post('/select2', 'indexSelect2');
                         Route::post('/all', 'indexSearchAll');
                     });
                 });

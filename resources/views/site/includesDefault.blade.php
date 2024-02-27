@@ -21,6 +21,9 @@
     const urlRefCidades = `${urlApiVersion}/ref/cidades`;
     const urlRefCrenca = `${urlApiVersion}/ref/crencas`;
     const urlRefCutis = `${urlApiVersion}/ref/cutis`;
+    const urlRefDocumentos = `${urlApiVersion}/ref/documentos`;
+    const urlRefDocumentoTipos = `${urlApiVersion}/ref/documentos/tipos`;
+    const urlRefDocumentoOrgaoEmissor = `${urlApiVersion}/ref/documentos/orgaoemissor`;
     const urlRefEscolaridade = `${urlApiVersion}/ref/escolaridades`;
     const urlRefEstados = `${urlApiVersion}/ref/estados`;
     const urlRefEstadoCivil = `${urlApiVersion}/ref/estadocivil`;
@@ -32,6 +35,10 @@
     const urlRefStatus = `${urlApiVersion}/ref/status`;
 
     console.log(urlLogin);
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 </script>
 
 <?php 

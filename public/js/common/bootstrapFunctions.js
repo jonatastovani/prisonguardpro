@@ -75,7 +75,7 @@ export class bootstrapFunctions {
 
         titleHeader = title ? title : titleHeader;
         icoHeader = ico ? ico : icoHeader;
-        messageHTML += traceId?`<hr class="m-1"><p class="mb-0 fst-italic fw-semibold">${traceId}</p>`:'';
+        messageHTML += traceId ? `<hr class="m-1"><p class="mb-0 fst-italic fw-semibold">${traceId}</p>` : '';
         const id = `toast${Date.now()}`;
         let toastHTML = `
             <div class="toast ${thematic} ${customClass}" id="${id}" role="alert" aria-live="assertive" aria-atomic="true"
@@ -100,5 +100,10 @@ export class bootstrapFunctions {
         }
 
         return Promise.resolve(id);
+    }
+
+    static addEventTooltip() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     }
 }

@@ -243,6 +243,8 @@
     @include('modals.referencias.modalCadastroOlhoCor')
     @include('modals.referencias.modalCadastroCrenca')
 
+    @include('modals.referencias.modalCadastroDocumento')
+
     <script type="module" src="{{ asset('js/setores/inclusao/qualificativa/cadastroQualificativa.js') }}"></script>
 
 @endsection

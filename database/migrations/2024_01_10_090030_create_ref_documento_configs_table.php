@@ -24,8 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('estado_id')->nullable();
             $table->foreign('estado_id')->references('id')->on('ref_estados');
 
-            $table->unsignedBigInteger('orgao_exp_id')->nullable();
-            $table->foreign('orgao_exp_id')->references('id')->on('ref_documento_orgao_emissor');
+            $table->unsignedBigInteger('orgao_emissor_id')->nullable();
+            $table->foreign('orgao_emissor_id')->references('id')->on('ref_documento_orgao_emissor');
 
             $table->unsignedBigInteger('nacionalidade_id')->nullable();
             $table->foreign('nacionalidade_id')->references('id')->on('ref_nacionalidades');

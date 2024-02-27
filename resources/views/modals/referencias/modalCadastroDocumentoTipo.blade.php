@@ -27,8 +27,12 @@
                                     <th class="text-center">#</th>
                                     <th class="text-center">Ação</th>
                                     <th>Nome</th>
-                                    <th data-bs-toggle="tooltip" data-bs-title="Se o documento único nacionalmente, Ex: CPF, Passaporte...">Doc Nacional</th>
-                                    <th data-bs-toggle="tooltip" data-bs-title="Se o tipo de documento é bloqueado somente para Administradores do Sistema alterarem.">Bloq. Admin</th>
+                                    <th data-bs-toggle="tooltip"
+                                        data-bs-title="Se o documento único nacionalmente, Ex: CPF, Passaporte...">Doc
+                                        Nacional</th>
+                                    <th data-bs-toggle="tooltip"
+                                        data-bs-title="Se o tipo de documento é bloqueado somente para Administradores do Sistema alterarem.">
+                                        Bloq. Admin</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -57,6 +61,27 @@
                                         <label for="nomeModalCadastroDocumentoTipo" class="form-label">Nome</label>
                                         <input type="text" class="form-control" name="nome"
                                             id="nomeModalCadastroDocumentoTipo">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                name="doc_nacional_bln" id="doc_nacional_blnModalCadastroDocumentoTipo">
+                                            <label class="form-check-label" for="doc_nacional_blnModalCadastroDocumentoTipo"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-title="Se o documento único nacionalmente, Ex: CPF, Passaporte...">Documento
+                                                nacional</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" role="switch" name="bloqueado_perm_adm_bln"
+                                                id="bloqueado_perm_adm_blnModalCadastroDocumentoTipo">
+                                            <label class="form-check-label" for="bloqueado_perm_adm_blnModalCadastroDocumentoTipo"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-title="Se o tipo de documento é bloqueado somente para Administradores do Sistema alterarem.">Bloqueado Admin</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">

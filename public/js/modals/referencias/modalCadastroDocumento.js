@@ -2,8 +2,10 @@ import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
+import { modalCadastroDocumentoTipo } from "./modalCadastroDocumentoTipo.js";
+import { modalCadastroEstado } from "./modalCadastroEstado.js";
 
-export class modalCadastroDocumentoTipo {
+export class modalCadastroDocumento {
 
     /**
      * URL do endpoint da Api
@@ -39,8 +41,8 @@ export class modalCadastroDocumentoTipo {
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefDocumentoTipos;
-        this.#idModal = "#modalCadastroDocumentoTipo";
+        this.#urlApi = urlRefDocumentos;
+        this.#idModal = "#modalCadastroDocumento";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
@@ -178,13 +180,57 @@ export class modalCadastroDocumentoTipo {
 
         const self = this;
         const modal = $(self.#idModal);
-        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroDocumentoTipo') });
+        commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroDocumento') });
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
-            modal.find('.register-title').html('Novo Tipo de Documento');
+            modal.find('.register-title').html('Novo Documento');
             self.#actionsHideShowRegistrationFields(true);
             modal.find('input[name="nome"]').focus();
+        });
+
+        commonFunctions.addEventsSelect2($('#estado_idModalCadastroDocumento'), `${urlRefEstados}/search/select2`);
+        commonFunctions.addEventsSelect2($('#orgao_emissor_idModalCadastroDocumento'), `${urlRefDocumentoOrgaoEmissor}/search/select2`);
+        commonFunctions.addEventsSelect2($('#nacionalidade_idModalCadastroDocumento'), `${urlRefNacionalidades}/search/select2`);
+
+        const preencherDocumentoTipo = () => {
+            commonFunctions.fillSelect($('#tipo_idModalCadastroDocumento'), `${urlRefDocumentoTipos}`);
+        }
+        preencherDocumentoTipo();
+
+        modal.find(`.btnDocumentoTipoCadastro`).on('click', function () {
+            const obj = new modalCadastroDocumentoTipo();
+            obj.setFocusElementWhenClosingModal = this;
+            self.#modalHideShow(false);
+            obj.modalOpen().then(async function (result) {
+                if (result && result.refresh) {
+                    
+                    preencherDocumentoTipo();
+                    setTimeout(() => {
+                        modal.find('select[name="tipo_id"]').focus();
+                    }, 500);
+                    self.#promisseReturnValue.refresh = true;
+
+                }
+                self.#modalHideShow();
+            });
+        });
+
+        modal.find(`.btnEstadoCadastro`).on('click', function () {
+            const obj = new modalCadastroEstado();
+            obj.setFocusElementWhenClosingModal = this;
+            self.#modalHideShow(false);
+            obj.modalOpen().then(async function (result) {
+                if (result && result.refresh) {
+
+                    setTimeout(() => {
+                        modal.find('select[name="estado_id"]').focus();
+                    }, 500);
+                    self.#promisseReturnValue.refresh = true;
+
+                }
+                self.#modalHideShow();
+            });
         });
 
     }
@@ -273,7 +319,7 @@ export class modalCadastroDocumentoTipo {
                 form.find('input[name="nome"]').val(response.data.nome).focus();
                 form.find('input[name="doc_nacional_bln"]').prop('checked', response.data.doc_nacional_bln).focus();
                 form.find('input[name="bloqueado_perm_adm_bln"]').prop('checked', response.data.bloqueado_perm_adm_bln).focus();
-                form.find('.register-title').html(`Editar Tipo de Documento: ${response.data.id} - ${response.data.nome}`);
+                form.find('.register-title').html(`Editar Documento: ${response.data.id} - ${response.data.nome}`);
             }
         } catch (error) {
             console.error(error);
@@ -361,8 +407,8 @@ export class modalCadastroDocumentoTipo {
 
         try {
             const obj = new modalMessage();
-            obj.setTitle = 'Confirmação de exclusão de Tipo de Documento';
-            obj.setMessage = `Confirma a exclusão do Tipo de Documento <b>${nameDel}</b>?`;
+            obj.setTitle = 'Confirmação de exclusão de Documento';
+            obj.setMessage = `Confirma a exclusão do Documento <b>${nameDel}</b>?`;
             obj.setFocusElementWhenClosingModal = button;
             self.#modalHideShow(false);
             const result = await obj.modalOpen();
@@ -388,7 +434,7 @@ export class modalCadastroDocumentoTipo {
             try {
                 const response = await obj.deleteRequest();
 
-                commonFunctions.generateNotification(`Tipo de Documento deletado com sucesso!`, 'success');
+                commonFunctions.generateNotification(`Documento deletado com sucesso!`, 'success');
                 self.#promisseReturnValue.refresh = true;
 
                 self.modalCancel();
