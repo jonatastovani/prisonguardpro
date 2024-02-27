@@ -7,10 +7,14 @@ use App\Models\RefCabeloTipo;
 use App\Models\RefCidade;
 use App\Models\RefCrenca;
 use App\Models\RefCutis;
+use App\Models\RefDocumentoOrgaoEmissor;
+use App\Models\RefDocumentoTipo;
 use App\Models\RefEscolaridade;
+use App\Models\RefEstado;
 use App\Models\RefEstadoCivil;
 use App\Models\RefGenero;
 use App\Models\RefIncOrigem;
+use App\Models\RefNacionalidade;
 use App\Models\RefOlhoCor;
 use App\Models\RefOlhoTipo;
 use App\Models\RefPresoConvivioTipo;
@@ -27,8 +31,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A origem de inclusão informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['origem'] = [
                 'error' => $mensagem,
@@ -49,10 +54,51 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A $nome informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors[$input] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
+
+    public static function estado($resource, $request, &$arrErrors)
+    {
+        $resource->estado_id = $request->input('estado_id');
+
+        $resource = RefEstado::find($resource->estado_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O Estado informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
+
+            $arrErrors['estado'] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
+
+    public static function nacionalidade($resource, $request, &$arrErrors)
+    {
+        $resource->nacionalidade_id = $request->input('nacionalidade_id');
+
+        $resource = RefNacionalidade::find($resource->nacionalidade_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "A Nacionalidade informada não existe ou foi excluída.";
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
+
+            $arrErrors['nacionalidade'] = [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ];
@@ -68,8 +114,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O gênero informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['genero'] = [
                 'error' => $mensagem,
@@ -87,8 +134,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A escolaridade informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['escolaridade'] = [
                 'error' => $mensagem,
@@ -106,8 +154,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O estado civil informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['estado_civil'] = [
                 'error' => $mensagem,
@@ -125,8 +174,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A cutis informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['cutis'] = [
                 'error' => $mensagem,
@@ -144,8 +194,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O tipo de cabelo informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['cabelo_tipo'] = [
                 'error' => $mensagem,
@@ -163,8 +214,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A cor de cabelo informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['cabelo_cor'] = [
                 'error' => $mensagem,
@@ -182,8 +234,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O tipo de olhos informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['olho_tipo'] = [
                 'error' => $mensagem,
@@ -201,8 +254,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A cor de olhos informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['olho_cor'] = [
                 'error' => $mensagem,
@@ -220,8 +274,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "A crença informada não existe ou foi excluída.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['crenca'] = [
                 'error' => $mensagem,
@@ -239,8 +294,9 @@ class ValidacoesReferenciasId
         // Verifique se o modelo foi encontrado e não foi excluído
         if (!$resource || $resource->trashed()) {
             // Gerar um log
+            $codigo = 404;
             $mensagem = "O tipo de preso informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog($mensagem . "| Request: " . json_encode($request->input()));
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
 
             $arrErrors['preso_tipo'] = [
                 'error' => $mensagem,
@@ -249,4 +305,43 @@ class ValidacoesReferenciasId
         }
     }
 
+    public static function documentoTipo($resource, $request, &$arrErrors)
+    {
+        $resource->documento_tipo_id = $request->input('documento_tipo_id');
+
+        $resource = RefDocumentoTipo::find($resource->documento_tipo_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O Tipo de documento informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
+
+            $arrErrors['documento_tipo'] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
+
+    public static function documentoOrgaoEmissor($resource, $request, &$arrErrors)
+    {
+        $resource->orgao_emissor_id = $request->input('orgao_emissor_id');
+
+        $resource = RefDocumentoOrgaoEmissor::find($resource->orgao_emissor_id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O Orgão Emissor de Documentos informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | Request: " . json_encode($request->input()));
+
+            $arrErrors['orgao_emissor'] = [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ];
+        }
+    }
 }

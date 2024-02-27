@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('ref_documento_configs', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('tipo_id');
-            $table->foreign('tipo_id')->references('id')->on('ref_documento_tipos');
+            $table->unsignedBigInteger('documento_tipo_id');
+            $table->foreign('documento_tipo_id')->references('id')->on('ref_documento_tipos');
 
             $table->string('mask')->nullable();
             $table->integer('comprimento_int')->nullable();

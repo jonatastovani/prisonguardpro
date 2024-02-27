@@ -123,7 +123,7 @@
 
     <div class="row mt-2 mb-2">
         <div class="col-12">
-            <a href="{{route('inclusao.criarEntradasPresos')}}" class="btn btn-primary" title="Inserir nova Entrada de Presos">Nova entrada</a>
+            <a href="{{route('inclusao.criarEntradasPresos')}}" class="btn btn-outline-primary" title="Inserir nova Entrada de Presos">Nova entrada</a>
         </div>
     </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Common\CommonsFunctions;
 use App\Common\RestResponse;
+use App\Common\ValidacoesReferenciasId;
 use App\Models\RefDocumentoConfig;
 use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
@@ -20,19 +21,36 @@ class RefDocumentoConfigController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
+    // public function indexSearchAll(Request $request)
+    // {
+    //     // Regras de validação
+    //     $rules = [
+    //         'text' => 'nullable|string',
+    //     ];
+
+    //     CommonsFunctions::validacaoRequest($request, $rules);
+
+    //     $resource = RefDocumentoConfig::where('nome','LIKE', '%'. $request->input('text') .'%')
+    //     ->orderBy('nome')->get();
+    //     $response = RestResponse::createSuccessResponse($resource, 200);
+    //     return response()->json($response->toArray(), $response->getStatusCode());
+    // }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $arrErrors = [];
+
         // Regras de validação
         $rules = [
-            'tipo_id' => 'required|integer',
+            'documento_tipo_id' => 'required|integer',
             'mask' => 'nullable|string',
-            'comprimento' => 'nullable|integer',
-            'validade_emissao' => 'nullable|integer',
+            'comprimento_int' => 'nullable|integer',
+            'validade_emissao_int' => 'nullable|integer',
             'estado_id' => 'nullable|integer',
-            'orgao_exp_id' => 'required_with:estado_id|integer',
+            'orgao_emissor_id' => 'required_with:estado_id|integer',
             'nacionalidade_id' => 'nullable|integer',
         ];
 
@@ -40,14 +58,17 @@ class RefDocumentoConfigController extends Controller
 
         // Valida se não existe outro com o mesmo nome
         $this->validarRecursoExistente($request);
-
         // Se a validação passou, crie um novo registro
         $novo = new RefDocumentoConfig();
-        $novo->tipo_id = $request->input('tipo_id');
 
-        if($request->has(''))
-        $novo->sigla = $request->input('sigla');
+        ValidacoesReferenciasId::documentoTipo($novo, $request, $arrErrors);
 
+        $this->preencherCampos($novo, $request, $arrErrors);
+
+        $this->validacoesDocumentoTipo($novo, $request, $arrErrors);
+
+        // Erros que impedem o processamento
+        CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
         CommonsFunctions::inserirInfoCreated($novo);
 
@@ -65,6 +86,8 @@ class RefDocumentoConfigController extends Controller
         // Verifica se o modelo existe
         $resource = $this->buscarRecurso($id);
 
+        $resource->load('documento_tipo','estado','orgao_emissor','nacionalidade');
+        
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -138,24 +161,41 @@ class RefDocumentoConfigController extends Controller
         return $resource;
     }
 
+    private function buscarRecursoDocumentoTipo($id)
+    {
+        $resource = RefDocumentoTipo::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O Tipo de Documento informado não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+        return $resource;
+    }
+
     private function validarRecursoExistente($request, $id = null)
     {
-        $query = RefDocumentoConfig::join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.tipo_id')
-            ->where('ref_documento_configs.tipo_id', $request->input('tipo_id'))
+        $query = RefDocumentoConfig::join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.documento_tipo_id')
+            ->where('ref_documento_configs.documento_tipo_id', $request->input('documento_tipo_id'))
             ->where(function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
-                    $query->when($request, function($query, $request){
-                        if($request->has('estado_id') && $request->input('orgao_exp_id')){
+                    $query->when($request, function ($query, $request) {
+                        if ($request->has('estado_id') && $request->input('orgao_emissor_id')) {
                             $query->where('ref_documento_configs.estado_id', $request->input('estado_id'))
-                            ->where('ref_documento_configs.orgao_exp_id', $request->input('orgao_exp_id'))
-                            ->where('ref_documento_configs.nacionalidade_id', null);
+                                ->where('ref_documento_configs.orgao_emissor_id', $request->input('orgao_emissor_id'))
+                                ->where('ref_documento_configs.nacionalidade_id', null);
                         }
                     });
                 })->orWhere(function ($query) use ($request) {
-                    $query->when($request, function($query, $request){
-                        if($request->has('nacionalidade_id')){
+                    $query->when($request, function ($query, $request) {
+                        if ($request->has('nacionalidade_id')) {
                             $query->where('ref_documento_configs.nacionalidade_id', $request->input('nacionalidade_id'))
-                        ->where('ref_documento_tipos.doc_nacional', true);
+                                ->where('ref_documento_tipos.doc_nacional_bln', true);
                         }
                     });
                 });
@@ -168,7 +208,7 @@ class RefDocumentoConfigController extends Controller
 
         if ($query->exists()) {
             $codigo = 409;
-            $mensagem = "O nome do orgão emissor informado já existe.";
+            $mensagem = "A configuração deste documento já existe.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | Request: " . json_encode($request->input()));
 
             $response = RestResponse::createGenericResponse(["resource" => $query->first()], $codigo, $mensagem, $traceId);
@@ -176,27 +216,74 @@ class RefDocumentoConfigController extends Controller
         }
     }
 
-    private function VerificaDocumentoTipo(RefDocumentoConfig $retorno, Request $request, &$arrErrors)
+    private function preencherCampos(RefDocumentoConfig $resource, Request $request, &$arrErrors, $defaultNull = true)
     {
-        $retorno->tipo_id = $request['tipo_id'];
-
-        $resource = RefDocumentoTipo::find($retorno->tipo_id);
-
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
-            // Gerar um log
-            $codigo = 404;
-            $mensagem = "O Tipo de documento informado não existe ou foi excluído.";
-            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $retorno");
-
-            $arrErrors['documento_tipo'] = [
-                'error' => $mensagem,
-                'trace_id' => $traceId
-            ];
-            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
-            
+        if ($request->has('mask')) {
+            $resource->mask = $request->input('mask');
+        } else if ($defaultNull) {
+            $resource->mask = null;
         }
-
+        if ($request->has('comprimento_int')) {
+            $resource->comprimento_int = $request->input('comprimento_int');
+        } else if ($defaultNull) {
+            $resource->comprimento_int = null;
+        }
+        if ($request->has('validade_emissao_int')) {
+            $resource->validade_emissao_int = $request->input('validade_emissao_int');
+        } else if ($defaultNull) {
+            $resource->validade_emissao_int = null;
+        }
+        if ($request->has('estado_id') && $request->input('estado_id')) {
+            ValidacoesReferenciasId::estado($resource, $request, $arrErrors);
+        } else if ($defaultNull) {
+            $resource->estado_id = null;
+        }
+        if ($request->has('orgao_emissor_id') && $request->input('orgao_emissor_id')) {
+            ValidacoesReferenciasId::documentoOrgaoEmissor($resource, $request, $arrErrors);
+        } else if ($defaultNull) {
+            $resource->orgao_emissor_id = null;
+        }
+        if ($request->has('nacionalidade_id') && $request->input('nacionalidade_id')) {
+            ValidacoesReferenciasId::nacionalidade($resource, $request, $arrErrors);
+        } else if ($defaultNull) {
+            $resource->nacionalidade_id = null;
+        }
     }
 
+    private function validacoesDocumentoTipo(RefDocumentoConfig $resource, Request $request, &$arrErrors)
+    {
+
+        $documento_tipo = $this->buscarRecursoDocumentoTipo($request->documento_tipo_id);
+
+        if ($documento_tipo->doc_nacional_bln) {
+            if (!$resource->nacionalidade_id) {
+                // Gerar um log
+                $codigo = 422;
+                $mensagem = "A nacionalidade_id do documento não foi informada.";
+                $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | RefDocumentoTipo: " . json_encode($documento_tipo) . " | RefDocumentoConfig: " . json_encode($resource));
+
+                $arrErrors['nacionalidade_id'] = [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ];
+            } else {
+                $resource->estado_id = null;
+                $resource->orgao_emissor_id = null;
+            }
+        } else {
+            if (!$resource->estado_id) {
+                // Gerar um log
+                $codigo = 422;
+                $mensagem = "A estado_id do documento não foi informado.";
+                $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | RefDocumentoTipo: " . json_encode($documento_tipo) . " | RefDocumentoConfig: " . json_encode($resource));
+
+                $arrErrors['nacionalidade_id'] = [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ];
+            } else {
+                $resource->nacionalidade_id = null;
+            }
+        }
+    }
 }

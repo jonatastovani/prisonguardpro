@@ -47,7 +47,7 @@
         <div class="col-sm-6">
 			<div class="row">
 				<div class="col-12 mt-2">
-					<button type="button" id="btnInserirPreso" class="btn btn-primary w-md-25" title="Inserir um preso">
+					<button type="button" id="btnInserirPreso" class="btn btn-outline-primary w-md-25" title="Inserir um preso">
 						Inserir Preso
 					</button>
 				</div>
@@ -56,12 +56,12 @@
         <div class="col-sm-6">
 			<div class="row text-end">
 				<div class="col-12 mt-2">
-					<button type="submit" id="btnSalvar" class="btn btn-success me-2 w-25" title="Salvar alterações">
+					<button type="submit" id="btnSalvar" class="btn btn-outline-success me-2 w-25" title="Salvar alterações">
 						<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
 						Salvar
 					</button>
 					<a href="{{ !empty($redirecionamentoAnterior) ? $redirecionamentoAnterior : route('inclusao.entradasPresos') }}"
-						class="btn btn-danger w-25 redirecionamentoAnterior" title="Sair da edição da Entrada de Presos" style="width: 100px;">
+						class="btn btn-outline-danger w-25 redirecionamentoAnterior" title="Sair da edição da Entrada de Presos" style="width: 100px;">
 						Sair
 					</a>
 				</div>
