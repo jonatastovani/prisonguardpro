@@ -860,6 +860,15 @@ export class commonFunctions {
 
     }
 
+    /**
+     * Adiciona eventos para um elemento select2.
+     * @param {jQuery} elem - O elemento jQuery ao qual o select2 será aplicado.
+     * @param {string} urlApi - A URL da API para recuperar os dados do servidor.
+     * @param {Object} [options={}] - Opções adicionais para personalizar o comportamento do select2.
+     * @param {number} [options.minimum=3] - O número mínimo de caracteres necessários para acionar a pesquisa.
+     * @param {string} [options.placeholder='Selecione uma opção'] - O texto de espaço reservado para o select2.
+     * @param {jQuery} [options.dropdownParent=$(document.body)] - O elemento ao qual o dropdown do select2 será anexado.
+     */
     static addEventsSelect2(elem, urlApi, options = {}) {
         const {
             minimum = 3, placeholder = 'Selecione uma opção',
@@ -961,6 +970,16 @@ export class commonFunctions {
         }
     }
 
+    /**
+     * Recupera recursivamente os dados incluindo os trashed (excluídos) usando uma solicitação AJAX.
+     * @param {string} urlApi - A URL da API para onde será feita a solicitação.
+     * @param {Object} [options={}] - Opções adicionais para personalizar a solicitação AJAX.
+     * @param {Object} [options.data={ trashed: true }] - Os dados a serem enviados com a solicitação AJAX, por padrão, inclui o status "trashed" como verdadeiro.
+     * @param {string} [options.action='POST'] - A ação da solicitação AJAX (por exemplo, 'GET', 'POST', etc.).
+     * @param {string} [options.param=''] - O parâmetro adicional a ser enviado com a solicitação AJAX.
+     * @returns {Promise<any>} - Uma Promise que resolve com os dados da resposta da solicitação AJAX.
+     * @throws {Error} - Se ocorrer um erro durante a solicitação AJAX.
+     */
     static async getRecurseWithTrashed(urlApi, options = {}) {
         const {
             data = { trashed: true },
@@ -1005,11 +1024,11 @@ export class commonFunctions {
      */
     static cutText(string, options = {}) {
         const { qttWords = 1, maxLength = 0, firstLastName = false } = options;
-    
+
         if (maxLength > 0) {
             let words = string.split(/\s+/);
             let slicedText = ''
-            
+
             if (firstLastName) {
                 // Captura o primeiro e último nome
                 slicedText = words[0] + " " + words[words.length - 1];
@@ -1021,20 +1040,20 @@ export class commonFunctions {
             if (slicedText.length > maxLength) {
                 slicedText = slicedText.substring(0, maxLength);
             }
-    
+
             return slicedText;
         } else {
             let words = string.split(/\s+/);
             let slicedText = '';
-            
+
             if (firstLastName) {
                 // Captura o primeiro e último nome
                 slicedText = words[0] + " " + words[words.length - 1];
-            }else{
+            } else {
                 slicedText = words.slice(0, qttWords).join(' ');
             }
             console.log(slicedText)
-    
+
             return slicedText;
         }
     }
@@ -1052,6 +1071,20 @@ export class commonFunctions {
         return strItems;
     }
 
+    /**
+     * Gera uma notificação para exibição na interface do usuário.
+     * @param {string} message - A mensagem da notificação.
+     * @param {string} type - O tipo da notificação (por exemplo, 'success', 'error', 'warning', etc.).
+     * @param {Object} [options={}] - Opções adicionais para personalizar a notificação.
+     * @param {string} [options.messageTag='h6'] - A tag HTML para envolver a mensagem da notificação.
+     * @param {string} [options.messageClass=''] - A classe CSS adicional para estilizar a mensagem da notificação.
+     * @param {boolean} [options.applyTag=true] - Indica se a tag HTML especificada deve ser aplicada à mensagem.
+     * @param {Array<string>} [options.itemsArray=null] - Um array de itens para incluir na notificação.
+     * @param {string} [options.itemsTag='li'] - A tag HTML para cada item na lista de itens.
+     * @param {boolean} [options.autoRender=true] - Indica se a notificação deve ser renderizada automaticamente após a geração.
+     * @param {any} [options.traceId=undefined] - Um identificador de rastreamento opcional associado à notificação.
+     * @returns {Promise<any>} - Uma Promise que resolve com o objeto de notificação renderizado.
+     */
     static generateNotification(message, type, options = {}) {
         const {
             messageTag = 'h6',

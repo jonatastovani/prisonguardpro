@@ -56,17 +56,47 @@
                                         <div class="input-group">
                                             <select name="tipo_id" id="tipo_idModalCadastroDocumento"
                                                 class="form-select"></select>
-                                            <button class="btn btn-outline-secondary btnDocumentoTipoCadastro"><i
+                                            <button type="button"
+                                                class="btn btn-outline-secondary btnDocumentoTipoCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mt-2">
                                         <label for="maskModalCadastroDocumento" class="form-label">Máscara</label>
                                         <input type="text" class="form-control" name="mask"
                                             id="maskModalCadastroDocumento">
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-4 mt-2"
+                                        data-bs-title="Quantidade de dígitos que o documento terá,">
+                                        <label for="quantidadeModalCadastroDocumento" class="form-label">Qtd.
+                                            Dígitos</label>
+                                        <input type="text" class="form-control" name="mask"
+                                            id="maskModalCadastroDocumento">
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <div class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                name="reverse_bln" id="reverse_blnModalCadastroDocumento">
+                                            <label class="form-check-label" for="reverse_blnModalCadastroDocumento"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-title="Se a aplicação da máscara é aplicada da direita para a esqueda">Máscara
+                                                Reversa</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <div class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                name="reverse_bln" id="reverse_blnModalCadastroDocumento">
+                                            <label class="form-check-label" for="reverse_blnModalCadastroDocumento"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-title="Se for informado na máscara o 'A' então a única letra aceita é a letra X">Dígito
+                                                X</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row rowEstado" style="display: none">
                                     <div class="col-md-6 mt-2">
                                         <label for="estado_idModalCadastroDocumento" class="form-label">Estado</label>
                                         <div class="input-group">
@@ -80,40 +110,40 @@
                                         <label for="orgao_emissor_idModalCadastroDocumento" class="form-label">Órgão
                                             Emissor</label>
                                         <div class="input-group">
-                                            <select name="orgao_emissor_id" id="orgao_emissor_idModalCadastroDocumento"
+                                            <select name="orgao_emissor_id"
+                                                id="orgao_emissor_idModalCadastroDocumento"
                                                 class="form-select"></select>
                                             <button class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                    </div>
                                 </div>
-                                <div class="row">
+                                <div class="row rowNacionalide" style="display: none">
                                     <div class="col-md-6 mt-2">
                                         <label for="nacionalidade_idModalCadastroDocumento"
                                             class="form-label">Nacionalidade</label>
                                         <div class="input-group">
-                                            <select name="nacionalidade_id" id="nacionalidade_idModalCadastroDocumento"
+                                            <select name="nacionalidade_id"
+                                                id="nacionalidade_idModalCadastroDocumento"
                                                 class="form-select"></select>
                                             <button class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-12 text-end mt-2">
-                                            <button type="submit" class="btn btn-outline-success btn-save w-50"
-                                                style="max-width: 100px;">
-                                                <span class="spinner-border spinner-border-sm d-none" role="status"
-                                                    aria-hidden="true"></span>
-                                                Salvar
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger btn-cancel w-50"
-                                                style="max-width: 100px;">Cancelar</button>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end mt-2">
+                                        <button type="submit" class="btn btn-outline-success btn-save w-50"
+                                            style="max-width: 100px;">
+                                            <span class="spinner-border spinner-border-sm d-none" role="status"
+                                                aria-hidden="true"></span>
+                                            Salvar
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-cancel w-50"
+                                            style="max-width: 100px;">Cancelar</button>
                                     </div>
                                 </div>
+                            </div>
                         </form>
                     </div>
                 </div>

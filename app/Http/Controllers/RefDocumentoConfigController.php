@@ -21,26 +21,39 @@ class RefDocumentoConfigController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    // public function indexSearchAll(Request $request)
-    // {
-    //     // Regras de validação
-    //     $rules = [
-    //         'text' => 'nullable|string',
-    //     ];
+    public function indexSearchAll(Request $request)
+    {
+        // Regras de validação
+        $rules = [
+            'text' => 'nullable|string',
+        ];
 
-    //     CommonsFunctions::validacaoRequest($request, $rules);
+        CommonsFunctions::validacaoRequest($request, $rules);
 
-    //     $resource = RefDocumentoConfig::where('nome','LIKE', '%'. $request->input('text') .'%')
-    //     ->orderBy('nome')->get();
-    //     $response = RestResponse::createSuccessResponse($resource, 200);
-    //     return response()->json($response->toArray(), $response->getStatusCode());
-    // }
+        $resource = RefDocumentoConfig::select('ref_documento_configs.*')
+            ->join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.documento_tipo_id')
+            ->leftJoin('ref_nacionalidades', 'ref_nacionalidades.id', '=', 'ref_documento_configs.nacionalidade_id')
+            ->leftJoin('ref_estados', 'ref_estados.id', '=', 'ref_documento_configs.estado_id')
+            ->leftJoin('ref_documento_orgao_emissor', 'ref_documento_orgao_emissor.id', '=', 'ref_documento_configs.orgao_emissor_id')
+            ->where('ref_documento_tipos.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_nacionalidades.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_estados.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_estados.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_documento_orgao_emissor.nome', 'LIKE', '%' . $request->input('text') . '%')
+            ->orWhere('ref_documento_orgao_emissor.sigla', 'LIKE', '%' . $request->input('text') . '%')
+            ->with('documento_tipo', 'estado.nacionalidade', 'nacionalidade', 'orgao_emissor')
+            ->orderBy('ref_documento_tipos.nome')->get();
+        $response = RestResponse::createSuccessResponse($resource, 200);
+        return response()->json($response->toArray(), $response->getStatusCode());
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        // $this->authorize('store', RefDocumentoConfig::class);
+
         $arrErrors = [];
 
         // Regras de validação
@@ -86,8 +99,8 @@ class RefDocumentoConfigController extends Controller
         // Verifica se o modelo existe
         $resource = $this->buscarRecurso($id);
 
-        $resource->load('documento_tipo','estado','orgao_emissor','nacionalidade');
-        
+        $resource->load('documento_tipo', 'estado', 'orgao_emissor', 'nacionalidade');
+
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -97,7 +110,7 @@ class RefDocumentoConfigController extends Controller
      */
     public function update(Request $request)
     {
-        $this->authorize('update', RefDocumentoConfig::class);
+        // $this->authorize('update', RefDocumentoConfig::class);
 
         // Regras de validação
         $rules = [
@@ -130,7 +143,7 @@ class RefDocumentoConfigController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', RefDocumentoConfig::class);
+        // $this->authorize('delete', RefDocumentoConfig::class);
 
         // Verifica se o modelo existe
         $resource = $this->buscarRecurso($id);
@@ -180,7 +193,8 @@ class RefDocumentoConfigController extends Controller
 
     private function validarRecursoExistente($request, $id = null)
     {
-        $query = RefDocumentoConfig::join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.documento_tipo_id')
+        $query = RefDocumentoConfig::select('ref_documento_configs.*')
+            ->join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.documento_tipo_id')
             ->where('ref_documento_configs.documento_tipo_id', $request->input('documento_tipo_id'))
             ->where(function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
@@ -232,6 +246,16 @@ class RefDocumentoConfigController extends Controller
             $resource->validade_emissao_int = $request->input('validade_emissao_int');
         } else if ($defaultNull) {
             $resource->validade_emissao_int = null;
+        }
+        if ($request->has('reverse_bln')) {
+            $resource->reverse_bln = $request->input('reverse_bln');
+        } else if ($defaultNull) {
+            $resource->reverse_bln = null;
+        }
+        if ($request->has('digito_x_bln')) {
+            $resource->digito_x_bln = $request->input('digito_x_bln');
+        } else if ($defaultNull) {
+            $resource->digito_x_bln = null;
         }
         if ($request->has('estado_id') && $request->input('estado_id')) {
             ValidacoesReferenciasId::estado($resource, $request, $arrErrors);

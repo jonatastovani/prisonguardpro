@@ -223,7 +223,7 @@
                     <a href="{{ URL::previous() }}" class="btn btn-outline-danger w-25 redirectUrl"
                         title="Sair da edição da Entrada de Presos" style="max-width: 100px;">
                         Sair
-                    </a>                      
+                    </a>
                 </div>
             </div>
         </div>

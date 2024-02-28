@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('mask')->nullable();
             $table->integer('comprimento_int')->nullable();
             $table->integer('validade_emissao_int')->nullable();
+            $table->boolean('reverse_bln')->nullable()->default(false);
+            $table->boolean('digito_x_bln')->nullable()->default(false);
 
             $table->unsignedBigInteger('estado_id')->nullable();
             $table->foreign('estado_id')->references('id')->on('ref_estados');

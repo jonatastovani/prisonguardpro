@@ -1,4 +1,5 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
+import { bootstrapFunctions } from "../../common/bootstrapFunctions.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
@@ -189,9 +190,9 @@ export class modalCadastroDocumento {
             modal.find('input[name="nome"]').focus();
         });
 
-        commonFunctions.addEventsSelect2($('#estado_idModalCadastroDocumento'), `${urlRefEstados}/search/select2`);
-        commonFunctions.addEventsSelect2($('#orgao_emissor_idModalCadastroDocumento'), `${urlRefDocumentoOrgaoEmissor}/search/select2`);
-        commonFunctions.addEventsSelect2($('#nacionalidade_idModalCadastroDocumento'), `${urlRefNacionalidades}/search/select2`);
+        commonFunctions.addEventsSelect2($('#estado_idModalCadastroDocumento'), `${urlRefEstados}/search/select2`, { dropdownParent: modal, minimum: 0 });
+        commonFunctions.addEventsSelect2($('#orgao_emissor_idModalCadastroDocumento'), `${urlRefDocumentoOrgaoEmissor}/search/select2`, { dropdownParent: modal, minimum: 0 });
+        commonFunctions.addEventsSelect2($('#nacionalidade_idModalCadastroDocumento'), `${urlRefNacionalidades}/search/select2`, { dropdownParent: modal, minimum: 0 });
 
         const preencherDocumentoTipo = () => {
             commonFunctions.fillSelect($('#tipo_idModalCadastroDocumento'), `${urlRefDocumentoTipos}`);
@@ -204,7 +205,7 @@ export class modalCadastroDocumento {
             self.#modalHideShow(false);
             obj.modalOpen().then(async function (result) {
                 if (result && result.refresh) {
-                    
+
                     preencherDocumentoTipo();
                     setTimeout(() => {
                         modal.find('select[name="tipo_id"]').focus();
@@ -232,6 +233,7 @@ export class modalCadastroDocumento {
                 self.#modalHideShow();
             });
         });
+
 
     }
 
@@ -262,28 +264,39 @@ export class modalCadastroDocumento {
                 if (response.data.length) {
                     for (let i = 0; i < response.data.length; i++) {
                         const item = response.data[i];
-                        const doc_nacional = item.doc_nacional_bln ? "Sim" : "Não";
-                        const bloqueado_perm_adm = item.bloqueado_perm_adm_bln ? "Sim" : "Não";
 
+                        const documento_tipo = item.documento_tipo;
+                        const doc_nacional = documento_tipo.doc_nacional_bln ? "Sim" : "Não";
+                        const bloqueado_perm_adm = documento_tipo.bloqueado_perm_adm_bln ? "Sim" : "Não";
+
+                        let nome = '';
+                        let title = '';
+                        if (documento_tipo.doc_nacional_bln) {
+                            nome = `${documento_tipo.nome} - ${item.nacionalidade.sigla}`;
+                            title = `Documento nacional do(a) ${item.nacionalidade.pais}`
+                        } else {
+                            nome = `${documento_tipo.nome} - ${item.estado.sigla}/${item.orgao_emissor.sigla}`;
+                            title = `${item.estado.nome} - ${item.estado.nacionalidade.pais} / ${item.orgao_emissor.nome}`
+                        }
                         const idTr = `${item.id}${Date.now()}`;
                         tabela.append(`
-                        <tr id=${idTr}>
-                            <td class="text-center"><b>${item.id}</b></td>
-                            <td>
-                                <div class="d-flex wrap-nowrap justify-content-center">
-                                    <button class="btn btn-outline-primary btn-mini-2 me-2 btn-edit" title="Editar cadastro">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td>${item.nome}</td>
-                            <td>${doc_nacional}</td>
-                            <td>${bloqueado_perm_adm}</td>
-                        </tr>
-                    `);
+                            <tr id=${idTr}>
+                                <td class="text-center"><b>${item.id}</b></td>
+                                <td>
+                                    <div class="d-flex wrap-nowrap justify-content-center">
+                                        <button class="btn btn-outline-primary btn-mini-2 me-2 btn-edit" title="Editar cadastro">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td data-bs-title="${title}" data-bs-toggle="tooltip">${nome}</td>
+                                <td>${doc_nacional}</td>
+                                <td>${bloqueado_perm_adm}</td>
+                            </tr>
+                        `);
 
                         item['idTr'] = idTr;
 
@@ -295,6 +308,7 @@ export class modalCadastroDocumento {
                         }
                     }
                 }
+                bootstrapFunctions.addEventTooltip();
             } else {
                 throw new Error('Action inválido');
             }

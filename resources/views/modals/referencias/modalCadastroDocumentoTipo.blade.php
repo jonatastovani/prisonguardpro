@@ -28,7 +28,7 @@
                                     <th class="text-center">Ação</th>
                                     <th>Nome</th>
                                     <th data-bs-toggle="tooltip"
-                                        data-bs-title="Se o documento único nacionalmente, Ex: CPF, Passaporte...">Doc
+                                        data-bs-title="Se o documento é único nacionalmente, Ex: CPF, Passaporte...">Doc
                                         Nacional</th>
                                     <th data-bs-toggle="tooltip"
                                         data-bs-title="Se o tipo de documento é bloqueado somente para Administradores do Sistema alterarem.">
@@ -70,7 +70,7 @@
                                                 name="doc_nacional_bln" id="doc_nacional_blnModalCadastroDocumentoTipo">
                                             <label class="form-check-label" for="doc_nacional_blnModalCadastroDocumentoTipo"
                                                 data-bs-toggle="tooltip"
-                                                data-bs-title="Se o documento único nacionalmente, Ex: CPF, Passaporte...">Documento
+                                                data-bs-title="Se o documento é único nacionalmente, Ex: CPF, Passaporte...">Documento
                                                 nacional</label>
                                         </div>
                                     </div>
