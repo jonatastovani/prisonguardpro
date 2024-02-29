@@ -55,7 +55,7 @@ class RefDocumentoOrgaoEmissorController extends Controller
         $mappedResults = $resources->map(function ($item) {
             return [
                 'id' => $item->id,
-                'text' => $item->sigla . " - " . $item->nome,
+                'text' => $item->sigla . " (" . $item->nome .")",
             ];
         });
 

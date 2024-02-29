@@ -8,6 +8,7 @@ use App\Common\ValidacoesReferenciasId;
 use App\Models\RefDocumentoConfig;
 use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RefDocumentoConfigController extends Controller
 {
@@ -60,10 +61,28 @@ class RefDocumentoConfigController extends Controller
         $rules = [
             'documento_tipo_id' => 'required|integer',
             'mask' => 'nullable|string',
-            'comprimento_int' => 'nullable|integer',
             'validade_emissao_int' => 'nullable|integer',
+            'reverse_bln' => 'nullable|boolean',
+            'digito_bln' => 'required|boolean',
+            'digito_mask' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('digito_bln') === true;
+                }),
+                'string',
+            ],
+            'digito_separador' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('digito_bln') === true;
+                }),
+                'string',
+            ],
             'estado_id' => 'nullable|integer',
-            'orgao_emissor_id' => 'required_with:estado_id|integer',
+            'orgao_emissor_id' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('estado_id') !== null;
+                }),
+                'integer',
+            ],
             'nacionalidade_id' => 'nullable|integer',
         ];
 
@@ -99,7 +118,7 @@ class RefDocumentoConfigController extends Controller
         // Verifica se o modelo existe
         $resource = $this->buscarRecurso($id);
 
-        $resource->load('documento_tipo', 'estado', 'orgao_emissor', 'nacionalidade');
+        $resource->load('documento_tipo', 'estado.nacionalidade', 'orgao_emissor', 'nacionalidade');
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -237,11 +256,6 @@ class RefDocumentoConfigController extends Controller
         } else if ($defaultNull) {
             $resource->mask = null;
         }
-        if ($request->has('comprimento_int')) {
-            $resource->comprimento_int = $request->input('comprimento_int');
-        } else if ($defaultNull) {
-            $resource->comprimento_int = null;
-        }
         if ($request->has('validade_emissao_int')) {
             $resource->validade_emissao_int = $request->input('validade_emissao_int');
         } else if ($defaultNull) {
@@ -252,10 +266,20 @@ class RefDocumentoConfigController extends Controller
         } else if ($defaultNull) {
             $resource->reverse_bln = null;
         }
-        if ($request->has('digito_x_bln')) {
-            $resource->digito_x_bln = $request->input('digito_x_bln');
+        if ($request->has('digito_bln')) {
+            $resource->digito_bln = $request->input('digito_bln');
         } else if ($defaultNull) {
-            $resource->digito_x_bln = null;
+            $resource->digito_bln = null;
+        }
+        if ($request->has('digito_mask')) {
+            $resource->digito_mask = $request->input('digito_mask');
+        } else if ($defaultNull) {
+            $resource->digito_mask = null;
+        }
+        if ($request->has('digito_separador')) {
+            $resource->digito_separador = $request->input('digito_separador');
+        } else if ($defaultNull) {
+            $resource->digito_separador = null;
         }
         if ($request->has('estado_id') && $request->input('estado_id')) {
             ValidacoesReferenciasId::estado($resource, $request, $arrErrors);
@@ -298,10 +322,10 @@ class RefDocumentoConfigController extends Controller
             if (!$resource->estado_id) {
                 // Gerar um log
                 $codigo = 422;
-                $mensagem = "A estado_id do documento não foi informado.";
+                $mensagem = "O estado_id do documento não foi informado.";
                 $traceId = CommonsFunctions::generateLog($codigo . " | " . $mensagem . " | RefDocumentoTipo: " . json_encode($documento_tipo) . " | RefDocumentoConfig: " . json_encode($resource));
 
-                $arrErrors['nacionalidade_id'] = [
+                $arrErrors['estado_id'] = [
                     'error' => $mensagem,
                     'trace_id' => $traceId
                 ];

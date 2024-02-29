@@ -591,11 +591,11 @@ export class commonFunctions {
     }
 
     /**
-     * Gets an array of default values considered as invalid for generating filters.
+     * Obtém um array de valores padrão considerados inválidos para geração de filtros ou validações de campos vazios.
      *
-     * @returns {Array} - An array of default values.
+     * @returns {Array} – Uma matriz de valores padrão.
      */
-    static buscarValoresInvalidosGerarFiltros() {
+    static getInvalidsDefaultValuesGenerateFilters() {
         return ['undefined', undefined, 'null', null, '0', 0, ''];
     }
 
@@ -697,6 +697,50 @@ export class commonFunctions {
     }
 
     /**
+     * Adiciona um evento de mudança a uma caixa de seleção para controlar a visibilidade e a capacidade de um elemento oculto.
+     * @param {string|jQuery} checkbox - O seletor ou o elemento jQuery da caixa de seleção.
+     * @param {string|jQuery} elementHidden - O seletor ou o elemento jQuery do elemento que será ocultado/mostrado.
+     * @param {Object} [options={}] - Opções adicionais para personalizar o comportamento do evento.
+     * @param {string} [options.effect='fast'] - O efeito de transição a ser aplicado ao mostrar/ocultar o elemento (por exemplo, 'fast', 'slow', etc.).
+     * @param {string} [options.elemDisabled='input, textarea, select, button'] - Os seletores dos elementos dentro do elemento oculto que devem ser desativados quando a caixa de seleção estiver marcada.
+     * @param {boolean} [options.trueHidden=true] - Indica se o elemento está oculto quando a caixa de seleção está marcada como verdadeira (true) ou falsa (false).
+     * @param {Array<string>} [options.inputs] - Uma lista de seletores de elementos adicionais dentro do elemento oculto que devem ser manipulados (ocultados/mostrados/desativados) junto com o elemento principal.
+     */
+    static eventCkbHidden(checkbox, elementHidden, options = {}) {
+
+        const ckb = $(checkbox);
+
+        ckb.on('change', function () {
+
+            const elemHidden = $(elementHidden);
+            const effect = options.effect ? options.effect : 'fast';
+            const elemDisabled = options.elemDisabled ? options.elemDisabled : 'input, textarea, select, button';
+            const trueHidden = options.trueHidden == true;
+
+            const execute = (inp) => {
+                const input = $(inp);
+                if (ckb.prop('checked') == trueHidden) {
+                    input.attr('disabled', true);
+                    elemHidden.hide(effect);
+                } else {
+                    input.removeAttr('disabled');
+                    elemHidden.show(effect);
+                }
+            };
+
+            if (options.inputs) {
+                options.inputs.forEach(inp => {
+                    execute(inp);
+                });
+            } else {
+                execute(elemHidden.find(elemDisabled));
+            }
+
+        });
+
+    }
+
+    /**
      * Sets up default event handlers for modals, such as close, cancel, and save actions.
      *
      * @param {Object} self - The reference to the current object.
@@ -735,6 +779,12 @@ export class commonFunctions {
         modal.on('keydown', function (e) {
             if (e.key === 'Escape') {
                 e.stopPropagation();
+                self.setEndTimer = true;
+            }
+        });
+
+        modal.on('click', function (e) {
+            if ($(e.target).hasClass('modal')) {
                 self.setEndTimer = true;
             }
         });
@@ -876,6 +926,7 @@ export class commonFunctions {
         } = options;
 
         elem.select2({
+            theme: "bootstrap",
             language: {
                 inputTooShort: function (args) {
                     var caracteres = args.minimum - args.input.length;

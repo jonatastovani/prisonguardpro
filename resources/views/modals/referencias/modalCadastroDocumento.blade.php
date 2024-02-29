@@ -51,31 +51,26 @@
                                     <h5 class="register-title">Novo Documento</h5>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 mt-2">
-                                        <label for="tipo_idModalCadastroDocumento" class="form-label">Tipo</label>
+                                    <div class="col-sm-6 mt-2">
+                                        <label for="documento_tipo_idModalCadastroDocumento"
+                                            class="form-label">Tipo</label>
                                         <div class="input-group">
-                                            <select name="tipo_id" id="tipo_idModalCadastroDocumento"
+                                            <select name="documento_tipo_id"
+                                                id="documento_tipo_idModalCadastroDocumento"
                                                 class="form-select"></select>
                                             <button type="button"
                                                 class="btn btn-outline-secondary btnDocumentoTipoCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mt-2">
+                                    <div class="col-sm-6 mt-2">
                                         <label for="maskModalCadastroDocumento" class="form-label">Máscara</label>
                                         <input type="text" class="form-control" name="mask"
                                             id="maskModalCadastroDocumento">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4 mt-2"
-                                        data-bs-title="Quantidade de dígitos que o documento terá,">
-                                        <label for="quantidadeModalCadastroDocumento" class="form-label">Qtd.
-                                            Dígitos</label>
-                                        <input type="text" class="form-control" name="mask"
-                                            id="maskModalCadastroDocumento">
-                                    </div>
-                                    <div class="col-md-4 d-flex align-items-end">
+                                    <div class="col-sm-4 d-flex align-items-end">
                                         <div class="form-check form-switch mt-2">
                                             <input class="form-check-input" type="checkbox" role="switch"
                                                 name="reverse_bln" id="reverse_blnModalCadastroDocumento">
@@ -85,52 +80,79 @@
                                                 Reversa</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 d-flex align-items-end">
+                                    <div class="col-sm-4 d-flex align-items-end">
                                         <div class="form-check form-switch mt-2">
                                             <input class="form-check-input" type="checkbox" role="switch"
-                                                name="reverse_bln" id="reverse_blnModalCadastroDocumento">
-                                            <label class="form-check-label" for="reverse_blnModalCadastroDocumento"
+                                                name="digito_bln" id="digito_blnModalCadastroDocumento">
+                                            <label class="form-check-label" for="digito_blnModalCadastroDocumento"
                                                 data-bs-toggle="tooltip"
-                                                data-bs-title="Se for informado na máscara o 'A' então a única letra aceita é a letra X">Dígito
-                                                X</label>
+                                                data-bs-title="Se o documento não tem por padrão o dígito, então um campo de dígito é criado, sendo opcional a inserção.">Campo
+                                                Dígito</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row rowEstado" style="display: none">
-                                    <div class="col-md-6 mt-2">
+
+                                <div class="row rowDigito" style="display: none;">
+                                    <div class="col-3 mt-2" data-bs-toggle="tooltip"
+                                        data-bs-title="Máscara que define os valores a serem aceitos no campo dígito.">
+                                        <label for="digito_maskModalCadastroDocumento" class="form-label">Másc.
+                                            dígito</label>
+                                        <input type="text" class="form-control text-center" name="digito_mask"
+                                            placeholder="Ex: X" id="digito_maskModalCadastroDocumento" disabled>
+                                    </div>
+                                    <div class="col-3 mt-2" data-bs-toggle="tooltip"
+                                        data-bs-title="Caractere separador do dígito.">
+                                        <label for="digito_separadorModalCadastroDocumento"
+                                            class="form-label">Separador</label>
+                                        <input type="text" class="form-control text-center" name="digito_separador"
+                                            placeholder="Ex: -, /" id="digito_separadorModalCadastroDocumento"
+                                            disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row rowEstado" style="display: none;">
+                                    <div class="col-sm-6 mt-2">
                                         <label for="estado_idModalCadastroDocumento" class="form-label">Estado</label>
                                         <div class="input-group">
-                                            <select name="estado_id" id="estado_idModalCadastroDocumento"
-                                                class="form-select"></select>
+                                            <div class="input-group-select2-button-1">
+                                                <select name="estado_id" id="estado_idModalCadastroDocumento"
+                                                    class="form-select" disabled></select>
+                                            </div>
                                             <button class="btn btn-outline-secondary btnEstadoCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mt-2">
+                                    <div class="col-sm-6 mt-2">
                                         <label for="orgao_emissor_idModalCadastroDocumento" class="form-label">Órgão
                                             Emissor</label>
                                         <div class="input-group">
-                                            <select name="orgao_emissor_id"
-                                                id="orgao_emissor_idModalCadastroDocumento"
-                                                class="form-select"></select>
+                                            <div class="input-group-select2-button-1">
+                                                <select name="orgao_emissor_id"
+                                                    id="orgao_emissor_idModalCadastroDocumento" class="form-select"
+                                                    disabled></select>
+                                            </div>
                                             <button class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row rowNacionalide" style="display: none">
-                                    <div class="col-md-6 mt-2">
+
+                                <div class="row rowNacionalidade" style="display: none;">
+                                    <div class="col-sm-6 mt-2">
                                         <label for="nacionalidade_idModalCadastroDocumento"
                                             class="form-label">Nacionalidade</label>
                                         <div class="input-group">
-                                            <select name="nacionalidade_id"
-                                                id="nacionalidade_idModalCadastroDocumento"
-                                                class="form-select"></select>
+                                            <div class="input-group-select2-button-1">
+                                                <select name="nacionalidade_id"
+                                                    id="nacionalidade_idModalCadastroDocumento" class="form-select"
+                                                    disabled></select>
+                                            </div>
                                             <button class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-12 text-end mt-2">
                                         <button type="submit" class="btn btn-outline-success btn-save w-50"

@@ -13,6 +13,10 @@ export class modalCadastroDocumento {
      */
     #urlApi;
     /**
+     * URL do endpoint da Api (Documento Tipos)
+     */
+    #urlApiDocTipos;
+    /**
      * ID do modal
      */
     #idModal;
@@ -43,6 +47,7 @@ export class modalCadastroDocumento {
 
     constructor() {
         this.#urlApi = urlRefDocumentos;
+        this.#urlApiDocTipos = urlRefDocumentoTipos;
         this.#idModal = "#modalCadastroDocumento";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
@@ -90,22 +95,12 @@ export class modalCadastroDocumento {
         return new Promise(function (resolve) {
 
             const checkConfirmation = setInterval(function () {
-
-                // if (self.#promisseReturnValue !== undefined || self.#endTimer) {
                 if (self.#endTimer) {
-
                     clearInterval(checkConfirmation);
-                    // if (self.#promisseReturnValue !== undefined) {
-                    //     resolve(self.#promisseReturnValue);
-                    // }
                     resolve(self.#promisseReturnValue);
-
                     self.#modalClose();
-                    // self.#promisseReturnValue = undefined;
                     self.#endTimer = false;
-
                 }
-
             }, 250);
 
         });
@@ -158,8 +153,9 @@ export class modalCadastroDocumento {
         self.#idRegister = null;
         self.#action = enumAction.POST;
         modal.find('form')[0].reset();
-        modal.find('form').find('select').val('');
-
+        modal.find('form').find('select').val('').trigger('change');
+        modal.find('input:checkbox').trigger('change');
+        modal.find('select[name="documento_tipo_id"]').removeAttr('disabled');
     }
 
     #actionsHideShowRegistrationFields(status = false) {
@@ -187,7 +183,7 @@ export class modalCadastroDocumento {
             self.#action = enumAction.POST;
             modal.find('.register-title').html('Novo Documento');
             self.#actionsHideShowRegistrationFields(true);
-            modal.find('input[name="nome"]').focus();
+            modal.find('select[name="documento_tipo_id"]').focus();
         });
 
         commonFunctions.addEventsSelect2($('#estado_idModalCadastroDocumento'), `${urlRefEstados}/search/select2`, { dropdownParent: modal, minimum: 0 });
@@ -195,7 +191,7 @@ export class modalCadastroDocumento {
         commonFunctions.addEventsSelect2($('#nacionalidade_idModalCadastroDocumento'), `${urlRefNacionalidades}/search/select2`, { dropdownParent: modal, minimum: 0 });
 
         const preencherDocumentoTipo = () => {
-            commonFunctions.fillSelect($('#tipo_idModalCadastroDocumento'), `${urlRefDocumentoTipos}`);
+            commonFunctions.fillSelect($('#documento_tipo_idModalCadastroDocumento'), `${urlRefDocumentoTipos}`);
         }
         preencherDocumentoTipo();
 
@@ -208,7 +204,7 @@ export class modalCadastroDocumento {
 
                     preencherDocumentoTipo();
                     setTimeout(() => {
-                        modal.find('select[name="tipo_id"]').focus();
+                        modal.find('select[name="documento_tipo_id"]').focus();
                     }, 500);
                     self.#promisseReturnValue.refresh = true;
 
@@ -234,6 +230,34 @@ export class modalCadastroDocumento {
             });
         });
 
+        $('#documento_tipo_idModalCadastroDocumento').on('change', async function () {
+            if (!commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes($(this).val())) {
+                try {
+                    const obj = new conectAjax(`${self.#urlApiDocTipos}`);
+                    obj.setParam($(this).val());
+                    const response = await obj.getRequest();
+                    console.log(response)
+                    if (response.data) {
+                        if (response.data.doc_nacional_bln) {
+                            modal.find('.rowNacionalidade').show('fast').find('input, select').removeAttr('disabled');
+                            modal.find('.rowEstado').hide('fast').find('input, select').attr('disabled', true);
+                        } else {
+                            modal.find('.rowNacionalidade').hide('fast').find('input, select').attr('disabled', true);
+                            modal.find('.rowEstado').show('fast').find('input, select').removeAttr('disabled');
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                    const traceId = error.traceId ? error.traceId : undefined;
+                    commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
+                }
+            } else {
+                modal.find('.rowNacionalidade').hide('fast').find('input, select').attr('disabled', true);
+                modal.find('.rowEstado').hide('fast').find('input, select').attr('disabled', true);
+            }
+        })
+
+        commonFunctions.eventCkbHidden(modal.find('input[name="digito_bln"]'), modal.find('.rowDigito'))
 
     }
 
@@ -293,8 +317,6 @@ export class modalCadastroDocumento {
                                     </div>
                                 </td>
                                 <td data-bs-title="${title}" data-bs-toggle="tooltip">${nome}</td>
-                                <td>${doc_nacional}</td>
-                                <td>${bloqueado_perm_adm}</td>
                             </tr>
                         `);
 
@@ -329,11 +351,37 @@ export class modalCadastroDocumento {
         try {
             const response = await obj.getRequest();
             if (response.data) {
+                const data = response.data;
+
                 const form = $(self.#idModal).find('form');
-                form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('input[name="doc_nacional_bln"]').prop('checked', response.data.doc_nacional_bln).focus();
-                form.find('input[name="bloqueado_perm_adm_bln"]').prop('checked', response.data.bloqueado_perm_adm_bln).focus();
-                form.find('.register-title').html(`Editar Documento: ${response.data.id} - ${response.data.nome}`);
+                form.find('select[name="documento_tipo_id"]').val(data.documento_tipo_id).trigger('change').attr('disabled', true);
+                form.find('input[name="mask"]').val(data.mask).focus();
+                form.find('input[name="reverse_bln"]').prop('checked', data.reverse_bln);
+                form.find('input[name="digito_bln"]').prop('checked', data.digito_bln).trigger('change');
+                if (data.digito_bln) {
+                    form.find('input[name="digito_mask"]').val(data.digito_mask);
+                    form.find('input[name="digito_separador"]').val(data.digito_separador);
+                }
+                if (data.estado_id) {
+                    form.find('select[name="estado_id"]').html(new Option(`${data.estado.nome} - ${data.estado.sigla} (${data.estado.nacionalidade.pais})`, data.estado_id, true, true)).trigger('change');
+                    form.find('select[name="orgao_emissor_id"]').html(new Option(`${data.orgao_emissor.sigla} (${data.orgao_emissor.nome})`, data.orgao_emissor_id, true, true)).trigger('change');
+                }
+                if (data.nacionalidade_id) {
+                    form.find('select[name="nacionalidade_id"]').html(new Option(`${data.nacionalidade.pais} - ${data.nacionalidade.sigla}`, data.nacionalidade_id, true, true)).trigger('change');
+                }
+
+                const documento_tipo = data.documento_tipo;
+                let nome = '';
+                let title = '';
+                if (documento_tipo.doc_nacional_bln) {
+                    nome = `${documento_tipo.nome} - ${data.nacionalidade.sigla}`;
+                    title = `Documento nacional do(a) ${data.nacionalidade.pais}`
+                } else {
+                    nome = `${documento_tipo.nome} - ${data.estado.sigla}/${data.orgao_emissor.sigla}`;
+                    title = `${data.estado.nome} - ${data.estado.nacionalidade.pais} / ${data.orgao_emissor.nome}`
+                }
+
+                form.find('.register-title').attr('title', title).html(`Editar Documento: ${response.data.id} - ${nome}`);
             }
         } catch (error) {
             console.error(error);

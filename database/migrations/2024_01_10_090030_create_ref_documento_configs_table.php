@@ -18,10 +18,11 @@ return new class extends Migration
             $table->foreign('documento_tipo_id')->references('id')->on('ref_documento_tipos');
 
             $table->string('mask')->nullable();
-            $table->integer('comprimento_int')->nullable();
-            $table->integer('validade_emissao_int')->nullable();
+            $table->integer('validade_emissao_int')->nullable()->default(0);
             $table->boolean('reverse_bln')->nullable()->default(false);
-            $table->boolean('digito_x_bln')->nullable()->default(false);
+            $table->boolean('digito_bln')->nullable()->default(false);
+            $table->string('digito_separador')->nullable();
+            $table->string('digito_mask')->nullable();
 
             $table->unsignedBigInteger('estado_id')->nullable();
             $table->foreign('estado_id')->references('id')->on('ref_estados');

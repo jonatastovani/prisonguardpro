@@ -2,12 +2,13 @@ import { modalCadastroDocumento } from "../modals/referencias/modalCadastroDocum
 
 $(document).ready(function () {
 
+
     // preSetMask.apply('#rg', 1);
-    $('#rg').mask('#.##0-A', {
-        reverse: true,
+    $('#rg').mask('00.000.00A-X', {
+        reverse: false,
         translation: {
-            'A': {
-                pattern: /[0-9X]/,
+            'X': {
+                pattern: /[0-9xX]/,
             }
         },
         onKeyPress: function(value, e, field, options) {
@@ -52,7 +53,7 @@ $(document).ready(function () {
             }
         });
     })
-    // .click();
+    .click();
 
 
 });

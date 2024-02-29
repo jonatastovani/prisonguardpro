@@ -5,7 +5,7 @@
 }
 
 .input-group .select2 {
-    flex: 1;
+    flex: 1 2 auto;
 }
 
 .input-group .select2-selection {
@@ -19,4 +19,8 @@
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 35px;
+}
+
+.input-group .input-group-select2-button-1 {
+    width: calc(100% - 38px);
 }

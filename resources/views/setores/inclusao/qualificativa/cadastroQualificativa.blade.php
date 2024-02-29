@@ -63,7 +63,9 @@
                 <div class="col-xl-4 col-lg-9 col-md-8 mt-2">
                     <label for="cidade_nasc_id" class="form-label">Cidade Nascimento</label>
                     <div class="input-group">
-                        <select name="cidade_nasc_id" id="cidade_nasc_id" style="width: 100%;"></select>
+                        <div class="input-group-select2-button-1">
+                            <select name="cidade_nasc_id" id="cidade_nasc_id" style="width: 100%;"></select>
+                        </div>
                         <button id="btnCidadeCadastro" class="btn btn-outline-secondary"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
@@ -75,8 +77,6 @@
                 <div class="col-xl-3 col-md-4 col-sm-6 mt-2">
                     <label for="genero_id" class="form-label">Gênero / Orientação Sexual</label>
                     <div class="input-group">
-                        {{-- <button id="btnGeneroConsulta" class="btn btn-outline-secondary"><i
-                                class="bi bi-search"></i></button> --}}
                         <select name="genero_id" id="genero_id" class="form-select"></select>
                         <button id="btnGeneroCadastro" class="btn btn-outline-secondary"><i
                                 class="bi bi-pencil"></i></button>
