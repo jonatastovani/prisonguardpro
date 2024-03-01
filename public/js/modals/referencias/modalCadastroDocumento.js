@@ -195,7 +195,8 @@ export class modalCadastroDocumento {
         }
         preencherDocumentoTipo();
 
-        modal.find(`.btnDocumentoTipoCadastro`).on('click', function () {
+        modal.find(`.btnDocumentoTipoCadastro`).on('click', function (e) {
+            e.preventDefault();
             const obj = new modalCadastroDocumentoTipo();
             obj.setFocusElementWhenClosingModal = this;
             self.#modalHideShow(false);
@@ -213,7 +214,8 @@ export class modalCadastroDocumento {
             });
         });
 
-        modal.find(`.btnEstadoCadastro`).on('click', function () {
+        modal.find(`.btnEstadoCadastro`).on('click', function (e) {
+            e.preventDefault();
             const obj = new modalCadastroEstado();
             obj.setFocusElementWhenClosingModal = this;
             self.#modalHideShow(false);
@@ -239,11 +241,11 @@ export class modalCadastroDocumento {
                     console.log(response)
                     if (response.data) {
                         if (response.data.doc_nacional_bln) {
-                            modal.find('.rowNacionalidade').show('fast').find('input, select').removeAttr('disabled');
-                            modal.find('.rowEstado').hide('fast').find('input, select').attr('disabled', true);
+                            modal.find('.rowNacionalidade').show('fast').find('input, select, button').removeAttr('disabled');
+                            modal.find('.rowEstado').hide('fast').find('input, select, button').attr('disabled', true);
                         } else {
-                            modal.find('.rowNacionalidade').hide('fast').find('input, select').attr('disabled', true);
-                            modal.find('.rowEstado').show('fast').find('input, select').removeAttr('disabled');
+                            modal.find('.rowNacionalidade').hide('fast').find('input, select, button').attr('disabled', true);
+                            modal.find('.rowEstado').show('fast').find('input, select, button').removeAttr('disabled');
                         }
                     }
                 } catch (error) {
@@ -252,8 +254,8 @@ export class modalCadastroDocumento {
                     commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
                 }
             } else {
-                modal.find('.rowNacionalidade').hide('fast').find('input, select').attr('disabled', true);
-                modal.find('.rowEstado').hide('fast').find('input, select').attr('disabled', true);
+                modal.find('.rowNacionalidade').hide('fast').find('input, select, button').attr('disabled', true);
+                modal.find('.rowEstado').hide('fast').find('input, select, button').attr('disabled', true);
             }
         })
 

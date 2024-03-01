@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <form>
+                        <form id="formModalCadastroDocumento">
                             <div class="col-12 divRegistrationFields" style="display: none;">
                                 <div class="row">
                                     <h5 class="register-title">Novo Documento</h5>
@@ -155,7 +155,7 @@
 
                                 <div class="row">
                                     <div class="col-12 text-end mt-2">
-                                        <button type="submit" class="btn btn-outline-success btn-save w-50"
+                                        <button type="submit" form="formModalCadastroDocumento" class="btn btn-outline-success btn-save w-50"
                                             style="max-width: 100px;">
                                             <span class="spinner-border spinner-border-sm d-none" role="status"
                                                 aria-hidden="true"></span>

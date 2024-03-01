@@ -9,6 +9,7 @@ use App\Models\RefDocumentoConfig;
 use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Ramsey\Uuid\Type\Integer;
 
 class RefDocumentoConfigController extends Controller
 {
@@ -97,7 +98,7 @@ class RefDocumentoConfigController extends Controller
 
         $this->preencherCampos($novo, $request, $arrErrors);
 
-        $this->validacoesDocumentoTipo($novo, $request, $arrErrors);
+        $this->validacoesDocumentoTipo($novo, $request->documento_tipo_id, $arrErrors);
 
         // Erros que impedem o processamento
         CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
@@ -131,28 +132,55 @@ class RefDocumentoConfigController extends Controller
     {
         // $this->authorize('update', RefDocumentoConfig::class);
 
+        $arrErrors = [];
+
         // Regras de validação
         $rules = [
-            'nome' => 'required',
-            'sigla' => 'required|min:2',
+            'mask' => 'nullable|string',
+            'validade_emissao_int' => 'nullable|integer',
+            'reverse_bln' => 'nullable|boolean',
+            'digito_bln' => 'required|boolean',
+            'digito_mask' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('digito_bln') === true;
+                }),
+                'string',
+            ],
+            'digito_separador' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('digito_bln') === true;
+                }),
+                'string',
+            ],
+            'estado_id' => 'nullable|integer',
+            'orgao_emissor_id' => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('estado_id') !== null;
+                }),
+                'integer',
+            ],
+            'nacionalidade_id' => 'nullable|integer',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $this->validarRecursoExistente($request, $request->id);
+        $this->validarRecursoExistente($request,$request->id);
+        
+        // Se a validação passou, busca o registro
+        $resource = $this->buscarRecurso($request->id);;
 
-        // Verifica se o modelo existe
-        $resource = $this->buscarRecurso($request->id);
+        $this->preencherCampos($resource, $request, $arrErrors);
 
-        // Se passou pelas validações, altera o recurso
-        $resource->nome = $request->input('nome');
-        $resource->sigla = $request->input('sigla');
+        $this->validacoesDocumentoTipo($resource, $resource->documento_tipo_id, $arrErrors);
+
+        // Erros que impedem o processamento
+        CommonsFunctions::retornaErroQueImpedemProcessamento422($arrErrors);
 
         CommonsFunctions::inserirInfoUpdated($resource);
+
         $resource->save();
 
-        // Retorne uma resposta de sucesso (status 200 - OK)
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
@@ -201,7 +229,7 @@ class RefDocumentoConfigController extends Controller
         if (!$resource || $resource->trashed()) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O Tipo de Documento informado não existe ou foi excluído.";
+            $mensagem = "O Tipo de Documento não existe ou foi excluído.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
@@ -298,10 +326,10 @@ class RefDocumentoConfigController extends Controller
         }
     }
 
-    private function validacoesDocumentoTipo(RefDocumentoConfig $resource, Request $request, &$arrErrors)
+    private function validacoesDocumentoTipo(RefDocumentoConfig $resource, Integer $documento_tipo_id, &$arrErrors)
     {
 
-        $documento_tipo = $this->buscarRecursoDocumentoTipo($request->documento_tipo_id);
+        $documento_tipo = $this->buscarRecursoDocumentoTipo($documento_tipo_id);
 
         if ($documento_tipo->doc_nacional_bln) {
             if (!$resource->nacionalidade_id) {
