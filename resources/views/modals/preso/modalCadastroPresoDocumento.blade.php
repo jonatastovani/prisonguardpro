@@ -10,22 +10,24 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <label for="artigo_idModalCadastroPresoDocumento" class="form-label">Artigo</label>
+                            <label for="documento_idModalCadastroPresoDocumento" class="form-label">Documento</label>
                             <br>
                             <div class="input-group">
-                                <select name="artigo_id" id="artigo_idModalCadastroPresoDocumento" class="form-select">
+                                <select name="documento_id" id="documento_idModalCadastroPresoDocumento" class="form-select">
                                 </select>
                                 <button type="button"
-                                    class="btn btn-outline-secondary btnArtigosCadastro"><i class="bi bi-pencil"></i></button>
+                                    class="btn btn-outline-secondary btnDocumentosCadastro"><i class="bi bi-pencil"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
-                            <label for="observacoesModalCadastroPresoDocumento" class="form-label">Observações
-                                (Opcional)</label>
-                            <textarea name="observacoes" id="observacoesModalCadastroPresoDocumento" cols="12" rows="2" class="form-control"
-                                placeholder="Nome da vítima em caso de esposa/companheira, quantidade de drogas..."></textarea>
+                        <div class="col-8">
+                            <label for="numeroModalCadastroPresoDocumento" class="form-label">Número</label>
+                            <input type="text" name="numero" id="numeroModalCadastroPresoDocumento" class="form-control">
+                        </div>
+                        <div class="col-2 divDigito" style="display: none">
+                            <label for="digitoModalCadastroPresoDocumento" class="form-label">Dígito</label>
+                            <input type="text" name="digito" id="digitoModalCadastroPresoDocumento" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -45,6 +47,6 @@
     </div>
 </div>
 
-@include('modals.referencias.modalCadastroArtigo')
+@include('modals.referencias.modalCadastroDocumento')
 
 <script type="module" src="{{ asset('js/modals/preso/modalCadastroPresoDocumento.js') }}"></script>

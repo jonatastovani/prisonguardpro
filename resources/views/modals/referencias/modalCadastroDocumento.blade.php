@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-4 d-flex align-items-end">
+                                    <div class="col-6 d-flex align-items-end">
                                         <div class="form-check form-switch mt-2">
                                             <input class="form-check-input" type="checkbox" role="switch"
                                                 name="reverse_bln" id="reverse_blnModalCadastroDocumento">
@@ -81,7 +81,7 @@
                                                 Reversa</label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 d-flex align-items-end">
+                                    <div class="col-6 d-flex align-items-end">
                                         <div class="form-check form-switch mt-2">
                                             <input class="form-check-input" type="checkbox" role="switch"
                                                 name="digito_bln" id="digito_blnModalCadastroDocumento">
@@ -94,14 +94,14 @@
                                 </div>
 
                                 <div class="row rowDigito" style="display: none;">
-                                    <div class="col-3 mt-2" data-bs-toggle="tooltip"
+                                    <div class="col-6 mt-2" data-bs-toggle="tooltip"
                                         data-bs-title="Máscara que define os valores a serem aceitos no campo dígito.">
                                         <label for="digito_maskModalCadastroDocumento" class="form-label">Másc.
                                             dígito</label>
                                         <input type="text" class="form-control text-center" name="digito_mask"
                                             placeholder="Ex: X" id="digito_maskModalCadastroDocumento" disabled>
                                     </div>
-                                    <div class="col-3 mt-2" data-bs-toggle="tooltip"
+                                    <div class="col-6 mt-2" data-bs-toggle="tooltip"
                                         data-bs-title="Caractere separador do dígito.">
                                         <label for="digito_separadorModalCadastroDocumento"
                                             class="form-label">Separador</label>

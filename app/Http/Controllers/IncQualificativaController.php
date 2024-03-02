@@ -47,13 +47,13 @@ class IncQualificativaController extends Controller
             $this->validarRecursoExistentePreso($request);
 
             // Se passou pelas validações então insere os novos dados na qualificativa
-            $this->storeQualificativa($request, $passagem);
+            return $this->storeQualificativa($request, $passagem);
         } else {
             // Valida se não existe outra qualificativa provisória com o mesmo passagem_id, se existir retorna a mensagem automaticamente
             $this->validarRecursoExistenteProvisoria($request);
 
             // Se passou pelas validações então insere os novos dados na qualificativa
-            $this->storeQualificativaProvisoria($request, $passagem);
+            return $this->storeQualificativaProvisoria($request, $passagem);
         }
     }
 
@@ -262,13 +262,13 @@ class IncQualificativaController extends Controller
                 }
             }
 
-            $novo->refresh();
+            $passagem->refresh();
 
             DB::commit();
 
             // $this->executarEventoWebsocket();
 
-            $response = RestResponse::createSuccessResponse($novo, 200, ['token' => true]);
+            $response = RestResponse::createSuccessResponse($passagem, 200, ['token' => true]);
             return response()->json($response->toArray(), $response->getStatusCode());
         } catch (\Exception $e) {
             // Se ocorrer algum erro, fazer o rollback da transação
@@ -330,7 +330,7 @@ class IncQualificativaController extends Controller
             $this->validarRecursoExistentePreso($request, $request->input('preso_id'));
 
             // Se passou pelas validações então insere os novos dados na qualificativa
-            $this->storeQualificativa($request, $passagem);
+            return $this->storeQualificativa($request, $passagem);
         } else if ($request->has('qual_prov_id') && $request->input('qual_prov_id')) {
             // Valida se não existe outra qualificativa provisória com o mesmo passagem_id, se existir retorna a mensagem automaticamente
             $this->validarRecursoExistenteProvisoria($request, $request->input('qual_prov_id'));

@@ -9,7 +9,6 @@ use App\Models\RefDocumentoConfig;
 use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Ramsey\Uuid\Type\Integer;
 
 class RefDocumentoConfigController extends Controller
 {
@@ -18,8 +17,24 @@ class RefDocumentoConfigController extends Controller
      */
     public function index()
     {
-        $resource = RefDocumentoConfig::all();
-        $response = RestResponse::createSuccessResponse($resource, 200);
+        $resource = RefDocumentoConfig::select('ref_documento_configs.*')
+            ->join('ref_documento_tipos', 'ref_documento_tipos.id', '=', 'ref_documento_configs.documento_tipo_id')
+            ->with('documento_tipo', 'estado.nacionalidade', 'nacionalidade', 'orgao_emissor')
+            ->orderBy('ref_documento_tipos.nome')->get();
+
+        // Mapear os resultados para inserir o nome personalizado
+        $mappedResults = $resource->map(function ($item) {
+            $nome = $item->documento_tipo->nome;
+            if ($item->documento_tipo->doc_nacional_bln) {
+                $nome .= " - {$item->nacionalidade->sigla}";
+            } else {
+                $nome .= " - {$item->estado->sigla}/{$item->orgao_emissor->sigla}";
+            }
+            $item['nome'] = $nome;
+            return $item;
+        });
+
+        $response = RestResponse::createSuccessResponse($mappedResults, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
@@ -165,8 +180,8 @@ class RefDocumentoConfigController extends Controller
         CommonsFunctions::validacaoRequest($request, $rules);
 
         // Valida se não existe outro com o mesmo nome
-        $this->validarRecursoExistente($request,$request->id);
-        
+        $this->validarRecursoExistente($request, $request->id);
+
         // Se a validação passou, busca o registro
         $resource = $this->buscarRecurso($request->id);;
 
@@ -204,7 +219,7 @@ class RefDocumentoConfigController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    private function buscarRecurso($id) : RefDocumentoConfig
+    private function buscarRecurso($id): RefDocumentoConfig
     {
         $resource = RefDocumentoConfig::find($id);
 

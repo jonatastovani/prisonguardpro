@@ -10,8 +10,10 @@
         <div class="col-12 mt-2 text-center">
 
             @php
-                if (!$preso_id_bln) {
+                if (!$preso_id_bln && !$qual_prov_id) {
                     $titulo = "Nova $titulo";
+                } else {
+                    $titulo = "Alterar $titulo";
                 }
             @endphp
 

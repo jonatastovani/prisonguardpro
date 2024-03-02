@@ -1076,37 +1076,31 @@ export class commonFunctions {
     static cutText(string, options = {}) {
         const { qttWords = 1, maxLength = 0, firstLastName = false } = options;
 
-        if (maxLength > 0) {
-            let words = string.split(/\s+/);
-            let slicedText = ''
+        let words = string.split(/\s+/);
+        let slicedText = ''
 
-            if (firstLastName) {
+        if (firstLastName) {
+            if (words.length > 1) {
                 // Captura o primeiro e último nome
                 slicedText = words[0] + " " + words[words.length - 1];
             } else {
-                let slicedWords = words.slice(0, qttWords);
-                slicedText = slicedWords.join(' ');
+                // Captura o primeiro nome porque não tem mais que uma palavra
+                slicedText = words[0];
             }
+        } else {
+            let slicedWords = words.slice(0, qttWords);
+            slicedText = slicedWords.join(' ');
+        }
 
+        if (maxLength > 0) {
             if (slicedText.length > maxLength) {
                 slicedText = slicedText.substring(0, maxLength);
             }
-
-            return slicedText;
         } else {
-            let words = string.split(/\s+/);
-            let slicedText = '';
-
-            if (firstLastName) {
-                // Captura o primeiro e último nome
-                slicedText = words[0] + " " + words[words.length - 1];
-            } else {
-                slicedText = words.slice(0, qttWords).join(' ');
-            }
-            console.log(slicedText)
-
-            return slicedText;
+            slicedText = words.slice(0, qttWords).join(' ');
         }
+        
+        return slicedText;
     }
 
     static returnArrayToHTML(array, options = {}) {

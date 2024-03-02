@@ -1,5 +1,5 @@
 import { commonFunctions } from "../../common/commonFunctions.js";
-import { modalCadastroArtigo } from "../referencias/modalCadastroArtigo.js";
+import { modalCadastroDocumento } from "../referencias/modalCadastroDocumento.js";
 
 export class modalCadastroPresoDocumento {
 
@@ -33,14 +33,14 @@ export class modalCadastroPresoDocumento {
     timerSearch;
 
     constructor() {
-        this.#urlApi = urlRefArtigos;
+        this.#urlApi = urlRefDocumentos;
         this.#idModal = "#modalCadastroPresoDocumento";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
         this.#arrData = {
             idDiv: undefined,
-            artigo_id: null,
+            documento_id: null,
             observacoes: null
         };
         this.#addEventsDefault();
@@ -149,7 +149,7 @@ export class modalCadastroPresoDocumento {
 
         self.#clearForm();
         setTimeout(() => {
-            $(self.#idModal).find('select[name="artigo_id"]').focus();
+            $(self.#idModal).find('select[name="documento_id"]').focus();
         }, 500);
     }
 
@@ -168,21 +168,19 @@ export class modalCadastroPresoDocumento {
         const self = this;
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
-        const selectArtigo = modal.find('select[name="artigo_id"]');
-        commonFunctions.addEventsSelect2(selectArtigo, `${self.#urlApi}/search/select2`, {
-            dropdownParent: modal, minimum: 0
-        });
 
-        modal.find(`.btnArtigosCadastro`).on('click', function () {
-            const obj = new modalCadastroArtigo();
+        commonFunctions.fillSelect(modal.find('select[name="documento_id"]'),self.#urlApi);
+
+        modal.find(`.btnDocumentosCadastro`).on('click', function () {
+            const obj = new modalCadastroDocumento();
             obj.setFocusElementWhenClosingModal = this;
             self.#modalHideShow(false);
             obj.modalOpen().then(async function (result) {
                 if (result && result.refresh) {
 
-                    const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.artigo_id });
+                    const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.documento_id });
                     const data = response.data;
-                    modal.find('select[name="artigo_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
+                    modal.find('select[name="documento_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
                     
                     self.#promisseReturnValue.refresh = true;
 
@@ -199,9 +197,9 @@ export class modalCadastroPresoDocumento {
         const modal = $(self.#idModal);
 
         try {
-            const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.artigo_id });
+            const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.documento_id });
             const data = response.data;
-            const selectArtigo = modal.find('select[name="artigo_id"]');
+            const selectArtigo = modal.find('select[name="documento_id"]');
 
             selectArtigo.html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
             selectArtigo.attr('disabled', true);
@@ -222,7 +220,7 @@ export class modalCadastroPresoDocumento {
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
         self.#promisseReturnValue.refresh = true;
-        self.#promisseReturnValue.arrData.artigo_id = data.artigo_id
+        self.#promisseReturnValue.arrData.documento_id = data.documento_id
         self.#promisseReturnValue.arrData.observacoes = data.observacoes;
         self.#endTimer = true;
 

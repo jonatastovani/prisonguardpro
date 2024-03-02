@@ -1,29 +1,29 @@
-import { modalCadastroDocumento } from "../modals/referencias/modalCadastroDocumento.js";
+import { modalCadastroPresoDocumento } from "../modals/preso/modalCadastroPresoDocumento.js";
 
 $(document).ready(function () {
 
 
-    // preSetMask.apply('#rg', 1);
-    $('#rg').mask('00.000.00A-X', {
-        reverse: false,
-        translation: {
-            'X': {
-                pattern: /[0-9xX]/,
-            }
-        },
-        onKeyPress: function(value, e, field, options) {
-            console.log(value)
-            console.log(e)
-            console.log(field)
-            console.log(options)
-            const key = e.key;
-            console.log(e.key)
-            // const lastChar = value[value.length - 1];
-            // if (key !== 'X' && lastChar !== 'X') {
-            //     e.preventDefault();
-            // }
-        }
-    });
+    // // preSetMask.apply('#rg', 1);
+    // $('#rg').mask('00.000.00A-X', {
+    //     reverse: false,
+    //     translation: {
+    //         'X': {
+    //             pattern: /[0-9xX]/,
+    //         }
+    //     },
+    //     onKeyPress: function(value, e, field, options) {
+    //         console.log(value)
+    //         console.log(e)
+    //         console.log(field)
+    //         console.log(options)
+    //         const key = e.key;
+    //         console.log(e.key)
+    //         // const lastChar = value[value.length - 1];
+    //         // if (key !== 'X' && lastChar !== 'X') {
+    //         //     e.preventDefault();
+    //         // }
+    //     }
+    // });
 
     // $('#rg').mask('#.##0', {
     //     reverse: true,
@@ -45,7 +45,7 @@ $(document).ready(function () {
     // });
 
     $(`#btnModal`).on('click', function () {
-        const obj = new modalCadastroDocumento();
+        const obj = new modalCadastroPresoDocumento();
         obj.setFocusElementWhenClosingModal = this;
         obj.modalOpen().then(function (result) {
             if (result && result.refresh) {
