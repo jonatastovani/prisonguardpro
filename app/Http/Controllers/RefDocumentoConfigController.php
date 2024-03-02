@@ -204,7 +204,7 @@ class RefDocumentoConfigController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    private function buscarRecurso($id)
+    private function buscarRecurso($id) : RefDocumentoConfig
     {
         $resource = RefDocumentoConfig::find($id);
 
@@ -326,7 +326,7 @@ class RefDocumentoConfigController extends Controller
         }
     }
 
-    private function validacoesDocumentoTipo(RefDocumentoConfig $resource, Integer $documento_tipo_id, &$arrErrors)
+    private function validacoesDocumentoTipo(RefDocumentoConfig $resource, Int $documento_tipo_id, &$arrErrors)
     {
 
         $documento_tipo = $this->buscarRecursoDocumentoTipo($documento_tipo_id);

@@ -271,8 +271,8 @@ export class modalCadastroDocumentoTipo {
             if (response.data) {
                 const form = $(self.#idModal).find('form');
                 form.find('input[name="nome"]').val(response.data.nome).focus();
-                form.find('input[name="doc_nacional_bln"]').prop('checked', response.data.doc_nacional_bln).focus();
-                form.find('input[name="bloqueado_perm_adm_bln"]').prop('checked', response.data.bloqueado_perm_adm_bln).focus();
+                form.find('input[name="doc_nacional_bln"]').prop('checked', response.data.doc_nacional_bln);
+                form.find('input[name="bloqueado_perm_adm_bln"]').prop('checked', response.data.bloqueado_perm_adm_bln);
                 form.find('.register-title').html(`Editar Tipo de Documento: ${response.data.id} - ${response.data.nome}`);
             }
         } catch (error) {

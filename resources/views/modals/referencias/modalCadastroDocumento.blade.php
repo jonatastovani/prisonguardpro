@@ -27,6 +27,7 @@
                                     <th class="text-center">#</th>
                                     <th class="text-center">Ação</th>
                                     <th>Nome</th>
+                                    <th>Máscara</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -45,7 +46,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <form id="formModalCadastroDocumento">
+                        <form>
                             <div class="col-12 divRegistrationFields" style="display: none;">
                                 <div class="row">
                                     <h5 class="register-title">Novo Documento</h5>
@@ -118,7 +119,7 @@
                                                 <select name="estado_id" id="estado_idModalCadastroDocumento"
                                                     class="form-select" disabled></select>
                                             </div>
-                                            <button class="btn btn-outline-secondary btnEstadoCadastro"><i
+                                            <button type="button" class="btn btn-outline-secondary btnEstadoCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
@@ -131,7 +132,7 @@
                                                     id="orgao_emissor_idModalCadastroDocumento" class="form-select"
                                                     disabled></select>
                                             </div>
-                                            <button class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
+                                            <button type="button" class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
@@ -147,7 +148,7 @@
                                                     id="nacionalidade_idModalCadastroDocumento" class="form-select"
                                                     disabled></select>
                                             </div>
-                                            <button class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
+                                            <button type="button" class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
@@ -155,13 +156,13 @@
 
                                 <div class="row">
                                     <div class="col-12 text-end mt-2">
-                                        <button type="submit" form="formModalCadastroDocumento" class="btn btn-outline-success btn-save w-50"
+                                        <button type="submit" class="btn btn-outline-success btn-save w-50"
                                             style="max-width: 100px;">
                                             <span class="spinner-border spinner-border-sm d-none" role="status"
                                                 aria-hidden="true"></span>
                                             Salvar
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-cancel w-50"
+                                        <button class="btn btn-outline-danger btn-cancel w-50"
                                             style="max-width: 100px;">Cancelar</button>
                                     </div>
                                 </div>

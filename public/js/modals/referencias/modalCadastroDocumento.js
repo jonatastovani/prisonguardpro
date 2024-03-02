@@ -292,8 +292,6 @@ export class modalCadastroDocumento {
                         const item = response.data[i];
 
                         const documento_tipo = item.documento_tipo;
-                        const doc_nacional = documento_tipo.doc_nacional_bln ? "Sim" : "Não";
-                        const bloqueado_perm_adm = documento_tipo.bloqueado_perm_adm_bln ? "Sim" : "Não";
 
                         let nome = '';
                         let title = '';
@@ -304,6 +302,8 @@ export class modalCadastroDocumento {
                             nome = `${documento_tipo.nome} - ${item.estado.sigla}/${item.orgao_emissor.sigla}`;
                             title = `${item.estado.nome} - ${item.estado.nacionalidade.pais} / ${item.orgao_emissor.nome}`
                         }
+                        const mascara = item.mask;
+
                         const idTr = `${item.id}${Date.now()}`;
                         tabela.append(`
                             <tr id=${idTr}>
@@ -319,6 +319,7 @@ export class modalCadastroDocumento {
                                     </div>
                                 </td>
                                 <td data-bs-title="${title}" data-bs-toggle="tooltip">${nome}</td>
+                                <td>${mascara}</td>
                             </tr>
                         `);
 
