@@ -1,4 +1,4 @@
-import { modalCadastroPresoDocumento } from "../modals/preso/modalCadastroPresoDocumento.js";
+import { modalCadastroPessoaDocumento } from "../modals/pessoa/modalCadastroPessoaDocumento.js";
 
 $(document).ready(function () {
 
@@ -45,7 +45,7 @@ $(document).ready(function () {
     // });
 
     $(`#btnModal`).on('click', function () {
-        const obj = new modalCadastroPresoDocumento();
+        const obj = new modalCadastroPessoaDocumento();
         obj.setFocusElementWhenClosingModal = this;
         obj.modalOpen().then(function (result) {
             if (result && result.refresh) {

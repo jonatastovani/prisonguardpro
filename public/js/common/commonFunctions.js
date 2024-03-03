@@ -335,16 +335,17 @@ export class commonFunctions {
     }
 
     /**
-     * Applies a custom mask to a numeric input element.
+     * Aplica uma máscara personalizada a um elemento de entrada numérico.
      *
-     * @param {jQuery} elem - The input element to which the mask will be applied.
-     * @param {Object} metadata - Metadata that customizes the mask.
-     * @param {string} metadata.format - The desired format mask (default: '0,99' for numbers with two decimal places).
-     * @param {Object} metadata.before - Settings for digits before the decimal point.
-     * @param {number} metadata.before.quantity - The number of digits before the decimal point.
-     * @param {Object} metadata.after - Settings for digits after the decimal point.
-     * @param {number} metadata.after.quantity - The number of digits after the decimal point.
-     * @param {boolean} metadata.reverse - Defines whether the mask should be applied in reverse mode (from right to left).
+     * @param {jQuery} elem – O elemento de entrada ao qual a máscara será aplicada.
+     * @param {Object} metadata - Metadados que personalizam a máscara.
+     * @param {string} metadata.format - A máscara de formato desejada (padrão: '0,99' para números com duas casas decimais).
+     * @param {Object} metadata.before - Configurações para dígitos antes da vírgula decimal.
+     * @param {number} metadata.before.quantity – O número de dígitos antes da vírgula decimal.
+     * @param {Object} metadata.after - Configurações para dígitos após a vírgula decimal.
+     * @param {number} metadata.after.quantity – O número de dígitos após a vírgula decimal.
+     * @param {boolean} metadata.reverse - Define se a máscara deve ser aplicada em modo reverso (da direita para a esquerda).
+     * @param {string} metadata.translation - Objeto de tradução contendo traduções personalizadas para a máscara.
      */
     static applyCustomNumberMask(elem, metadata = {}) {
         let format = '0,99';
@@ -371,9 +372,19 @@ export class commonFunctions {
 
         }
 
-        elem.mask(format, { reverse: metadata.reverse });
+        let data = { reverse: metadata.reverse };
+        if (metadata.translation == 'docX') {
+            data['translation'] = {
+                'X': {
+                    pattern: /[0-9xX]/,
+                }
+            }
+        }
+        elem.mask(format, data);
 
     }
+
+    
 
     /**
      * Applies a currency mask to a text input field.
@@ -1099,7 +1110,7 @@ export class commonFunctions {
         } else {
             slicedText = words.slice(0, qttWords).join(' ');
         }
-        
+
         return slicedText;
     }
 

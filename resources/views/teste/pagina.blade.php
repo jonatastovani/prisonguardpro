@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    @include('modals.preso.modalCadastroPresoDocumento')
+    @include('modals.pessoa.modalCadastroPessoaDocumento')
 
     <script type="module" src="{{ asset('js/teste/pagina.js') }}"></script>
 

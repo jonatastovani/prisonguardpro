@@ -1,7 +1,8 @@
+import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
 import { modalCadastroDocumento } from "../referencias/modalCadastroDocumento.js";
 
-export class modalCadastroPresoDocumento {
+export class modalCadastroPessoaDocumento {
 
     /**
      * URL do endpoint da Api
@@ -34,7 +35,7 @@ export class modalCadastroPresoDocumento {
 
     constructor() {
         this.#urlApi = urlRefDocumentos;
-        this.#idModal = "#modalCadastroPresoDocumento";
+        this.#idModal = "#modalCadastroPessoaDocumento";
         this.#promisseReturnValue = undefined;
         this.#focusElementWhenClosingModal = null;
         this.#endTimer = false;
@@ -87,7 +88,7 @@ export class modalCadastroPresoDocumento {
             refresh: false,
             arrData: self.#arrData
         };
-        if(self.#arrData.idDiv!=undefined){
+        if (self.#arrData.idDiv != undefined) {
             self.#fillDataAll();
         } else {
             $(self.#idModal).modal('show');
@@ -169,7 +170,53 @@ export class modalCadastroPresoDocumento {
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
 
-        commonFunctions.fillSelect(modal.find('select[name="documento_id"]'),self.#urlApi);
+        const preencherDocumento = () => {
+            commonFunctions.fillSelect(modal.find('select[name="documento_id"]'), self.#urlApi);
+            modal.find('select[name="documento_id"]').trigger('change');
+        }
+        preencherDocumento();
+
+        modal.find('select[name="documento_id"]').on('change', async function () {
+            const id = $(this).val();
+            const divDocumento = modal.find('.divDocumento');
+            const divDigito = modal.find('.divDigito');
+
+            if (!commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(id)) {
+                const obj = new conectAjax(self.#urlApi);
+                obj.setParam(id)
+                try {
+                    const response = await obj.getRequest();
+                    console.log(response)
+                    if (response.data) {
+                        const data = response.data;
+                        
+                        if (data.mask) {
+                            commonFunctions.applyCustomNumberMask(modal.find('input[name="numero"]'), { format: data.mask, reverse: data.reverse_bln, translation: 'docX' })
+                        } else {
+                            modal.find('input[name="numero"]').unmask();
+                        }
+                        divDocumento.show('fast').find('input, select, button').removeAttr('disabled');
+                        
+                        if (data.digito_bln) {
+                            commonFunctions.applyCustomNumberMask(modal.find('input[name="digito"]'), { format: data.digito_mask, translation: 'docX' })
+                            divDigito.show('fast').find('input, select, button').removeAttr('disabled');
+                        } else {
+                            modal.find('input[name="digito"]').unmask();
+                            divDigito.hide('fast').find('input, select, button').attr('disabled', true);
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                    const traceId = error.traceId ? error.traceId : undefined;
+                    commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
+                }
+            } else {
+                modal.find('input[name="numero"]').unmask();
+                modal.find('input[name="digito"]').unmask();
+                divDocumento.hide('fast').find('input, select, button').attr('disabled', true);
+                divDigito.hide('fast').find('input, select, button').attr('disabled', true);
+            }
+        });
 
         modal.find(`.btnDocumentosCadastro`).on('click', function () {
             const obj = new modalCadastroDocumento();
@@ -177,17 +224,13 @@ export class modalCadastroPresoDocumento {
             self.#modalHideShow(false);
             obj.modalOpen().then(async function (result) {
                 if (result && result.refresh) {
-
-                    const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.documento_id });
-                    const data = response.data;
-                    modal.find('select[name="documento_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
-                    
+                    preencherDocumento();
                     self.#promisseReturnValue.refresh = true;
-
                 }
                 self.#modalHideShow();
             });
         });
+
 
     }
 
@@ -210,7 +253,7 @@ export class modalCadastroPresoDocumento {
             console.error(error);
             const traceId = error.traceId ? error.traceId : undefined;
             commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
-        self.#endTimer = true;
+            self.#endTimer = true;
         }
 
     }
