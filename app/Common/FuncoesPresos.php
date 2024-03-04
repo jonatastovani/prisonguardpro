@@ -4,6 +4,7 @@ namespace App\Common;
 
 use App\Models\IncEntradaPreso;
 use App\Models\IncQualificativaProvisoria;
+use App\Models\PresoDocumentoProvisorio;
 use App\Models\PresoPassagemArtigo;
 use InvalidArgumentException;
 
@@ -136,6 +137,26 @@ class FuncoesPresos
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             return ["artigo_passagem.$id" => [
+                'error' => $mensagem,
+                'trace_id' => $traceId
+            ]];
+        } 
+
+        return $resource;
+    }
+
+    public static function buscarRecursoPresoDocumentoProvisorio($id) : PresoDocumentoProvisorio | array
+    {
+        $resource = PresoDocumentoProvisorio::find($id);
+
+        // Verifique se o modelo foi encontrado e não foi excluído
+        if (!$resource || $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O documento atribuído ao ID Passagem $id não existe ou foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            return ["documento_provisorio.$id" => [
                 'error' => $mensagem,
                 'trace_id' => $traceId
             ]];

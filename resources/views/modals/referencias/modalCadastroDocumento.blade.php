@@ -61,7 +61,7 @@
                                                 class="form-select"></select>
                                             <button type="button"
                                                 class="btn btn-outline-secondary btnDocumentoTipoCadastro"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                    class="bi bi-pencil" tabindex="-1"></i></button>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mt-2">
@@ -92,10 +92,12 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4 col-6 mt-2">
-                                        <label for="validade_emissao_intModalCadastroDocumento"
-                                            class="form-label" data-bs-title="Validade padrão do documento em meses. Deixe vazio para não aplicar a validade." data-bs-toggle="tooltip">Validade</label>
+                                        <label for="validade_emissao_intModalCadastroDocumento" class="form-label"
+                                            data-bs-title="Validade padrão do documento em meses. Deixe vazio para não aplicar a validade."
+                                            data-bs-toggle="tooltip">Validade</label>
                                         <div class="input-group">
-                                            <input type="text" name="validade_emissao_int" id="validade_emissao_intModalCadastroDocumento" class="form-control">
+                                            <input type="text" name="validade_emissao_int"
+                                                id="validade_emissao_intModalCadastroDocumento" class="form-control">
                                             <div class="input-group-text">meses(ês)</div>
                                         </div>
                                     </div>
@@ -129,7 +131,7 @@
                                             </div>
                                             <button type="button"
                                                 class="btn btn-outline-secondary btnEstadoCadastro"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                    class="bi bi-pencil" tabindex="-1"></i></button>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mt-2">
@@ -143,7 +145,7 @@
                                             </div>
                                             <button type="button"
                                                 class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                    class="bi bi-pencil" tabindex="-1"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -160,7 +162,7 @@
                                             </div>
                                             <button type="button"
                                                 class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                    class="bi bi-pencil" tabindex="-1"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -172,14 +174,8 @@
                                             data-bs-title="O Tipo de validação de documento para ser aplicado.">Tipo de
                                             validação</label>
                                         <div class="input-group">
-                                            <div class="input-group-select2-button-1">
-                                                <select name="validation_type"
-                                                    id="validation_typeModalCadastroDocumento"
-                                                    class="form-select"></select>
-                                            </div>
-                                            <button type="button"
-                                                class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
-                                                    class="bi bi-pencil"></i></button>
+                                            <select name="validation_type" id="validation_typeModalCadastroDocumento"
+                                                class="form-select"></select>
                                         </div>
                                     </div>
                                 </div>

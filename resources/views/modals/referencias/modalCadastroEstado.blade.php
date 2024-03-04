@@ -68,7 +68,7 @@
                                         <div class="input-group flex">
                                             <select name="nacionalidade_id" id="nacionalidade_idModalCadastroEstado"></select>
                                             <button type="button" class="btn btn-outline-secondary btnPaisCadastro"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                    class="bi bi-pencil" tabindex="-1"></i></button>
                                         </div>
                                     </div>
                                 </div>

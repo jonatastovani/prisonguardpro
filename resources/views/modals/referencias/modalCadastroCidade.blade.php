@@ -63,7 +63,7 @@
                                         <div class="input-group">
                                             <select name="estado_id" id="estado_idModalCadastroEstado"></select>
                                             <button type="button"
-                                            class="btn btn-outline-secondary btnEstadoCadastro"><i class="bi bi-pencil"></i></button>
+                                            class="btn btn-outline-secondary btnEstadoCadastro" tabindex="-1"><i class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
                                 </div>

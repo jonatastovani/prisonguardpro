@@ -249,6 +249,9 @@ export class modalCadastroPessoaDocumento {
             if (self.#arrData.digito) {
                 modal.find('input[name="digito"]').val(self.#arrData.digito);
             }
+            if (self.#arrData.data_emissao) {
+                modal.find('input[name="data_emissao"]').val(self.#arrData.data_emissao);
+            }
             $(self.#idModal).modal('show');
 
         } catch (error) {
@@ -268,7 +271,7 @@ export class modalCadastroPessoaDocumento {
         if ((!commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(data.documento_id) || self.#arrData.documento_id) &&
             !commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(data.numero)) {
 
-            const returnData = () => {
+                const returnData = () => {
                 self.#promisseReturnValue.refresh = true;
                 self.#promisseReturnValue.arrData.documento_id = data.documento_id
                 self.#promisseReturnValue.arrData.numero = data.numero;
@@ -276,6 +279,11 @@ export class modalCadastroPessoaDocumento {
                     self.#promisseReturnValue.arrData.digito = data.digito;
                 } else {
                     self.#promisseReturnValue.arrData.digito = '';
+                }
+                if (data.data_emissao) {
+                    self.#promisseReturnValue.arrData.data_emissao = data.data_emissao;
+                } else {
+                    self.#promisseReturnValue.arrData.data_emissao = '';
                 }
                 self.#endTimer = true;
             }

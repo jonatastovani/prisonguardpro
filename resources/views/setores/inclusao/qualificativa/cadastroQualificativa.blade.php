@@ -68,7 +68,7 @@
                         <div class="input-group-select2-button-1">
                             <select name="cidade_nasc_id" id="cidade_nasc_id" style="width: 100%;"></select>
                         </div>
-                        <button id="btnCidadeCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnCidadeCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <label for="genero_id" class="form-label">Gênero / Orientação Sexual</label>
                     <div class="input-group">
                         <select name="genero_id" id="genero_id" class="form-select"></select>
-                        <button id="btnGeneroCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnGeneroCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                     <label for="escolaridade_id" class="form-label">Escolaridade</label>
                     <div class="input-group">
                         <select name="escolaridade_id" id="escolaridade_id" class="form-select"></select>
-                        <button id="btnEscolaridadeCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnEscolaridadeCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     <label for="estado_civil_id" class="form-label">Estado Civil</label>
                     <div class="input-group">
                         <select name="estado_civil_id" id="estado_civil_id" class="form-select"></select>
-                        <button id="btnEstadoCivilCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnEstadoCivilCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     <label for="cutis_id" class="form-label">Cutis</label>
                     <div class="input-group">
                         <select name="cutis_id" id="cutis_id" class="form-select"></select>
-                        <button id="btnCutisCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnCutisCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                     <label for="cabelo_tipo_id" class="form-label">Tipo de Cabelo</label>
                     <div class="input-group">
                         <select name="cabelo_tipo_id" id="cabelo_tipo_id" class="form-select"></select>
-                        <button id="btnCabeloTipoCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnCabeloTipoCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                     <label for="cabelo_cor_id" class="form-label">Cor de Cabelo</label>
                     <div class="input-group">
                         <select name="cabelo_cor_id" id="cabelo_cor_id" class="form-select"></select>
-                        <button id="btnCabeloCorCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnCabeloCorCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
                     <label for="olho_tipo_id" class="form-label">Tipo de Olhos</label>
                     <div class="input-group">
                         <select name="olho_tipo_id" id="olho_tipo_id" class="form-select"></select>
-                        <button id="btnOlhoTipoCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnOlhoTipoCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                     <label for="olho_cor_id" class="form-label">Cor de Olhos</label>
                     <div class="input-group">
                         <select name="olho_cor_id" id="olho_cor_id" class="form-select"></select>
-                        <button id="btnOlhoCorCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnOlhoCorCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                     <label for="crenca_id" class="form-label">Crença</label>
                     <div class="input-group">
                         <select name="crenca_id" id="crenca_id" class="form-select"></select>
-                        <button id="btnCrencaCadastro" class="btn btn-outline-secondary"><i
+                        <button id="btnCrencaCadastro" class="btn btn-outline-secondary" tabindex="-1"><i
                                 class="bi bi-pencil"></i></button>
                     </div>
                 </div>

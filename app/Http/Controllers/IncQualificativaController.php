@@ -9,6 +9,7 @@ use App\Common\ValidacoesReferenciasId;
 use App\Models\IncEntradaPreso;
 use App\Models\IncQualificativaProvisoria;
 use App\Models\Preso;
+use App\Models\PresoDocumentoProvisorio;
 use App\Models\PresoPassagemArtigo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -214,6 +215,7 @@ class IncQualificativaController extends Controller
             'documentos.*.documento_id' => 'required|integer',
             'documentos.*.numero' => 'required|string',
             'documentos.*.digito' => 'nullable|string',
+            'documentos.*.data_emissao' => 'nullable|date_format:Y-m-d',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);
@@ -233,10 +235,22 @@ class IncQualificativaController extends Controller
 
         $arrArtigos = [];
         if ($request->has('artigos') && $request->input('artigos')) {
-            foreach ($request->input('artigos') as $preso) {
-                $retorno = $this->preencherArtigos($preso);
+            foreach ($request->input('artigos') as $artigo) {
+                $retorno = $this->preencherArtigos($artigo);
                 if ($retorno instanceof PresoPassagemArtigo) {
                     $arrArtigos[] = $retorno;
+                } else {
+                    $arrErrors = array_merge($arrErrors, $retorno);
+                }
+            }
+        }
+
+        $arrDocumentos = [];
+        if ($request->has('documentos') && $request->input('documentos')) {
+            foreach ($request->input('documentos') as $documento) {
+                $retorno = $this->preencherDocumento($documento);
+                if ($retorno instanceof PresoDocumentoProvisorio) {
+                    $arrDocumentos[] = $retorno;
                 } else {
                     $arrErrors = array_merge($arrErrors, $retorno);
                 }
@@ -256,7 +270,6 @@ class IncQualificativaController extends Controller
             CommonsFunctions::inserirInfoCreated($novo);
             $novo->save();
 
-            // $artigos = [];
             foreach ($arrArtigos as $artigo) {
                 if ($artigo instanceof PresoPassagemArtigo) {
 
@@ -264,6 +277,16 @@ class IncQualificativaController extends Controller
                     CommonsFunctions::inserirInfoCreated($artigo);
 
                     $artigo->save();
+                }
+            }
+
+            foreach ($arrDocumentos as $documento) {
+                if ($documento instanceof PresoDocumentoProvisorio) {
+
+                    $documento['passagem_id'] = $passagem->id;
+                    CommonsFunctions::inserirInfoCreated($documento);
+
+                    $documento->save();
                 }
             }
 
@@ -300,7 +323,7 @@ class IncQualificativaController extends Controller
 
         $resource->load('preso.pessoa', 'preso.pressoa.cidade_nasc', 'preso.pressoa.genero', 'preso.pressoa.escolaridade', 'preso.pressoa.estado_civil', 'preso.pressoa.documentos');
 
-        $resource->load('artigos', 'qual_prov.cidade_nasc.estado.nacionalidade', 'qual_prov.genero', 'qual_prov.escolaridade', 'qual_prov.estado_civil', 'qual_prov.cutis', 'qual_prov.cabelo_tipo', 'qual_prov.cabelo_cor', 'qual_prov.olho_cor', 'qual_prov.olho_tipo', 'qual_prov.crenca', 'convivio_tipo');
+        $resource->load('artigos', 'documentos', 'qual_prov.cidade_nasc.estado.nacionalidade', 'qual_prov.genero', 'qual_prov.escolaridade', 'qual_prov.estado_civil', 'qual_prov.cutis', 'qual_prov.cabelo_tipo', 'qual_prov.cabelo_cor', 'qual_prov.olho_cor', 'qual_prov.olho_tipo', 'qual_prov.crenca', 'convivio_tipo');
 
         $response = RestResponse::createSuccessResponse($resource, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
@@ -397,11 +420,23 @@ class IncQualificativaController extends Controller
 
         $arrArtigos = [];
         if ($request->has('artigos') && $request->input('artigos')) {
-            foreach ($request->input('artigos') as $preso) {
-                $retorno = $this->preencherArtigos($preso);
+            foreach ($request->input('artigos') as $artigo) {
+                $retorno = $this->preencherArtigos($artigo, $passagem->id);
 
                 if ($retorno instanceof PresoPassagemArtigo) {
                     $arrArtigos[] = $retorno;
+                } else {
+                    $arrErrors = array_merge($arrErrors, $retorno);
+                }
+            }
+        }
+
+        $arrDocumentos = [];
+        if ($request->has('documentos') && $request->input('documentos')) {
+            foreach ($request->input('documentos') as $documento) {
+                $retorno = $this->preencherDocumento($documento, $passagem->id);
+                if ($retorno instanceof PresoDocumentoProvisorio) {
+                    $arrDocumentos[] = $retorno;
                 } else {
                     $arrErrors = array_merge($arrErrors, $retorno);
                 }
@@ -442,6 +477,30 @@ class IncQualificativaController extends Controller
                     }
 
                     $artigo->save();
+                }
+            }
+
+            foreach ($passagem->documentos as $documentoExistente) {
+                $documentoEnviado = collect($arrDocumentos)->firstWhere('id', $documentoExistente->id);
+
+                if (!$documentoEnviado) {
+                    // Se o documento existente não foi enviado, então excluímos
+                    CommonsFunctions::inserirInfoDeleted($documentoExistente);
+                    $documentoExistente->save();
+                }
+            }
+
+            foreach ($arrDocumentos as $documento) {
+                if ($documento instanceof PresoDocumentoProvisorio) {
+
+                    if (!$documento->id) {
+                        $documento['passagem_id'] = $passagem->id;
+                        CommonsFunctions::inserirInfoCreated($documento);
+                    } else {
+                        CommonsFunctions::inserirInfoUpdated($documento);
+                    }
+
+                    $documento->save();
                 }
             }
 
@@ -495,7 +554,7 @@ class IncQualificativaController extends Controller
         $resource = FuncoesPresos::buscarRecursoPresoPassagemArtigo($id);
 
         if ($resource instanceof PresoPassagemArtigo) {
-            if ($resource->entrada_id != $passagem_id) {
+            if ($resource->passagem_id != $passagem_id) {
                 // Gerar um log
                 $codigo = 422;
                 $mensagem = "O ID $id de artigo atribuído informado não pertence a passagem de preso $passagem_id.";
@@ -511,7 +570,51 @@ class IncQualificativaController extends Controller
         return $resource;
     }
 
-    private function buscarRecurso($passagem_id)
+    private function preencherDocumento($documento, $passagem_id = null)
+    {
+        $retorno = new PresoDocumentoProvisorio();
+        $camposValidos = ['passagem_id', 'documento_id', 'numero', 'digito', 'data_emissao'];
+
+        if (isset($documento['id'])) {
+            $retorno = $this->buscarRecursoDocumento($documento['id'], $passagem_id);
+        }
+
+        if ($retorno instanceof PresoDocumentoProvisorio) {
+            foreach ($camposValidos as $campo) {
+                if (isset($documento[$campo]) && !empty($documento[$campo])) {
+                    $retorno->$campo = $documento[$campo];
+                } else {
+                    if ($passagem_id && !in_array($campo, ['passagem_id'])) {
+                        $retorno->$campo = null;
+                    }
+                }
+            }
+        }
+        return $retorno;
+    }
+
+    private function buscarRecursoDocumento($id, $passagem_id)
+    {
+        $resource = FuncoesPresos::buscarRecursoPresoDocumentoProvisorio($id);
+
+        if ($resource instanceof PresoDocumentoProvisorio) {
+            if ($resource->passagem_id != $passagem_id) {
+                // Gerar um log
+                $codigo = 422;
+                $mensagem = "O ID $id de documento provisório informado não pertence a passagem de preso $passagem_id.";
+                $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+                return ["documento_provisorio.$id" => [
+                    'error' => $mensagem,
+                    'trace_id' => $traceId
+                ]];
+            }
+        }
+
+        return $resource;
+    }
+
+    private function buscarRecurso($passagem_id) : IncEntradaPreso
     {
         $resource = FuncoesPresos::buscarRecursoPassagemPreso($passagem_id);
         if (!$resource instanceof IncEntradaPreso) {

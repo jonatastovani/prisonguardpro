@@ -191,7 +191,7 @@ $(document).ready(function () {
             const obj = new modalCadastroPresoArtigo();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
+                if (result && result.arrData.artigo_id) {
                     inserirArtigos(result.arrData);
                 }
             });
@@ -201,7 +201,7 @@ $(document).ready(function () {
             const obj = new modalCadastroPessoaDocumento();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
-                if (result && result.refresh) {
+                if (result && result.arrData.documento_id) {
                     inserirDocumentos(result.arrData);
                 }
             });
@@ -347,6 +347,15 @@ $(document).ready(function () {
             $('#olho_cor_id').val(qual_prov.olho_cor_id);
             $('#crenca_id').val(qual_prov.crenca_id);
             $('#sinais').val(qual_prov.sinais);
+
+            if (data.documentos) {
+                data.documentos.forEach(documento => {
+                    console.log(documento)
+                    inserirDocumentos(documento)
+                });
+            }
+
+
         }
 
     }
@@ -443,13 +452,28 @@ $(document).ready(function () {
 
 
         div.find('.btn-delete').on("click", function () {
-            arrArtigos = arrArtigos.filter((item) => item.idDiv != arrData.idDiv);
-
             if (arrData.id) {
-                acaoBtnDeletar(idDiv, this);
+                acaoBtnDeletarArtigo(idDiv, this);
             } else {
                 div.remove();
             }
+        });
+
+    }
+
+    function acaoBtnDeletarArtigo(idDiv, button) {
+
+        const obj = new modalMessage();
+        obj.setMessage = `Confirma a exclusão deste artigo para o preso?`;
+        obj.setTitle = 'Confirmação de exclusão de artigo';
+        obj.setFocusElementWhenClosingModal = button;
+        obj.modalOpen().then(function (result) {
+
+            if (result) {
+                $(`#${idDiv}`).remove();
+                arrArtigos = arrArtigos.filter((item) => item.idDiv != arrData.idDiv);
+            }
+
         });
 
     }
@@ -463,18 +487,22 @@ $(document).ready(function () {
         }
         let numero = arrDataDocumento.numero;
         const digito = arrDataDocumento.digito ? arrDataDocumento.digito : '';
+        const data_emissao = arrDataDocumento.data_emissao ? arrDataDocumento.data_emissao : '';
 
         arrDocumentos.push({
             id: id,
             documento_id: arrDataDocumento.documento_id,
             idDiv: idDiv,
             numero: numero,
-            digito: digito
+            digito: digito,
+            data_emissao: data_emissao,
         })
 
-        digito ? arrDocumentos['digito'] = digito : '';
-
-        let nome = 'N/C'
+        let nome = 'N/C';
+        let strDataEmissao = '';
+        if(data_emissao) {
+            strDataEmissao = `Emissão: ${moment(data_emissao).format('DD/MM/YYYY')}`;
+        }
 
         try {
             const response = await commonFunctions.getRecurseWithTrashed(urlRefDocumentos, { param: arrDataDocumento.documento_id });
@@ -500,6 +528,7 @@ $(document).ready(function () {
                                 <h5 class="card-title">
                                     ${numero}
                                 </h5>
+                                <p class="card-text">${strDataEmissao}</p>
                             </div>
                             <div class="col-2 d-flex justify-content-end px-1">
                                 <div class="btn-group-vertical" role="group">
@@ -530,19 +559,25 @@ $(document).ready(function () {
                 const obj = new modalCadastroPessoaDocumento();
                 obj.setArrData = { ...arrDocumentos[index] };
                 obj.modalOpen().then(async function (result) {
-                    console.log(result)
                     if (result && result.refresh) {
                         const response = await commonFunctions.getRecurseWithTrashed(urlRefDocumentos, { param: arrDocumentos[index].documento_id });
                         arrDocumentos[index].numero = result.arrData.numero;
                         arrDocumentos[index].digito = result.arrData.digito ? result.arrData.digito : '';
+                        arrDocumentos[index].data_emissao = result.arrData.data_emissao ? result.arrData.data_emissao : '';
 
                         let numero = arrDocumentos[index].numero;
+                        let strDataEmissao = ''
                         if(arrDocumentos[index].digito) {
                             numero += `${response.data.digito_separador}${arrDocumentos[index].digito}`
                         }
+                        if(arrDocumentos[index].data_emissao) {
+                            strDataEmissao = `Emissão: ${moment(arrDocumentos[index].data_emissao).format('DD/MM/YYYY')}`;
+                        }
+
                         const card = $(`#${result.arrData.idDiv}`);
                         card.find('.card-header').html(response.data.nome);
                         card.find('.card-title').html(numero);
+                        card.find('.card-text').html(strDataEmissao);
                     }
                 });
             } else {
@@ -556,10 +591,8 @@ $(document).ready(function () {
 
 
         div.find('.btn-delete').on("click", function () {
-            arrDocumentos = arrDocumentos.filter((item) => item.idDiv != arrData.idDiv);
-
             if (arrData.id) {
-                acaoBtnDeletar(idDiv, this);
+                acaoBtnDeletarDocumento(idDiv, this);
             } else {
                 div.remove();
             }
@@ -567,16 +600,17 @@ $(document).ready(function () {
 
     }
 
-    function acaoBtnDeletar(idDiv, button) {
+    function acaoBtnDeletarDocumento(idDiv, button) {
 
         const obj = new modalMessage();
-        obj.setMessage = `Confirma a exclusão deste artigo para o preso?`;
-        obj.setTitle = 'Confirmação de exclusão de artigo';
+        obj.setMessage = `Confirma a exclusão deste documento para o preso?`;
+        obj.setTitle = 'Confirmação de exclusão de documento';
         obj.setFocusElementWhenClosingModal = button;
         obj.modalOpen().then(function (result) {
 
             if (result) {
                 $(`#${idDiv}`).remove();
+                arrDocumentos = arrDocumentos.filter((item) => item.idDiv != idDiv);
             }
 
         });
@@ -593,7 +627,40 @@ $(document).ready(function () {
         data['preso_id'] = preso_id;
         // data['perm_atribuir_matricula_bln'] = perm_atribuir_matricula_bln;
 
-        salvar(data);
+        let blnSalvar = true;
+        const idsEncontradosArtigos = new Set();
+        const idsEncontradosDocumentos = new Set();
+        let itemsMessage = [];
+        
+        data.artigos.forEach(artigo => {
+            const cardArtigo = $(`#${artigo.idDiv}`).find('.card');
+            if (idsEncontradosArtigos.has(String(artigo.artigo_id))) {
+                blnSalvar = false;
+                cardArtigo.addClass('text-bg-warning');
+                itemsMessage.push(`O Artigo ${cardArtigo.find('.card-header').html()} está duplicado.`);
+            } else {
+                idsEncontradosArtigos.add(String(artigo.artigo_id));
+                cardArtigo.find('.card').removeClass('text-bg-warning');
+            }
+        });
+
+        data.documentos.forEach(documento => {
+            const cardDocumento = $(`#${documento.idDiv}`).find('.card');
+            if (idsEncontradosDocumentos.has(String(documento.documento_id))) {
+                blnSalvar = false;
+                cardDocumento.addClass('text-bg-warning');
+                itemsMessage.push(`O Documento ${cardDocumento.find('.card-header').html()} está duplicado.`);
+            } else {
+                idsEncontradosDocumentos.add(String(documento.documento_id));
+                cardDocumento.removeClass('text-bg-warning');
+            }
+        });
+
+        if(blnSalvar){
+            salvar(data);
+        } else {
+            commonFunctions.generateNotification('Os dados não foram enviados pelo(s) seguinte(s) motivo(s):','warning', {itemsArray: itemsMessage})
+        }
     }
 
     function salvar(data) {

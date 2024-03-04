@@ -73,12 +73,12 @@ class IncEntradaPreso extends Model
 
     public function artigos()
     {
-        return $this->hasMany(PresoPassagemArtigo::class,'passagem_id');
+        return $this->hasMany(PresoPassagemArtigo::class, 'passagem_id');
     }
 
     public function qual_prov()
     {
-        return $this->hasOne(IncQualificativaProvisoria::class,'passagem_id')->latest();
+        return $this->hasOne(IncQualificativaProvisoria::class, 'passagem_id')->latest();
     }
 
     public function convivio_tipo()
@@ -86,4 +86,9 @@ class IncEntradaPreso extends Model
         return $this->belongsTo(RefPresoConvivioTipo::class);
     }
 
+    public function documentos()
+    {
+        return $this->hasMany(PresoDocumentoProvisorio::class, 'passagem_id');
+    }
+    
 }

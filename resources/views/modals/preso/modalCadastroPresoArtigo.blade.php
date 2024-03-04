@@ -16,7 +16,7 @@
                                 <select name="artigo_id" id="artigo_idModalCadastroPresoArtigo" class="form-select">
                                 </select>
                                 <button type="button"
-                                    class="btn btn-outline-secondary btnArtigosCadastro"><i class="bi bi-pencil"></i></button>
+                                    class="btn btn-outline-secondary btnArtigosCadastro" tabindex="-1"><i class="bi bi-pencil"></i></button>
                             </div>
                         </div>
                     </div>

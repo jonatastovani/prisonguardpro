@@ -16,7 +16,7 @@
                                 <select name="documento_id" id="documento_idModalCadastroPessoaDocumento" class="form-select">
                                 </select>
                                 <button type="button"
-                                    class="btn btn-outline-secondary btnDocumentosCadastro"><i class="bi bi-pencil"></i></button>
+                                    class="btn btn-outline-secondary btnDocumentosCadastro" tabindex="-1"><i class="bi bi-pencil"></i></button>
                             </div>
                         </div>
                     </div>
@@ -28,6 +28,12 @@
                         <div class="col-2 mt-2 divDigito" style="display: none">
                             <label for="digitoModalCadastroPessoaDocumento" class="form-label">Dígito</label>
                             <input type="text" name="digito" id="digitoModalCadastroPessoaDocumento" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 divDataEmissao">
+                            <label for="data_emissaoModalCadastroPessoaDocumento" class="form-label">Data de emissão</label>
+                            <input type="date" name="data_emissao" id="data_emissaoModalCadastroPessoaDocumento" class="form-control">
                         </div>
                     </div>
                 </div>
