@@ -291,4 +291,30 @@ class UserPermissaoController extends Controller
             }
         }
     }
+    
+    // public function verifyGroup(Request $request)
+    // {
+        
+    //     $resource = UserPermissao::where('user_id', $idUser)
+    //         ->where('permissao_id', $idPermissao)
+    //         ->where(function ($query) use ($dataAtual) {
+    //             $query->whereDate('data_termino', '>=', $dataAtual)
+    //                 ->orWhereNull('data_termino');
+    //         })->first();
+
+    //     // Verifique se o modelo foi encontrado e não foi excluído
+    //     if (!$resource || $resource->trashed()) {
+    //         // Gerar um log
+    //         $codigo = 404;
+    //         $mensagem = "A Permissão de Usuário informada não existe ou foi excluída.";
+    //         $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | idUser: $idUser | idPermissao: $idPermissao");
+
+    //         $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+    //         return response()->json($response->toArray(), $response->getStatusCode());
+    //     }
+
+    //     $response = RestResponse::createSuccessResponse($resource, 200);
+    //     return response()->json($response->toArray(), $response->getStatusCode());
+    // }
+
 }

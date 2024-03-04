@@ -384,7 +384,7 @@ export class commonFunctions {
 
     }
 
-    
+
 
     /**
      * Applies a currency mask to a text input field.
@@ -520,10 +520,57 @@ export class commonFunctions {
             const errorMessage = 'Erro ao preencher';
             console.error(error);
             elem.html(`<option>${errorMessage}</option>`);
-            $.notify(error.message)
+            commonFunctions.generateNotification(error.message, 'error');
             return Promise.reject(error);
         }
     }
+
+    /**
+     * Preenche um elemento de seleção (select) com opções geradas a partir de um array de objetos.
+     * @param {jQuery} elem - O elemento jQuery select que será preenchido.
+     * @param {Array<Object>} array - O array de objetos a partir do qual as opções serão geradas.
+     * @param {Object} [options={}] - Opções adicionais para personalizar o preenchimento do select.
+     * @param {boolean} [options.insertFirstOption=true] - Indica se deve ser inserida uma primeira opção no select.
+     * @param {string} [options.firstOptionName='Selecione'] - O texto da primeira opção.
+     * @param {string} [options.firstOptionValue=''] - O valor da primeira opção.
+     * @param {string} [options.selectedIdOption=elem.val()] - O valor do atributo "value" da opção que deve ser selecionada por padrão.
+     * @param {string} [options.displayColumnName='nome'] - O nome da coluna no objeto do array que contém os valores a serem exibidos nas opções.
+     * @returns {Promise<string>} - Uma Promise que resolve com uma mensagem indicando o sucesso do preenchimento do select ou rejeita com um erro se ocorrer algum problema.
+     */
+    static async fillSelectArray(elem, array, options = {}) {
+        const {
+            insertFirstOption: insertFirstOption = true,
+            firstOptionName: firstOptionName = 'Selecione',
+            firstOptionValue: firstOptionValue = '',
+            selectedIdOption: selectedIdOption = elem.val(),
+            displayColumnName: displayColumnName = 'nome',
+        } = options;
+
+        try {
+            let strOptions = '';
+
+            if (insertFirstOption) {
+                strOptions += `<option value="${firstOptionValue}">${firstOptionName}</option>`;
+            }
+
+            array.forEach(item => {
+                const id = item.id;
+                const valor = item[displayColumnName];
+                const strSelected = (id == selectedIdOption ? ' selected' : '');
+                strOptions += `\n<option value="${id}"${strSelected}>${valor}</option>`;
+            });
+
+            elem.html(strOptions);
+            return Promise.resolve('A lista foi carregada com sucesso!');
+        } catch (error) {
+            const errorMessage = 'Erro ao preencher';
+            console.error(error);
+            elem.html(`<option>${errorMessage}</option>`);
+            commonFunctions.generateNotification(error.message, 'error');
+            return Promise.reject(error);
+        }
+    }
+
 
     /**
      * Generates a form and redirects the user to the specified URL.

@@ -3,6 +3,7 @@ import { bootstrapFunctions } from "../../common/bootstrapFunctions.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
 import { enumAction } from "../../common/enumAction.js";
 import { modalMessage } from "../../common/modalMessage.js";
+import { validations } from "../../common/validations.js";
 import { modalCadastroDocumentoTipo } from "./modalCadastroDocumentoTipo.js";
 import { modalCadastroEstado } from "./modalCadastroEstado.js";
 
@@ -195,6 +196,9 @@ export class modalCadastroDocumento {
         }
         preencherDocumentoTipo();
 
+        let arrayValidationsTypes = validations.getArrayValidationsTypes.map((item) => ({ id: item, nome: item }));
+        commonFunctions.fillSelectArray($('#validation_typeModalCadastroDocumento'), arrayValidationsTypes);
+
         modal.find(`.btnDocumentoTipoCadastro`).on('click', function (e) {
             e.preventDefault();
             const obj = new modalCadastroDocumentoTipo();
@@ -361,6 +365,8 @@ export class modalCadastroDocumento {
                 form.find('input[name="mask"]').val(data.mask).focus();
                 form.find('input[name="reverse_bln"]').prop('checked', data.reverse_bln);
                 form.find('input[name="digito_bln"]').prop('checked', data.digito_bln).trigger('change');
+                form.find('select[name="validation_type"]').val(data.validation_type);
+
                 if (data.digito_bln) {
                     form.find('input[name="digito_mask"]').val(data.digito_mask);
                     form.find('input[name="digito_separador"]').val(data.digito_separador);

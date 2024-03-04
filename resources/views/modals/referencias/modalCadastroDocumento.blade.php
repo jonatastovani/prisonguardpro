@@ -154,6 +154,22 @@
                                     </div>
                                 </div>
 
+                                <div class="row rowValidation">
+                                    <div class="col-sm-6 mt-2">
+                                        <label for="validation_typeModalCadastroDocumento"
+                                            class="form-label" data-bs-toggle="tooltip" data-bs-title="O Tipo de validação de documento para ser aplicado.">Tipo de validação</label>
+                                        <div class="input-group">
+                                            <div class="input-group-select2-button-1">
+                                                <select name="validation_type"
+                                                    id="validation_typeModalCadastroDocumento" class="form-select"
+                                                    ></select>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
+                                                    class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-12 text-end mt-2">
                                         <button type="submit" class="btn btn-outline-success btn-save w-50"
@@ -162,7 +178,7 @@
                                                 aria-hidden="true"></span>
                                             Salvar
                                         </button>
-                                        <button class="btn btn-outline-danger btn-cancel w-50"
+                                        <button type="button" class="btn btn-outline-danger btn-cancel w-50"
                                             style="max-width: 100px;">Cancelar</button>
                                     </div>
                                 </div>

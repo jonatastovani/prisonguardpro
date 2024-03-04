@@ -87,7 +87,7 @@ export class modalCadastroPresoArtigo {
             refresh: false,
             arrData: self.#arrData
         };
-        if(self.#arrData.idDiv!=undefined){
+        if (self.#arrData.idDiv != undefined) {
             self.#fillDataAll();
         } else {
             $(self.#idModal).modal('show');
@@ -178,14 +178,11 @@ export class modalCadastroPresoArtigo {
             obj.setFocusElementWhenClosingModal = this;
             self.#modalHideShow(false);
             obj.modalOpen().then(async function (result) {
-                if (result && result.refresh) {
-
-                    const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.artigo_id });
+                if (result && result.refresh && !commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(selectArtigo.val())) {
+                    const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: selectArtigo.val() });
                     const data = response.data;
                     modal.find('select[name="artigo_id"]').html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
-                    
                     self.#promisseReturnValue.refresh = true;
-
                 }
                 self.#modalHideShow();
             });
@@ -212,7 +209,7 @@ export class modalCadastroPresoArtigo {
             console.error(error);
             const traceId = error.traceId ? error.traceId : undefined;
             commonFunctions.generateNotification(error.message, 'error', { itemsArray: error.itemsMessage, traceId: traceId });
-        self.#endTimer = true;
+            self.#endTimer = true;
         }
 
     }
@@ -221,10 +218,14 @@ export class modalCadastroPresoArtigo {
 
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
-        self.#promisseReturnValue.refresh = true;
-        self.#promisseReturnValue.arrData.artigo_id = data.artigo_id
-        self.#promisseReturnValue.arrData.observacoes = data.observacoes;
-        self.#endTimer = true;
+        if (!commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(data.artigo_id)) {
+            self.#promisseReturnValue.refresh = true;
+            self.#promisseReturnValue.arrData.artigo_id = data.artigo_id
+            self.#promisseReturnValue.arrData.observacoes = data.observacoes;
+            self.#endTimer = true;
+        } else {
+            commonFunctions.generateNotification('Preencha todos os campos necessários para poder salvar as informações.', 'warning');
+        }
 
     }
 

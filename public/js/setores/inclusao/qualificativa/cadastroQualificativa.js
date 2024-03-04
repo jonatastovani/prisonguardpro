@@ -5,8 +5,8 @@ import { enumAction } from "../../../common/enumAction.js";
 import { funcoesPresos } from "../../../common/funcoesPresos.js";
 import { modalLoading } from "../../../common/modalLoading.js";
 import { modalMessage } from "../../../common/modalMessage.js";
+import { modalCadastroPessoaDocumento } from "../../../modals/pessoa/modalCadastroPessoaDocumento.js";
 import { modalCadastroPresoArtigo } from "../../../modals/preso/modalCadastroPresoArtigo.js";
-import { modalCadastroPresoDocumento } from "../../../modals/preso/modalCadastroPresoDocumento.js";
 import { modalCadastroCabeloCor } from "../../../modals/referencias/modalCadastroCabeloCor.js";
 import { modalCadastroCabeloTipo } from "../../../modals/referencias/modalCadastroCabeloTipo.js";
 import { modalCadastroCidade } from "../../../modals/referencias/modalCadastroCidade.js";
@@ -28,7 +28,9 @@ $(document).ready(function () {
     let perm_atribuir_matricula_bln = $('#perm_atribuir_matricula_bln').val();
     const redirect = $('.redirectUrl').attr('href');
     const containerArtigos = $('#containerArtigos');
+    const containerDocumentos = $('#containerDocumentos');
     let arrArtigos = [];
+    let arrDocumentos = [];
     const loading = new modalLoading();
 
     async function init() {
@@ -62,7 +64,6 @@ $(document).ready(function () {
         const preencherGenero = () => {
             commonFunctions.fillSelect($('#genero_id'), `${urlRefGenero}`, { idOpcaoSelecionada: 1 });
         }
-        // preencherGenero();
 
         $(`#btnGeneroCadastro`).on('click', function () {
             const obj = new modalCadastroGenero();
@@ -77,7 +78,6 @@ $(document).ready(function () {
         const preencherEscolaridade = () => {
             commonFunctions.fillSelect($('#escolaridade_id'), `${urlRefEscolaridade}`);
         }
-        // preencherEscolaridade();
 
         $(`#btnEscolaridadeCadastro`).on('click', function () {
             const obj = new modalCadastroEscolaridade();
@@ -92,7 +92,6 @@ $(document).ready(function () {
         const preencherEstadoCivil = () => {
             commonFunctions.fillSelect($('#estado_civil_id'), `${urlRefEstadoCivil}`);
         }
-        // preencherEstadoCivil();
 
         $(`#btnEstadoCivilCadastro`).on('click', function () {
             const obj = new modalCadastroEstadoCivil();
@@ -107,7 +106,6 @@ $(document).ready(function () {
         const preencherCutis = () => {
             commonFunctions.fillSelect($('#cutis_id'), `${urlRefCutis}`);
         }
-        // preencherCutis();
 
         $(`#btnCutisCadastro`).on('click', function () {
             const obj = new modalCadastroCutis();
@@ -122,7 +120,6 @@ $(document).ready(function () {
         const preencherCabeloTipo = () => {
             commonFunctions.fillSelect($('#cabelo_tipo_id'), `${urlRefCabeloTipo}`);
         }
-        // preencherCabeloTipo();
 
         $(`#btnCabeloTipoCadastro`).on('click', function () {
             const obj = new modalCadastroCabeloTipo();
@@ -137,7 +134,6 @@ $(document).ready(function () {
         const preencherCabeloCor = () => {
             commonFunctions.fillSelect($('#cabelo_cor_id'), `${urlRefCabeloCor}`);
         }
-        // preencherCabeloCor();
 
         $(`#btnCabeloCorCadastro`).on('click', function () {
             const obj = new modalCadastroCabeloCor();
@@ -152,7 +148,6 @@ $(document).ready(function () {
         const preencherOlhoTipo = () => {
             commonFunctions.fillSelect($('#olho_tipo_id'), `${urlRefOlhoTipo}/comdescricao`, { idOpcaoSelecionada: 1 });
         }
-        // preencherOlhoTipo();
 
         $(`#btnOlhoTipoCadastro`).on('click', function () {
             const obj = new modalCadastroOlhoTipo();
@@ -167,7 +162,6 @@ $(document).ready(function () {
         const preencherOlhoCor = () => {
             commonFunctions.fillSelect($('#olho_cor_id'), `${urlRefOlhoCor}`);
         }
-        // preencherOlhoCor();
 
         $(`#btnOlhoCorCadastro`).on('click', function () {
             const obj = new modalCadastroOlhoCor();
@@ -182,7 +176,6 @@ $(document).ready(function () {
         const preencherCrenca = () => {
             commonFunctions.fillSelect($('#crenca_id'), `${urlRefCrenca}`);
         }
-        // preencherCrenca();
 
         $(`#btnCrencaCadastro`).on('click', function () {
             const obj = new modalCadastroCrenca();
@@ -204,27 +197,18 @@ $(document).ready(function () {
             });
         });
 
-        $(`#btnAddDocumentos`).on('click', function () {
-            const obj = new modalCadastroPresoDocumento();
+        $(`#btnAddDocumento`).on('click', function () {
+            const obj = new modalCadastroPessoaDocumento();
             obj.setFocusElementWhenClosingModal = this;
             obj.modalOpen().then(function (result) {
                 if (result && result.refresh) {
-                    inserirArtigos(result.arrData);
+                    inserirDocumentos(result.arrData);
                 }
             });
         });
 
         buscarDados();
 
-        // // $(`#btnAddDocumentos`).on('click', function () {
-        //     const obj = new modalCadastroDocumento();
-        //     // obj.setFocusElementWhenClosingModal = this;
-        //     obj.modalOpen().then(function (result) {
-        //         if (result && result.refresh) {
-        //             // inserirArtigos(result.arrData);
-        //         }
-        //     });
-        // // });
     };
 
     async function preencherTodosSelects() {
@@ -395,28 +379,32 @@ $(document).ready(function () {
             commonFunctions.generateNotification(`Não foi possível obter os dados do ID Artigo ${arrDataArtigo.artigo_id} para o preso. <br>Erro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
         }
 
-        let strPreso = `
-            <div id="${idDiv}" class="card col-sm-6 p-0">
-                <div class="card-header py-1">
-                    ${nome}
-                </div>
-                <div class="card-body p-1">
-                    <div class="row m-0 p-0">
-                        <div class="col px-1" style="max-heigth: 100px;">
-                            <h5 class="card-title">
-                                ${descricao}
-                            </h5>
-                            <p class="card-text">${commonFunctions.formatStringToHTML(observacoes)}</p>
-                        </div>
-                        <div class="col-sm-2 d-flex flex-sm-column px-1">
-                            <button class="btn btn-sm btn-outline-primary btn-edit" title="Editar observação"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger btn-delete" title="Excluir artigo"><i class="bi bi-trash"></i></button>
+        let strArtigo = `
+            <div id="${idDiv}" class="col p-0">
+                <div class="card p-0">
+                    <div class="card-header py-1">
+                        ${nome}
+                    </div>
+                    <div class="card-body p-1">
+                        <div class="row m-0 p-0">
+                            <div class="col px-1" style="max-heigth: 100px;">
+                                <h5 class="card-title">
+                                    ${descricao}
+                                </h5>
+                                <p class="card-text">${commonFunctions.formatStringToHTML(observacoes)}</p>
+                            </div>
+                            <div class="col-2 d-flex justify-content-end px-1">
+                                <div class="btn-group-vertical" role="group">
+                                    <button class="btn btn-mini btn-outline-primary btn-edit" title="Editar observação"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-mini btn-outline-danger btn-delete" title="Excluir artigo"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>`;
 
-        containerArtigos.append(strPreso);
+        containerArtigos.append(strArtigo);
         arrDataArtigo['idDiv'] = idDiv;
         addEventosArtigos(arrDataArtigo);
 
@@ -434,7 +422,6 @@ $(document).ready(function () {
                 const obj = new modalCadastroPresoArtigo();
                 obj.setArrData = { ...arrArtigos[index] };
                 obj.modalOpen().then(async function (result) {
-                    console.log(result)
                     if (result && result.refresh) {
                         const response = await commonFunctions.getRecurseWithTrashed(urlRefArtigos, { param: arrArtigos[index].artigo_id });
                         arrArtigos[index].observacoes = result.arrData.observacoes ? result.arrData.observacoes : '';
@@ -467,6 +454,119 @@ $(document).ready(function () {
 
     }
 
+    async function inserirDocumentos(arrDataDocumento) {
+
+        const id = arrDataDocumento.id ? arrDataDocumento.id : '';
+        let idDiv = '';
+        if (!arrDataDocumento.idDiv) {
+            idDiv = `${id}${Date.now()}`;
+        }
+        let numero = arrDataDocumento.numero;
+        const digito = arrDataDocumento.digito ? arrDataDocumento.digito : '';
+
+        arrDocumentos.push({
+            id: id,
+            documento_id: arrDataDocumento.documento_id,
+            idDiv: idDiv,
+            numero: numero,
+            digito: digito
+        })
+
+        digito ? arrDocumentos['digito'] = digito : '';
+
+        let nome = 'N/C'
+
+        try {
+            const response = await commonFunctions.getRecurseWithTrashed(urlRefDocumentos, { param: arrDataDocumento.documento_id });
+            nome = response.data.nome;
+            if(digito) {
+                numero += `${response.data.digito_separador}${digito}`
+            }
+
+        } catch (error) {
+            console.error(error);
+            commonFunctions.generateNotification(`Não foi possível obter os dados do ID Documento ${arrDataDocumento.documento_id} para o preso. <br>Erro: ${error.message}`, 'error', { traceId: error.traceId ? error.traceId : undefined });
+        }
+
+        let strDocumento = `
+            <div id="${idDiv}" class="col p-0">
+                <div class="card p-0">
+                    <div class="card-header py-1">
+                        ${nome}
+                    </div>
+                    <div class="card-body p-1">
+                        <div class="row m-0 p-0">
+                            <div class="col px-1" style="max-heigth: 100px;">
+                                <h5 class="card-title">
+                                    ${numero}
+                                </h5>
+                            </div>
+                            <div class="col-2 d-flex justify-content-end px-1">
+                                <div class="btn-group-vertical" role="group">
+                                    <button class="btn btn-outline-primary btn-mini btn-edit" data-bs-toggle="tooltip" data-bs-title="Editar documento"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger btn-delete" data-bs-toggle="tooltip" data-bs-title="Excluir documento"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        containerDocumentos.append(strDocumento);
+        arrDataDocumento['idDiv'] = idDiv;
+        addEventosDocumentos(arrDataDocumento);
+
+        return idDiv;
+    }
+
+    function addEventosDocumentos(arrData) {
+
+        const idDiv = arrData.idDiv;
+        const div = $(`#${idDiv}`);
+
+        div.find('.btn-edit').on('click', function () {
+            const index = arrDocumentos.findIndex((item) => item.idDiv === arrData.idDiv);
+            if (index != -1) {
+                const obj = new modalCadastroPessoaDocumento();
+                obj.setArrData = { ...arrDocumentos[index] };
+                obj.modalOpen().then(async function (result) {
+                    console.log(result)
+                    if (result && result.refresh) {
+                        const response = await commonFunctions.getRecurseWithTrashed(urlRefDocumentos, { param: arrDocumentos[index].documento_id });
+                        arrDocumentos[index].numero = result.arrData.numero;
+                        arrDocumentos[index].digito = result.arrData.digito ? result.arrData.digito : '';
+
+                        let numero = arrDocumentos[index].numero;
+                        if(arrDocumentos[index].digito) {
+                            numero += `${response.data.digito_separador}${arrDocumentos[index].digito}`
+                        }
+                        const card = $(`#${result.arrData.idDiv}`);
+                        card.find('.card-header').html(response.data.nome);
+                        card.find('.card-title').html(numero);
+                    }
+                });
+            } else {
+                message = 'Documento não encontrado no Array Documentos'
+                console.error(message);
+                console.error(arrDocumentos, `Index: ${index}`);
+                commonFunctions.generateNotification(`Não foi possível editar o documento. <br>Erro: ${message}`, 'error');
+            }
+
+        });
+
+
+        div.find('.btn-delete').on("click", function () {
+            arrDocumentos = arrDocumentos.filter((item) => item.idDiv != arrData.idDiv);
+
+            if (arrData.id) {
+                acaoBtnDeletar(idDiv, this);
+            } else {
+                div.remove();
+            }
+        });
+
+    }
+
     function acaoBtnDeletar(idDiv, button) {
 
         const obj = new modalMessage();
@@ -488,6 +588,7 @@ $(document).ready(function () {
         let data = commonFunctions.getInputsValues($('#dadosQualificativa'));
         data['matricula'] = funcoesPresos.insereDigitoMatriculaAoSalvar(data['matricula']);
         data['artigos'] = arrArtigos;
+        data['documentos'] = arrDocumentos;
         data['qual_prov_id'] = qual_prov_id;
         data['preso_id'] = preso_id;
         // data['perm_atribuir_matricula_bln'] = perm_atribuir_matricula_bln;

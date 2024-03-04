@@ -9,6 +9,7 @@ use App\Models\RefDocumentoConfig;
 use App\Models\RefDocumentoTipo;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use LDAP\Result;
 
 class RefDocumentoConfigController extends Controller
 {
@@ -78,6 +79,7 @@ class RefDocumentoConfigController extends Controller
             'documento_tipo_id' => 'required|integer',
             'mask' => 'nullable|string',
             'validade_emissao_int' => 'nullable|integer',
+            'validation_type' => 'nullable|string',
             'reverse_bln' => 'nullable|boolean',
             'digito_bln' => 'required|boolean',
             'digito_mask' => [
@@ -129,14 +131,25 @@ class RefDocumentoConfigController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Request $request)
     {
+        $trashed = false;
+        if ($request->has('trashed')) {
+            $trashed = true;
+        }
         // Verifica se o modelo existe
-        $resource = $this->buscarRecurso($id);
-
+        $resource = $this->buscarRecurso($request->id, $trashed);
         $resource->load('documento_tipo', 'estado.nacionalidade', 'orgao_emissor', 'nacionalidade');
 
-        $response = RestResponse::createSuccessResponse($resource, 200);
+        $nome = $resource->documento_tipo->nome;
+        if ($resource->documento_tipo->doc_nacional_bln) {
+            $nome .= " - {$resource->nacionalidade->sigla}";
+        } else {
+            $nome .= " - {$resource->estado->sigla}/{$resource->orgao_emissor->sigla}";
+        }
+        $result = array_merge($resource->toArray(), ["nome" => $nome]);
+
+        $response = RestResponse::createSuccessResponse($result, 200);
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
@@ -153,6 +166,7 @@ class RefDocumentoConfigController extends Controller
         $rules = [
             'mask' => 'nullable|string',
             'validade_emissao_int' => 'nullable|integer',
+            'validation_type' => 'nullable|string',
             'reverse_bln' => 'nullable|boolean',
             'digito_bln' => 'required|boolean',
             'digito_mask' => [
@@ -219,20 +233,33 @@ class RefDocumentoConfigController extends Controller
         return response()->json($response->toArray(), $response->getStatusCode());
     }
 
-    private function buscarRecurso($id): RefDocumentoConfig
+    private function buscarRecurso($id, $trashed = false): RefDocumentoConfig
     {
-        $resource = RefDocumentoConfig::find($id);
+        // Verifica se o recurso está excluído apenas se $trashed for falso
+        $resource = !$trashed ? RefDocumentoConfig::find($id) : RefDocumentoConfig::withTrashed()->find($id);
 
-        // Verifique se o modelo foi encontrado e não foi excluído
-        if (!$resource || $resource->trashed()) {
+        // Verifique se o modelo foi encontrado
+        if (!$resource) {
             // Gerar um log
             $codigo = 404;
-            $mensagem = "O Documento informado não existe ou foi excluído.";
+            $mensagem = "O ID do Documento informado não existe.";
             $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
 
             $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
             return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
         }
+
+        // Verifique se o modelo está excluído, se necessário
+        if (!$trashed && $resource->trashed()) {
+            // Gerar um log
+            $codigo = 404;
+            $mensagem = "O ID do Documento informado foi excluído.";
+            $traceId = CommonsFunctions::generateLog("$codigo | $mensagem | id: $id");
+
+            $response = RestResponse::createErrorResponse($codigo, $mensagem, $traceId);
+            return response()->json($response->toArray(), $response->getStatusCode())->throwResponse();
+        }
+
         return $resource;
     }
 
@@ -303,6 +330,11 @@ class RefDocumentoConfigController extends Controller
             $resource->validade_emissao_int = $request->input('validade_emissao_int');
         } else if ($defaultNull) {
             $resource->validade_emissao_int = null;
+        }
+        if ($request->has('validation_type')) {
+            $resource->validation_type = $request->input('validation_type');
+        } else if ($defaultNull) {
+            $resource->validation_type = null;
         }
         if ($request->has('reverse_bln')) {
             $resource->reverse_bln = $request->input('reverse_bln');

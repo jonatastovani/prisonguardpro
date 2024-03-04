@@ -211,7 +211,6 @@ class RefArtigoController extends Controller
         return $resource;
     }
 
-
     private function validarRecursoExistente($request, $id = null)
     {
         $query = RefArtigo::where('nome', $request->input('nome'));

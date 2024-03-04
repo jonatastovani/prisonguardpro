@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->string('mask')->nullable();
             $table->integer('validade_emissao_int')->nullable()->default(0);
+            $table->string('validation_type')->nullable();
             $table->boolean('reverse_bln')->nullable()->default(false);
             $table->boolean('digito_bln')->nullable()->default(false);
             $table->string('digito_separador')->nullable();

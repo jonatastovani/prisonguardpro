@@ -166,13 +166,13 @@
                     </div>
                     <div class="row ps-2 pe-2">
                         <div class="col-12">
-                            <div id="containerDocumentos" class="row overflow-auto border border-dark-subtle rounded"
+                            <div id="containerDocumentos" class="row row-cols-sm-2 overflow-auto border border-dark-subtle rounded"
                                 style="min-height: 100px; max-height: 380px;"></div>
                         </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-12 text-end">
-                            <button id="btnAddDocumentos" class="btn btn-outline-primary btn-sm">Adicionar
+                            <button id="btnAddDocumento" class="btn btn-outline-primary btn-sm">Adicionar
                                 Documentos</button>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                     </div>
                     <div class="row ps-2 pe-2">
                         <div class="col-12">
-                            <div id="containerArtigos" class="row overflow-auto border border-dark-subtle rounded"
+                            <div id="containerArtigos" class="row row-cols-sm-2 overflow-auto border border-dark-subtle rounded"
                                 style="min-height: 100px; max-height: 380px;"></div>
                         </div>
                     </div>
@@ -231,9 +231,9 @@
         </div>
     </div>
 
+    @include('modals.pessoa.modalCadastroPessoaDocumento')
     @include('modals.preso.modalAlterarPresoConvivio')
     @include('modals.preso.modalCadastroPresoArtigo')
-    @include('modals.preso.modalCadastroPresoDocumento')
     @include('modals.referencias.modalCadastroCidade')
     @include('modals.referencias.modalCadastroGenero')
     @include('modals.referencias.modalCadastroEscolaridade')
@@ -244,8 +244,6 @@
     @include('modals.referencias.modalCadastroOlhoTipo')
     @include('modals.referencias.modalCadastroOlhoCor')
     @include('modals.referencias.modalCadastroCrenca')
-
-    @include('modals.referencias.modalCadastroDocumento')
 
     <script type="module" src="{{ asset('js/setores/inclusao/qualificativa/cadastroQualificativa.js') }}"></script>
 

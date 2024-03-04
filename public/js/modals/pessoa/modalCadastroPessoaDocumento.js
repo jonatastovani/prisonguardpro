@@ -1,5 +1,6 @@
 import { conectAjax } from "../../ajax/conectAjax.js";
 import { commonFunctions } from "../../common/commonFunctions.js";
+import { validations } from "../../common/validations.js";
 import { modalCadastroDocumento } from "../referencias/modalCadastroDocumento.js";
 
 export class modalCadastroPessoaDocumento {
@@ -32,6 +33,10 @@ export class modalCadastroPessoaDocumento {
      * Variável para reservar o timeOut da consulta pelo search
      */
     timerSearch;
+    /**
+     * Variável para reservar o nome do type da validação para aplicar validação dos números do documento.
+     */
+    #validationType;
 
     constructor() {
         this.#urlApi = urlRefDocumentos;
@@ -42,7 +47,8 @@ export class modalCadastroPessoaDocumento {
         this.#arrData = {
             idDiv: undefined,
             documento_id: null,
-            observacoes: null
+            numero: null,
+            digito: null,
         };
         this.#addEventsDefault();
     }
@@ -97,22 +103,12 @@ export class modalCadastroPessoaDocumento {
         return new Promise(function (resolve) {
 
             const checkConfirmation = setInterval(function () {
-
-                // if (self.#promisseReturnValue !== undefined || self.#endTimer) {
                 if (self.#endTimer) {
-
                     clearInterval(checkConfirmation);
-                    // if (self.#promisseReturnValue !== undefined) {
-                    //     resolve(self.#promisseReturnValue);
-                    // }
                     resolve(self.#promisseReturnValue);
-
                     self.#modalClose();
-                    // self.#promisseReturnValue = undefined;
                     self.#endTimer = false;
-
                 }
-
             }, 250);
 
         });
@@ -186,17 +182,21 @@ export class modalCadastroPessoaDocumento {
                 obj.setParam(id)
                 try {
                     const response = await obj.getRequest();
-                    console.log(response)
                     if (response.data) {
                         const data = response.data;
-                        
+                        if (data.validation_type) {
+                            self.#validationType = data.validation_type;
+                        } else {
+                            self.#validationType = undefined;
+                        }
+
                         if (data.mask) {
                             commonFunctions.applyCustomNumberMask(modal.find('input[name="numero"]'), { format: data.mask, reverse: data.reverse_bln, translation: 'docX' })
                         } else {
                             modal.find('input[name="numero"]').unmask();
                         }
                         divDocumento.show('fast').find('input, select, button').removeAttr('disabled');
-                        
+
                         if (data.digito_bln) {
                             commonFunctions.applyCustomNumberMask(modal.find('input[name="digito"]'), { format: data.digito_mask, translation: 'docX' })
                             divDigito.show('fast').find('input, select, button').removeAttr('disabled');
@@ -242,11 +242,13 @@ export class modalCadastroPessoaDocumento {
         try {
             const response = await commonFunctions.getRecurseWithTrashed(self.#urlApi, { param: self.#arrData.documento_id });
             const data = response.data;
-            const selectArtigo = modal.find('select[name="documento_id"]');
+            const selectDocumento = modal.find('select[name="documento_id"]');
 
-            selectArtigo.html(new Option(`${data.nome} (${data.descricao})`, data.id, true, true)).trigger('change');
-            selectArtigo.attr('disabled', true);
-            modal.find('textarea[name="observacoes"]').val(self.#arrData.observacoes);
+            selectDocumento.val(data.id).attr('disabled', true).trigger('change');
+            modal.find('input[name="numero"]').val(self.#arrData.numero);
+            if (self.#arrData.digito) {
+                modal.find('input[name="digito"]').val(self.#arrData.digito);
+            }
             $(self.#idModal).modal('show');
 
         } catch (error) {
@@ -262,10 +264,36 @@ export class modalCadastroPessoaDocumento {
 
         const self = this;
         let data = commonFunctions.getInputsValues($(self.#idModal).find('form')[0]);
-        self.#promisseReturnValue.refresh = true;
-        self.#promisseReturnValue.arrData.documento_id = data.documento_id
-        self.#promisseReturnValue.arrData.observacoes = data.observacoes;
-        self.#endTimer = true;
+
+        if ((!commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(data.documento_id) || self.#arrData.documento_id) &&
+            !commonFunctions.getInvalidsDefaultValuesGenerateFilters().includes(data.numero)) {
+
+            const returnData = () => {
+                self.#promisseReturnValue.refresh = true;
+                self.#promisseReturnValue.arrData.documento_id = data.documento_id
+                self.#promisseReturnValue.arrData.numero = data.numero;
+                if (data.digito) {
+                    self.#promisseReturnValue.arrData.digito = data.digito;
+                } else {
+                    self.#promisseReturnValue.arrData.digito = '';
+                }
+                self.#endTimer = true;
+            }
+
+            if (self.#validationType) {
+                let concatNumero = `${data.numero}${data.digito ? data.digito : ''}`;
+                if (!validations.apply(self.#validationType, {'numero': concatNumero})) {
+                    commonFunctions.generateNotification('O número informado não passou pela validação.', 'warning');
+                } else {
+                    returnData();
+                };
+            } else {
+                returnData();
+            }
+
+        } else {
+            commonFunctions.generateNotification('Preencha todos os campos necessários para poder salvar as informações.', 'warning');
+        }
 
     }
 

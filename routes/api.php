@@ -162,7 +162,7 @@ route::prefix('/v1')->group(function () {
                 // Rotas relacionadas ao RefDocumentoConfigController
                 Route::controller(RefDocumentoConfigController::class)->group(function () {
                     Route::get('', 'index');
-                    Route::get('/{id}', 'show');
+                    Route::match(['get', 'post'], '/{id}', 'show');
                     Route::post('', 'store');
                     Route::put('/{id}', 'update');
                     Route::delete('/{id}', 'destroy');
@@ -482,6 +482,14 @@ route::prefix('/v1')->group(function () {
                 Route::post('', 'store');
                 Route::put('/{id}', 'update');
                 Route::delete('/{id}', 'destroy');
+                
+                Route::prefix('/verify')->group(function () {
+                    Route::prefix('/group')->group(function () {
+                        Route::get('/{name}', 'verifyGroup');
+                        
+                    });
+                    
+                });
             });
         });
     });
