@@ -18,7 +18,7 @@
                 </div>
                 <div class="row flex-fill overflow-auto">
                     <div class="table-responsive mt-2">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-sm table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>

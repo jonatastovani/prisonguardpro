@@ -21,7 +21,7 @@
 
                 <div class="row flex-fill overflow-auto">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-sm table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-6 d-flex align-items-end">
+                                    <div class="col-sm-4 col-6 d-flex align-items-end">
                                         <div class="form-check form-switch mt-2">
                                             <input class="form-check-input" type="checkbox" role="switch"
                                                 name="reverse_bln" id="reverse_blnModalCadastroDocumento">
@@ -81,7 +81,7 @@
                                                 Reversa</label>
                                         </div>
                                     </div>
-                                    <div class="col-6 d-flex align-items-end">
+                                    <div class="col-sm-4 col-6 d-flex align-items-end">
                                         <div class="form-check form-switch mt-2">
                                             <input class="form-check-input" type="checkbox" role="switch"
                                                 name="digito_bln" id="digito_blnModalCadastroDocumento">
@@ -89,6 +89,14 @@
                                                 data-bs-toggle="tooltip"
                                                 data-bs-title="Se o documento não tem por padrão o dígito, então um campo de dígito é criado, sendo opcional a inserção.">Campo
                                                 Dígito</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-6 mt-2">
+                                        <label for="validade_emissao_intModalCadastroDocumento"
+                                            class="form-label" data-bs-title="Validade padrão do documento em meses. Deixe vazio para não aplicar a validade." data-bs-toggle="tooltip">Validade</label>
+                                        <div class="input-group">
+                                            <input type="text" name="validade_emissao_int" id="validade_emissao_intModalCadastroDocumento" class="form-control">
+                                            <div class="input-group-text">meses(ês)</div>
                                         </div>
                                     </div>
                                 </div>
@@ -105,9 +113,9 @@
                                         data-bs-title="Caractere separador do dígito.">
                                         <label for="digito_separadorModalCadastroDocumento"
                                             class="form-label">Separador</label>
-                                        <input type="text" class="form-control text-center" name="digito_separador"
-                                            placeholder="Ex: -, /" id="digito_separadorModalCadastroDocumento"
-                                            disabled>
+                                        <input type="text" class="form-control text-center"
+                                            name="digito_separador" placeholder="Ex: -, /"
+                                            id="digito_separadorModalCadastroDocumento" disabled>
                                     </div>
                                 </div>
 
@@ -119,7 +127,8 @@
                                                 <select name="estado_id" id="estado_idModalCadastroDocumento"
                                                     class="form-select" disabled></select>
                                             </div>
-                                            <button type="button" class="btn btn-outline-secondary btnEstadoCadastro"><i
+                                            <button type="button"
+                                                class="btn btn-outline-secondary btnEstadoCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
@@ -132,7 +141,8 @@
                                                     id="orgao_emissor_idModalCadastroDocumento" class="form-select"
                                                     disabled></select>
                                             </div>
-                                            <button type="button" class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
+                                            <button type="button"
+                                                class="btn btn-outline-secondary btnOrgaoEmissorCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
@@ -148,7 +158,8 @@
                                                     id="nacionalidade_idModalCadastroDocumento" class="form-select"
                                                     disabled></select>
                                             </div>
-                                            <button type="button" class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
+                                            <button type="button"
+                                                class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>
@@ -156,15 +167,18 @@
 
                                 <div class="row rowValidation">
                                     <div class="col-sm-6 mt-2">
-                                        <label for="validation_typeModalCadastroDocumento"
-                                            class="form-label" data-bs-toggle="tooltip" data-bs-title="O Tipo de validação de documento para ser aplicado.">Tipo de validação</label>
+                                        <label for="validation_typeModalCadastroDocumento" class="form-label"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-title="O Tipo de validação de documento para ser aplicado.">Tipo de
+                                            validação</label>
                                         <div class="input-group">
                                             <div class="input-group-select2-button-1">
                                                 <select name="validation_type"
-                                                    id="validation_typeModalCadastroDocumento" class="form-select"
-                                                    ></select>
+                                                    id="validation_typeModalCadastroDocumento"
+                                                    class="form-select"></select>
                                             </div>
-                                            <button type="button" class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
+                                            <button type="button"
+                                                class="btn btn-outline-secondary btnNacionalidadeCadastro"><i
                                                     class="bi bi-pencil"></i></button>
                                         </div>
                                     </div>

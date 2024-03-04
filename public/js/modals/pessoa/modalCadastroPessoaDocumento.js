@@ -165,7 +165,7 @@ export class modalCadastroPessoaDocumento {
         const self = this;
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self);
-
+        
         const preencherDocumento = () => {
             commonFunctions.fillSelect(modal.find('select[name="documento_id"]'), self.#urlApi);
             modal.find('select[name="documento_id"]').trigger('change');

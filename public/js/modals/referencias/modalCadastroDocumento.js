@@ -179,6 +179,8 @@ export class modalCadastroDocumento {
         const self = this;
         const modal = $(self.#idModal);
         commonFunctions.eventDefaultModals(self, { formRegister: true, inputsSearchs: modal.find('.inputActionSearchModalCadastroDocumento') });
+        
+        modal.find('input[name="validade_emissao_int"]').mask('999');
 
         modal.find(".btnNewRegister").on("click", () => {
             self.#action = enumAction.POST;
@@ -363,6 +365,7 @@ export class modalCadastroDocumento {
                 const form = $(self.#idModal).find('form');
                 form.find('select[name="documento_tipo_id"]').val(data.documento_tipo_id).trigger('change').attr('disabled', true);
                 form.find('input[name="mask"]').val(data.mask).focus();
+                form.find('input[name="validade_emissao_int"]').val(data.validade_emissao_int);
                 form.find('input[name="reverse_bln"]').prop('checked', data.reverse_bln);
                 form.find('input[name="digito_bln"]').prop('checked', data.digito_bln).trigger('change');
                 form.find('select[name="validation_type"]').val(data.validation_type);

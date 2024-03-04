@@ -209,6 +209,11 @@ class IncQualificativaController extends Controller
             'artigos.*.id' => 'nullable|integer',
             'artigos.*.artigo_id' => 'required|integer',
             'artigos.*.observacoes' => 'nullable|string',
+            'documentos' => 'nullable|array',
+            'documentos.*.id' => 'nullable|integer',
+            'documentos.*.documento_id' => 'required|integer',
+            'documentos.*.numero' => 'required|string',
+            'documentos.*.digito' => 'nullable|string',
         ];
 
         CommonsFunctions::validacaoRequest($request, $rules);

@@ -222,13 +222,11 @@ export class modalCadastroEstadoCivil {
                         <tr id=${idTr}>
                             <td class="text-center"><b>${item.id}</b></td>
                             <td>
-                                <div class="d-flex wrap-nowrap justify-content-center">
-                                    <button class="btn btn-outline-primary btn-mini-2 me-2 btn-edit" title="Editar cadastro">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                <div class="d-flex justify-content-center">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-outline-primary btn-mini-2 btn-edit" title="Editar cadastro"><i class="bi bi-pencil"></i> </button>
+                                        <button class="btn btn-outline-danger btn-mini-2 btn-delete" title="Deletar cadastro"><i class="bi bi-trash"></i></button>
+                                    </div>
                                 </div>
                             </td>
                             <td>${item.nome}</td>
