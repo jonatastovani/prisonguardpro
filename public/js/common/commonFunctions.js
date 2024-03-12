@@ -571,7 +571,6 @@ export class commonFunctions {
         }
     }
 
-
     /**
      * Generates a form and redirects the user to the specified URL.
      *

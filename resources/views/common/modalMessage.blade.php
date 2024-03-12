@@ -20,6 +20,5 @@
         </div>
     </div>
 </div>
-</div>
 
 <script type="module" src="{{ asset('js/common/modalMessage.js') }}"></script>

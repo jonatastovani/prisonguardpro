@@ -59,9 +59,9 @@
                                             id="nomeModalCadastroCidade">
                                     </div>
                                     <div class="col-lg-6">
-                                        <label for="estado_idModalCadastroEstado" class="form-label">Estado</label>
+                                        <label for="estado_idModalCadastroCidade" class="form-label">Estado</label>
                                         <div class="input-group">
-                                            <select name="estado_id" id="estado_idModalCadastroEstado"></select>
+                                            <select name="estado_id" id="estado_idModalCadastroCidade"></select>
                                             <button type="button"
                                             class="btn btn-outline-secondary btnEstadoCadastro" tabindex="-1"><i class="bi bi-pencil"></i></button>
                                         </div>

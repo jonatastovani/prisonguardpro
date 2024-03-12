@@ -11,15 +11,12 @@
 
     <link rel="stylesheet" href="{{ asset('/bootstrap-5.3.2-dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/bootstrap-icons-1.11.1/bootstrap-icons.css') }}">
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('css/style-popup.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/modal-custom.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('css/select2-4.1.0.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/select2-4.0.2.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="{{asset('build/assets/app-e3b0c442.css')}}">
 
@@ -31,7 +28,6 @@
     <script src="{{ asset('js/jquery/moments-2.29.4.min.js') }}"></script>
     <script src="{{ asset('js/jquery/select2-4.0.2.js') }}"></script>
     <script src="{{ asset('bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js') }}"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>         --}}
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script type="module" src="{{asset('build/assets/app-72d66899.js')}}"></script>
 

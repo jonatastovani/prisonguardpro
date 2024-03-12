@@ -1,6 +1,6 @@
 <div class="row">
     <nav id="navbar" class="navbar navbar-dark navbar-expand-lg bg-dark">
-        <div class="container-fluid">
+        <div class="container">
             <a id="systemName" class="navbar-brand" href="/home">{{ config('sistema.nome') }}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="bi bi-list"></i>
