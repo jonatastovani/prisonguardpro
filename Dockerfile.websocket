@@ -1,0 +1,14 @@
+# Use a imagem oficial do PHP para o WebSocket
+FROM php:8.1-cli
+
+# Instale as dependências necessárias para sockets
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    && docker-php-ext-install sockets \
+    && docker-php-ext-enable sockets
+
+# Defina o diretório de trabalho
+WORKDIR /var/www/html
+
+# Comando padrão para iniciar o servidor WebSocket ao iniciar o container
+CMD ["php", "artisan", "websockets:serve"]
