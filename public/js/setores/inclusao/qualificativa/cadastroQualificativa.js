@@ -524,7 +524,7 @@ $(document).ready(function () {
                     </div>
                     <div class="card-body p-1">
                         <div class="row m-0 p-0">
-                            <div class="col px-1" style="max-heigth: 100px;">
+                            <div class="col px-1" style="max-height: 100px;">
                                 <h5 class="card-title">
                                     ${numero}
                                 </h5>
